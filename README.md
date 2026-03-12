@@ -1,5 +1,14 @@
-# React + Vite + Hono + Cloudflare Workers
+# Build
+Locally, run `npx vite`
+To deploy, run 
+```
+npm run build
+npm run deploy
+```
 
+
+
+# React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
 
 This template provides a minimal setup for building a React application with TypeScript and Vite, designed to run on Cloudflare Workers. It features hot module replacement, ESLint integration, and the flexibility of Workers deployments.

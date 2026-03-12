@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react';
 import { 
 	ReactFlow, 
+	Background,
+	Controls,
 	applyNodeChanges, 
 	applyEdgeChanges, 
 	addEdge,
@@ -37,14 +39,19 @@ export default function App() {
  
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
-      <ReactFlow
+		<ReactFlow
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        fitView
-      />
+        fitView>
+			<Background />
+			<Controls />
+
+
+
+		</ReactFlow>
     </div>
   );
 }
