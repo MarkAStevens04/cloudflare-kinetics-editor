@@ -1,4 +1,4 @@
-import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
+import { Handle, Position, type Node, type NodeProps, type BuiltInNode } from '@xyflow/react';
 import { ChangeEvent } from 'react';
 
 type ProteinNodeType = Node<{ 
@@ -6,14 +6,7 @@ type ProteinNodeType = Node<{
     onLabelChange: (id: string, value: string) => void;
 }, 'protein'>;
 
-type DefaultNodeType = Node<
-    {
-        label: string;
-    },
-    'default'
->;
-
-export type AppNode = DefaultNodeType | ProteinNodeType;
+export type AppNode = BuiltInNode | ProteinNodeType;
 
 
 
