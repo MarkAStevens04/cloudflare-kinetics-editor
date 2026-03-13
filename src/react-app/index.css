@@ -80,8 +80,8 @@ button:focus-visible {
 .action-button {
 	border-radius: 8px;
 	border: 1px solid transparent;
-	padding: 4px 8px;
-	font-size: 48px;
+	padding: 8px 16px;
+	font-size: 36px;
 	font-weight: 500;
 	font-family: inherit;
 	background-color: #06d471;

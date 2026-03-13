@@ -23,7 +23,7 @@ const nodeTypes = {
 };
  
 const initialNodes: AppNode[] = [
-  { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Protein 1', number: 2 }, type: 'protein'},
+  { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Click to edit', onLabelChange: () => {} }, type: 'protein'},
   { id: 'n2', position: { x: 0, y: 100 }, data: { label: 'Protein 2'}, type: 'default'},
 ];
 const initialEdges: Edge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2' , animated: true}];
@@ -51,6 +51,32 @@ export default function App() {
     [setEdges],
   );
 
+  const onLabelChange = useCallback(
+    (id: string, value: string) => {
+      setNodes((nds) =>
+        nds.map((node) =>
+          node.id === id
+            ? {
+                ...node,
+                data: {
+                  ...node.data,
+                  label: value,
+                }
+            } : node
+        )
+      )
+    },
+    [setNodes]
+  );
+
+  const nodesWithCallbacks: AppNode[] = nodes.map((node) => ({
+    ...node,
+    data: {
+      ...node.data,
+      onLabelChange,
+    }
+  }));
+
   const addNode = useCallback(() => {
     const newNode: AppNode = {
       id: String(nextId++),
@@ -58,7 +84,7 @@ export default function App() {
         x: Math.random() * 300,
         y: Math.random() * 300,
       },
-      data: { label: `Node ${nextId - 1}`, number: 3},
+      data: { label: 'New Species', onLabelChange: () => {} },
       type: 'protein',
     };
 
@@ -68,7 +94,7 @@ export default function App() {
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
 		<ReactFlow
-        nodes={nodes}
+        nodes={nodesWithCallbacks}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
