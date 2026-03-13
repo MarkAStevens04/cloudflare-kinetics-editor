@@ -1,10 +1,41 @@
-import type { Node, NodeProps } from '@xyflow/react';
+import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
 
-type ProteinNode = Node<{ 
+type ProteinNodeType = Node<{ 
     number: number,
     label: string; 
 }, 'protein'>;
 
-export default function ProteinNode({ data }: NodeProps<ProteinNode>) {
-    return <div>A special protein id: {data.number}, with label {data.label}</div>;
+type DefaultNodeType = Node<
+    {
+        label: string;
+    },
+    'default'
+>;
+
+export type AppNode = DefaultNodeType | ProteinNodeType;
+
+
+
+export default function ProteinNode({ data }: NodeProps<ProteinNodeType>) {
+    return (
+    <div
+        style={{
+            padding: '12px',
+            border: '1px solid #ccc',
+            borderRadius: '12px',
+            background: 'white',
+            minWidth: '160px',
+            textAlign: 'center',
+        }}
+    
+    >
+        A special protein id: {data.number}, with label {data.label}
+        <Handle type="target" position={Position.Left}> </Handle>
+
+        <Handle type="source" position={Position.Right}> </Handle>
+
+    </div>
+    
+  
+    );
 }
