@@ -32,6 +32,8 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
   animated: true,
 };
 
+let nextId= 3;
+
 export default function App() {
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
@@ -48,6 +50,20 @@ export default function App() {
     (connection) => setEdges((edgesSnapshot) => addEdge(connection, edgesSnapshot)),
     [setEdges],
   );
+
+  const addNode = useCallback(() => {
+    const newNode: AppNode = {
+      id: String(nextId++),
+      position: {
+        x: Math.random() * 300,
+        y: Math.random() * 300,
+      },
+      data: { label: `Node ${nextId - 1}`, number: 3},
+      type: 'protein',
+    };
+
+    setNodes((currentNodes) => [...currentNodes, newNode]);
+  }, [setNodes]);
  
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
@@ -63,7 +79,7 @@ export default function App() {
 			<Background />
 			<Controls />
 			<Panel position="top-left"> 
-        <button>Add New Node</button>
+        <button onClick={addNode}>Add New Node</button>
         
       </Panel>
 

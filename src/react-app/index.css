@@ -54,6 +54,26 @@ button:focus-visible {
 	outline: 4px auto -webkit-focus-ring-color;
 }
 
+
+.custom-node {
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	padding: 12px;
+	font-size: 12px;
+	font-weight: 500;
+	background-color: #fff;
+	cursor: pointer;
+	transition: border-color 0.1s;
+}
+.custom-node:hover {
+	border-color: #888;
+	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+}
+.custom-node:focus,
+.custom-node:focus-visible {
+	outline: 4px auto -webkit-focus-ring-color;
+}
+
 @media (prefers-color-scheme: light) {
 	:root {
 		color: #213547;

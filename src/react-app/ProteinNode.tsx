@@ -19,23 +19,14 @@ export type AppNode = DefaultNodeType | ProteinNodeType;
 export default function ProteinNode({ data }: NodeProps<ProteinNodeType>) {
     return (
     <div
-        style={{
-            padding: '12px',
-            border: '1px solid #ccc',
-            borderRadius: '12px',
-            background: 'white',
-            minWidth: '160px',
-            textAlign: 'center',
-        }}
-    
-    >
-        A special protein id: {data.number}, with label {data.label}
-        <Handle type="target" position={Position.Left}> </Handle>
+        className="custom-node"
 
+    >
+        A special protein id: {data.number} 
+         with label {data.label}
+        <Handle type="target" position={Position.Left}> </Handle>
         <Handle type="source" position={Position.Right}> </Handle>
 
     </div>
-    
-  
     );
 }
