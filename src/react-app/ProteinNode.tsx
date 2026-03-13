@@ -15,36 +15,22 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
         data.onLabelChange(id, event.target.value);
     }
 
-
     return (
-    <div
-        className="custom-node"
-        style={{
-            border: selected ? '2px solid #2563eb' : '1px solid #999'
-        }}
-    >
-        <div style={{ fontWeight: 600, marginBottom: 8}}>Editable Node</div>
-    
-        <input 
+
+    <div className="custom-node">
+        {selected ? <input 
             className="nodrag"
             value={data.label}
             onChange={onChange}
             placeholder="Type a label..."
-            style={{
-                width: '100%',
-                padding: 8,
-                borderRadius: 8,
-                border: '1px solid #ccc'
-            }}
-        />
-
-        <div style={{ marginTop: 8, fontSize: 12, color: '#555' }}>
-            Current label: {data.label}
-        </div>
+            font-family="Inter"
+            /> : <div className="nodrag" style={{ fontSize: 24, color: '#000' }}>{data.label}</div>}
 
         <Handle type="target" position={Position.Left}> </Handle>
         <Handle type="source" position={Position.Right}> </Handle>
 
     </div>
+
+
     );
 }

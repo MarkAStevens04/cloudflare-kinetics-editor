@@ -7,6 +7,32 @@ npm run deploy
 ```
 
 
+# UI Improvements:
+### Multi-Highlight
+- Only have to highlight part of a node to select it
+- More beautiful selections
+
+### Camera controls
+- Switch to Canva defaults 
+    - shift + scroll = left / right 
+    - ctrl + scroll = in / out
+    - regular scroll = up / down
+
+### Selection
+- Bar Pops out on right allowing you to edit node further
+- Click once = selection
+    - After selection, short click = edit text (no more movement)
+    - After selection, long click = move node (MAYBE NOT THIS?? Lowkey unintuitive. Just after selection, any click on text = edit text)
+    - Maybe after one selection, holding on certain section allows you to move whole thing, but holding on text doesn't?
+- Click once => NO MORE DRAGGING!
+
+### Basic Controls
+- Ctrl-Z to undo
+- Ctrl + C / Ctrl + V 
+
+
+### Right click
+Allows you to add new node
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
