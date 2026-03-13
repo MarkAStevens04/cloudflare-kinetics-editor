@@ -13,6 +13,11 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+	font-family: Helios_Extended;
+	src: url(Helios_Extended.otf)
+}
+
 a {
 	font-weight: 500;
 	color: #646cff;
@@ -57,22 +62,38 @@ button:focus-visible {
 
 .custom-node {
 	border-radius: 5px;
-	border: 1px solid #ccc;
+	border: 2px solid #ccc;
 	padding: 12px;
+	font-family: Helios_Extended;
 	font-size: 12px;
 	font-weight: 500;
 	background-color: #fff;
-	cursor: pointer;
-	transition: border-color 0.1s;
+	transition: border 0.05s;
 }
 .custom-node:hover {
-	border-color: #888;
-	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+	border-color: #747bff;;
+	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
 }
-.custom-node:focus,
-.custom-node:focus-visible {
-	outline: 4px auto -webkit-focus-ring-color;
+
+
+
+.action-button {
+	border-radius: 8px;
+	border: 1px solid transparent;
+	padding: 4px 8px;
+	font-size: 48px;
+	font-weight: 500;
+	font-family: inherit;
+	background-color: #06d471;
+	color: #ffffff;
+	cursor: pointer;
+	transition: border-color 0.25s, background-color 0.25s;
 }
+.action-button:hover {
+	border-color: #fff;
+	background-color: #0cc56b;
+}
+
 
 @media (prefers-color-scheme: light) {
 	:root {

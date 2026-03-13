@@ -80,7 +80,12 @@ export default function App() {
 			<Controls />
 			<Panel position="top-left"> 
         <button onClick={addNode}>Add New Node</button>
-        
+      </Panel>
+
+      <Panel position="top-right"> 
+        <button className="action-button">
+          Simulate!
+        </button>
       </Panel>
 
 		</ReactFlow>
