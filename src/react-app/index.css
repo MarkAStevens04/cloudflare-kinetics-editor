@@ -71,7 +71,7 @@ button:focus-visible {
 	transition: border 0.05s;
 }
 .custom-node:hover {
-	border-color: #747bff;;
+	border-color: #747bff;
 	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
 }
 

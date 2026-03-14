@@ -21,18 +21,43 @@ import ProteinNode, { type AppNode } from './ProteinNode';
 const nodeTypes = {
   protein: ProteinNode,
 };
- 
+
+// const NODE_COLORS = [
+//   '#ee6055', // Vibrant Coral
+//   '#60d394', // Emerald
+//   '#aaf683', // Light Green
+//   '#ffd97d', // Jasmine
+//   '#ff9b85', // Salmon
+// ]
+
+
+const NODE_COLORS = [
+  '#90f1ef', // Soft Cyan
+  '#ffd6e0', // Petal Frost
+  '#ffef9f', // Vanilla Custard
+  '#c1fba4', // Light Green
+  '#7bf1a8', // Light Green
+]
+
+let colIdx= 1;
+
+const getRandomColor = () => {
+  colIdx = (colIdx + 1) % NODE_COLORS.length;
+  return NODE_COLORS[colIdx];
+}
+
 const initialNodes: AppNode[] = [
-  { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Click to edit', onLabelChange: () => {} }, type: 'protein'},
+  { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Click to edit', onLabelChange: () => {}, color: getRandomColor() }, type: 'protein'},
   { id: 'n2', position: { x: 0, y: 100 }, data: { label: 'Protein 2'}, type: 'default'},
 ];
+
+let nextId= 2;
+
 const initialEdges: Edge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2' , animated: true}];
  
 const defaultEdgeOptions: DefaultEdgeOptions = {
   animated: true,
 };
-
-let nextId= 3;
 
 export default function App() {
   const [nodes, setNodes] = useState(initialNodes);
@@ -84,7 +109,7 @@ export default function App() {
         x: Math.random() * 300,
         y: Math.random() * 300,
       },
-      data: { label: 'New Species', onLabelChange: () => {} },
+      data: { label: 'Species ' + String(nextId), onLabelChange: () => {}, color: getRandomColor() },
       type: 'protein',
     };
 
