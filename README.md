@@ -41,7 +41,7 @@ npm run deploy
 - Make it possible to rescale
     - Diff color palettes depending on type of species
     - Diff shapes for diff species
-
+- Z index saved. So as you click, all Z-indices for edges come up
 
 ### Simulation
 - After simulating, change width and color of reaction networks
@@ -54,7 +54,8 @@ Allows you to add new node
 - Sources can be both inputs OR outputs
 - Click edge, easily swap direction
 - Edges have arrows on them denoting direction
-
+- Can change where edge ends at (look at reconnectable attr https://reactflow.dev/api-reference/types/edge)
+ 
 
 ### Decoration
 - Background is little hexagon intersections for organic chemistry

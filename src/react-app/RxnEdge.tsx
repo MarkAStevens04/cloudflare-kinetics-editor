@@ -1,16 +1,16 @@
 import { 
     BaseEdge, 
-    getStraightPath, 
+    EdgeLabelRenderer,
+    getSimpleBezierPath,
+    useReactFlow, 
     type Edge,
     type EdgeProps 
 } from '@xyflow/react';
 
-import { ChangeEvent } from 'react';
 import './index.css';
 
 type RxnEdgeType = Edge<{ 
     label: string; 
-    onLabelChange: (id: string, value: string) => void;
     color: string;
 }, 'reaction'>;
 
@@ -18,15 +18,34 @@ export type AppEdge = RxnEdgeType;
 
 
 
-export default function RxnEdge({ id, data, selected, sourceX, sourceY, targetX, targetY }: EdgeProps<RxnEdgeType>) {
-    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-        data.onLabelChange(id, event.target.value);
-    }
+export default function RxnEdge({ id, selected, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition }: EdgeProps<RxnEdgeType>) {
+    const { deleteElements } = useReactFlow();
+    const [edgePath, labelX, labelY] = getSimpleBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
 
-    const [edgePath] = getStraightPath({ sourceX, sourceY, targetX, targetY })
+    const edgeColorOp = selected ? '#747bff' : '#ccc';
 
     return (
-        <BaseEdge id={id} path={edgePath} />
+        <>
+                <BaseEdge 
+                id={id} 
+                path={edgePath} 
+                style={{
+                    stroke: edgeColorOp,
+                    strokeWidth: '1px',
+                }}
+                />
+                <EdgeLabelRenderer>
+                    <button 
+                    onClick={() => deleteElements({ edges: [{ id }] })}
+                    style={{
+                        position: 'absolute',
+                        transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
+                        pointerEvents: 'all',
+                    }}
+                    className="nodrag nopan"
+                    > delete </button>
+                </EdgeLabelRenderer>
+        </>
 
     // <div className="custom-edge">
         

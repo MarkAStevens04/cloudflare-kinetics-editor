@@ -52,16 +52,16 @@ const getRandomColor = () => {
 }
 
 const initialNodes: AppNode[] = [
-  { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Click to edit', onLabelChange: () => {}, color: getRandomColor() }, type: 'protein'},
-  { id: 'n2', position: { x: 0, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: getRandomColor() }, type: 'protein'},
+  { id: 'n1', position: { x: 0, y: -0 }, data: { label: 'Click to edit', onLabelChange: () => {}, color: getRandomColor() }, type: 'protein'},
+  { id: 'n2', position: { x: 500, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: getRandomColor() }, type: 'protein'},
 ];
 
 let nextId= 2;
 
-const initialEdges: AppEdge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2' , animated: true}];
+const initialEdges: AppEdge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2' , type: 'reaction'}];
  
 const defaultEdgeOptions: DefaultEdgeOptions = {
-  animated: true,
+  type: 'reaction',
 };
 
 export default function App() {
