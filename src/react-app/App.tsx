@@ -67,6 +67,7 @@ export default function App() {
     (changes) => setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
     [setNodes],
   );
+  
   const onEdgesChange: OnEdgesChange = useCallback(
     (changes) => setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
     [setEdges],

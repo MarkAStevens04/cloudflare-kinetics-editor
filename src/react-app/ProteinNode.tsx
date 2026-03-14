@@ -1,4 +1,5 @@
-import { Handle, Position, type Node, type NodeProps, type BuiltInNode } from '@xyflow/react';
+// import type BuiltInNod from '@xyflow/react';
+import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
 import { ChangeEvent } from 'react';
 import './index.css';
 
@@ -8,7 +9,7 @@ type ProteinNodeType = Node<{
     color: string;
 }, 'protein'>;
 
-export type AppNode = BuiltInNode | ProteinNodeType;
+export type AppNode = ProteinNodeType;
 
 
 
