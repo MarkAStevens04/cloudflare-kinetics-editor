@@ -54,6 +54,10 @@ Allows you to add new node
 - Click edge, easily swap direction
 - Edges have arrows on them denoting direction
 
+
+### Decoration
+- Background is little hexagon intersections for organic chemistry
+
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
 

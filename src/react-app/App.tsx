@@ -60,11 +60,11 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
 };
 
 export default function App() {
-  const [nodes, setNodes] = useState(initialNodes);
+  const [nodes, setNodes] = useState<AppNode[]>(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
  
-  const onNodesChange: OnNodesChange = useCallback(
-    (changes) => setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
+  const onNodesChange: OnNodesChange<AppNode> = useCallback(
+    (changes) => setNodes((nodesSnapshot) => applyNodeChanges<AppNode>(changes, nodesSnapshot)),
     [setNodes],
   );
   
@@ -119,7 +119,7 @@ export default function App() {
  
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
-		<ReactFlow
+		<ReactFlow<AppNode, Edge>
         nodes={nodesWithCallbacks}
         edges={edges}
         onNodesChange={onNodesChange}
