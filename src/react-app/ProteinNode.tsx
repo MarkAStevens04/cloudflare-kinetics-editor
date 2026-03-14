@@ -21,10 +21,17 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
 
     const borderColorOp = selected ? '#747bff' : "#ccc";
     const borderSizeOp = selected ? '2px' : '0px';
+    const selectPadding = selected ? '12px 9px' : '12px 12px';
 
     return (
 
-    <div className="custom-node" style={{borderColor : borderColorOp, backgroundColor: data.color, borderWidth: borderSizeOp }}>
+    <div className="custom-node" style={{
+        borderColor : borderColorOp, 
+        backgroundColor: data.color, 
+        borderWidth: borderSizeOp,
+        padding: selectPadding,
+        
+        }}>
         
         {/* Option where you have to double click */}
         {selected ? <input 
@@ -41,8 +48,9 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
                 fontFamily: 'Helios_Extended', 
                 padding: '0px 0px',
                 outline: '0px',
+                transition: 'border-color 0.5s',
             }}
-            /> : <div style={{ fontSize: 24, color: '#000' }}>{data.label}</div>
+            /> : <div style={{ fontSize: 24, color: '#000'}}>{data.label}</div>
         }
 
 

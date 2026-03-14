@@ -11,6 +11,7 @@ npm run deploy
 ### Multi-Highlight
 - Only have to highlight part of a node to select it
 - More beautiful selections
+- On Highlight, also highlight edges
 
 ### Camera controls
 - Switch to Canva defaults 
@@ -46,6 +47,21 @@ npm run deploy
 
 ### Simulation
 - After simulating, change width and color of reaction networks
+
+### Nice little touches
+- Contextual zoom (zooming out shows less detailed stuff https://reactflow.dev/examples/interaction/contextual-zoom)
+
+- Auto-organize button to make nodes aesthetically pleasing
+
+- Aesthetic Gradients (https://reactflow.dev/examples/styling/turbo-flow)
+
+
+### Little guide document
+- What do we want out of this project?
+    - Speed
+    - Intuitive
+    - Exactly what you need (no more, no less)
+
 
 
 ### Right click

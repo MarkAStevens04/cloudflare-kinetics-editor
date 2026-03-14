@@ -164,7 +164,7 @@ export default function App() {
 
       <Panel position="top-right"> 
         <button className="action-button">
-          Simulate!
+          SIMULATE
         </button>
       </Panel>
 
