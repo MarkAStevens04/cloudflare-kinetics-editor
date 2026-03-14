@@ -29,11 +29,15 @@ npm run deploy
 
 - COULD make it so that clicking the text -> edit the text, click the side -> move the node
 
+- Corresponding line on chart should highlight as well
+
 ### Basic Controls
 - Ctrl-Z to undo
 - Ctrl + C / Ctrl + V 
 - Delete AND Backspace allow you to delete stuff
 - Clicking "Enter" after editing name closes selection
+
+- Highlight and edit multiple connections simultaneously!
 
 
 ### Species
@@ -65,13 +69,14 @@ npm run deploy
 
 
 ### Right click
-Allows you to add new node
+- Allows you to add new node
 
 ### Edge Editing
 - Sources can be both inputs OR outputs
 - Click edge, easily swap direction
 - Edges have arrows on them denoting direction
 - Can change where edge ends at (look at reconnectable attr https://reactflow.dev/api-reference/types/edge)
+- Copy and paste edges
  
 
 ### Decoration
