@@ -26,13 +26,30 @@ npm run deploy
     - Maybe after one selection, holding on certain section allows you to move whole thing, but holding on text doesn't?
 - Click once => NO MORE DRAGGING!
 
+- COULD make it so that clicking the text -> edit the text, click the side -> move the node
+
 ### Basic Controls
 - Ctrl-Z to undo
 - Ctrl + C / Ctrl + V 
+- Delete AND Backspace allow you to delete stuff
+- Clicking "Enter" after editing name closes selection
+
+
+### Species
+- Add different reactants
+
+
+### Simulation
+- After simulating, change width and color of reaction networks
 
 
 ### Right click
 Allows you to add new node
+
+### Edge Editing
+- Sources can be both inputs OR outputs
+- Click edge, easily swap direction
+- Edges have arrows on them denoting direction
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
