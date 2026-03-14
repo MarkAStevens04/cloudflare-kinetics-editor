@@ -32,7 +32,7 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
             onChange={onChange}
             placeholder="Type a label..."
             style={{fontSize: 24,
-                border: '2px solid #000',
+                border: '2px solid rgba(0, 0, 0, 0.1)',
                 backgroundColor: data.color,
                 borderRadius: '4px',
                 fieldSizing: 'content',
