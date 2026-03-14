@@ -8,7 +8,7 @@ import {
 	applyEdgeChanges, 
 	addEdge,
 	// type Node,
-	type Edge,
+  // ConnectionMode,
 	type OnNodesChange,
 	type OnEdgesChange,
 	type OnConnect,
@@ -17,9 +17,14 @@ import {
 import '@xyflow/react/dist/style.css';
 
 import ProteinNode, { type AppNode } from './ProteinNode';
+import RxnEdge, { type AppEdge } from './RxnEdge';
 
 const nodeTypes = {
   protein: ProteinNode,
+};
+
+const edgeTypes = {
+  reaction: RxnEdge,
 };
 
 // const NODE_COLORS = [
@@ -53,7 +58,7 @@ const initialNodes: AppNode[] = [
 
 let nextId= 2;
 
-const initialEdges: Edge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2' , animated: true}];
+const initialEdges: AppEdge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2' , animated: true}];
  
 const defaultEdgeOptions: DefaultEdgeOptions = {
   animated: true,
@@ -61,15 +66,15 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
 
 export default function App() {
   const [nodes, setNodes] = useState<AppNode[]>(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
+  const [edges, setEdges] = useState<AppEdge[]>(initialEdges);
  
   const onNodesChange: OnNodesChange<AppNode> = useCallback(
     (changes) => setNodes((nodesSnapshot) => applyNodeChanges<AppNode>(changes, nodesSnapshot)),
     [setNodes],
   );
   
-  const onEdgesChange: OnEdgesChange = useCallback(
-    (changes) => setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
+  const onEdgesChange: OnEdgesChange<AppEdge> = useCallback(
+    (changes) => setEdges((edgesSnapshot) => applyEdgeChanges<AppEdge>(changes, edgesSnapshot)),
     [setEdges],
   );
   const onConnect: OnConnect = useCallback(
@@ -119,13 +124,15 @@ export default function App() {
  
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
-		<ReactFlow<AppNode, Edge>
+		<ReactFlow<AppNode, AppEdge>
         nodes={nodesWithCallbacks}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        // connectionMode={ConnectionMode.Loose}
         fitView
         defaultEdgeOptions={defaultEdgeOptions}>
 			<Background />
