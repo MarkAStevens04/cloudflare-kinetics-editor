@@ -1,7 +1,7 @@
 import { 
     BaseEdge, 
     EdgeLabelRenderer,
-    getSimpleBezierPath,
+    getBezierPath,
     useReactFlow, 
     type Edge,
     type EdgeProps 
@@ -20,7 +20,7 @@ export type AppEdge = RxnEdgeType;
 
 export default function RxnEdge({ id, selected, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition }: EdgeProps<RxnEdgeType>) {
     const { deleteElements } = useReactFlow();
-    const [edgePath, labelX, labelY] = getSimpleBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
+    const [edgePath, labelX, labelY] = getBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
 
     const edgeColorOp = selected ? '#747bff' : '#ccc';
 
