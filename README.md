@@ -42,6 +42,7 @@ npm run deploy
     - Diff color palettes depending on type of species
     - Diff shapes for diff species
 - Z index saved. So as you click, all Z-indices for edges come up
+- When adding multiple nodes, if a node is deleted, roll your index back by one so you get a new node that was the same color as the one you deleted!
 
 ### Simulation
 - After simulating, change width and color of reaction networks

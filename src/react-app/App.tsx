@@ -7,6 +7,7 @@ import {
 	applyNodeChanges, 
 	applyEdgeChanges, 
 	addEdge,
+  MarkerType,
 	// type Node,
   // ConnectionMode,
 	type OnNodesChange,
@@ -58,7 +59,7 @@ const initialNodes: AppNode[] = [
 
 let nextId= 2;
 
-const initialEdges: AppEdge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2' , type: 'reaction'}];
+const initialEdges: AppEdge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction'}];
  
 const defaultEdgeOptions: DefaultEdgeOptions = {
   type: 'reaction',
@@ -77,8 +78,28 @@ export default function App() {
     (changes) => setEdges((edgesSnapshot) => applyEdgeChanges<AppEdge>(changes, edgesSnapshot)),
     [setEdges],
   );
+  // const onConnect: OnConnect = useCallback(
+  //   (connection) => setEdges((edgesSnapshot) => addEdge(connection, edgesSnapshot)),
+  //   [setEdges],
+  // );
+
   const onConnect: OnConnect = useCallback(
-    (connection) => setEdges((edgesSnapshot) => addEdge(connection, edgesSnapshot)),
+    (params) => 
+      setEdges((eds) => 
+        addEdge(
+          {
+            ...params,
+            type: 'reaction',
+            animated: true,
+            markerEnd: { 
+              type: MarkerType.ArrowClosed,
+              width: 20,
+              height: 20
+             },
+          },
+          eds,
+        ),
+      ),
     [setEdges],
   );
 
