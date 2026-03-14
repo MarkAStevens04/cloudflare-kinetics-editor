@@ -48,7 +48,7 @@ const getRandomColor = () => {
 
 const initialNodes: AppNode[] = [
   { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Click to edit', onLabelChange: () => {}, color: getRandomColor() }, type: 'protein'},
-  { id: 'n2', position: { x: 0, y: 100 }, data: { label: 'Protein 2'}, type: 'default'},
+  { id: 'n2', position: { x: 0, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: getRandomColor() }, type: 'protein'},
 ];
 
 let nextId= 2;

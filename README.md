@@ -37,6 +37,9 @@ npm run deploy
 
 ### Species
 - Add different reactants
+- Make it possible to rescale
+    - Diff color palettes depending on type of species
+    - Diff shapes for diff species
 
 
 ### Simulation
