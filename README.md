@@ -60,11 +60,12 @@ npm run deploy
 - Aesthetic Gradients (https://reactflow.dev/examples/styling/turbo-flow)
 
 
-### Little guide document
+### Project Charter Document
 - What do we want out of this project?
     - Speed
     - Intuitive
     - Exactly what you need (no more, no less)
+    - Look like reaction diagrams you see online
 
 
 
