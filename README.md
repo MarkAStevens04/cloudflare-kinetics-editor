@@ -62,6 +62,8 @@ npm run deploy
 
 ### Project Charter Document
 - What do we want out of this project?
+    - * AMAZING DEFAULT OPTIONS! The program should think for you as much as possible.
+    - Make it as non-intimidating as possible for biologists / ppl who don't know reaction mechanisms very well.
     - Speed
     - Intuitive
     - Exactly what you need (no more, no less)
@@ -82,6 +84,10 @@ npm run deploy
 
 ### Decoration
 - Background is little hexagon intersections for organic chemistry
+
+### Optimize based on constraints!
+- Set a desired threshhold for different proteins (want protein X to be > 100, reactant Y <10, etc.) then it automatically helps you choose parameters to optimzie those constraints!
+- Think from the perspective of a synthetic biologist. They want to make something happen, but might not know what levers to turn. Our algorithm could tell them what levers to turn!
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
