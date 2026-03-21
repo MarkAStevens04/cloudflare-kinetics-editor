@@ -11,6 +11,7 @@ npm run deploy
 ### Multi-Highlight
 - Only have to highlight part of a node to select it
 - More beautiful selections
+- On Highlight, also highlight edges
 
 ### Camera controls
 - Switch to Canva defaults 
@@ -28,28 +29,66 @@ npm run deploy
 
 - COULD make it so that clicking the text -> edit the text, click the side -> move the node
 
+- Corresponding line on chart should highlight as well
+
 ### Basic Controls
 - Ctrl-Z to undo
 - Ctrl + C / Ctrl + V 
+    - Multi-node selection, AND individual nodes / edges
 - Delete AND Backspace allow you to delete stuff
 - Clicking "Enter" after editing name closes selection
+
+- Highlight and edit multiple connections simultaneously!
 
 
 ### Species
 - Add different reactants
-
+- Color corresponds to reactant type
+- Make it possible to rescale
+    - Diff color palettes depending on type of species
+    - Diff shapes for diff species
+- Z index saved. So as you click, all Z-indices for edges come up
+- When adding multiple nodes, if a node is deleted, roll your index back by one so you get a new node that was the same color as the one you deleted!
 
 ### Simulation
 - After simulating, change width and color of reaction networks
 
+### Nice little touches
+- Contextual zoom (zooming out shows less detailed stuff https://reactflow.dev/examples/interaction/contextual-zoom)
+
+- Auto-organize button to make nodes aesthetically pleasing
+
+- Aesthetic Gradients (https://reactflow.dev/examples/styling/turbo-flow)
+
+
+### Project Charter Document
+- What do we want out of this project?
+    - * AMAZING DEFAULT OPTIONS! The program should think for you as much as possible.
+    - Make it as non-intimidating as possible for biologists / ppl who don't know reaction mechanisms very well.
+    - Speed
+    - Intuitive
+    - Exactly what you need (no more, no less)
+    - Look like reaction diagrams you see online
+
+
 
 ### Right click
-Allows you to add new node
+- Allows you to add new node
 
 ### Edge Editing
 - Sources can be both inputs OR outputs
 - Click edge, easily swap direction
 - Edges have arrows on them denoting direction
+- Can change where edge ends at (look at reconnectable attr https://reactflow.dev/api-reference/types/edge)
+- Copy and paste edges
+ 
+
+### Decoration
+- Background is little hexagon intersections for organic chemistry
+
+### Optimize based on constraints!
+- Set a desired threshhold for different proteins (want protein X to be > 100, reactant Y <10, etc.) then it automatically helps you choose parameters to optimzie those constraints!
+- Think from the perspective of a synthetic biologist. They want to make something happen, but might not know what levers to turn. Our algorithm could tell them what levers to turn!
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)

@@ -7,8 +7,9 @@ import {
 	applyNodeChanges, 
 	applyEdgeChanges, 
 	addEdge,
+  MarkerType,
 	// type Node,
-	type Edge,
+  // ConnectionMode,
 	type OnNodesChange,
 	type OnEdgesChange,
 	type OnConnect,
@@ -17,38 +18,97 @@ import {
 import '@xyflow/react/dist/style.css';
 
 import ProteinNode, { type AppNode } from './ProteinNode';
+import RxnEdge, { type AppEdge } from './RxnEdge';
+import RxnDrawer from './Drawer';
 
 const nodeTypes = {
   protein: ProteinNode,
 };
- 
-const initialNodes: AppNode[] = [
-  { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Click to edit', onLabelChange: () => {} }, type: 'protein'},
-  { id: 'n2', position: { x: 0, y: 100 }, data: { label: 'Protein 2'}, type: 'default'},
-];
-const initialEdges: Edge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2' , animated: true}];
- 
-const defaultEdgeOptions: DefaultEdgeOptions = {
-  animated: true,
+
+const edgeTypes = {
+  reaction: RxnEdge,
 };
 
-let nextId= 3;
+// const NODE_COLORS = [
+//   '#ee6055', // Vibrant Coral
+//   '#60d394', // Emerald
+//   '#aaf683', // Light Green
+//   '#ffd97d', // Jasmine
+//   '#ff9b85', // Salmon
+// ]
+
+
+const NODE_COLORS = [
+  '#90f1ef', // Soft Cyan
+  '#ffd6e0', // Petal Frost
+  '#ffef9f', // Vanilla Custard
+  '#c1fba4', // Light Green
+  '#7bf1a8', // Light Green
+]
+
+let colIdx= 1;
+
+const getRandomColor = () => {
+  colIdx = (colIdx + 1) % NODE_COLORS.length;
+  return NODE_COLORS[colIdx];
+}
+
+const initialNodes: AppNode[] = [
+  { id: 'n1', position: { x: 0, y: -0 }, data: { label: 'Click to edit', onLabelChange: () => {}, color: getRandomColor() }, type: 'protein'},
+  { id: 'n2', position: { x: 500, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: getRandomColor() }, type: 'protein'},
+];
+
+let nextId= 2;
+
+const initialEdges: AppEdge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test', toggleDrawer: () => {},}, }];
+ 
+const defaultEdgeOptions: DefaultEdgeOptions = {
+  type: 'reaction',
+};
 
 export default function App() {
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
+  const [nodes, setNodes] = useState<AppNode[]>(initialNodes);
+  const [edges, setEdges] = useState<AppEdge[]>(initialEdges);
+  const [drawerToggle, setDrawerToggle] = useState(false);
  
-  const onNodesChange: OnNodesChange = useCallback(
-    (changes) => setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
+  const onNodesChange: OnNodesChange<AppNode> = useCallback(
+    (changes) => setNodes((nodesSnapshot) => applyNodeChanges<AppNode>(changes, nodesSnapshot)),
     [setNodes],
   );
-  const onEdgesChange: OnEdgesChange = useCallback(
-    (changes) => setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
+  
+  const onEdgesChange: OnEdgesChange<AppEdge> = useCallback(
+    (changes) => setEdges((edgesSnapshot) => applyEdgeChanges<AppEdge>(changes, edgesSnapshot)),
     [setEdges],
   );
+  // const onConnect: OnConnect = useCallback(
+  //   (connection) => setEdges((edgesSnapshot) => addEdge(connection, edgesSnapshot)),
+  //   [setEdges],
+  // );
+
+  const onDrawerToggle = useCallback(() => {
+    setDrawerToggle(!drawerToggle);
+  }, [drawerToggle]);
+
   const onConnect: OnConnect = useCallback(
-    (connection) => setEdges((edgesSnapshot) => addEdge(connection, edgesSnapshot)),
-    [setEdges],
+    (params) => 
+      setEdges((eds) => 
+        addEdge(
+          {
+            ...params,
+            type: 'reaction',
+            animated: true,
+            markerEnd: { 
+              type: MarkerType.ArrowClosed,
+              width: 20,
+              height: 20
+             },
+            data: { label: 't2', toggleDrawer: onDrawerToggle },
+            
+          },
+          eds,
+        ),
+      ),
+    [setEdges, onDrawerToggle],
   );
 
   const onLabelChange = useCallback(
@@ -84,7 +144,7 @@ export default function App() {
         x: Math.random() * 300,
         y: Math.random() * 300,
       },
-      data: { label: 'New Species', onLabelChange: () => {} },
+      data: { label: 'Species ' + String(nextId), onLabelChange: () => {}, color: getRandomColor() },
       type: 'protein',
     };
 
@@ -92,29 +152,38 @@ export default function App() {
   }, [setNodes]);
  
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
-		<ReactFlow
-        nodes={nodesWithCallbacks}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        nodeTypes={nodeTypes}
-        fitView
-        defaultEdgeOptions={defaultEdgeOptions}>
-			<Background />
-			<Controls />
-			<Panel position="top-left"> 
-        <button onClick={addNode}>Add New Node</button>
-      </Panel>
+    <div style={{ width: '100vw', height: '100vh' }} className="app">
+        <>
+        <ReactFlow<AppNode, AppEdge>
+            nodes={nodesWithCallbacks}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
+            // connectionMode={ConnectionMode.Loose}
+            fitView
+            defaultEdgeOptions={defaultEdgeOptions}>
+          <Background />
+          <Controls />
 
-      <Panel position="top-right"> 
-        <button className="action-button">
-          Simulate!
-        </button>
-      </Panel>
+          <Panel position="top-right"> 
+            <button className="action-button">
+              SIMULATE
+            </button>
+          </Panel>
+          
 
-		</ReactFlow>
+        </ReactFlow>
+        
+        
+        </>
+        
+        <RxnDrawer open={drawerToggle} onClose={onDrawerToggle} />
+        <button onClick={addNode} style={{position: 'fixed', top: 10, left: 10}}>Add New Node</button>
+        
+      
     </div>
   );
 }
