@@ -12,6 +12,8 @@ import './index.css';
 type RxnEdgeType = Edge<{ 
     label: string; 
     toggleDrawer: () => void;
+    onRateLawChange: (id: string, rateLaw: string) => void;
+    rate_law: string;
 }, 'reaction'>;
 
 export type AppEdge = RxnEdgeType;

@@ -34,7 +34,7 @@ npm run deploy
 ### Basic Controls
 - Ctrl-Z to undo
 - Ctrl + C / Ctrl + V 
-    - Multi-node selection, AND individual nodes / edges
+    - Multi-node selection, AND individual nodes / ed
 - Delete AND Backspace allow you to delete stuff
 - Clicking "Enter" after editing name closes selection
 
@@ -89,6 +89,12 @@ npm run deploy
 ### Optimize based on constraints!
 - Set a desired threshhold for different proteins (want protein X to be > 100, reactant Y <10, etc.) then it automatically helps you choose parameters to optimzie those constraints!
 - Think from the perspective of a synthetic biologist. They want to make something happen, but might not know what levers to turn. Our algorithm could tell them what levers to turn!
+
+### Diagram Layout
+- Think about how much abstraction you want your app to have for the diagrams
+- Implicitly add "bound enzyme" kinetics
+    - So normally you have Lactose -> sucrose + glucose (with a little "lactase" above the arrow)
+    - What if we implicitly had this happen, like didn't show the full diagram? This would be a "simplified" diagram.
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
