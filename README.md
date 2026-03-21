@@ -34,6 +34,7 @@ npm run deploy
 ### Basic Controls
 - Ctrl-Z to undo
 - Ctrl + C / Ctrl + V 
+    - Multi-node selection, AND individual nodes / edges
 - Delete AND Backspace allow you to delete stuff
 - Clicking "Enter" after editing name closes selection
 

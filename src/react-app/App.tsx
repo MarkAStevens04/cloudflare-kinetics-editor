@@ -19,6 +19,7 @@ import '@xyflow/react/dist/style.css';
 
 import ProteinNode, { type AppNode } from './ProteinNode';
 import RxnEdge, { type AppEdge } from './RxnEdge';
+import RxnDrawer from './Drawer';
 
 const nodeTypes = {
   protein: ProteinNode,
@@ -59,7 +60,7 @@ const initialNodes: AppNode[] = [
 
 let nextId= 2;
 
-const initialEdges: AppEdge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction'}];
+const initialEdges: AppEdge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test', toggleDrawer: () => {},}, }];
  
 const defaultEdgeOptions: DefaultEdgeOptions = {
   type: 'reaction',
@@ -68,6 +69,7 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
 export default function App() {
   const [nodes, setNodes] = useState<AppNode[]>(initialNodes);
   const [edges, setEdges] = useState<AppEdge[]>(initialEdges);
+  const [drawerToggle, setDrawerToggle] = useState(true);
  
   const onNodesChange: OnNodesChange<AppNode> = useCallback(
     (changes) => setNodes((nodesSnapshot) => applyNodeChanges<AppNode>(changes, nodesSnapshot)),
@@ -83,6 +85,10 @@ export default function App() {
   //   [setEdges],
   // );
 
+  const onDrawerToggle = useCallback(() => {
+    setDrawerToggle(!drawerToggle);
+  }, [drawerToggle]);
+
   const onConnect: OnConnect = useCallback(
     (params) => 
       setEdges((eds) => 
@@ -96,11 +102,13 @@ export default function App() {
               width: 20,
               height: 20
              },
+            data: { label: 't2', toggleDrawer: onDrawerToggle },
+            
           },
           eds,
         ),
       ),
-    [setEdges],
+    [setEdges, onDrawerToggle],
   );
 
   const onLabelChange = useCallback(
@@ -144,31 +152,38 @@ export default function App() {
   }, [setNodes]);
  
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
-		<ReactFlow<AppNode, AppEdge>
-        nodes={nodesWithCallbacks}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        // connectionMode={ConnectionMode.Loose}
-        fitView
-        defaultEdgeOptions={defaultEdgeOptions}>
-			<Background />
-			<Controls />
-			<Panel position="top-left"> 
-        <button onClick={addNode}>Add New Node</button>
-      </Panel>
+    <div style={{ width: '100vw', height: '100vh' }} className="app">
+        <>
+        <ReactFlow<AppNode, AppEdge>
+            nodes={nodesWithCallbacks}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
+            // connectionMode={ConnectionMode.Loose}
+            fitView
+            defaultEdgeOptions={defaultEdgeOptions}>
+          <Background />
+          <Controls />
 
-      <Panel position="top-right"> 
-        <button className="action-button">
-          SIMULATE
-        </button>
-      </Panel>
+          <Panel position="top-right"> 
+            <button className="action-button">
+              SIMULATE
+            </button>
+          </Panel>
+          
 
-		</ReactFlow>
+        </ReactFlow>
+        
+        
+        </>
+        
+        <RxnDrawer open={drawerToggle} onClose={onDrawerToggle} />
+        <button onClick={addNode} style={{position: 'fixed', top: 10, left: 10}}>Add New Node</button>
+        
+      
     </div>
   );
 }
