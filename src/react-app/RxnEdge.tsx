@@ -11,8 +11,7 @@ import './index.css';
 
 type RxnEdgeType = Edge<{ 
     label: string; 
-    toggleDrawer: () => void;
-    onRateLawChange: (id: string, rateLaw: string) => void;
+    toggleDrawer: (id: string) => void;
     rate_law: string;
 }, 'reaction'>;
 
@@ -38,6 +37,10 @@ export default function RxnEdge({
     const edgeColorOp = selected ? '#747bff' : '#ccc';
 
     const activeMarkerEnd = selected ? 'url(#selected-marker)' : markerEnd;
+
+    const onToggle = () => {
+        data?.toggleDrawer(id);
+    }
 
     return (
         <>
@@ -83,7 +86,7 @@ export default function RxnEdge({
             />
             <EdgeLabelRenderer>
                 <button 
-                onClick={data?.toggleDrawer}
+                onClick={onToggle}
                 style={{
                     position: 'absolute',
                     transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,

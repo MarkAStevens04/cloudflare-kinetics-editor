@@ -65,7 +65,7 @@ const initialNodes: AppNode[] = [
 
 let nextId= 3;
 
-const initialEdges: AppEdge[] = [{ id: 'n1_n2', source: 'n1', target: 'n2' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: '10', onRateLawChange: () => {}}, }];
+const initialEdges: AppEdge[] = [{ id: 'n1_n2', source: 'n1', target: 'n2' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: '10'}, }];
  
 const defaultEdgeOptions: DefaultEdgeOptions = {
   type: 'reaction',
@@ -75,6 +75,9 @@ export default function App() {
   const [nodes, setNodes] = useState<AppNode[]>(initialNodes);
   const [edges, setEdges] = useState<AppEdge[]>(initialEdges);
   const [drawerToggle, setDrawerToggle] = useState(false);
+
+  const [selectedRxnId, setSelectedRxnId] = useState('none');
+  const [currRateLaw, setCurrRateLaw] = useState('none');
  
   const onNodesChange: OnNodesChange<AppNode> = useCallback(
     (changes) => setNodes((nodesSnapshot) => applyNodeChanges<AppNode>(changes, nodesSnapshot)),
@@ -90,9 +93,11 @@ export default function App() {
   //   [setEdges],
   // );
 
-  const onDrawerToggle = useCallback(() => {
+  const onDrawerToggle = useCallback((id: string) => {
+    setSelectedRxnId(id);
+    setCurrRateLaw(edges.find((edge) => edge.id === id)?.data?.rate_law || 'none');
     setDrawerToggle(!drawerToggle);
-  }, [drawerToggle]);
+  }, [drawerToggle, edges]);
 
   const onConnect: OnConnect = useCallback(
     (params) => 
@@ -108,7 +113,7 @@ export default function App() {
               width: 20,
               height: 20
              },
-            data: { label: 't2', toggleDrawer: () => {}, rate_law: '10', onRateLawChange: () => {} },
+            data: { label: 't2', toggleDrawer: () => {}, rate_law: '10'},
             
           },
           eds,
@@ -138,6 +143,8 @@ export default function App() {
 
   const onRateLawChange = useCallback(
     (id: string, rateLaw: string) => {
+      setCurrRateLaw(rateLaw);
+
       setEdges((eds) =>
         eds.map((edge) => {
 
@@ -153,7 +160,7 @@ export default function App() {
                 }
             }
         })
-      )
+      );
     },
     [setEdges]
   );
@@ -178,8 +185,7 @@ export default function App() {
       ...edge,
       data: {
         ...edge.data,
-        toggleDrawer: onDrawerToggle,
-        onRateLawChange: onRateLawChange,
+        toggleDrawer: () => onDrawerToggle(edge.id)
       }
     }
   });
@@ -236,8 +242,20 @@ export default function App() {
         
         
         </>
+        {drawerToggle && 
+          <RxnDrawer 
+          RxnID={selectedRxnId} 
+          rateLaw={currRateLaw}
+          open={drawerToggle} 
+          onClose={onDrawerToggle} 
+          onRateLawChange={onRateLawChange}
+        />
         
-        <RxnDrawer open={drawerToggle} onClose={onDrawerToggle} />
+        }
+        
+        
+
+
         <button onClick={addNode} style={{position: 'fixed', top: 10, left: 10}}>Add New Node</button>
         <button onClick={callSimulation} className="action-button" style={{position: 'fixed', top: 10, right: 10}}>SIMULATE</button>
         

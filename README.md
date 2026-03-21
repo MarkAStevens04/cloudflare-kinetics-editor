@@ -96,6 +96,14 @@ npm run deploy
     - So normally you have Lactose -> sucrose + glucose (with a little "lactase" above the arrow)
     - What if we implicitly had this happen, like didn't show the full diagram? This would be a "simplified" diagram.
 
+### Autofill Protein info
+- Have a "reaction" drawer and a "protein" drawer
+    - Reaction drawer for getting info about a reaction
+    - Protein drawer for suggesting protein stuff
+
+### BUG FIXES:
+- Connecting edge to itself
+
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
 

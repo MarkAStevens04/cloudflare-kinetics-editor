@@ -5,21 +5,31 @@
   // child's job because the parent knows the right parameters to give it, wheras the
   // child wouldn't be able to provide ANY parameters to the function.
 import React from 'react';
+import { ChangeEvent } from 'react';
 import { animated, useTransition } from '@react-spring/web';
 
 
 import './index.css';
 
 
-export type DrawerProps = {
+export type RxnDrawerProps = {
+    RxnID: string;
+    rateLaw: string;
     open: boolean;
     onClose: () => void;
-    children?: React.ReactNode;
+    onRateLawChange: (id: string, rateLaw: string) => void;
+    // children?: React.ReactNode;
 };
 
 
 
-export default function RxnDrawer({open, onClose}: DrawerProps) {
+export default function RxnDrawer({RxnID, rateLaw, open, onClose, onRateLawChange}: RxnDrawerProps) {
+
+    console.log('Drawer has id: ', RxnID);
+
+    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+        onRateLawChange(RxnID, event.target.value);
+    }
 
     const transitions = useTransition(open ? [true] : [],  {
         from: { x: -240, opacity: 0 },
@@ -67,7 +77,11 @@ export default function RxnDrawer({open, onClose}: DrawerProps) {
                 {/* <button onClick={onClose} className="nodrag nopan action-button">Close</button> */}
                 <p>From REACTANT_1 - REACTANT_2</p>
 
-                <input placeholder="Rate Law" />           
+                <input 
+                    placeholder="Rate Law" 
+                    value={rateLaw}
+                    onChange={onChange}
+                />           
 
                 <input placeholder="Initial concentration: REACTANT 1" /> 
                 <input placeholder="Initial concentration: REACTANT 2" /> 
