@@ -28,19 +28,35 @@ export default function RxnDrawer({open, onClose}: DrawerProps) {
         config: { tension: 220, friction: 24 },
     });
 
+    const interactiveBG = open ? 'block' : 'none';
+    const currOpacity = open ? 1 : 0;
+
     return transitions((style, item) =>
         item ? (
             <>
                 {/* Closes when you click out of the drawer, but prevents moving around the screen. */}
-                {open && <div 
+                {/* {open && <div 
+                    className="drawer-dimmer"
                     onClick={onClose}
                     style={{
                         position: 'fixed',
                         inset: 0,
-                        background: 'rgba(0, 0, 0, 0)',
+                        background: 'rgba(0, 0, 0, 0.1)',
                     }}
                 />
-                }
+                } */}
+
+                <div 
+                    className="drawer-dimmer"
+                    onClick={onClose}
+                    style={{
+                        position: 'fixed',
+                        inset: 0,
+                        background: 'rgba(0, 0, 0, 0.1)',
+                        display: interactiveBG,
+                        opacity: currOpacity,
+                    }}
+                />
                 
                 
 

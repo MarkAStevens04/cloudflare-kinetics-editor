@@ -69,7 +69,7 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
 export default function App() {
   const [nodes, setNodes] = useState<AppNode[]>(initialNodes);
   const [edges, setEdges] = useState<AppEdge[]>(initialEdges);
-  const [drawerToggle, setDrawerToggle] = useState(true);
+  const [drawerToggle, setDrawerToggle] = useState(false);
  
   const onNodesChange: OnNodesChange<AppNode> = useCallback(
     (changes) => setNodes((nodesSnapshot) => applyNodeChanges<AppNode>(changes, nodesSnapshot)),
