@@ -8,57 +8,58 @@
 import { ChangeEvent } from 'react';
 import { animated, useTransition } from '@react-spring/web';
 
+import { type AppNode } from './ProteinNode';
+import { type AppEdge } from './RxnEdge';
+
 
 import './index.css';
 
 
 export type RxnDrawerProps = {
-    RxnID: string;
-    ReaID: string;
-    ProID: string;
-    rateLaw: string;
-    reactantInit: string;
-    productInit: string;
-    reactantLabel: string;
-    productLabel: string;
+    edge: AppEdge;
+    nodes: AppNode[];
     open: boolean;
     onClose: () => void;
-    onRateLawChange: (id: string, rateLaw: string, reactantInit: string, productInit: string) => void;
-    onReactantChange: (id: string, reactantInit: string) => void;
-    onProductChange: (id: string, productInit: string) => void;
+    onRateLawChange: (id: string, rateLaw: string) => void;
+    onInitialChange: (currNode: AppNode, reactantInit: string) => void;
     // children?: React.ReactNode;
 };
 
 
 
 export default function RxnDrawer({
-    RxnID, 
-    ReaID,
-    ProID,
-    rateLaw, 
-    reactantInit, 
-    productInit, 
-    reactantLabel, 
-    productLabel, 
+    edge, 
+    nodes,
     open,
     onClose, 
     onRateLawChange,
-    onReactantChange,
-    onProductChange,
+    onInitialChange,
 }: RxnDrawerProps) {
+
+    const sourceNode = nodes.find((node) => node.id === edge.source) || nodes[0];
+    const targetNode = nodes.find((node) => node.id === edge.target) || nodes[0];
+
+    const RxnID = edge.id;
+    const rateLaw = edge.data?.rate_law;
+
+    const reactantInit = sourceNode.data.initial || '';
+    const productInit = targetNode.data.initial || '';
+    const reactantLabel = sourceNode.data.label;
+    const productLabel = targetNode.data.label;
+
 
     console.log('Drawer has id: ', RxnID);
 
     const onRateChange = (event: ChangeEvent<HTMLInputElement>) => {
-        onRateLawChange(RxnID, event.target.value, reactantInit, productInit);
+        onRateLawChange(RxnID, event.target.value);
     }
 
     const onRChange = (event: ChangeEvent<HTMLInputElement>) => {
-        onReactantChange(ReaID, event.target.value);
+        onInitialChange(sourceNode, event.target.value);
     }
 
     const onPChange = (event: ChangeEvent<HTMLInputElement>) => {
-        onProductChange(ProID, event.target.value);
+        onInitialChange(targetNode, event.target.value);
     }
 
     // const onDrawerClick = () => {
