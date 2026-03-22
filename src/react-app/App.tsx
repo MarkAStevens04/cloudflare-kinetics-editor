@@ -59,13 +59,13 @@ const getRandomColor = () => {
 }
 
 const initialNodes: AppNode[] = [
-  { id: 'n1', position: { x: 0, y: -0 }, data: { label: 'Click to edit', onLabelChange: () => {}, color: getRandomColor(), initial: 0 }, type: 'protein'},
-  { id: 'n2', position: { x: 500, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: getRandomColor(), initial: 0 }, type: 'protein'},
+  { id: 'n1', position: { x: 0, y: -0 }, data: { label: 'Click to edit', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
+  { id: 'n2', position: { x: 500, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
 ];
 
 let nextId= 3;
 
-const initialEdges: AppEdge[] = [{ id: 'n1_n2', source: 'n1', target: 'n2' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: '10'}, }];
+const initialEdges: AppEdge[] = [{ id: 'n1_n2', source: 'n1', target: 'n2' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: '0'}, }];
  
 const defaultEdgeOptions: DefaultEdgeOptions = {
   type: 'reaction',
@@ -78,7 +78,16 @@ export default function App() {
 
   const [selectedRxnId, setSelectedRxnId] = useState('none');
   const [currRateLaw, setCurrRateLaw] = useState('none');
- 
+
+  const [currReactantInit, setCurrReactantInit] = useState('');
+  const [currProductInit, setCurrProductInit] = useState('');
+
+  const [currReactantLabel, setCurrReactantLabel] = useState('');
+  const [currProductLabel, setCurrProductLabel] = useState('');
+
+  const [currReactantID, setCurrReactantID] = useState('');
+  const [currProductID, setCurrProductID] = useState('');
+
   const onNodesChange: OnNodesChange<AppNode> = useCallback(
     (changes) => setNodes((nodesSnapshot) => applyNodeChanges<AppNode>(changes, nodesSnapshot)),
     [setNodes],
@@ -96,8 +105,21 @@ export default function App() {
   const onDrawerToggle = useCallback((id: string) => {
     setSelectedRxnId(id);
     setCurrRateLaw(edges.find((edge) => edge.id === id)?.data?.rate_law || 'none');
+
+    const currReactID = edges.find((edge) => edge.id === id)?.source || 'none';
+    const currProductID = edges.find((edge) => edge.id === id)?.target || 'none';
+
+    setCurrReactantInit(nodes.find((node) => node.id === currReactID)?.data.initial || '');
+    setCurrProductInit(nodes.find((node) => node.id === currProductID)?.data.initial || '');
+
+    setCurrReactantLabel(nodes.find((node) => node.id === currReactID)?.data.label || '');
+    setCurrProductLabel(nodes.find((node) => node.id === currProductID)?.data.label || '');
+
+    setCurrReactantID(currReactID);
+    setCurrProductID(currProductID);
+
     setDrawerToggle(!drawerToggle);
-  }, [drawerToggle, edges]);
+  }, [drawerToggle, edges, nodes]);
 
   const onConnect: OnConnect = useCallback(
     (params) => 
@@ -113,7 +135,7 @@ export default function App() {
               width: 20,
               height: 20
              },
-            data: { label: 't2', toggleDrawer: () => {}, rate_law: '10'},
+            data: { label: 't2', toggleDrawer: () => {}, rate_law: '0'},
             
           },
           eds,
@@ -142,14 +164,14 @@ export default function App() {
 
 
   const onRateLawChange = useCallback(
-    (id: string, rateLaw: string) => {
+    (EID: string, rateLaw: string, reactantInit: string, productInit: string) => {
       setCurrRateLaw(rateLaw);
 
       setEdges((eds) =>
         eds.map((edge) => {
 
           // Make sure edge has data
-          if (edge.id != id) return edge;
+          if (edge.id != EID) return edge;
           if (!edge.data) return edge;
 
           return {
@@ -157,12 +179,56 @@ export default function App() {
                 data: {
                   ...edge.data,
                   rate_law: rateLaw,
+                  reactantInit: reactantInit,
+                  productInit: productInit,
                 }
             }
         })
       );
+
     },
     [setEdges]
+  );
+
+  const onReactantChange = useCallback(
+    (RID: string, reactantInit: string, ) => {
+      setCurrReactantInit(reactantInit);
+
+      setNodes((nds) =>
+        nds.map((node) =>
+          node.id === RID
+            ? {
+                ...node,
+                data: {
+                  ...node.data,
+                  initial: reactantInit,
+                }
+            } : node
+        )
+      );
+    },
+    [setNodes]
+  );
+
+
+  const onProductChange = useCallback(
+    (PID: string, productInit: string, ) => {
+      setCurrProductInit(productInit);
+
+      setNodes((nds) =>
+        nds.map((node) =>
+          node.id === PID
+            ? {
+                ...node,
+                data: {
+                  ...node.data,
+                  initial: productInit,
+                }
+            } : node
+        )
+      );
+    },
+    [setNodes]
   );
 
   // update all nodes to have the correct callback
@@ -197,7 +263,7 @@ export default function App() {
         x: Math.random() * 300,
         y: Math.random() * 300,
       },
-      data: { label: 'Species ' + String(nextId - 1), onLabelChange: () => {}, color: getRandomColor(), initial: 0 },
+      data: { label: 'Species ' + String(nextId - 1), onLabelChange: () => {}, color: getRandomColor(), initial: '' },
       type: 'protein',
     };
 
@@ -245,10 +311,22 @@ export default function App() {
         {drawerToggle && 
           <RxnDrawer 
           RxnID={selectedRxnId} 
+          ReaID={currReactantID}
+          ProID={currProductID}
+
           rateLaw={currRateLaw}
+          reactantInit={currReactantInit}
+          productInit={currProductInit}
+          
+          reactantLabel={currReactantLabel}
+          productLabel={currProductLabel}
+
           open={drawerToggle} 
-          onClose={onDrawerToggle} 
+          // POSSIBLE ERROR!! When we store onDrawerToggle(selectedRxnId) if selectedRxnId changes, we'll save our rate law to the NEW reaction id!
+          onClose={() => onDrawerToggle(selectedRxnId)} 
           onRateLawChange={onRateLawChange}
+          onReactantChange={onReactantChange}
+          onProductChange={onProductChange}
         />
         
         }

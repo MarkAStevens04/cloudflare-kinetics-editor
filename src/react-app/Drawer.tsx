@@ -4,7 +4,7 @@
   // to run that function, and I'll do it for you." The parent board is taking over this
   // child's job because the parent knows the right parameters to give it, wheras the
   // child wouldn't be able to provide ANY parameters to the function.
-import React from 'react';
+// import React from 'react';
 import { ChangeEvent } from 'react';
 import { animated, useTransition } from '@react-spring/web';
 
@@ -14,22 +14,56 @@ import './index.css';
 
 export type RxnDrawerProps = {
     RxnID: string;
+    ReaID: string;
+    ProID: string;
     rateLaw: string;
+    reactantInit: string;
+    productInit: string;
+    reactantLabel: string;
+    productLabel: string;
     open: boolean;
     onClose: () => void;
-    onRateLawChange: (id: string, rateLaw: string) => void;
+    onRateLawChange: (id: string, rateLaw: string, reactantInit: string, productInit: string) => void;
+    onReactantChange: (id: string, reactantInit: string) => void;
+    onProductChange: (id: string, productInit: string) => void;
     // children?: React.ReactNode;
 };
 
 
 
-export default function RxnDrawer({RxnID, rateLaw, open, onClose, onRateLawChange}: RxnDrawerProps) {
+export default function RxnDrawer({
+    RxnID, 
+    ReaID,
+    ProID,
+    rateLaw, 
+    reactantInit, 
+    productInit, 
+    reactantLabel, 
+    productLabel, 
+    open,
+    onClose, 
+    onRateLawChange,
+    onReactantChange,
+    onProductChange,
+}: RxnDrawerProps) {
 
     console.log('Drawer has id: ', RxnID);
 
-    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-        onRateLawChange(RxnID, event.target.value);
+    const onRateChange = (event: ChangeEvent<HTMLInputElement>) => {
+        onRateLawChange(RxnID, event.target.value, reactantInit, productInit);
     }
+
+    const onRChange = (event: ChangeEvent<HTMLInputElement>) => {
+        onReactantChange(ReaID, event.target.value);
+    }
+
+    const onPChange = (event: ChangeEvent<HTMLInputElement>) => {
+        onProductChange(ProID, event.target.value);
+    }
+
+    // const onDrawerClick = () => {
+    //     onClose(RxnID);
+    // }
 
     const transitions = useTransition(open ? [true] : [],  {
         from: { x: -240, opacity: 0 },
@@ -75,16 +109,25 @@ export default function RxnDrawer({RxnID, rateLaw, open, onClose, onRateLawChang
                 > 
                 <br /> <br />
                 {/* <button onClick={onClose} className="nodrag nopan action-button">Close</button> */}
-                <p>From REACTANT_1 - REACTANT_2</p>
+                <p>From {reactantLabel} - {productLabel}</p>
 
                 <input 
                     placeholder="Rate Law" 
-                    value={rateLaw}
-                    onChange={onChange}
-                />           
+                    value={rateLaw === '0' ? '' : rateLaw}
+                    onChange={onRateChange}
+                />   
+                
+                <input 
+                    placeholder={`${reactantLabel} Initial Concentration`} 
+                    value={reactantInit === '' ? '' : reactantInit}
+                    onChange={onRChange}
+                />      
 
-                <input placeholder="Initial concentration: REACTANT 1" /> 
-                <input placeholder="Initial concentration: REACTANT 2" /> 
+                <input 
+                    placeholder={`${productLabel} Initial Concentration`} 
+                    value={productInit === '' ? '' : productInit}
+                    onChange={onPChange}
+                />              
 
                 </animated.div>
             </>

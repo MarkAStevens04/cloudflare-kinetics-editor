@@ -7,7 +7,7 @@ type ProteinNodeType = Node<{
     label: string; 
     onLabelChange: (id: string, value: string) => void;
     color: string;
-    initial: number;
+    initial: string;
 }, 'protein'>;
 
 export type AppNode = ProteinNodeType;
