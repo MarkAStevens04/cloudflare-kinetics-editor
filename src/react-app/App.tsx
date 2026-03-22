@@ -59,7 +59,7 @@ const getRandomColor = () => {
 }
 
 const initialNodes: AppNode[] = [
-  { id: 'n0', position: { x: -500, y: -500 }, data: { label: 'DEFAULT NODE (ERROR)', onLabelChange: () => {}, color: '#fff', initial: '' }, type: 'protein'},
+  // { id: 'n0', position: { x: -500, y: -500 }, data: { label: 'DEFAULT NODE (ERROR)', onLabelChange: () => {}, color: '#ddd', initial: '' }, type: 'protein'},
   { id: 'n1', position: { x: 0, y: -0 }, data: { label: 'Click to edit', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
   { id: 'n2', position: { x: 500, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
 ];
@@ -268,24 +268,23 @@ export default function App() {
         
         
         </>
-        {drawerToggle && 
-          <RxnDrawer 
+
+        <button onClick={addNode} style={{position: 'fixed', top: 10, left: 10}}>Add New Node</button>
+        <RxnDrawer 
           edge={selectedRxn} 
           nodes={nodesWithCallbacks}
 
           open={drawerToggle} 
           // POSSIBLE ERROR!! When we store onDrawerToggle(selectedRxnId) if selectedRxnId changes, we'll save our rate law to the NEW reaction id!
-          onClose={() => onDrawerToggle(selectedRxn.id)} 
+          onToggle={() => onDrawerToggle(selectedRxnID)} 
           onRateLawChange={onRateLawChange}
           onInitialChange={onInitialChange}
         />
         
-        }
-        
         
 
 
-        <button onClick={addNode} style={{position: 'fixed', top: 10, left: 10}}>Add New Node</button>
+        
         <button onClick={callSimulation} className="action-button" style={{position: 'fixed', top: 10, right: 10}}>SIMULATE</button>
         
       

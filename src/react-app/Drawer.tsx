@@ -19,7 +19,7 @@ export type RxnDrawerProps = {
     edge: AppEdge;
     nodes: AppNode[];
     open: boolean;
-    onClose: () => void;
+    onToggle: () => void;
     onRateLawChange: (id: string, rateLaw: string) => void;
     onInitialChange: (currNode: AppNode, reactantInit: string) => void;
     // children?: React.ReactNode;
@@ -31,7 +31,7 @@ export default function RxnDrawer({
     edge, 
     nodes,
     open,
-    onClose, 
+    onToggle, 
     onRateLawChange,
     onInitialChange,
 }: RxnDrawerProps) {
@@ -44,11 +44,12 @@ export default function RxnDrawer({
 
     const reactantInit = sourceNode.data.initial || '';
     const productInit = targetNode.data.initial || '';
+
     const reactantLabel = sourceNode.data.label;
     const productLabel = targetNode.data.label;
 
-
-    console.log('Drawer has id: ', RxnID);
+    const reactantColor = sourceNode.data.color;
+    const productColor = targetNode.data.color;
 
     const onRateChange = (event: ChangeEvent<HTMLInputElement>) => {
         onRateLawChange(RxnID, event.target.value);
@@ -62,10 +63,6 @@ export default function RxnDrawer({
         onInitialChange(targetNode, event.target.value);
     }
 
-    // const onDrawerClick = () => {
-    //     onClose(RxnID);
-    // }
-
     const transitions = useTransition(open ? [true] : [],  {
         from: { x: -240, opacity: 0 },
         enter: { x: 0, opacity: 1},
@@ -73,22 +70,22 @@ export default function RxnDrawer({
         config: { tension: 220, friction: 24 },
     });
 
-    const interactiveBG = open ? 'block' : 'none';
-    const currOpacity = open ? 1 : 0;
+    // const interactiveBG = open ? 'block' : 'none';
+    const pointerEvents = open ? 'auto' : 'none';
 
     return transitions((style, item) =>
         item ? (
             <>
                 {/* Closes when you click out of the drawer, but prevents moving around the screen. */}
-                <div 
+                <animated.div 
                     className="drawer-dimmer"
-                    onClick={onClose}
+                    onClick={onToggle}
                     style={{
+                        pointerEvents: pointerEvents,
                         position: 'fixed',
                         inset: 0,
                         background: 'rgba(0, 0, 0, 0.1)',
-                        display: interactiveBG,
-                        opacity: currOpacity,
+                        opacity: style.opacity,
                     }}
                 />
                 
@@ -110,7 +107,11 @@ export default function RxnDrawer({
                 > 
                 <br /> <br />
                 {/* <button onClick={onClose} className="nodrag nopan action-button">Close</button> */}
-                <p>From {reactantLabel} - {productLabel}</p>
+                <p className="species-text" >
+                    <p className="species-highlight-box" style={{backgroundColor: reactantColor,}}>{reactantLabel}</p>
+                    -
+                    <p className="species-highlight-box" style={{backgroundColor: productColor,}}>{productLabel}</p>
+                </p>
 
                 <input 
                     placeholder="Rate Law" 

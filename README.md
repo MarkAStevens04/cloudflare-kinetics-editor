@@ -49,6 +49,8 @@ npm run deploy
     - Diff shapes for diff species
 - Z index saved. So as you click, all Z-indices for edges come up
 - When adding multiple nodes, if a node is deleted, roll your index back by one so you get a new node that was the same color as the one you deleted!
+- Allow back and forth with reactions! Make them reversible if desired.
+    - See https://reactflow.dev/examples/nodes/easy-connect for details
 
 ### Simulation
 - After simulating, change width and color of reaction networks
@@ -101,9 +103,14 @@ npm run deploy
     - Reaction drawer for getting info about a reaction
     - Protein drawer for suggesting protein stuff
 
+### A/B Testing
+- Transitions when opening / closing drawers or no?
+- Different size of hitbox
+
 ### BUG FIXES:
 - Connecting edge to itself
 - MAKE SURE THERE'S SAFE INPUTS!
+- Be careful about window and deleting stuff
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)

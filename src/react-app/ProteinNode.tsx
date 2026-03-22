@@ -12,6 +12,12 @@ type ProteinNodeType = Node<{
 
 export type AppNode = ProteinNodeType;
 
+const DEFAULT_HANDLE_STYLE = {
+  width: '8px',
+  height: '8px',
+  background: 'black',
+};
+
 
 
 export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNodeType>) {
@@ -74,8 +80,38 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
             }}
             /> */}
 
-        <Handle type="target" position={Position.Left}> </Handle>
-        <Handle type="source" position={Position.Right}> </Handle>
+        <Handle 
+            type="target" 
+            position={Position.Left} 
+            style={{ 
+                ...DEFAULT_HANDLE_STYLE,
+                pointerEvents: 'all',
+            }} 
+        >
+            <div
+                className="handle-hitbox"
+                style={{
+                    transform: 'translate(-35%, -35%)',
+                }}
+            />
+        </Handle>
+
+
+
+        <Handle 
+            type="source" 
+            position={Position.Right} 
+            style={{
+             ...DEFAULT_HANDLE_STYLE
+             }}
+        > 
+            <div 
+                className="handle-hitbox" 
+                style={{
+                    transform: 'translate(-15%, -35%)',
+                }}
+            />
+        </Handle>
 
     </div>
 
