@@ -44,7 +44,8 @@ export default function RxnEdge({
 
     return (
         <>
-            <svg style={{ position: 'absolute', top: 0, left: 0 }}>
+        
+        <svg style={{ position: 'absolute', top: 0, left: 0 }}>
         <defs>
           <marker
             className="react-flow__arrowhead"

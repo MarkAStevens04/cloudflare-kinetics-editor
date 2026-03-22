@@ -111,6 +111,11 @@ npm run deploy
 - Connecting edge to itself
 - MAKE SURE THERE'S SAFE INPUTS!
 - Be careful about window and deleting stuff
+- When there's 0 connections
+
+### Drawer
+- Possibly put mini-reaction-diagram in its own little div and make everything smaller
+- What if we just had a small arrow from species2 to species 3, and we edited the rate law beneach the mini-diagram?
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)

@@ -91,6 +91,7 @@ export default function RxnDrawer({
                 
 
                 <animated.div
+                    className="drawer"
                     style={{
                         position: 'fixed',
                         top: 0,
@@ -107,29 +108,93 @@ export default function RxnDrawer({
                 > 
                 <br /> <br />
                 {/* <button onClick={onClose} className="nodrag nopan action-button">Close</button> */}
-                <p className="species-text" >
-                    <p className="species-highlight-box" style={{backgroundColor: reactantColor,}}>{reactantLabel}</p>
-                    -
-                    <p className="species-highlight-box" style={{backgroundColor: productColor,}}>{productLabel}</p>
-                </p>
 
-                <input 
-                    placeholder="Rate Law" 
-                    value={rateLaw === '0' ? '' : rateLaw}
-                    onChange={onRateChange}
-                />   
+                <p className="species-text" > Reaction Name </p>
+
+                {/* Reactant Parameters */}
+                <div className="species-container" style={{
+                    backgroundColor: reactantColor,
+                    position: 'absolute',
+                    top: '100px',
+
+                }}>
+                    <div className="species-container-header"> {reactantLabel} </div>
+                    <hr style={{
+                        border: 'none',
+                        height: '1px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.15)',
+                        margin: '0px 0',
+                        padding: 0,
+                    }} />
+                    <div className="species-params">     
+                        Initial: 
+                        <input 
+                            className="item species-param-input"
+                            placeholder={`0`} 
+                            value={reactantInit === '' ? '' : reactantInit}
+                            onChange={onRChange}
+                        />
+                    </div>    
+
+                </div>
                 
-                <input 
-                    placeholder={`${reactantLabel} Initial Concentration`} 
-                    value={reactantInit === '' ? '' : reactantInit}
-                    onChange={onRChange}
-                />      
+                <br />
+                {/* Product Parameters */}
+                <div className="species-container" style={{
+                    backgroundColor: productColor,
+                    position: 'absolute',
+                    bottom: '100px',
+                }}>
+                    <div className="species-container-header"> {productLabel} </div>
+                    <hr style={{
+                        border: 'none',
+                        height: '1px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.15)',
+                        margin: '0px 0',
+                        padding: 0,
+                    }} />
+                    <div className="species-params">     
+                        Initial: 
+                        <input 
+                            className="item species-param-input"
+                            placeholder={`0`} 
+                            value={productInit === '' ? '' : productInit}
+                            onChange={onPChange}
+                        />
+                    </div>    
 
-                <input 
-                    placeholder={`${productLabel} Initial Concentration`} 
-                    value={productInit === '' ? '' : productInit}
-                    onChange={onPChange}
-                />              
+                </div>
+
+                <div className="arrow-container">
+                    <svg className="down-arrow" viewBox="0 4 20 82" preserveAspectRatio="none">
+                        <path
+                            d="M10 5 L10 85 M4 79 L10 85 L16 79"
+                            stroke="rgba(0, 0, 0, 0.5)"
+                            strokeWidth="0.5"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                    </svg>
+
+                </div>
+            
+
+
+                <div className="rate-law-container">
+                    <input 
+                        style={{
+                            backgroundColor: 'rgba(255, 255, 255, 1)',
+                            color: 'rgba(0, 0, 0, 0.8)',
+                        }}
+                        className="species-param-input"
+                        placeholder="Rate Law" 
+                        value={rateLaw === '0' ? '' : rateLaw}
+                        onChange={onRateChange}
+                    />   
+                </div>
+                
+                       
 
                 </animated.div>
             </>
