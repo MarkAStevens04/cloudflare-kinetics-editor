@@ -233,10 +233,22 @@ export default function App() {
 
   const callSimulation = useCallback(() => {
     const payload = {
-      "Species": nodesWithCallbacks.map(({ id, data}) => ({'id': id, 'initial': data.initial})),
-      "Reactions": edgesWithCallbacks.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': data?.rate_law, })),
+      "Species": nodesWithCallbacks.map(({ id, data}) => ({'id': id, 'initial': Number(data.initial)})),
+      "Reactions": edgesWithCallbacks.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': data?.rate_law, 'Parameters': {'test1': 0.0}})),
       "Simulation": {"t_end": 300, "dt": 1, "method": "Euler"},
     };
+
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    };
+
+    console.log('Request sent! Awaiting response...');
+
+    fetch('https://kinetics-editor.vercel.app/api/simulate', requestOptions).then(response => response.json()).then(data => console.log('Simulation results: ', data));
+  
+
     console.log('Simulation started! Payload: ', payload);
   }, [nodesWithCallbacks, edgesWithCallbacks]);
  
