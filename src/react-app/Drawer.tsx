@@ -148,6 +148,10 @@ export default function RxnDrawer({
                         </div>    
 
                     </div>
+
+                    <p style={{
+                        fontSize: '24px',
+                    }}>→</p>
                     
                     {/* Product Parameters */}
                     <div className="species-container" style={{
