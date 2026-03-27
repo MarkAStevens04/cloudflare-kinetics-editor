@@ -96,7 +96,7 @@ export default function RxnDrawer({
                         position: 'fixed',
                         top: 0,
                         left: 0,
-                        width: 240,
+                        width: 340,
                         height: '100vh',
                         background: 'white',
                         borderRight: "1px solid #ddd",

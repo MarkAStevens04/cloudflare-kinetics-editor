@@ -112,6 +112,7 @@ npm run deploy
 - MAKE SURE THERE'S SAFE INPUTS!
 - Be careful about window and deleting stuff
 - When there's 0 connections
+- ** Turn gestures off on laptop so you can swipe left and right and NOT have the screen navigate back and forth **
 
 ### Drawer
 - Possibly put mini-reaction-diagram in its own little div and make everything smaller
