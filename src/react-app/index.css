@@ -244,7 +244,7 @@ button:focus-visible {
 	padding: 4px 4px;
 	background-color: #1a1a1a;
 	
-	color: #000-;
+	color: #000;
 	cursor: pointer;
 	transition: border-color 0.25s, background-size 0.4s;
 }
