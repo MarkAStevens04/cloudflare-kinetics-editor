@@ -66,7 +66,7 @@ const initialNodes: AppNode[] = [
 
 let nextId= 3;
 
-const initialEdges: AppEdge[] = [{ id: 'n1_n2', source: 'n1', target: 'n2' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: '0'}, }];
+const initialEdges: AppEdge[] = [{ id: 'n1_n2', source: 'n1', target: 'n2' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: ''}, }];
  
 const defaultEdgeOptions: DefaultEdgeOptions = {
   type: 'reaction',
@@ -117,7 +117,7 @@ export default function App() {
               width: 20,
               height: 20
              },
-            data: { label: 't2', toggleDrawer: () => {}, rate_law: '0'},
+            data: { label: 't2', toggleDrawer: () => {}, rate_law: ''},
             
           },
           eds,
