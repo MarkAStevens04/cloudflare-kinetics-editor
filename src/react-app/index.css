@@ -224,6 +224,36 @@ button:focus-visible {
 	padding: 0px 0px;
 }
 
+.autofill-species-box {
+	font-family: Helios_Extended;
+	font-weight: normal;
+	font-size: 12px;
+	margin: 0px 0px;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	width: fit-content;
+
+	cursor: pointer;
+
+	border-radius: 8px;
+	border: 2px solid transparent;
+	padding: 4px 4px;
+	background-color: #1a1a1a;
+	
+	color: #000-;
+	cursor: pointer;
+	transition: border-color 0.25s, background-size 0.4s;
+}
+
+.autofill-species-box:hover {
+	border-color: #747bff;
+}
+
+
 .drawer-text {
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 20px;

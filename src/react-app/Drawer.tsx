@@ -63,6 +63,10 @@ export default function RxnDrawer({
         onInitialChange(targetNode, event.target.value);
     }
 
+    const onRateButton = (buttonID: string) => {
+        onRateLawChange(RxnID, rateLaw + buttonID);
+    }
+
     const transitions = useTransition(open ? [true] : [],  {
         from: { x: -240, opacity: 0 },
         enter: { x: 0, opacity: 1},
@@ -72,6 +76,11 @@ export default function RxnDrawer({
 
     // const interactiveBG = open ? 'block' : 'none';
     const pointerEvents = open ? 'auto' : 'none';
+
+    // const reactantButtons = nodes.map((node) => "<p className='autofill-species-box'>" + node.id + "</p>").join('');
+
+    // console.log(reactantButtons);
+
 
     return transitions((style, item) =>
         item ? (
@@ -214,9 +223,35 @@ export default function RxnDrawer({
                             width: '95%',
                             margin: '0px 0px',
                             minWidth: '0px',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            padding: '5px 5px',
+                            gap: '5px',
                         }}
                     >
-                        <p>REACTANT 1</p>
+                        {/* <p className='autofill-species-box'>REACTANT 1</p>
+                        <p className='autofill-species-box'>REACTANT 2</p>
+                        <p className='autofill-species-box'>REACTANT NUMBER 3</p>
+                        <p className='autofill-species-box'>REACTANT 1</p>
+                        <p className='autofill-species-box'>REACTANT 2</p>
+                        <p className='autofill-species-box'>REACTANT 3</p>
+                        <p className='autofill-species-box'>REACTANT 1</p>
+                        <p className='autofill-species-box'>REACTANT 2</p>
+                        <p className='autofill-species-box'>REACTANT 3</p> */}
+
+                        {/* Populate our rate law buttons */}
+                        {nodes.map((node) => (
+                            <p className='autofill-species-box' 
+                            key={node.id} 
+                            style={{backgroundColor: node.data.color}}
+                            onClick={() => onRateButton(node.id)}
+                            >
+
+                                {node.data.label}
+
+                            </p>))
+                        }
+
                     </div>
 
                 </div>   
