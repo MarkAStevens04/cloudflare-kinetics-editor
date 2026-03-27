@@ -96,12 +96,11 @@ export default function RxnDrawer({
                         position: 'fixed',
                         top: 0,
                         left: 0,
-                        width: 340,
+                        width: 400,
                         height: '100vh',
                         background: 'white',
                         borderRight: "1px solid #ddd",
                         boxShadow: "0 0 20px rgba(0, 0, 0, 0.12)",
-                        padding: 20,
                         transform: style.x.to((x) => `translate3d(${x}px, 0, 0)`),
                         opacity: style.opacity
                     }}
@@ -111,89 +110,117 @@ export default function RxnDrawer({
 
                 <p className="species-text" > Reaction Name </p>
 
-                {/* Reactant Parameters */}
-                <div className="species-container" style={{
-                    backgroundColor: reactantColor,
-                    position: 'absolute',
-                    top: '100px',
-
-                }}>
-                    <div className="species-container-header"> {reactantLabel} </div>
-                    <hr style={{
-                        border: 'none',
-                        height: '1px',
-                        backgroundColor: 'rgba(0, 0, 0, 0.15)',
-                        margin: '0px 0',
-                        padding: 0,
-                    }} />
-                    <div className="species-params">     
-                        Initial: 
-                        <input 
-                            className="item species-param-input"
-                            placeholder={`0`} 
-                            value={reactantInit === '' ? '' : reactantInit}
-                            onChange={onRChange}
-                        />
-                    </div>    
-
-                </div>
-                
                 <br />
-                {/* Product Parameters */}
-                <div className="species-container" style={{
-                    backgroundColor: productColor,
-                    position: 'absolute',
-                    bottom: '100px',
-                }}>
-                    <div className="species-container-header"> {productLabel} </div>
-                    <hr style={{
-                        border: 'none',
-                        height: '1px',
-                        backgroundColor: 'rgba(0, 0, 0, 0.15)',
-                        margin: '0px 0',
-                        padding: 0,
-                    }} />
-                    <div className="species-params">     
-                        Initial: 
-                        <input 
-                            className="item species-param-input"
-                            placeholder={`0`} 
-                            value={productInit === '' ? '' : productInit}
-                            onChange={onPChange}
-                        />
-                    </div>    
+                <div className="drawer-reaction-diagram">
+
+                    {/* Reactant Parameters */}
+                    <div className="species-container" style={{
+                        backgroundColor: reactantColor,
+                        // position: 'absolute',
+                        // top: '100px',
+
+                    }}>
+                        <div className="species-container-header"> {reactantLabel} </div>
+                        <hr style={{
+                            border: 'none',
+                            height: '1px',
+                            backgroundColor: 'rgba(0, 0, 0, 0.15)',
+                            margin: '0px 0',
+                            padding: 0,
+                        }} />
+                        <div className="species-params">     
+                            Initial: 
+                            <input 
+                                className="item species-param-input"
+                                placeholder={`0`} 
+                                value={reactantInit === '' ? '' : reactantInit}
+                                onChange={onRChange}
+                            />
+                        </div>    
+
+                    </div>
+                    
+                    {/* Product Parameters */}
+                    <div className="species-container" style={{
+                        backgroundColor: productColor,
+                        // position: 'absolute',
+                        // bottom: '100px',
+                    }}>
+                        <div className="species-container-header"> {productLabel} </div>
+                        <hr style={{
+                            border: 'none',
+                            height: '1px',
+                            backgroundColor: 'rgba(0, 0, 0, 0.15)',
+                            margin: '0px 0',
+                            padding: 0,
+                        }} />
+                        <div className="species-params">     
+                            Initial: 
+                            <input 
+                                className="item species-param-input"
+                                placeholder={`0`} 
+                                value={productInit === '' ? '' : productInit}
+                                onChange={onPChange}
+                            />
+                        </div>    
+
+                    </div>
+
+                    {/* <div className="arrow-container">
+                        <svg className="down-arrow" viewBox="0 4 20 82" preserveAspectRatio="none">
+                            <path
+                                d="M10 5 L10 85 M4 79 L10 85 L16 79"
+                                stroke="rgba(0, 0, 0, 0.5)"
+                                strokeWidth="0.5"
+                                fill="none"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                        </svg>
+
+                    </div> */}
 
                 </div>
+                <br />
+                <hr />
 
-                <div className="arrow-container">
-                    <svg className="down-arrow" viewBox="0 4 20 82" preserveAspectRatio="none">
-                        <path
-                            d="M10 5 L10 85 M4 79 L10 85 L16 79"
-                            stroke="rgba(0, 0, 0, 0.5)"
-                            strokeWidth="0.5"
-                            fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    </svg>
+                {/* Edit Rate Laws */}
+                <div className='rate-editor'>
 
-                </div>
-            
+                    <p className='drawer-text'>Rate Law</p>
 
-
-                <div className="rate-law-container">
                     <input 
                         style={{
                             backgroundColor: 'rgba(255, 255, 255, 1)',
                             color: 'rgba(0, 0, 0, 0.8)',
+                            width: '95%',
+                            margin: '0px 0px',
+                            minWidth: '0px',
                         }}
                         className="species-param-input"
                         placeholder="Rate Law" 
                         value={rateLaw === '0' ? '' : rateLaw}
                         onChange={onRateChange}
                     />   
-                </div>
-                
+
+                    <br />
+                    <p className='drawer-text' style={{fontSize: '0.8em', margin: '10px 0px',}}>Add species to rate law</p>
+
+                    {/* Add Reactant Handles */}
+                    <div className="species-param-input" 
+                    style={{
+                            backgroundColor: 'rgba(255, 255, 255, 1)',
+                            color: 'rgba(0, 0, 0, 0.8)',
+                            width: '95%',
+                            margin: '0px 0px',
+                            minWidth: '0px',
+                        }}
+                    >
+                        <p>REACTANT 1</p>
+                    </div>
+
+                </div>   
+
                        
 
                 </animated.div>

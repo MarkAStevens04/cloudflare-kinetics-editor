@@ -147,6 +147,22 @@ button:focus-visible {
 
 }
 
+
+.drawer {
+	margin: 0;
+	padding: 20px 20px;
+}
+
+.drawer-reaction-diagram{
+	/* background-color: rgba(0, 0, 0, 0.1); */
+	padding: 0px 0px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%
+	/* gap: 10px; */
+}
+
 .species-container {
 	color: rgba(0, 0, 0, 0.87);
 
@@ -154,11 +170,19 @@ button:focus-visible {
 	border: 0px solid transparent;
 	padding: 0.1em 0.5em;
 
-	position: relative;
-	left: 50px;
-	right: 50px;
+	/* width: 100px; */
 
 	transition: border-color 0.25s;
+}
+
+.species-container-header {
+	font-family: Helios_Extended;
+	font-size: 1.5em;
+	margin: 0em 0em;
+	padding: 0em 0em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .species-params {
@@ -195,20 +219,26 @@ button:focus-visible {
 	border-color: #747bff;
 }
 
-.species-container-header {
-	font-family: Helios_Extended;
-	font-size: 1.5em;
-	margin: 0em 0em;
-	padding: 0em 0em;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+.rate-editor {
+	color: #1a1a1a;
+	padding: 0px 0px;
 }
 
-.rate-law-container {
-	position: absolute;
-	right: 10px;
+.drawer-text {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 20px;
+	font-weight: 600;
+	font-size: 24px;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	cursor: pointer;
 }
+
+
 
 
 .arrow-container {
@@ -226,13 +256,6 @@ button:focus-visible {
 	width: 100%;
 	height: 100%;
 	display: block;
-}
-
-.drawer {
-	margin: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 }
 
 
