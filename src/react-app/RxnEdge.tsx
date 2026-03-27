@@ -11,7 +11,8 @@ import './index.css';
 
 type RxnEdgeType = Edge<{ 
     label: string; 
-    toggleDrawer: () => void;
+    toggleDrawer: (id: string) => void;
+    rate_law: string;
 }, 'reaction'>;
 
 export type AppEdge = RxnEdgeType;
@@ -37,9 +38,14 @@ export default function RxnEdge({
 
     const activeMarkerEnd = selected ? 'url(#selected-marker)' : markerEnd;
 
+    const onToggle = () => {
+        data?.toggleDrawer(id);
+    }
+
     return (
         <>
-            <svg style={{ position: 'absolute', top: 0, left: 0 }}>
+        
+        <svg style={{ position: 'absolute', top: 0, left: 0 }}>
         <defs>
           <marker
             className="react-flow__arrowhead"
@@ -81,7 +87,7 @@ export default function RxnEdge({
             />
             <EdgeLabelRenderer>
                 <button 
-                onClick={data?.toggleDrawer}
+                onClick={onToggle}
                 style={{
                     position: 'absolute',
                     transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,

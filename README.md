@@ -34,7 +34,7 @@ npm run deploy
 ### Basic Controls
 - Ctrl-Z to undo
 - Ctrl + C / Ctrl + V 
-    - Multi-node selection, AND individual nodes / edges
+    - Multi-node selection, AND individual nodes / ed
 - Delete AND Backspace allow you to delete stuff
 - Clicking "Enter" after editing name closes selection
 
@@ -49,6 +49,8 @@ npm run deploy
     - Diff shapes for diff species
 - Z index saved. So as you click, all Z-indices for edges come up
 - When adding multiple nodes, if a node is deleted, roll your index back by one so you get a new node that was the same color as the one you deleted!
+- Allow back and forth with reactions! Make them reversible if desired.
+    - See https://reactflow.dev/examples/nodes/easy-connect for details
 
 ### Simulation
 - After simulating, change width and color of reaction networks
@@ -89,6 +91,32 @@ npm run deploy
 ### Optimize based on constraints!
 - Set a desired threshhold for different proteins (want protein X to be > 100, reactant Y <10, etc.) then it automatically helps you choose parameters to optimzie those constraints!
 - Think from the perspective of a synthetic biologist. They want to make something happen, but might not know what levers to turn. Our algorithm could tell them what levers to turn!
+
+### Diagram Layout
+- Think about how much abstraction you want your app to have for the diagrams
+- Implicitly add "bound enzyme" kinetics
+    - So normally you have Lactose -> sucrose + glucose (with a little "lactase" above the arrow)
+    - What if we implicitly had this happen, like didn't show the full diagram? This would be a "simplified" diagram.
+
+### Autofill Protein info
+- Have a "reaction" drawer and a "protein" drawer
+    - Reaction drawer for getting info about a reaction
+    - Protein drawer for suggesting protein stuff
+
+### A/B Testing
+- Transitions when opening / closing drawers or no?
+- Different size of hitbox
+
+### BUG FIXES:
+- Connecting edge to itself
+- MAKE SURE THERE'S SAFE INPUTS!
+- Be careful about window and deleting stuff
+- When there's 0 connections
+- ** Turn gestures off on laptop so you can swipe left and right and NOT have the screen navigate back and forth **
+
+### Drawer
+- Possibly put mini-reaction-diagram in its own little div and make everything smaller
+- What if we just had a small arrow from species2 to species 3, and we edited the rate law beneach the mini-diagram?
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
