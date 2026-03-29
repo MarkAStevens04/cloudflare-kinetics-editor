@@ -58,6 +58,8 @@ There are TWO packages for biobuilder. The first is the "frontend" (this repo!) 
 
 This section walks you through setting up the repository on your device, and making your first edit to the code! This section is written specifically for first-time developers.
 
+If you don't already have an idea of what to code, look at the [good first issues](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22) and [help wanted](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22help%20wanted%22) tags to see what our repo needs!
+
 For new developers, I recommend downloading [GitHub Desktop](https://github.com/apps/desktop) to manage Git. I also recommend making edits with [Visual Studio Code](https://code.visualstudio.com/). Finally, [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video is immensely helpful in making your first edit.
 
 ## Step 1: Fork the project
@@ -130,22 +132,24 @@ Once your code is approved, it will be merged onto the main branch, and your cod
 Huge congrats on making your first contribution, and thanks for improving BioBuilder!! This platform wouldn't be possible without amazing contributors like you ❤️
 
 
-# Reporting Bugs
+# Request / Reporting Something!
 
-This section details how you can report any bugs you find.
+This section details how you can report any bugs you find, or request new features.
 
-### How do I submit a Bug report?
+## How do I submit a Bug report?
+
+The best person to fix a bug is YOU! You're more qualified than you think, and if you see something that you can improve, you should do it! But if you just want to report a bug, you can do that following this guide.
+
 Bugs are tracked as [GitHub issues](https://guides.github.com/features/issues/). Create an issue and fill in the required information. It helps us resolve the issue quicker!
 
 Go to the PUBLIC repository (not your fork if you've created a fork), go to the "Issues" tab, and click "New Issue".
 
-
-- quick title
-- steps to reproduce
-- what it SHOULD do
-- Ideas for what causes it
-- difficulty to fix
 - impact severity (1 - Small annoyance, 2 - Frustrating but recoverable,  3 - Project Completely crashes)
-- platform
-- pictures
-- email for contact
+
+## How to request a feature
+
+The best person to implement a feature is YOU! You're more qualified than you think, and if you see something that you can improve, you should do it! But if you just want to request a feature, you can do that following this guide.
+
+Feature Requests are tracked as [GitHub issues](https://guides.github.com/features/issues/). Create an issue and fill in the required information. It helps us triage the feature quicker!
+
+Go to the PUBLIC repository (not your fork if you've created a fork), go to the "Issues" tab, and click "New Issue".
