@@ -212,7 +212,7 @@ export default function RxnDrawer({
                         }}
                         className="species-param-input"
                         placeholder="Rate Law" 
-                        value={rateLaw === '0' ? '' : rateLaw}
+                        value={rateLaw}
                         onChange={onRateChange}
                     />   
 
