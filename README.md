@@ -1,3 +1,69 @@
+[![N|Solid](src/react-app/assets/Bio_Builder_Banner.png)](https://biobuilder.app/)
+
+# Basic Overview
+
+BioBuilder is a web-based biochemical kinetics editor and simulator! Built specifically to run simulations easily and quickly. 
+
+# Philosophy
+
+Biochemical kinetics allows you to predict the future in biology. It allows you to know exactly which chemicals and how much will be produced, given some set of initial conditions.
+
+We believe that biochemists shouldn't need to be computer scientists to benefit from this technique. BioBuilder bridges the gap between biologists and computers, and allows you to start running simulations NOW!
+
+**There are two repos**: The frontend (this repo) to interface with scientists, and the backend ([HERE](https://github.com/MarkAStevens04/Kinetics-Editor)) to run our simulations.
+
+This app was originally built for PHY426.
+
+Go to https://biobuilder.app to start using the software now!
+
+
+# Contributing
+
+Want to see a new feature on the site? Is there a small tweak that would make the site less frustrating? The best person to make the change is *YOU*! You don't need to be an expert computer scientist to make a meaningful impact. Whether you're a seasoned open-source veteran, or this is your first contribution, we always welcome any help we can get, and we've created a guide to help make it easy for you to get started.
+
+See `CONTRIBUTING.md` for a guide on how to get started making your first contributions.
+
+
+# How to use
+
+Go to https://biobuilder.app to start using the software now!
+
+## 1. Setting up your simulation
+The hardest part of biochemical kinetics isn't performing the simulation: it's finding the right parameters. While we plan on adding integrations with existing databases, for now, you will need to add your own biochemical kinetic parameters. The wikipedia page for [Metabolic Network Modelling](https://en.wikipedia.org/wiki/Metabolic_network_modelling) is a helpful guide if you're just getting started with biochemical kinetics.
+
+Your model needs 3 outside components:
+- Reaction Diagrams
+- Rates & Parameters
+- Initial conditions
+
+**Reaction Diagrams** can be found from a number of free online databases, including:
+- [KEGG](https://www.kegg.jp/)
+- [BioCyc](https://biocyc.org/)
+- [ENZYME](https://enzyme.expasy.org/)
+- [BRENDA](https://www.brenda-enzymes.info/)
+- [BiGG](http://bigg.ucsd.edu/)
+
+**Rates & Parameters** are evaluated from real experiments scientists have performed. One of the most well-known databases to gather these kinetic rate parameters is [Sabio-RK](https://sabiork.h-its.org/). Another helpful resource is [BioNumbers](https://bionumbers.hms.harvard.edu/search.aspx).
+
+**Initial Conditions** depend on YOUR experiment! If you plan on going into the lab to do some work, use plausible information about your system ([BioNumbers](https://bionumbers.hms.harvard.edu/search.aspx) is helpful for this). If you're doing some theoretical work, use numbers that closely resemble your system wherever possible, or run multiple simulations with different values to find the ones that are most realistic!
+
+## 2. Making your simulation
+
+After you know your **diagrams**, **parameters**, and **initial conditions**, it's time to start putting them in the simulation! Here's a quick guide on how:
+
+- Create the reaction diagram (add nodes, draw edges to represent reactions)
+- Edit reaction parameters (click each edge to open the reaction drawer. Each edge needs to have a rate law.)
+- Edit initial values (in the reaction editor, you can set the initial values of each reactant!)
+
+
+## 3. Running your simulation
+Now you've set up your simulation, it's time to run it! Click "SIMULATE" in the top right corner, and voila! We've performed your simulation!
+
+
+# Feedback
+
+We LOVE feedback, and we're always looking for ways to improve the platform! Feel free to shoot me an email at <mark@biobuilder.app> with any suggestions or feedback, and I'd be happy to respond.
+
 # Build
 Locally, run `npx vite`
 To deploy, run 
@@ -6,8 +72,12 @@ npm run build
 npm run deploy
 ```
 
+# Future Work
 
-# UI Improvements:
+As with any project, ideas can quickly outpace capacity. Here's some ideas of what we want to do!
+
+## 1. UI-Improvements
+
 ### Multi-Highlight
 - Only have to highlight part of a node to select it
 - More beautiful selections
@@ -116,10 +186,18 @@ npm run deploy
 - Fix how parameters are handled...
 - Verify rate laws are plausible
 - Better error handling
+- You can delete connection while drawer is open (drawer should automatically close)
 
 ### Drawer
 - Possibly put mini-reaction-diagram in its own little div and make everything smaller
 - What if we just had a small arrow from species2 to species 3, and we edited the rate law beneach the mini-diagram?
+
+### Urgent
+- Return differential equations
+- better logging in Python for vercel
+- Data labels in graph
+- Better rate law editing
+- Weird labels on connections
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
