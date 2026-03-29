@@ -1,13 +1,29 @@
-# Resources
+# Contributing to BioBuilder
+Thank you SO MUCH for taking the time to contribute to this project!!
+
+The following is a set of guidelines for contributing to BioBuilder. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request!
+
+
+## Resources
 Making your first contribution is scary, but we're here to help! Problems and questions will arise as you contribute, and we've included a few resources if you want someone to talk to:
 
 - **Discord**: Join our [DISCORD](https://discord.gg/GmsKryYDGN) server to discuss contributions, ask questions, and make some friends with like-minded people!
 - **Email**: Send me an email at <mark@biobuilder.app> if you ever need anything, or have some ideas for improvement or feedback!! I'm immensely grateful you're thinking about contributing, and my goal is to respond to emails within 1 week. 
 
-
-# Contributing to BioBuilder
 ## Table of contents
-- TODO
+- [Code of Conduct](#code-of-conduct)
+- [Where do I start?](#where-do-i-start)
+    - [First Time Contributors](#first-time-contributors)
+    - [BioBuilder's Repos](#biobuilders-repos)
+- [File Structure](#file-structure)
+- [Getting Started](#getting-started)
+    - [Step 1: Fork the project](#step-1-fork-the-project)
+    - [Step 2: Copy the repository onto your computer](#step-2-copy-the-repository-onto-your-computer)
+    - [Step 3: Make your edits!](#step-3-make-your-edits)
+    - [Step 4: Run your code locally](#step-4-run-your-code-locally)
+    - [Step 5: Merge your changes](#step-5-merge-your-changes)
+    - [Step 6: Respond to feedback](#step-6-respond-to-feedback)
+
 
 ## Code of Conduct
 - TODO
@@ -31,7 +47,7 @@ There are TWO packages for biobuilder. The first is the "frontend" (this repo!) 
 
 
 
-## File Structure
+### File Structure
 
 - `src/react-app/App.tsx`: Core code for web app
 - `src/react-app/ProteinNode.tsx`: Code for nodes in the graph editor
@@ -40,39 +56,34 @@ There are TWO packages for biobuilder. The first is the "frontend" (this repo!) 
 
 # Getting started
 
-This section walks you through setting up the repository for you to edit.
+This section walks you through setting up the repository on your device, and making your first edit to the code! This section is written specifically for first-time developers.
 
-For new developers, I recommend downloading [GitHub Desktop](https://github.com/apps/desktop) to manage Git. I also recommend making edits with [Visual Studio Code](https://code.visualstudio.com/). 
+For new developers, I recommend downloading [GitHub Desktop](https://github.com/apps/desktop) to manage Git. I also recommend making edits with [Visual Studio Code](https://code.visualstudio.com/). Finally, [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video is immensely helpful in making your first edit.
 
-### Step 1: Fork the project
+## Step 1: Fork the project
 
-Go to the [root of this repository](https://github.com/MarkAStevens04/cloudflare-kinetics-editor). In the top right, click "fork repository". 
+1. Go to the [root of this repository](https://github.com/MarkAStevens04/cloudflare-kinetics-editor). In the top right, click "fork repository". 
+2. Name your fork something descriptive
+3. Click "create fork"
 
-Name your fork something descriptive
 
-Click "create fork"
+## Step 2: Copy the repository onto your computer
 
-### Step 2: Copy the repository onto your computer
-
-In the top right of your new repository, click the green "Code" button.
-
-Click "Open with GitHub Desktop" (or follow other instructions).
-
-The [GitHub Desktop](https://github.com/apps/desktop) app should open, and you can just click the blue "clone" button.
-
-If a box appears that says "How are you planning to use this fork", click **"To contribute to the parent project"**.
-
-On the right side of the GitHub Desktop app, there should be a box that says "Open Visual Studio Code". Click this. 
+1. In the top right of your new repository, click the green "Code" button.
+2. Click "Open with GitHub Desktop" (or follow other instructions).
+3. The [GitHub Desktop](https://github.com/apps/desktop) app should open, and you can just click the blue "clone" button.
+4. If a box appears that says "How are you planning to use this fork", click **"To contribute to the parent project"**.
+5. On the right side of the GitHub Desktop app, there should be a box that says "Open Visual Studio Code". Click this. 
 
 You can now edit the project!
 
-### Step 3: Make your edits!
+## Step 3: Make your edits!
 
-Edit the code to create your desired feature. Note with VS Code, you have to click Ctrl + S (or CMD + S on Mac) to save your code.
+1. Edit the code to create your desired feature. Note with VS Code, you have to click Ctrl + S (or CMD + S on Mac) to save your code.
 
 Make sure to follow our Style Guides (TODO).
 
-### Step 4: Run your code locally
+## Step 4: Run your code locally
 
 To run your code, open a terminal in Visual Studio Code (Top of the screen, click "Terminal") and run:
 
@@ -84,7 +95,7 @@ After waiting a few seconds, the website should now be hosted at the website <lo
 
 One nice feature of Visual Studio Code is that after you save your edits (with CTRL + C on Windows, or CMD + C on Mac), your website should automatically update to reflect the changes!
 
-### Step 5: Merge your changes
+## Step 5: Merge your changes
 
 Congrats on making your first edits to BioBuilder!! Now, let's put these edits on the main BioBuilder website.
 
@@ -108,7 +119,7 @@ CONGRATS!!! You've just made your first contribution to BioBuilder!! But we're n
 
 Right now, your code exists as a "Pull Request" (PR). You can see this PR in the "Pull Requests" tab of the BioBuilder repo. You'll get notifications once someone responds to this pull request.
 
-### Step 6: Respond to feedback
+## Step 6: Respond to feedback
 
 We want your help improving BioBuilder, and our goal is to make your code changes materialize! But we also want to make sure our project is sustainable & bug-free. Don't be offended if your pull request is denied at first, this is normal. Take it as an opportunity to learn how to improve your coding skills!
 
@@ -119,3 +130,22 @@ Once your code is approved, it will be merged onto the main branch, and your cod
 Huge congrats on making your first contribution, and thanks for improving BioBuilder!! This platform wouldn't be possible without amazing contributors like you ❤️
 
 
+# Reporting Bugs
+
+This section details how you can report any bugs you find.
+
+### How do I submit a Bug report?
+Bugs are tracked as [GitHub issues](https://guides.github.com/features/issues/). Create an issue and fill in the required information. It helps us resolve the issue quicker!
+
+Go to the PUBLIC repository (not your fork if you've created a fork), go to the "Issues" tab, and click "New Issue".
+
+
+- quick title
+- steps to reproduce
+- what it SHOULD do
+- Ideas for what causes it
+- difficulty to fix
+- impact severity (1 - Small annoyance, 2 - Frustrating but recoverable,  3 - Project Completely crashes)
+- platform
+- pictures
+- email for contact

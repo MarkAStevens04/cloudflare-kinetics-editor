@@ -1,0 +1,48 @@
+name: Bug Report 🐛
+description: Tell about a bug you've found!
+labels: ["bug", "triage"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to tell us about a bug! 🎉
+  - type: markdown
+    attributes:
+      value: "---"
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Steps to Reproduce"
+      description: |
+        Tell us how to reproduce the bug. Be as detailed as possible, and include any relevant information about your environment (e.g., operating system, software version, etc.). The more information you provide, the easier it will be for us to identify and fix the bug.
+        
+        **Example**: 
+        "_ When clicking a reaction edge, while the drawer is open, if you click the "backspace" button, the current edge will be deleted, causing the drawer to switch to a new edge. _"
+      placeholder: "What's going wrong? How can we reproduce the bug?"
+  - type: markdown
+    attributes:
+      value: "---"
+  - type: textarea
+    id: desired
+    attributes:
+      label: "Desired Behavior"
+      description: |
+        What do you expect to happen instead of the bug? What should the correct behavior be? Be as detailed as possible, and include any relevant information about your environment (e.g., operating system, software version, etc.). The more information you provide, the easier it will be for us to identify and fix the bug.
+
+        **Example**: 
+        "_When the reaction edge is deleted while the drawer is open, I expect the drawer to automatically close gracefully._"
+      placeholder: "What should happen instead of the bug?"
+  - type: markdown
+    attributes:
+      value: "---"
+  - type: textarea
+    id: additional
+    attributes:
+      label: "Additional"
+      description: |
+        Is there any additional information that would be helpful for us to know about this bug? This could include screenshots, error messages, or any other relevant information that you think would be helpful for us to understand the bug and how to fix it.
+        
+        **Example**:
+        "_Follow the expected behavior from Canva, they do a good job of handling similar scenarios._"
+      placeholder: "Anything else we should know about this bug?"
