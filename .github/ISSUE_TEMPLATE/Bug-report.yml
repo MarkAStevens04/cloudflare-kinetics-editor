@@ -11,15 +11,28 @@ body:
     attributes:
       value: "---"
   - type: textarea
+    id: description
+    attributes:
+      label: "What's going wrong?"
+      description: |
+        Tell us what the bug is. What is going wrong with the bug? Please be as descriptive as possible so we can fix the bug as quickly as possible. The more information you provide, the easier it will be for us to identify and fix the bug.
+
+        **Example**: 
+        "_You can delete an edge while the drawer is open, and the drawer will display a NEW reaction instead._"
+      placeholder: "What is the bug?"
+  - type: markdown
+    attributes:
+      value: "---"
+  - type: textarea
     id: reproduction
     attributes:
       label: "Steps to Reproduce"
       description: |
-        Tell us how to reproduce the bug. Be as detailed as possible, and include any relevant information about your environment (e.g., operating system, software version, etc.). The more information you provide, the easier it will be for us to identify and fix the bug.
+        Tell us how to reproduce the bug. Be as detailed as possible, and include any relevant information about your environment (browser, operating system, etc.). The more information you provide, the easier it will be for us to identify and fix the bug.
         
         **Example**: 
-        "_ When clicking a reaction edge, while the drawer is open, if you click the "backspace" button, the current edge will be deleted, causing the drawer to switch to a new edge. _"
-      placeholder: "What's going wrong? How can we reproduce the bug?"
+        "_When clicking a reaction edge, while the drawer is open, if you click the "backspace" button, the current edge will be deleted, causing the drawer to switch to a new edge._"
+      placeholder: "How can we reproduce the bug?"
   - type: markdown
     attributes:
       value: "---"
@@ -31,7 +44,7 @@ body:
         What do you expect to happen instead of the bug? What should the correct behavior be? Be as detailed as possible, and include any relevant information about your environment (e.g., operating system, software version, etc.). The more information you provide, the easier it will be for us to identify and fix the bug.
 
         **Example**: 
-        "_When the reaction edge is deleted while the drawer is open, I expect the drawer to automatically close gracefully._"
+        "_When the reaction edge is deleted while the drawer is open, I expect the drawer to automatically close gracefully. _"
       placeholder: "What should happen instead of the bug?"
   - type: markdown
     attributes:

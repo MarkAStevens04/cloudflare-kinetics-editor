@@ -1,0 +1,51 @@
+name: Feature Request 🚀
+description: Suggest an idea for BioBuilder!
+labels: ["new feature"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to request a feature! 🎉
+  - type: markdown
+    attributes:
+      value: "---"
+  - type: textarea
+    id: goal
+    attributes:
+      label: "Goal"
+      description: |
+        Should be short and leave flexibility for the coder.
+
+        **Example**: 
+        "_Allow users to save their work between sessions._"
+      placeholder: "What should this feature accomplish?"
+  - type: markdown
+    attributes:
+      value: "---"
+  - type: textarea
+    id: ctxt
+    attributes:
+      label: "Context"
+      description: |
+        Describe & give context to the problem this feature will solve.
+        What role does this feature play in the broader context of BioBuilder?
+        
+        **Example**: 
+        "_Biochemists often use similar projects over time, and appreciate being able to build their projects over multiple sessions. This has already been done by many softwares, and [benchling](https://www.benchling.com/) is a great example. Saving work enables long-run projects that cumulatively build over time._"
+      placeholder: "Explain your case for why this feature is important to the broader software."
+  - type: markdown
+    attributes:
+      value: "---"
+  - type: textarea
+    id: idea
+    attributes:
+      label: "Implementation Idea"
+      description: |
+        What's the idea for how this task could get accomplished?
+        What is some useful software or extra information?
+        Doesn't need to be a super detailed description of how to accomplish the task. Should point to some helpful resources and **be encouraging to the coder**. Leave room for flexibility, but acts as a guide if the coder gets stuck.
+
+        **Example**:
+        "_[Supabase](https://supabase.com/docs/guides/auth) seems like the best framework for implementing user authentication and state management. However, [Auth0](https://auth0.com/docs) seems like it might help. First you'll need a way of converting the diagram layout into a format readable by a database. Then you need you connect to the database from the web app, and update data. Finally, you'll need to handle some sort of authentication so the right user has access to the right items._"
+      placeholder: "What's the idea for how this task **could** get accomplished?"
