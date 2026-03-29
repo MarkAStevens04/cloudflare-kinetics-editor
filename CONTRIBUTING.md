@@ -2,7 +2,7 @@
 Making your first contribution is scary, but we're here to help! Problems and questions will arise as you contribute, and we've included a few resources if you want someone to talk to:
 
 - **Discord**: Join our [DISCORD](https://discord.gg/GmsKryYDGN) server to discuss contributions, ask questions, and make some friends with like-minded people!
-- **Email**: Send me an email at <mark@biobuilder.app> if you ever need anything. I'm immensely grateful you're thinking about contributing, and my goal is to respond to emails within 1 week. 
+- **Email**: Send me an email at <mark@biobuilder.app> if you ever need anything, or have some ideas for improvement or feedback!! I'm immensely grateful you're thinking about contributing, and my goal is to respond to emails within 1 week. 
 
 
 # Contributing to BioBuilder
@@ -104,11 +104,18 @@ Click "Contribute" (on the right side of the page) and "open pull request".
 
 Now, click "Create pull request".
 
-CONGRATS!!! You've just made your first contribution to BioBuilder!!
+CONGRATS!!! You've just made your first contribution to BioBuilder!! But we're not done yet. Before we put your changes into the website, there's always someone who reviews the code and gives feedback. 
+
+Right now, your code exists as a "Pull Request" (PR). You can see this PR in the "Pull Requests" tab of the BioBuilder repo. You'll get notifications once someone responds to this pull request.
 
 ### Step 6: Respond to feedback
 
-We want your help improving BioBuilder, and our goal is to make your code changes materialize! Don't be offended if your pull request is denied at first, this is normal.
+We want your help improving BioBuilder, and our goal is to make your code changes materialize! But we also want to make sure our project is sustainable & bug-free. Don't be offended if your pull request is denied at first, this is normal. Take it as an opportunity to learn how to improve your coding skills!
 
+We will make comments on your code and give feedback. This is called a "code review". These comments and feedback will appear underneath your pull request.
+
+Once your code is approved, it will be merged onto the main branch, and your code will be public!
+
+Huge congrats on making your first contribution, and thanks for improving BioBuilder!! This platform wouldn't be possible without amazing contributors like you ❤️
 
 
