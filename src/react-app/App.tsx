@@ -16,6 +16,7 @@ import {
   type DefaultEdgeOptions,
  } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import fakeGraph from './assets/fake_graph.png';
 
 // Analytics
 import { init as initFullStory } from '@fullstory/browser';
@@ -78,6 +79,8 @@ export default function App() {
   const [drawerToggle, setDrawerToggle] = useState(false);
 
   const [selectedRxnID, setSelectedRxnID] = useState<string>(initialEdges[0].id);
+
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   const onNodesChange: OnNodesChange<AppNode> = useCallback(
     (changes) => setNodes((nodesSnapshot) => applyNodeChanges<AppNode>(changes, nodesSnapshot)),
@@ -231,12 +234,31 @@ export default function App() {
   }, [setNodes]);
 
 
-  const callSimulation = useCallback(() => {
+  const callSimulation = useCallback(async () => {
     const payload = {
-      "Species": nodesWithCallbacks.map(({ id, data}) => ({'id': id, 'initial': data.initial})),
-      "Reactions": edgesWithCallbacks.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': data?.rate_law, })),
+      "Species": nodesWithCallbacks.map(({ id, data}) => ({'id': id, 'initial': Number(data.initial)})),
+      "Reactions": edgesWithCallbacks.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': data?.rate_law, 'Parameters': {'test1': 0.0}})),
       "Simulation": {"t_end": 300, "dt": 1, "method": "Euler"},
     };
+
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    };
+
+    console.log('Request sent! Awaiting response...');
+
+    // fetch('https://kinetics-editor.vercel.app/api/simulate', requestOptions).then(response => response.json()).then(data => console.log('Simulation results: ', data));
+  
+    const response = await fetch('https://kinetics-editor.vercel.app/api/simulate', requestOptions);
+
+    const blob = await response.blob();
+
+    const imageUrl = URL.createObjectURL(blob);
+
+    setImageSrc(imageUrl);
+
     console.log('Simulation started! Payload: ', payload);
   }, [nodesWithCallbacks, edgesWithCallbacks]);
  
@@ -281,7 +303,7 @@ export default function App() {
           onInitialChange={onInitialChange}
         />
         
-        
+        <img src={imageSrc || fakeGraph} style={{position: 'fixed', bottom: 10, right: 10}} />
 
 
         

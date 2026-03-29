@@ -113,6 +113,9 @@ npm run deploy
 - Be careful about window and deleting stuff
 - When there's 0 connections
 - ** Turn gestures off on laptop so you can swipe left and right and NOT have the screen navigate back and forth **
+- Fix how parameters are handled...
+- Verify rate laws are plausible
+- Better error handling
 
 ### Drawer
 - Possibly put mini-reaction-diagram in its own little div and make everything smaller
