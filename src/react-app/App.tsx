@@ -16,7 +16,7 @@ import {
   type DefaultEdgeOptions,
  } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import fakeGraph from './assets/fake_graph.png';
+// import fakeGraph from './assets/fake_graph.png';
 
 // Analytics
 import { init as initFullStory } from '@fullstory/browser';
@@ -303,7 +303,8 @@ export default function App() {
           onInitialChange={onInitialChange}
         />
         
-        <img src={imageSrc || fakeGraph} style={{position: 'fixed', bottom: 10, right: 10}} />
+        {imageSrc && <img src={imageSrc} style={{position: 'fixed', bottom: 10, right: 10}} />}
+        
 
 
         
