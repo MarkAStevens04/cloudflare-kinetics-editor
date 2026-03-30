@@ -23,6 +23,9 @@ Making your first contribution is scary, but we're here to help! Problems and qu
     - [Step 4: Run your code locally](#step-4-run-your-code-locally)
     - [Step 5: Merge your changes](#step-5-merge-your-changes)
     - [Step 6: Respond to feedback](#step-6-respond-to-feedback)
+- [Request / Report Something!](#request-report-something)
+    - [How do I submit a Bug report?](#how-do-i-submit-a-bug-report)
+    - [How do I submit a Request a feature?](#how-do-i-request-a-feature)
 
 
 ## Code of Conduct
@@ -132,7 +135,7 @@ Once your code is approved, it will be merged onto the main branch, and your cod
 Huge congrats on making your first contribution, and thanks for improving BioBuilder!! This platform wouldn't be possible without amazing contributors like you ❤️
 
 
-# Request / Reporting Something!
+# Request / Report Something!
 
 This section details how you can report any bugs you find, or request new features.
 
@@ -146,7 +149,7 @@ Go to the PUBLIC repository (not your fork if you've created a fork), go to the 
 
 - impact severity (1 - Small annoyance, 2 - Frustrating but recoverable,  3 - Project Completely crashes)
 
-## How to request a feature
+## How do I request a feature?
 
 The best person to implement a feature is YOU! You're more qualified than you think, and if you see something that you can improve, you should do it! But if you just want to request a feature, you can do that following this guide.
 

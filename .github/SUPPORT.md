@@ -1,3 +1,4 @@
+# Support
 We could all use a helping hand every once in a while. Here's where to get support if anything goes wrong!
 
 - **Discord**: Join our [DISCORD](https://discord.gg/GmsKryYDGN) server to discuss contributions, ask questions, and make some friends with like-minded people!
