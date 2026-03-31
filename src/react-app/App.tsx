@@ -35,6 +35,9 @@ import ProteinNode, { type AppNode } from './ProteinNode';
 import RxnEdge, { type AppEdge } from './RxnEdge';
 import RxnDrawer from './Drawer';
 
+// Stringify
+import { convertLatexToAsciiMath } from "mathlive";
+
 const nodeTypes = {
   protein: ProteinNode,
 };
@@ -237,7 +240,7 @@ export default function App() {
   const callSimulation = useCallback(async () => {
     const payload = {
       "Species": nodesWithCallbacks.map(({ id, data}) => ({'id': id, 'initial': Number(data.initial)})),
-      "Reactions": edgesWithCallbacks.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': data?.rate_law, 'Parameters': {'test1': 0.0}})),
+      "Reactions": edgesWithCallbacks.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': convertLatexToAsciiMath(data?.rate_law || ''), 'Parameters': {'test1': 0.0}})),
       "Simulation": {"t_end": 300, "dt": 1, "method": "Euler"},
     };
 
@@ -247,7 +250,8 @@ export default function App() {
       body: JSON.stringify(payload)
     };
 
-    console.log('Request sent! Awaiting response...');
+    console.log('Simulation started! Payload: ', payload);
+    
 
     // fetch('https://kinetics-editor.vercel.app/api/simulate', requestOptions).then(response => response.json()).then(data => console.log('Simulation results: ', data));
   
@@ -259,7 +263,8 @@ export default function App() {
 
     setImageSrc(imageUrl);
 
-    console.log('Simulation started! Payload: ', payload);
+    console.log('Simulation Complete!');
+    
   }, [nodesWithCallbacks, edgesWithCallbacks]);
  
 

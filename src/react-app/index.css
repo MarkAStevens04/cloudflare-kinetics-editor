@@ -289,6 +289,10 @@ button:focus-visible {
 }
 
 
+math-field {
+	--smart-fence-color: red;
+}
+
 
 
 

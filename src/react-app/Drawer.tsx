@@ -5,7 +5,7 @@
   // child's job because the parent knows the right parameters to give it, wheras the
   // child wouldn't be able to provide ANY parameters to the function.
 // import React from 'react';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useRef } from 'react';
 import { animated, useTransition } from '@react-spring/web';
 
 import { type AppNode } from './ProteinNode';
@@ -16,7 +16,7 @@ import './index.css';
 
 // For math live input
 import "mathlive";
-import { MathfieldElement } from "mathlive";
+import { MathfieldElement } from 'mathlive';
 
 
 export type RxnDrawerProps = {
@@ -32,7 +32,6 @@ export type RxnDrawerProps = {
 type rateEditorProps = {
     nodes: AppNode[];
     currentRateLaw?: string;
-    onRateButton: (id: string) => void;
     onRateChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -75,7 +74,7 @@ export default function RxnDrawer({
     }
 
     const onRateButton = (buttonID: string) => {
-        const add_str =  rateLaw + '<p>' +buttonID + '</p>';
+        const add_str =  rateLaw + buttonID;
         onRateLawChange(RxnID, add_str);
     }
 
@@ -270,7 +269,7 @@ export default function RxnDrawer({
 
                     </div>
 
-                    <RateEditor nodes={nodes} currentRateLaw={rateLaw} onRateButton={onRateButton} onRateChange={onRateChange} />
+                    <RateEditor nodes={nodes} currentRateLaw={rateLaw} onRateChange={onRateChange} />
 
 
                 </div>   
@@ -284,36 +283,40 @@ export default function RxnDrawer({
 
 }
 
-
-
-
-
 function RateEditor({
     nodes,
     currentRateLaw,
-    onRateButton,
     onRateChange,
 
 }: rateEditorProps) {
+    
+    const mfRef = useRef<MathfieldElement>(null); 
 
-    const mfe = new MathfieldElement();
-    mfe.value = "\\frac{\\pi}{2}";
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         onRateChange(event);
     }
+
+    const onButton = (buttonID: string) => {
+
+        mfRef.current?.insert(buttonID, {
+            focus: true,
+            insertionMode: "replaceSelection",
+        });
+    }
     
+    
+    // IDEA: Use locale to convert between ID and label? MathfieldElement.strings
 
 
     return (
-        <div contentEditable={true}>   
+        <div>   
                         {nodes.map((node) => (
                             <div>
                             <p className='autofill-species-box' 
                             key={node.id} 
                             style={{backgroundColor: node.data.color}}
-                            onClick={() => onRateButton(node.id)}
-                            contentEditable={false}
+                            onClick={() => onButton(node.id)}
                             >
 
                                 {node.data.label}
@@ -323,12 +326,16 @@ function RateEditor({
                         }
                         <p> Hello world!</p>
 
-                        <math-field id="mathfield" virtual-keyboard-mode="manual" style={{width: '100%'}}> enter here </math-field>
-
+                     
 
 
                         <math-field
+                            id="formula"
+                            ref={mfRef}
                             onInput={onChange}
+                            style={{
+                                display: 'block',
+                            }}
 
                         >
                             {currentRateLaw}
