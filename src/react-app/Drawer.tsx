@@ -14,6 +14,10 @@ import { type AppEdge } from './RxnEdge';
 
 import './index.css';
 
+// For math live input
+import "mathlive";
+import { MathfieldElement } from "mathlive";
+
 
 export type RxnDrawerProps = {
     edge: AppEdge;
@@ -24,6 +28,13 @@ export type RxnDrawerProps = {
     onInitialChange: (currNode: AppNode, reactantInit: string) => void;
     // children?: React.ReactNode;
 };
+
+type rateEditorProps = {
+    nodes: AppNode[];
+    currentRateLaw?: string;
+    onRateButton: (id: string) => void;
+    onRateChange: (event: ChangeEvent<HTMLInputElement>) => void;
+}
 
 
 
@@ -64,7 +75,8 @@ export default function RxnDrawer({
     }
 
     const onRateButton = (buttonID: string) => {
-        onRateLawChange(RxnID, rateLaw + buttonID);
+        const add_str =  rateLaw + '<p>' +buttonID + '</p>';
+        onRateLawChange(RxnID, add_str);
     }
 
     const transitions = useTransition(open ? [true] : [],  {
@@ -258,6 +270,9 @@ export default function RxnDrawer({
 
                     </div>
 
+                    <RateEditor nodes={nodes} currentRateLaw={rateLaw} onRateButton={onRateButton} onRateChange={onRateChange} />
+
+
                 </div>   
 
                        
@@ -265,6 +280,61 @@ export default function RxnDrawer({
                 </animated.div>
             </>
         ) : null
+    );
+
+}
+
+
+
+
+
+function RateEditor({
+    nodes,
+    currentRateLaw,
+    onRateButton,
+    onRateChange,
+
+}: rateEditorProps) {
+
+    const mfe = new MathfieldElement();
+    mfe.value = "\\frac{\\pi}{2}";
+
+    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+        onRateChange(event);
+    }
+    
+
+
+    return (
+        <div contentEditable={true}>   
+                        {nodes.map((node) => (
+                            <div>
+                            <p className='autofill-species-box' 
+                            key={node.id} 
+                            style={{backgroundColor: node.data.color}}
+                            onClick={() => onRateButton(node.id)}
+                            contentEditable={false}
+                            >
+
+                                {node.data.label}
+
+                            </p>
+                            </div>))
+                        }
+                        <p> Hello world!</p>
+
+                        <math-field id="mathfield" virtual-keyboard-mode="manual" style={{width: '100%'}}> enter here </math-field>
+
+
+
+                        <math-field
+                            onInput={onChange}
+
+                        >
+                            {currentRateLaw}
+                        </math-field>
+
+                    </div>
     );
 
 }

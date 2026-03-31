@@ -16,6 +16,7 @@
 		"@react-spring/web": "^10.0.3",
 		"@xyflow/react": "^12.10.1",
 		"hono": "4.11.1",
+		"mathlive": "^0.109.0",
 		"react": "19.2.1",
 		"react-dom": "19.2.1"
 	},
