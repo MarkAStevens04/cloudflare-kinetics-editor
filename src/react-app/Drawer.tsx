@@ -253,9 +253,27 @@ function RateEditor({
 
     const macros = useMemo(() => {
         return Object.fromEntries(
-            nodes.map((node) => [idToLatex(node.id), '\\text{' + node.data.label + '}'])
+            nodes.map((node) => [idToLatex(node.id), {args: 1, def: '\\text{' + node.data.label + '}', expand: true}])
         );
+
     }, [nodes]);
+
+    // const macros = useMemo(() => {
+    //     return Object.fromEntries(
+    //         nodes.map((node) => [idToLatex(node.id), '\\text{' + node.data.label + '}'])
+    //     );
+
+    // }, [nodes]);
+
+
+    // const macros = useMemo(() => {
+    //     // return Object.fromEntries(
+    //     //     nodes.map((node) => [idToLatex(node.id), '\\text{' + node.data.label + '}'])
+    //     // );
+
+    //     return {'reactant': "\\text{'#1'}"};
+
+    // }, [nodes]);
 
     console.log('Macros: ' + JSON.stringify(macros));
 
@@ -273,7 +291,7 @@ function RateEditor({
 
     const onButton = (buttonID: string) => {
 
-        mfRef.current?.insert('\\' + idToLatex(buttonID), {
+        mfRef.current?.insert('\\obj'+ buttonID + '{' + buttonID + '}', {
             focus: true,
             insertionMode: "replaceSelection",
             selectionMode: "item",
