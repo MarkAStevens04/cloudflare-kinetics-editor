@@ -231,11 +231,6 @@ export default function RxnDrawer({
 }
 
 
-function idToLatex(id: string) {
-    return 'obj' + id;
-}
-
-
 
 function RateEditor({
     nodes,
@@ -247,20 +242,34 @@ function RateEditor({
     const mfRef = useRef<MathfieldElement>(null); 
 
 
+    // When our input is changed
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         onRateChange(event);
+    }
+
+    // When a variable button is clicked
+    const onButton = (buttonID: string) => {
+        mfRef.current?.insert('\\obj'+ buttonID + '{\\text{' + buttonID + '}}', {
+            // focus: true,
+            insertionMode: "replaceSelection",
+            selectionMode: "item",
+        });
+        console.log('Macros: ' + mfRef.current?.macros);
+
+        // mfRef.current?.applyStyle({
+        //     color: buttonColor,
+        // });
     }
 
     const macros = useMemo(() => {
         return Object.fromEntries(
             // Very strange code here. We have args: 1 so that the parameter we add (\text{buttonID}) stays in the latex
             // We render our text as node.data.label, and in the backend, keep our latex as \objNXXX{\text{nXXX}}
-            nodes.map((node) => [idToLatex(node.id), {args: 1, def: '\\text{' + node.data.label + '}'}])
+            nodes.map((node) => ['obj' + node.id, {args: 1, def: '\\text{' + node.data.label + '}'}])
         );
 
     }, [nodes]);
 
-    console.log('Macros: ' + JSON.stringify(macros));
 
     useEffect(() => {
         const mf = mfRef.current;
@@ -273,23 +282,6 @@ function RateEditor({
         };
     }, [macros]);
 
-
-    const onButton = (buttonID: string) => {
-
-        mfRef.current?.insert('\\obj'+ buttonID + '{\\text{' + buttonID + '}}', {
-            focus: true,
-            insertionMode: "replaceSelection",
-            selectionMode: "item",
-        });
-
-        console.log('Macros: ' + mfRef.current?.macros);
-
-        // mfRef.current?.applyStyle({
-        //     color: buttonColor,
-        // });
-
-
-    }
 
 
     return (
