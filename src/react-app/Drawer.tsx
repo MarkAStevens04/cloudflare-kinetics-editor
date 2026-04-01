@@ -280,7 +280,19 @@ function RateEditor({
             ...mf.macros,
             ...macros,
         };
+
+        // mf.smartFence = false;
     }, [macros]);
+
+    useEffect(() => {
+        const mf = mfRef.current;
+        if (!mf) return;
+
+        if (mf.value !== currentRateLaw) {
+            mf.setValue(currentRateLaw, {silenceNotifications: true});
+        }
+
+    }, [currentRateLaw]);
 
 
 
