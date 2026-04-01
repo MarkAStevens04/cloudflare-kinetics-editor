@@ -73,11 +73,6 @@ export default function RxnDrawer({
         onInitialChange(targetNode, event.target.value);
     }
 
-    const onRateButton = (buttonID: string) => {
-        const add_str =  rateLaw + buttonID;
-        onRateLawChange(RxnID, add_str);
-    }
-
     const transitions = useTransition(open ? [true] : [],  {
         from: { x: -240, opacity: 0 },
         enter: { x: 0, opacity: 1},
@@ -209,11 +204,8 @@ export default function RxnDrawer({
                 <hr />
 
                 {/* Edit Rate Laws */}
-                <div className='rate-editor'>
 
-                    <p className='drawer-text'>Rate Law</p>
-
-                    <input 
+                <input 
                         style={{
                             backgroundColor: 'rgba(255, 255, 255, 1)',
                             color: 'rgba(0, 0, 0, 0.8)',
@@ -227,52 +219,7 @@ export default function RxnDrawer({
                         onChange={onRateChange}
                     />   
 
-                    <br />
-                    <p className='drawer-text' style={{fontSize: '0.8em', margin: '10px 0px',}}>Add species to rate law</p>
-
-                    {/* Add Reactant Handles */}
-                    <div className="species-param-input" 
-                    style={{
-                            backgroundColor: 'rgba(255, 255, 255, 1)',
-                            color: 'rgba(0, 0, 0, 0.8)',
-                            width: '95%',
-                            margin: '0px 0px',
-                            minWidth: '0px',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            padding: '5px 5px',
-                            gap: '5px',
-                        }}
-                    >
-                        {/* <p className='autofill-species-box'>REACTANT 1</p>
-                        <p className='autofill-species-box'>REACTANT 2</p>
-                        <p className='autofill-species-box'>REACTANT NUMBER 3</p>
-                        <p className='autofill-species-box'>REACTANT 1</p>
-                        <p className='autofill-species-box'>REACTANT 2</p>
-                        <p className='autofill-species-box'>REACTANT 3</p>
-                        <p className='autofill-species-box'>REACTANT 1</p>
-                        <p className='autofill-species-box'>REACTANT 2</p>
-                        <p className='autofill-species-box'>REACTANT 3</p> */}
-
-                        {/* Populate our rate law buttons */}
-                        {nodes.map((node) => (
-                            <p className='autofill-species-box' 
-                            key={node.id} 
-                            style={{backgroundColor: node.data.color}}
-                            onClick={() => onRateButton(node.id)}
-                            >
-
-                                {node.data.label}
-
-                            </p>))
-                        }
-
-                    </div>
-
-                    <RateEditor nodes={nodes} currentRateLaw={rateLaw} onRateChange={onRateChange} />
-
-
-                </div>   
+                <RateEditor nodes={nodes} currentRateLaw={rateLaw} onRateChange={onRateChange} />
 
                        
 
@@ -282,6 +229,13 @@ export default function RxnDrawer({
     );
 
 }
+
+
+function idToLatex(id: string) {
+    return 'obj' + id;
+}
+
+
 
 function RateEditor({
     nodes,
@@ -299,7 +253,7 @@ function RateEditor({
 
     const macros = useMemo(() => {
         return Object.fromEntries(
-            nodes.map((node) => ['obj' + node.id, node.data.label])
+            nodes.map((node) => [idToLatex(node.id), '\\text{' + node.data.label + '}'])
         );
     }, [nodes]);
 
@@ -319,7 +273,7 @@ function RateEditor({
 
     const onButton = (buttonID: string) => {
 
-        mfRef.current?.insert('\\obj' + buttonID, {
+        mfRef.current?.insert('\\' + idToLatex(buttonID), {
             focus: true,
             insertionMode: "replaceSelection",
             selectionMode: "item",
@@ -341,38 +295,56 @@ function RateEditor({
 
 
     return (
-        <div>   
-                        {nodes.map((node) => (
-                            <div>
-                            <p className='autofill-species-box' 
-                            key={node.id} 
-                            style={{backgroundColor: node.data.color}}
-                            onClick={() => onButton(node.id)}
-                            >
+    <div className='rate-editor'>   
+        <p className='drawer-text'>Rate Law</p>
 
-                                {node.data.label}
-
-                            </p>
-                            </div>))
-                        }
-                        <p> Hello world!</p>
-
-                     
+        <math-field
+                id="formula"
+                ref={mfRef}
+                onInput={onChange}
+                style={{
+                    display: 'block',
+                }}
+            >
+                {currentRateLaw}
+            </math-field>
 
 
-                        <math-field
-                            id="formula"
-                            ref={mfRef}
-                            onInput={onChange}
-                            style={{
-                                display: 'block',
-                            }}
+        <br />
+        <p className='drawer-text' style={{fontSize: '0.8em', margin: '10px 0px',}}>Add species to rate law</p>
 
-                        >
-                            {currentRateLaw}
-                        </math-field>
+        {/* Add Reactant Handles */}
+        <div className="species-param-input" 
+        style={{
+                backgroundColor: 'rgba(255, 255, 255, 1)',
+                color: 'rgba(0, 0, 0, 0.8)',
+                width: '95%',
+                margin: '0px 0px',
+                minWidth: '0px',
+                display: 'flex',
+                flexWrap: 'wrap',
+                padding: '5px 5px',
+                gap: '5px',
+            }}
+        >
 
-                    </div>
+            {/* Populate our rate law buttons */}
+            {nodes.map((node) => (
+                <div>
+                <p className='autofill-species-box' 
+                key={node.id} 
+                style={{backgroundColor: node.data.color}}
+                onClick={() => onButton(node.id)}
+                >
+
+                    {node.data.label}
+
+                </p>
+                </div>))
+            }
+        </div>
+
+    </div>
     );
 
 }
