@@ -253,27 +253,12 @@ function RateEditor({
 
     const macros = useMemo(() => {
         return Object.fromEntries(
-            nodes.map((node) => [idToLatex(node.id), {args: 1, def: '\\text{' + node.data.label + '}', expand: false}])
+            // Very strange code here. We have args: 1 so that the parameter we add (\text{buttonID}) stays in the latex
+            // We render our text as node.data.label, and in the backend, keep our latex as \objNXXX{\text{nXXX}}
+            nodes.map((node) => [idToLatex(node.id), {args: 1, def: '\\text{' + node.data.label + '}'}])
         );
 
     }, [nodes]);
-
-    // const macros = useMemo(() => {
-    //     return Object.fromEntries(
-    //         nodes.map((node) => [idToLatex(node.id), '\\text{' + node.data.label + '}'])
-    //     );
-
-    // }, [nodes]);
-
-
-    // const macros = useMemo(() => {
-    //     // return Object.fromEntries(
-    //     //     nodes.map((node) => [idToLatex(node.id), '\\text{' + node.data.label + '}'])
-    //     // );
-
-    //     return {'reactant': "\\text{'#1'}"};
-
-    // }, [nodes]);
 
     console.log('Macros: ' + JSON.stringify(macros));
 
@@ -305,11 +290,6 @@ function RateEditor({
 
 
     }
-    
-    
-    // IDEA: Use locale to convert between ID and label? MathfieldElement.strings
-
-    // IDEA: Look at registers?
 
 
     return (
