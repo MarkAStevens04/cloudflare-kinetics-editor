@@ -253,7 +253,7 @@ function RateEditor({
 
     const macros = useMemo(() => {
         return Object.fromEntries(
-            nodes.map((node) => [idToLatex(node.id), {args: 1, def: '\\text{' + node.data.label + '}', expand: true}])
+            nodes.map((node) => [idToLatex(node.id), {args: 1, def: '\\text{' + node.data.label + '}', expand: false}])
         );
 
     }, [nodes]);
@@ -291,7 +291,7 @@ function RateEditor({
 
     const onButton = (buttonID: string) => {
 
-        mfRef.current?.insert('\\obj'+ buttonID + '{' + buttonID + '}', {
+        mfRef.current?.insert('\\obj'+ buttonID + '{\\text{' + buttonID + '}}', {
             focus: true,
             insertionMode: "replaceSelection",
             selectionMode: "item",

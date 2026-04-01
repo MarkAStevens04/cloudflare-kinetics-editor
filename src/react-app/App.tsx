@@ -76,6 +76,13 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
   type: 'reaction',
 };
 
+
+function cleanAsciiConversion(ascii: string) {
+  // Remove all \ from the string, as these are added when converting from Latex to AsciiMath but we don't want them in our rate laws
+  return ascii.replace(/"/g, '').replace(/\^/g, '**');
+}
+
+
 export default function App() {
   const [nodes, setNodes] = useState<AppNode[]>(initialNodes);
   const [edges, setEdges] = useState<AppEdge[]>(initialEdges);
@@ -245,9 +252,12 @@ export default function App() {
 
 
   const callSimulation = useCallback(async () => {
+
+    // Reactions replaces all " with empty character! Quotes are added when Latex 'Text' is converted to a command, but we do NOT want this!
+    // Reactions replaces all ^ with ** for exponentiation.
     const payload = {
       "Species": nodesWithCallbacks.map(({ id, data}) => ({'id': id, 'initial': Number(data.initial)})),
-      "Reactions": edgesWithCallbacks.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': convertLatexToAsciiMath(data?.rate_law || ''), 'Parameters': {'test1': 0.0}})),
+      "Reactions": edgesWithCallbacks.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': cleanAsciiConversion(convertLatexToAsciiMath(data?.rate_law || '')), 'Parameters': {'test1': 0.0}})),
       "Simulation": {"t_end": 300, "dt": 1, "method": "Euler"},
     };
 
