@@ -5,7 +5,7 @@
   // child's job because the parent knows the right parameters to give it, wheras the
   // child wouldn't be able to provide ANY parameters to the function.
 // import React from 'react';
-import { ChangeEvent, useRef } from 'react';
+import { ChangeEvent, useRef, useEffect, useMemo } from 'react';
 import { animated, useTransition } from '@react-spring/web';
 
 import { type AppNode } from './ProteinNode';
@@ -297,16 +297,47 @@ function RateEditor({
         onRateChange(event);
     }
 
+    const macros = useMemo(() => {
+        return Object.fromEntries(
+            nodes.map((node) => ['obj' + node.id, node.data.label])
+        );
+    }, [nodes]);
+
+    console.log('Macros: ' + JSON.stringify(macros));
+
+    useEffect(() => {
+        const mf = mfRef.current;
+        if (!mf) return;
+
+        // Teach mathlive about our custom macros
+        mf.macros = {
+            ...mf.macros,
+            ...macros,
+        };
+    }, [macros]);
+
+
     const onButton = (buttonID: string) => {
 
-        mfRef.current?.insert(buttonID, {
+        mfRef.current?.insert('\\obj' + buttonID, {
             focus: true,
             insertionMode: "replaceSelection",
+            selectionMode: "item",
         });
+
+        console.log('Macros: ' + mfRef.current?.macros);
+
+        // mfRef.current?.applyStyle({
+        //     color: buttonColor,
+        // });
+
+
     }
     
     
     // IDEA: Use locale to convert between ID and label? MathfieldElement.strings
+
+    // IDEA: Look at registers?
 
 
     return (

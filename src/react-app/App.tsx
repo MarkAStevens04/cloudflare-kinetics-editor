@@ -64,13 +64,13 @@ const getRandomColor = () => {
 
 const initialNodes: AppNode[] = [
   // { id: 'n0', position: { x: -500, y: -500 }, data: { label: 'DEFAULT NODE (ERROR)', onLabelChange: () => {}, color: '#ddd', initial: '' }, type: 'protein'},
-  { id: 'n1', position: { x: 0, y: -0 }, data: { label: 'Click to edit', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
-  { id: 'n2', position: { x: 500, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
+  { id: 'Na', position: { x: 0, y: -0 }, data: { label: 'Click to edit', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
+  { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
 ];
 
 let nextId= 3;
 
-const initialEdges: AppEdge[] = [{ id: 'n1_n2', source: 'n1', target: 'n2' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: ''}, }];
+const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: ''}, }];
  
 const defaultEdgeOptions: DefaultEdgeOptions = {
   type: 'reaction',
@@ -222,9 +222,16 @@ export default function App() {
     }
   });
 
+
+  const numberToLetters = (num: number) => {
+    return String(num).split('').map((digit) => String.fromCharCode(97 + Number(digit))).join('');
+  }
+
+
+
   const addNode = useCallback(() => {
     const newNode: AppNode = {
-      id: 'n' + String(nextId++),
+      id: 'N' + numberToLetters(nextId++),
       position: {
         x: Math.random() * 300,
         y: Math.random() * 300,
