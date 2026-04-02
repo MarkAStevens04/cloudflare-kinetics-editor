@@ -349,7 +349,7 @@ export default function App() {
         {imageSrc && <img src={imageSrc} style={{position: 'fixed', bottom: 10, right: 10}} />}
         
 
-        <SimulationDrawer open={simDrawerOpen} onToggle={onToggleSimDrawer} />
+        <SimulationDrawer onSimulate={callSimulation} open={simDrawerOpen} onToggle={onToggleSimDrawer} />
 
         
         {/* <button onClick={callSimulation} className="action-button" style={{position: 'fixed', top: 10, right: 10}}>SIMULATE</button> */}

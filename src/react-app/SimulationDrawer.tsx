@@ -9,27 +9,34 @@ import { RxnDrawerProps } from './Drawer';
 export type SimulationDrawerProps = {
     open: boolean;
     onToggle: () => void;
+    onSimulate: () => void;
 }
 
 
 export default function SimulationDrawer({
     open,
     onToggle,
+    onSimulate,
 }:  SimulationDrawerProps
 ) {
 
     const [springs, api] = useSpring(() => ({
-        from: {height: 100},
+        from: {height: 100, width: 300},
     }));
 
     const handleClick = () => {
         api.start({
-            from: {height: 100},
-            to: {height: 1000},
+            from: {height: 100, width: 300},
+            to: {height: 500, width: 500},
             reverse: open,
         });
 
         onToggle();
+    }
+
+    const handleSimulate = (event: React.MouseEvent<HTMLButtonElement>) => { 
+        event.stopPropagation(); // Prevent the click event from bubbling up to the parent div
+        onSimulate();
     }
 
 
@@ -42,7 +49,6 @@ export default function SimulationDrawer({
                 position: 'fixed',
                 top: 10,
                 right: 10,
-                width: 300,
                 // background: '#000000',
                 borderRadius: 8,
                 overflow: 'hidden',
@@ -50,7 +56,9 @@ export default function SimulationDrawer({
             }}
             onClick={handleClick}
         >
-            <p className='action-button'>SIMULATE</p>
+            {/* <p className='action-button'>SIMULATE</p> */}
+
+            <button onClick={handleSimulate} className="action-button" >SIMULATE</button>
 
             <div className="sim-progression" style={{color: 'rgba(0, 0, 0, 0.6)', padding: 20, fontSize: 18}}>
                 <SimulationProgression open={open} />
