@@ -105,10 +105,9 @@ function SimulationDrawer({
                 <SimulationProgression open={open} />
             </div>
 
-        </animated.div>   
 
 
-        <LineChart
+            <LineChart
             dataset={data}
             xAxis={[
                 { dataKey: 'time',
@@ -129,6 +128,8 @@ function SimulationDrawer({
             // axisHighlight={{x: 'none', y: 'none'}}
         />
 
+        </animated.div>   
+
         
 
     </div>
@@ -139,7 +140,6 @@ function SimulationDrawer({
 
 
 export default React.memo(SimulationDrawer);
-
 
 
 
