@@ -34,9 +34,16 @@ FullStory('trackEvent', {
 import ProteinNode, { type AppNode } from './ProteinNode';
 import RxnEdge, { type AppEdge } from './RxnEdge';
 import RxnDrawer from './Drawer';
+import SimulationDrawer from './SimulationDrawer';
 
-// Stringify
+// Import fake data
+import blob from './assets/data.json';
+
+// Stringify TODO: Move this to Drawer instead
 import { convertLatexToAsciiMath } from "mathlive";
+
+
+
 
 const nodeTypes = {
   protein: ProteinNode,
@@ -96,6 +103,8 @@ export default function App() {
 
   const [imageSrc, setImageSrc] = useState<string | null>(null);
 
+  const [simDrawerOpen, setSimDrawerOpen] = useState(false);
+
   const onNodesChange: OnNodesChange<AppNode> = useCallback(
     (changes) => setNodes((nodesSnapshot) => applyNodeChanges<AppNode>(changes, nodesSnapshot)),
     [setNodes],
@@ -105,6 +114,12 @@ export default function App() {
     (changes) => setEdges((edgesSnapshot) => applyEdgeChanges<AppEdge>(changes, edgesSnapshot)),
     [setEdges],
   );
+
+
+  const onToggleSimDrawer = function() {
+    setSimDrawerOpen(!simDrawerOpen);
+  };
+
   // const onConnect: OnConnect = useCallback(
   //   (connection) => setEdges((edgesSnapshot) => addEdge(connection, edgesSnapshot)),
   //   [setEdges],
@@ -276,7 +291,11 @@ export default function App() {
   
     const response = await fetch('https://kinetics-editor.vercel.app/api/simulate', requestOptions);
 
-    const blob = await response.blob();
+    const fake = await response.blob();
+
+    console.log('Raw response blob: ', blob);
+
+    // const jsonBlob = await fetch('./src/react-app/assets/data.json').then(response => response.json()).then((json) => console.log(json));
 
     const imageUrl = URL.createObjectURL(blob);
 
@@ -330,9 +349,10 @@ export default function App() {
         {imageSrc && <img src={imageSrc} style={{position: 'fixed', bottom: 10, right: 10}} />}
         
 
+        <SimulationDrawer open={simDrawerOpen} onToggle={onToggleSimDrawer} />
 
         
-        <button onClick={callSimulation} className="action-button" style={{position: 'fixed', top: 10, right: 10}}>SIMULATE</button>
+        {/* <button onClick={callSimulation} className="action-button" style={{position: 'fixed', top: 10, right: 10}}>SIMULATE</button> */}
         
       
     </div>
