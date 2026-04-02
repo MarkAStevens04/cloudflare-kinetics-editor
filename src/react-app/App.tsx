@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { 
 	ReactFlow, 
 	Background,
@@ -53,6 +53,7 @@ const edgeTypes = {
   reaction: RxnEdge,
 };
 
+
 // Initialize set of possible colors for species nodes
 const NODE_COLORS = [
   '#90f1ef', // Soft Cyan
@@ -106,6 +107,19 @@ export default function App() {
   const [simDrawerOpen, setSimDrawerOpen] = useState(false);
 
   const sub_selection = useMemo(() => simulationData.filter((_, i) => (i) % 10 === 0), []);
+
+
+  const nodesRef = useRef(nodes);
+  const edgesRef = useRef(edges);
+
+  useEffect(() => {
+    nodesRef.current = nodes;
+  }, [nodes]);
+
+  useEffect(() => {
+    edgesRef.current = edges;
+  }, [edges]);
+
 
   const onNodesChange: OnNodesChange<AppNode> = useCallback(
     (changes) => setNodes((nodesSnapshot) => applyNodeChanges<AppNode>(changes, nodesSnapshot)),
@@ -274,9 +288,12 @@ export default function App() {
 
   const callSimulation = useCallback(async () => {
 
+    const currentNodes = nodesRef.current;
+    const currentEdges = edgesRef.current;
+
     const payload = {
-      "Species": nodes.map(({ id, data}) => ({'id': id, 'initial': Number(data.initial)})),
-      "Reactions": edges.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': cleanAsciiConversion(convertLatexToAsciiMath(data?.rate_law || '')), 'Parameters': {'test1': 0.0}})),
+      "Species": currentNodes.map(({ id, data}) => ({'id': id, 'initial': Number(data.initial)})),
+      "Reactions": currentEdges.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': cleanAsciiConversion(convertLatexToAsciiMath(data?.rate_law || '')), 'Parameters': {'test1': 0.0}})),
       "Simulation": {"t_end": 300, "dt": 1, "method": "Euler"},
     };
 
