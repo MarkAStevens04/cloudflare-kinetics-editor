@@ -4,19 +4,28 @@ import {
     useTransition,
     config,
 } from '@react-spring/web';
-import { RxnDrawerProps } from './Drawer';
+
+import React from 'react';
+
+import { useMemo } from 'react';
+
+import { LineChart } from '@mui/x-charts/LineChart';
+// Could use visx or Chart.js (https://www.chartjs.org/docs/latest/getting-started/usage.html)
+// Instead using MUI's LineCharts! https://mui.com/x/react-charts/line-demo/#BiaxialLineChart
 
 export type SimulationDrawerProps = {
     open: boolean;
     onToggle: () => void;
     onSimulate: () => void;
+    data: Array<Record<string, number>>;
 }
 
 
-export default function SimulationDrawer({
+function SimulationDrawer({
     open,
     onToggle,
     onSimulate,
+    data,
 }:  SimulationDrawerProps
 ) {
 
@@ -39,10 +48,42 @@ export default function SimulationDrawer({
         onSimulate();
     }
 
+    // Grab our data in a format that LineChart likes
+    // const updated_data = useMemo(() => {
+    //     console.log('re-render!');
+        
+    //     return Object.entries(data)
+    //     .filter(([key]) => key !== 'times')
+    //     .map(([label, values]) => ({
+    //         id: label,
+    //         label: label,
+    //         data: values,
+    //     }));
+        
+    // }, [data]);
 
-// style={{position: 'fixed', top: 10, right: 10}}
+    // const timestamps = useMemo(() => data.times ?? [], [data]);
+
+    // Extract timestamps
+    // const timestamps = data['times'] || [];
+    // console.log('updated data: ', updated_data);
+    // console.log('timestamps: ', timestamps);
+
+    console.log('big re-render!');
+
+    const keyToLabel: { [key: string]: string } = {
+        Invertase: 'Invertase',
+        Sucrose: 'Sucrose',
+        Invertase_Sucrose_Complex: 'Invertase_Sucrose_Complex',
+        Glucose: 'Glucose',
+        Fructose: 'Fructose',
+    };
+
+
+
 
     return (
+    <div>
         <animated.div
             className='sim-box'
             style={{
@@ -67,9 +108,37 @@ export default function SimulationDrawer({
         </animated.div>   
 
 
+        <LineChart
+            dataset={data}
+            xAxis={[
+                { dataKey: 'time',
+                    valueFormatter: (value: number) => value.toString()
+                },
+            ]}
+            yAxis={[{ width: 50 }]}
+            series={Object.keys(keyToLabel).map((key) => ({
+                dataKey: key,
+                label: keyToLabel[key],
+                showMark: true,
+            }))}
+
+            height={500}
+            width={500}
+            // skipAnimation
+            // slotProps={{tooltip: {trigger: 'item'}}}
+            // axisHighlight={{x: 'none', y: 'none'}}
+        />
+
+        
+
+    </div>
+
     )
 
 }
+
+
+export default React.memo(SimulationDrawer);
 
 
 

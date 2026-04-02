@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { 
 	ReactFlow, 
 	Background,
@@ -37,7 +37,7 @@ import RxnDrawer from './Drawer';
 import SimulationDrawer from './SimulationDrawer';
 
 // Import fake data
-import blob from './assets/data.json';
+import { simulationData } from './assets/data.tsx';
 
 // Stringify TODO: Move this to Drawer instead
 import { convertLatexToAsciiMath } from "mathlive";
@@ -105,6 +105,8 @@ export default function App() {
 
   const [simDrawerOpen, setSimDrawerOpen] = useState(false);
 
+  const sub_selection = useMemo(() => simulationData.filter((_, i) => (i) % 10 === 0), []);
+
   const onNodesChange: OnNodesChange<AppNode> = useCallback(
     (changes) => setNodes((nodesSnapshot) => applyNodeChanges<AppNode>(changes, nodesSnapshot)),
     [setNodes],
@@ -116,9 +118,9 @@ export default function App() {
   );
 
 
-  const onToggleSimDrawer = function() {
-    setSimDrawerOpen(!simDrawerOpen);
-  };
+  const onToggleSimDrawer = useCallback(() => {
+    setSimDrawerOpen(state => !state);
+  }, []);
 
   // const onConnect: OnConnect = useCallback(
   //   (connection) => setEdges((edgesSnapshot) => addEdge(connection, edgesSnapshot)),
@@ -129,9 +131,9 @@ export default function App() {
 
     setSelectedRxnID(id);
 
-    setDrawerToggle(!drawerToggle);
+    setDrawerToggle(state => !state);
 
-  }, [drawerToggle]);
+  }, []);
 
   const selectedRxn = edges.find((edge) => edge.id === selectedRxnID) || edges[0];
 
@@ -224,17 +226,17 @@ export default function App() {
   );
 
   // update all nodes to have the correct callback
-  const nodesWithCallbacks: AppNode[] = nodes.map((node) => ({
+  const nodesWithCallbacks: AppNode[] = useMemo(() => nodes.map((node) => ({
     ...node,
     data: {
       ...node.data,
       onLabelChange: onLabelChange,
     }
-  }));
+  })), [nodes, onLabelChange]);
 
 
   // update all edges to have the correct callback
-  const edgesWithCallbacks: AppEdge[] = edges.map((edge) => {
+  const edgesWithCallbacks: AppEdge[] = useMemo(() => edges.map((edge) => {
 
     // Make sure edge has data
     if (!edge.data) return edge;
@@ -246,7 +248,7 @@ export default function App() {
         toggleDrawer: () => onDrawerToggle(edge.id)
       }
     }
-  });
+  }), [edges, onDrawerToggle]);
 
 
   const numberToLetters = (num: number) => {
@@ -273,8 +275,8 @@ export default function App() {
   const callSimulation = useCallback(async () => {
 
     const payload = {
-      "Species": nodesWithCallbacks.map(({ id, data}) => ({'id': id, 'initial': Number(data.initial)})),
-      "Reactions": edgesWithCallbacks.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': cleanAsciiConversion(convertLatexToAsciiMath(data?.rate_law || '')), 'Parameters': {'test1': 0.0}})),
+      "Species": nodes.map(({ id, data}) => ({'id': id, 'initial': Number(data.initial)})),
+      "Reactions": edges.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': cleanAsciiConversion(convertLatexToAsciiMath(data?.rate_law || '')), 'Parameters': {'test1': 0.0}})),
       "Simulation": {"t_end": 300, "dt": 1, "method": "Euler"},
     };
 
@@ -287,7 +289,7 @@ export default function App() {
     console.log('Simulation started! Payload: ', payload);
     
 
-    // fetch('https://kinetics-editor.vercel.app/api/simulate', requestOptions).then(response => response.json()).then(data => console.log('Simulation results: ', data));
+    fetch('https://kinetics-editor.vercel.app/api/simulate', requestOptions).then(response => response.json()).then(data => console.log('Simulation results: ', data));
   
     const response = await fetch('https://kinetics-editor.vercel.app/api/simulate', requestOptions);
 
@@ -303,7 +305,7 @@ export default function App() {
 
     console.log('Simulation Complete!');
     
-  }, [nodesWithCallbacks, edgesWithCallbacks]);
+  }, []);
  
 
 
@@ -349,8 +351,7 @@ export default function App() {
         {imageSrc && <img src={imageSrc} style={{position: 'fixed', bottom: 10, right: 10}} />}
         
 
-        <SimulationDrawer onSimulate={callSimulation} open={simDrawerOpen} onToggle={onToggleSimDrawer} />
-
+        <SimulationDrawer data={sub_selection} onSimulate={callSimulation} open={simDrawerOpen} onToggle={onToggleSimDrawer} />
         
         {/* <button onClick={callSimulation} className="action-button" style={{position: 'fixed', top: 10, right: 10}}>SIMULATE</button> */}
         
