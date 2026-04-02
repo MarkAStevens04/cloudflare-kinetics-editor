@@ -79,6 +79,15 @@ function SimulationDrawer({
         Fructose: 'Fructose',
     };
 
+    const colors: { [key: string]: string } = {
+        Invertase: '#42a5f5',
+        Sucrose: '#ba68c8',
+        Invertase_Sucrose_Complex: '#ef5350',
+        Glucose: '#ff9800',
+        Fructose: '#4caf50',
+    };
+
+
 
 
 
@@ -107,7 +116,7 @@ function SimulationDrawer({
 
 
 
-            <LineChart
+            {open ? <LineChart
             dataset={data}
             xAxis={[
                 { dataKey: 'time',
@@ -118,15 +127,16 @@ function SimulationDrawer({
             series={Object.keys(keyToLabel).map((key) => ({
                 dataKey: key,
                 label: keyToLabel[key],
-                showMark: true,
+                color: colors[key],
+                showMark: false,
             }))}
 
-            height={500}
+            height={300}
             width={500}
             // skipAnimation
             // slotProps={{tooltip: {trigger: 'item'}}}
             // axisHighlight={{x: 'none', y: 'none'}}
-        />
+            /> : null}
 
         </animated.div>   
 

@@ -37,7 +37,7 @@ import RxnDrawer from './Drawer';
 import SimulationDrawer from './SimulationDrawer';
 
 // Import fake data
-import { simulationData } from './assets/data.tsx';
+import  simulationData  from './assets/data.json';
 
 // Stringify TODO: Move this to Drawer instead
 import { convertLatexToAsciiMath } from "mathlive";
@@ -106,7 +106,7 @@ export default function App() {
 
   const [simDrawerOpen, setSimDrawerOpen] = useState(false);
 
-  const sub_selection = useMemo(() => simulationData.filter((_, i) => (i) % 10 === 0), []);
+  const sub_selection = useMemo(() => simulationData.filter((_, i) => (i) % 1 === 0), []);
 
 
   const nodesRef = useRef(nodes);
