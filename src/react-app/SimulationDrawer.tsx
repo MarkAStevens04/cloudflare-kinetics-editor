@@ -37,13 +37,13 @@ export default function SimulationDrawer({
 
     return (
         <animated.div
-            
+            className='sim-box'
             style={{
                 position: 'fixed',
                 top: 10,
                 right: 10,
                 width: 300,
-                background: '#000000',
+                // background: '#000000',
                 borderRadius: 8,
                 overflow: 'hidden',
                 ...springs,
@@ -52,7 +52,7 @@ export default function SimulationDrawer({
         >
             <p className='action-button'>SIMULATE</p>
 
-            <div className="simProgression" style={{color: '#fff', padding: 20, fontSize: 18}}>
+            <div className="sim-progression" style={{color: 'rgba(0, 0, 0, 0.6)', padding: 20, fontSize: 18}}>
                 <SimulationProgression open={open} />
             </div>
 
