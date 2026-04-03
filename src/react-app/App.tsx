@@ -30,7 +30,7 @@ FullStory('trackEvent', {
   },
 })
 
-// Initialize Protein and Reacction types
+// Initialize Protein and Reaction types
 import ProteinNode, { type AppNode } from './ProteinNode';
 import RxnEdge, { type AppEdge } from './RxnEdge';
 import RxnDrawer from './Drawer';
@@ -41,6 +41,9 @@ import  simulationData  from './assets/data.json';
 
 // Stringify TODO: Move this to Drawer instead
 import { convertLatexToAsciiMath } from "mathlive";
+
+// Import Feedback Drawer
+import FeedbackDrawer from './FeedbackDrawer';
 
 
 
@@ -105,6 +108,7 @@ export default function App() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   const [simDrawerOpen, setSimDrawerOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   const sub_selection = useMemo(() => simulationData.filter((_, i) => (i) % 1 === 0), []);
 
@@ -142,6 +146,10 @@ export default function App() {
 
     setDrawerToggle(state => !state);
 
+  }, []);
+
+  const onFeedbackToggle = useCallback(() => {
+    setFeedbackOpen(state => !state);
   }, []);
 
   const selectedRxn = edges.find((edge) => edge.id === selectedRxnID) || edges[0];
@@ -349,6 +357,9 @@ export default function App() {
         </>
 
         <button onClick={addNode} style={{position: 'fixed', top: 10, left: 10}}>Add New Node</button>
+
+        <FeedbackDrawer open={feedbackOpen} onToggle={onFeedbackToggle} />
+
         <RxnDrawer 
           edge={selectedRxn} 
           nodes={nodesWithCallbacks}
@@ -362,8 +373,10 @@ export default function App() {
         
         {imageSrc && <img src={imageSrc} style={{position: 'fixed', bottom: 10, right: 10}} />}
         
+        
 
         <SimulationDrawer data={sub_selection} onSimulate={callSimulation} open={simDrawerOpen} onToggle={onToggleSimDrawer} />
+
         
         {/* <button onClick={callSimulation} className="action-button" style={{position: 'fixed', top: 10, right: 10}}>SIMULATE</button> */}
         
