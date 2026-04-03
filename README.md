@@ -132,6 +132,8 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 
 - Aesthetic Gradients (https://reactflow.dev/examples/styling/turbo-flow)
 
+- Example systems! So users can quickly get up and running and see the end product
+
 
 ### Project Charter Document
 - What do we want out of this project?
@@ -198,6 +200,7 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - Data labels in graph
 - Better rate law editing
 - Weird labels on connections
+- Arrows shouldn't always output on right, should be able to go from either direction
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)

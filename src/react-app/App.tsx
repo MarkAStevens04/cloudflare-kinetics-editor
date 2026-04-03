@@ -136,11 +136,6 @@ export default function App() {
     setSimDrawerOpen(state => !state);
   }, []);
 
-  // const onConnect: OnConnect = useCallback(
-  //   (connection) => setEdges((edgesSnapshot) => addEdge(connection, edgesSnapshot)),
-  //   [setEdges],
-  // );
-
   const onDrawerToggle = useCallback((id: string) => {
 
     setSelectedRxnID(id);

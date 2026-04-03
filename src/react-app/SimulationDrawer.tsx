@@ -7,12 +7,12 @@ import {
 
 import React from 'react';
 
-import { useMemo } from 'react';
-
 import { LineChart } from '@mui/x-charts/LineChart';
 // Could use visx or Chart.js (https://www.chartjs.org/docs/latest/getting-started/usage.html)
 // Instead using MUI's LineCharts! https://mui.com/x/react-charts/line-demo/#BiaxialLineChart
 
+
+// Create type for our simulation drawer
 export type SimulationDrawerProps = {
     open: boolean;
     onToggle: () => void;
@@ -21,6 +21,7 @@ export type SimulationDrawerProps = {
 }
 
 
+// Create SimulationDrawer as an object
 function SimulationDrawer({
     open,
     onToggle,
@@ -29,48 +30,36 @@ function SimulationDrawer({
 }:  SimulationDrawerProps
 ) {
 
+    // Animation styling we'll use on opening and closing of the drawer
     const [springs, api] = useSpring(() => ({
-        from: {height: 100, width: 300},
+        from: {height: 90, width: 300},
     }));
 
+
+    // When the outer drawer is clicked, spring open / closed
     const handleClick = () => {
+
+        // Do animation
         api.start({
-            from: {height: 100, width: 300},
+            from: {height: 90, width: 300},
             to: {height: 500, width: 500},
             reverse: open,
         });
 
+        // Perform toggle
         onToggle();
     }
 
+    // What happens when we click the inner "Simulate" button
     const handleSimulate = (event: React.MouseEvent<HTMLButtonElement>) => { 
         event.stopPropagation(); // Prevent the click event from bubbling up to the parent div
-        onSimulate();
+        if (!open) {
+            handleClick(); // Open the drawer if it's not already open
+        }
+        onSimulate(); // Outer call to run simulation
     }
 
-    // Grab our data in a format that LineChart likes
-    // const updated_data = useMemo(() => {
-    //     console.log('re-render!');
-        
-    //     return Object.entries(data)
-    //     .filter(([key]) => key !== 'times')
-    //     .map(([label, values]) => ({
-    //         id: label,
-    //         label: label,
-    //         data: values,
-    //     }));
-        
-    // }, [data]);
-
-    // const timestamps = useMemo(() => data.times ?? [], [data]);
-
-    // Extract timestamps
-    // const timestamps = data['times'] || [];
-    // console.log('updated data: ', updated_data);
-    // console.log('timestamps: ', timestamps);
-
-    console.log('big re-render!');
-
+    // Tracks how we should display each reactant on the line chart
     const keyToLabel: { [key: string]: string } = {
         Invertase: 'Invertase',
         Sucrose: 'Sucrose',
@@ -79,6 +68,7 @@ function SimulationDrawer({
         Fructose: 'Fructose',
     };
 
+    // Tracks the colors we use on the line chart
     const colors: { [key: string]: string } = {
         Invertase: '#42a5f5',
         Sucrose: '#ba68c8',
@@ -86,9 +76,6 @@ function SimulationDrawer({
         Glucose: '#ff9800',
         Fructose: '#4caf50',
     };
-
-
-
 
 
     return (
@@ -106,14 +93,12 @@ function SimulationDrawer({
             }}
             onClick={handleClick}
         >
-            {/* <p className='action-button'>SIMULATE</p> */}
 
             <button onClick={handleSimulate} className="action-button" >SIMULATE</button>
-
-            <div className="sim-progression" style={{color: 'rgba(0, 0, 0, 0.6)', padding: 20, fontSize: 18}}>
-                <SimulationProgression open={open} />
-            </div>
-
+        
+            <br />
+            <br />
+            <br />
 
 
             {open ? <LineChart
@@ -138,6 +123,10 @@ function SimulationDrawer({
             // axisHighlight={{x: 'none', y: 'none'}}
             /> : null}
 
+            <div className="sim-progression" >
+                <SimulationProgression open={open} />
+            </div>
+
         </animated.div>   
 
         
@@ -161,7 +150,7 @@ function SimulationProgression({ steps = ['Double-Checking Values', 'Generating 
         enter: { opacity: 1, x: '0px' },
         leave: {opacity: 0, x: '50px' },
         config: config.default,
-        trail: open ? 400 / steps.length : 50 / steps.length,
+        trail: open ? 1000 / steps.length : 50 / steps.length,
     });
 
     return transitions((style, item) => 
