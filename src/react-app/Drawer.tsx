@@ -155,10 +155,14 @@ export default function RxnDrawer({
 
                     </div>
 
+
+                    {/* Arrow connecting reactants to products */}
                     <p style={{
                         fontSize: '24px',
                     }}>→</p>
                     
+
+
                     {/* Product Parameters */}
                     <div className="species-container" style={{
                         backgroundColor: productColor,

@@ -1,9 +1,17 @@
-// import { 
-//     animated, 
-//     useSpring, 
-// } from '@react-spring/web';
+import { 
+    animated, 
+    useSpring, 
+} from '@react-spring/web';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
+
+declare global {
+    interface Window {
+        Tally?: {
+            loadEmbeds: () => void;
+        }
+    }
+}
 
 
 // Create type for our simulation drawer
@@ -21,98 +29,128 @@ export default function SimulationDrawer({
 }:  FeedbackDrawerProps
 ) {
 
-    const initialized = useRef(false);
+    const formId = 'VLYDpa';
 
-
+    // Script for feedback form
     useEffect(() => {
-        const win = window as any;
 
-        if (initialized.current) return;
-        initialized.current = true;
+        const widgetScriptSrc = 'https://tally.so/widgets/embed.js';
 
-        // Create the queueing stub from their snippet
-        if (typeof win.Featurebase !== "function") {
-            win.Featurebase = function() {
-                // eslint-disable-next-line prefer-rest-params
-                (win.Featurebase.q = win.Featurebase.q || []).push(arguments);
-            };
+        const loadEmbeds = () => {
+            if (window.Tally) {
+                window.Tally.loadEmbeds();
+                return;
+            }
+
+            // Fallback from Tally docs
+            document
+                .querySelectorAll<HTMLIFrameElement>('iframe[data-tally-src]:not([src])')
+                .forEach((iframe) => {
+                    const dataSrc = iframe.dataset.tallySrc;
+                    if (dataSrc) {
+                        iframe.src = dataSrc;
+                    }
+                });
+        };
+
+        // If sscript already loaded, just load embeds
+        if (window.Tally) {
+            loadEmbeds();
+            return;
         }
 
-        // Load the SDK once
-        if (!document.getElementById("featurebase-sdk")) {
-            const script = document.createElement("script");
-            script.id = "featurebase-sdk";
-            script.src = "https://do.featurebase.app/js/sdk.js";
-            document.head.appendChild(script);
+        // Avoid adding the script more than once
+        const existingScript = document.querySelector<HTMLScriptElement>(`script[src="${widgetScriptSrc}"]`);
+
+        if (existingScript) {
+            loadEmbeds();
+            return;
         }
 
+        const script = document.createElement('script');
+        script.src = widgetScriptSrc;
+        script.async = true;
+        script.onload = loadEmbeds;
+        script.onerror = loadEmbeds;
+        document.body.appendChild(script);
 
-        win.Featurebase("initialize_feedback_widget", {
-            organization: "biobuilder",
-            theme: "light",
-            placement: "left",
-            local: "en",
-            metadata: {
-                app_version: "1.0.0",
-            },
-        });
     }, []);
 
+    const tallySrc = `https://tally.so/embed/${formId}?alignLeft=1&dynamicHeight=1`;
 
 
-    return null;
 
 
-
-    // // Animation styling we'll use on opening and closing of the drawer
-    // const [springs, api] = useSpring(() => ({
-    //     from: {height: 300, width: 50},
-    // }));
-
-
-    // // When the outer drawer is clicked, spring open / closed
-    // const handleClick = () => {
-
-    //     // Do animation
-    //     api.start({
-    //         from: {height: 300, width: 50},
-    //         to: {height: 300, width: 200},
-    //         reverse: open,
-    //     });
-
-    //     // Perform toggle
-    //     onToggle();
-    // }
+    // Animation styling we'll use on opening and closing of the drawer
+    const [springs, api] = useSpring(() => ({
+        from: {height: 150, width: 34, bottom: 400},
+    }));
 
 
-    // return (
-    // <div>
-    //     <animated.div
-    //         className='feedback-box'
-    //         style={{
-    //             position: 'fixed',
-    //             left: 0,
-    //             bottom: 200,
-    //             // background: '#000000',
-    //             borderRadius: 8,
-    //             overflow: 'hidden',
-    //             ...springs,
-    //         }}
-    //         onClick={handleClick}
-    //     >
+    // When the outer drawer is clicked, spring open / closed
+    const handleClick = () => {
 
-    //     <p style={{
-    //          color: 'black' 
-    //     }}>
-    //     FEEDBACK
-    //     </p>
+        // Do animation
+        api.start({
+            from: {height: 150, width: 34, bottom: 400},
+            to: {height: 350, width: 300, bottom: 300},
+            reverse: open,
+        });
 
-    //     </animated.div>   
+        // Perform toggle
+        onToggle();
+    }
 
+
+    return (
+    <div>
+        <animated.div
+            className='feedback-box'
+            style={{
+                position: 'fixed',
+                left: 0,
+                // background: '#000000',
+                borderRadius: 8,
+                overflow: 'hidden',
+                ...springs,
+            }}
+            onClick={handleClick}
+        >
         
 
-    // </div>
+        {/* Text before button is opened */}
+        <div 
+        className='feedback-button'
+        style={{
+            padding: '0px 5px', 
+            // backgroundColor: 'rgba(0, 0, 0, 0.3)', 
+            width: '24px',
+            writingMode: 'sideways-lr',
+            textOrientation: 'mixed',
 
-    // )
+            // Disable selection
+            userSelect: 'none',
+        }}>
+            FEEDBACK
+        </div>
 
+        {/* Actual Survey */}
+        <div>
+            <iframe
+            data-tally-src={tallySrc}
+            loading="lazy"
+            width="281"
+            height={400}
+            frameBorder={0}
+            marginHeight={0}
+            marginWidth={0}
+            title={'Tally form'}
+            style={{ border: 'none', padding: '0px 0px', }}
+            />
+        </div>
+
+
+        </animated.div>   
+    </div>
+    );
 }

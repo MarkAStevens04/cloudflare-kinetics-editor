@@ -321,18 +321,41 @@ button:focus-visible {
 	font-weight: 400;
 
 	color: rgba(255, 255, 255, 0.87);
-	background-color: rgba(255, 255, 255);
+	background-color: rgba(116, 123, 255);
 
 	border: 5px transparent solid;
-	border-color: rgba(0, 0, 0, 0.1);
+	border-color: rgba(255, 255, 255, 0.51);
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
+	padding: 0px 0px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	/* width: 100% */
+
 }
 
+
+.feedback-button {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1;
+	font-weight: bold;
+	font-size: 24px;
+
+	color: rgba(255, 255, 255, 0.87);
+	
+	padding: 0px 0px;
+
+	/* font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale; */
+
+}
 
 
 .arrow-container {
