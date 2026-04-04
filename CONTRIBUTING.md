@@ -1,11 +1,11 @@
 # Contributing to BioBuilder
-Thank you SO MUCH for taking the time to contribute to this project!!
+Thank you SO MUCH for taking the time to contribute to this project!! 🎉🎉
 
-The following is a set of guidelines for contributing to BioBuilder. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request!
+The following is a set of guidelines for contributing to BioBuilder. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request! 😊
 
 
 ## Resources
-Making your first contribution is scary, but we're here to help! Problems and questions will arise as you contribute, and we've included a few resources if you want someone to talk to:
+Here's a few resources in case you get stuck while contributing. We're here to help! 
 
 - **Discord**: Join our [DISCORD](https://discord.gg/GmsKryYDGN) server to discuss contributions, ask questions, and make some friends with like-minded people!
 - **Email**: Send me an email at <mark@biobuilder.app> if you ever need anything, or have some ideas for improvement or feedback!! I'm immensely grateful you're thinking about contributing, and my goal is to respond to emails within 1 week. 
@@ -29,21 +29,21 @@ Making your first contribution is scary, but we're here to help! Problems and qu
 
 
 ## Code of Conduct
-- TODO
+See [CODE_OF_CONDUCT.md](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/blob/main/CODE_OF_CONDUCT.md)!
 
 
 ## Where do I start?
 
 ### First Time Contributors
 
-BioBuilder is intentionally built for biologists without a computer science background. If you're new to computer science, this is the perfect place to start honing your skills! Contributions can be as small as tweaking this documentation, or as big as implementing a completely new feature to the platform. We always welcome any help we can get.
+BioBuilder is built for biologists without a computer science background. If you fall in this category, this is the perfect place to start building your skills! Contributions can be as small as tweaking the documentation, or as big as implementing a completely new feature to the platform. We're always grateful for any help we can get.
 
-We reccommend taking a look at [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video for a high-level overview on what it means to contribute to open-source, and the general process to contributing.
+- [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video gives a visual explanation of how to make your first contribution.
+- Join our [DISCORD](https://discord.gg/GmsKryYDGN) to joing a community of passionate scientists! 
 
-Feel free to join our [DISCORD](https://discord.gg/GmsKryYDGN) to ask any questions!
 
 ### BioBuilder's Repos
-There are TWO packages for biobuilder. The first is the "frontend" (this repo!) which is what the user actually sees and interacts with. The second is the "backend", which is our simulation engine. 
+There are TWO repositories for biobuilder: The "frontend" (this repo!) which is what the user actually sees and interacts with, and the "backend", which is what computes our simulation. 
 
 - [BioBuilder Frontend](https://github.com/MarkAStevens04/cloudflare-kinetics-editor)
 - [BioBuilder Backend](https://github.com/MarkAStevens04/Kinetics-Editor)
@@ -52,6 +52,8 @@ There are TWO packages for biobuilder. The first is the "frontend" (this repo!) 
 
 ### File Structure
 
+Here's where you can find the code for each component:
+
 - `src/react-app/App.tsx`: Core code for web app
 - `src/react-app/ProteinNode.tsx`: Code for nodes in the graph editor
 - `src/react-app/RxnEdge.tsx`: Code for edges connecting nodes in graph editor
@@ -59,11 +61,11 @@ There are TWO packages for biobuilder. The first is the "frontend" (this repo!) 
 
 # Getting started
 
-This section walks you through setting up the repository on your device, and making your first edit to the code! This section is written specifically for first-time developers.
+This section gives a gentle introduction into making a "fork" of this repository, running the code locally, and making your first edit. 
 
-If you don't already have an idea of what to code, look at the [good first issues](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22) and [help wanted](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22help%20wanted%22) tags to see what our repo needs!
+Don't know what to code? Take a look at at the issues marked "[good first issue](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22)" and "[help wanted](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22help%20wanted%22)" to see what others need help with!
 
-For new developers, I recommend downloading [GitHub Desktop](https://github.com/apps/desktop) to manage Git. I also recommend making edits with [Visual Studio Code](https://code.visualstudio.com/). Finally, [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video is immensely helpful in making your first edit.
+For new developers, I recommend downloading [GitHub Desktop](https://github.com/apps/desktop) and [Visual Studio Code](https://code.visualstudio.com/). Finally, [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video is immensely helpful in making your first edit.
 
 ## Step 1: Fork the project
 

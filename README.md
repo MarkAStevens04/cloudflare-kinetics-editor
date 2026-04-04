@@ -64,8 +64,12 @@ Now you've set up your simulation, it's time to run it! Click "SIMULATE" in the 
 
 We LOVE feedback, and we're always looking for ways to improve the platform! Feel free to shoot me an email at <mark@biobuilder.app> with any suggestions or feedback, and I'd be happy to respond.
 
+You can also fill out [THIS](https://tally.so/r/VLYDpa) feedback form!
+
+
 # Build
 Locally, run `npx vite`
+
 To deploy, run 
 ```
 npm run build
