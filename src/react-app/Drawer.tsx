@@ -5,7 +5,7 @@
   // child's job because the parent knows the right parameters to give it, wheras the
   // child wouldn't be able to provide ANY parameters to the function.
 // import React from 'react';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useRef, useEffect, useMemo } from 'react';
 import { animated, useTransition } from '@react-spring/web';
 
 import { type AppNode } from './ProteinNode';
@@ -13,6 +13,10 @@ import { type AppEdge } from './RxnEdge';
 
 
 import './index.css';
+
+// For math live input
+import "mathlive";
+import { MathfieldElement } from 'mathlive';
 
 
 export type RxnDrawerProps = {
@@ -24,6 +28,12 @@ export type RxnDrawerProps = {
     onInitialChange: (currNode: AppNode, reactantInit: string) => void;
     // children?: React.ReactNode;
 };
+
+type rateEditorProps = {
+    nodes: AppNode[];
+    currentRateLaw?: string;
+    onRateChange: (event: ChangeEvent<HTMLInputElement>) => void;
+}
 
 
 
@@ -61,10 +71,6 @@ export default function RxnDrawer({
 
     const onPChange = (event: ChangeEvent<HTMLInputElement>) => {
         onInitialChange(targetNode, event.target.value);
-    }
-
-    const onRateButton = (buttonID: string) => {
-        onRateLawChange(RxnID, rateLaw + buttonID);
     }
 
     const transitions = useTransition(open ? [true] : [],  {
@@ -149,10 +155,14 @@ export default function RxnDrawer({
 
                     </div>
 
+
+                    {/* Arrow connecting reactants to products */}
                     <p style={{
                         fontSize: '24px',
                     }}>→</p>
                     
+
+
                     {/* Product Parameters */}
                     <div className="species-container" style={{
                         backgroundColor: productColor,
@@ -198,11 +208,8 @@ export default function RxnDrawer({
                 <hr />
 
                 {/* Edit Rate Laws */}
-                <div className='rate-editor'>
 
-                    <p className='drawer-text'>Rate Law</p>
-
-                    <input 
+                <input 
                         style={{
                             backgroundColor: 'rgba(255, 255, 255, 1)',
                             color: 'rgba(0, 0, 0, 0.8)',
@@ -216,55 +223,124 @@ export default function RxnDrawer({
                         onChange={onRateChange}
                     />   
 
-                    <br />
-                    <p className='drawer-text' style={{fontSize: '0.8em', margin: '10px 0px',}}>Add species to rate law</p>
-
-                    {/* Add Reactant Handles */}
-                    <div className="species-param-input" 
-                    style={{
-                            backgroundColor: 'rgba(255, 255, 255, 1)',
-                            color: 'rgba(0, 0, 0, 0.8)',
-                            width: '95%',
-                            margin: '0px 0px',
-                            minWidth: '0px',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            padding: '5px 5px',
-                            gap: '5px',
-                        }}
-                    >
-                        {/* <p className='autofill-species-box'>REACTANT 1</p>
-                        <p className='autofill-species-box'>REACTANT 2</p>
-                        <p className='autofill-species-box'>REACTANT NUMBER 3</p>
-                        <p className='autofill-species-box'>REACTANT 1</p>
-                        <p className='autofill-species-box'>REACTANT 2</p>
-                        <p className='autofill-species-box'>REACTANT 3</p>
-                        <p className='autofill-species-box'>REACTANT 1</p>
-                        <p className='autofill-species-box'>REACTANT 2</p>
-                        <p className='autofill-species-box'>REACTANT 3</p> */}
-
-                        {/* Populate our rate law buttons */}
-                        {nodes.map((node) => (
-                            <p className='autofill-species-box' 
-                            key={node.id} 
-                            style={{backgroundColor: node.data.color}}
-                            onClick={() => onRateButton(node.id)}
-                            >
-
-                                {node.data.label}
-
-                            </p>))
-                        }
-
-                    </div>
-
-                </div>   
+                <RateEditor nodes={nodes} currentRateLaw={rateLaw} onRateChange={onRateChange} />
 
                        
 
                 </animated.div>
             </>
         ) : null
+    );
+
+}
+
+
+
+function RateEditor({
+    nodes,
+    currentRateLaw,
+    onRateChange,
+
+}: rateEditorProps) {
+    
+    const mfRef = useRef<MathfieldElement>(null); 
+
+
+    // When our input is changed
+    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+        onRateChange(event);
+    }
+
+    // When a variable button is clicked
+    const onButton = (buttonID: string) => {
+        mfRef.current?.insert('\\obj'+ buttonID + '{\\text{' + buttonID + '}}', {
+            // focus: true,
+            insertionMode: "replaceSelection",
+            selectionMode: "item",
+        });
+        console.log('Macros: ' + mfRef.current?.macros);
+
+        // mfRef.current?.applyStyle({
+        //     color: buttonColor,
+        // });
+    }
+
+    const macros = useMemo(() => {
+        return Object.fromEntries(
+            // Very strange code here. We have args: 1 so that the parameter we add (\text{buttonID}) stays in the latex
+            // We render our text as node.data.label, and in the backend, keep our latex as \objNXXX{\text{nXXX}}
+            nodes.map((node) => ['obj' + node.id, {args: 1, def: '\\text{' + node.data.label + '}'}])
+        );
+
+    }, [nodes]);
+
+
+    useEffect(() => {
+        const mf = mfRef.current;
+        if (!mf) return;
+
+        // Teach mathlive about our custom macros
+        mf.macros = {
+            ...mf.macros,
+            ...macros,
+        };
+
+        mf.smartFence = false;
+    }, [macros]);
+
+
+
+    return (
+    <div className='rate-editor'>   
+        <p className='drawer-text'>Rate Law</p>
+
+        <math-field
+                id="formula"
+                ref={mfRef}
+                onInput={onChange}
+                style={{
+                    display: 'block',
+                }}
+            >
+                {currentRateLaw}
+            </math-field>
+
+
+        <br />
+        <p className='drawer-text' style={{fontSize: '0.8em', margin: '10px 0px',}}>Add species to rate law</p>
+
+        {/* Add Reactant Handles */}
+        <div className="species-param-input" 
+        style={{
+                backgroundColor: 'rgba(255, 255, 255, 1)',
+                color: 'rgba(0, 0, 0, 0.8)',
+                width: '95%',
+                margin: '0px 0px',
+                minWidth: '0px',
+                display: 'flex',
+                flexWrap: 'wrap',
+                padding: '5px 5px',
+                gap: '5px',
+            }}
+        >
+
+            {/* Populate our rate law buttons */}
+            {nodes.map((node) => (
+                <div>
+                <p className='autofill-species-box' 
+                key={node.id} 
+                style={{backgroundColor: node.data.color}}
+                onClick={() => onButton(node.id)}
+                >
+
+                    {node.data.label}
+
+                </p>
+                </div>))
+            }
+        </div>
+
+    </div>
     );
 
 }
