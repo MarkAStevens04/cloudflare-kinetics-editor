@@ -35,15 +35,13 @@ import ProteinNode, { type AppNode } from './ProteinNode';
 import RxnEdge, { type AppEdge } from './RxnEdge';
 import RxnDrawer from './Drawer';
 import SimulationDrawer from './SimulationDrawer';
+import FeedbackDrawer from './FeedbackDrawer';
 
 // Import fake data
 import  simulationData  from './assets/data.json';
 
 // Stringify TODO: Move this to Drawer instead
 import { convertLatexToAsciiMath } from "mathlive";
-
-// Import Feedback Drawer
-import FeedbackDrawer from './FeedbackDrawer';
 
 
 

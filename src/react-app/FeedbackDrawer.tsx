@@ -21,8 +21,8 @@ export type FeedbackDrawerProps = {
 }
 
 
-// Create SimulationDrawer as an object
-export default function SimulationDrawer({
+// Create FeedbackDrawer as an object
+export default function FeedbackDrawer({
     open,
     onToggle,
 
