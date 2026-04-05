@@ -23,7 +23,6 @@ Want to see a new feature on the site? Is there a small tweak that would make th
 
 See `CONTRIBUTING.md` for a guide on how to get started making your first contributions.
 
-
 # How to use
 
 Go to https://biobuilder.app to start using the software now!

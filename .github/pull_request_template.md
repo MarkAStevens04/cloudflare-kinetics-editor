@@ -2,15 +2,15 @@ Closes {LINK TO GH ISSUE}
 
 ## ✅ PR Type
 What kind of change does this PR introduce?
-```
-[ ] Bugfix
-[ ] Feature
-[ ] Code style update (formatting, local variables)
-[ ] Refactoring (no functional changes, no api changes)
-[ ] Documentation content changes
-[ ] Tests
-[ ] Other
-```
+
+- [ ] Bugfix
+- [ ] Feature
+- [ ] Code style update (formatting, local variables)
+- [ ] Refactoring (no functional changes, no api changes)
+- [ ] Documentation content changes
+- [ ] Tests
+- [ ] Other
+
 
 
 ## 🤔 Description
@@ -37,11 +37,11 @@ Screenshots or a screen recording of the visual changes associated with this PR.
 
 Did you do any of the following? If not, no worries, but if you can
 it's really helpful.
-```
-[ ] Documented what's new
-[ ] Added in-code documentation (wherever needed)
-[ ] Created a demo
-```
+
+- [ ] Documented what's new
+- [ ] Added in-code documentation (wherever needed)
+- [ ] Created a demo
+
 
 
 ## 📜 BioBuilder Contributor License Agreement
