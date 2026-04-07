@@ -209,7 +209,7 @@ export default function RxnDrawer({
 
                 {/* Edit Rate Laws */}
 
-                <input 
+                {/* <input 
                         style={{
                             backgroundColor: 'rgba(255, 255, 255, 1)',
                             color: 'rgba(0, 0, 0, 0.8)',
@@ -221,7 +221,7 @@ export default function RxnDrawer({
                         placeholder="Rate Law" 
                         value={rateLaw}
                         onChange={onRateChange}
-                    />   
+                    />    */}
 
                 <RateEditor nodes={nodes} currentRateLaw={rateLaw} onRateChange={onRateChange} />
 

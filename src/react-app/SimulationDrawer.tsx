@@ -5,6 +5,8 @@ import {
     config,
 } from '@react-spring/web';
 
+import {type AppNode } from './ProteinNode';
+
 import React from 'react';
 
 import { LineChart } from '@mui/x-charts/LineChart';
@@ -18,6 +20,7 @@ export type SimulationDrawerProps = {
     onToggle: () => void;
     onSimulate: () => void;
     data: Array<Record<string, number>>;
+    speciesInfo: Array<AppNode>;
 }
 
 
@@ -27,6 +30,7 @@ function SimulationDrawer({
     onToggle,
     onSimulate,
     data,
+    speciesInfo,
 }:  SimulationDrawerProps
 ) {
 
@@ -59,24 +63,18 @@ function SimulationDrawer({
         onSimulate(); // Outer call to run simulation
     }
 
+    // Construct legend for line chart!
     // Tracks how we should display each reactant on the line chart
-    const keyToLabel: { [key: string]: string } = {
-        Invertase: 'Invertase',
-        Sucrose: 'Sucrose',
-        Invertase_Sucrose_Complex: 'Invertase_Sucrose_Complex',
-        Glucose: 'Glucose',
-        Fructose: 'Fructose',
-    };
+    const keyToLabel: { [key: string]: string } = speciesInfo.reduce(
+        (acc, node) => ({ ...acc, [node.id]: node.data.label }), {}
+    );
 
     // Tracks the colors we use on the line chart
-    const colors: { [key: string]: string } = {
-        Invertase: '#42a5f5',
-        Sucrose: '#ba68c8',
-        Invertase_Sucrose_Complex: '#ef5350',
-        Glucose: '#ff9800',
-        Fructose: '#4caf50',
-    };
+    const colors: { [key: string]: string } = speciesInfo.reduce(
+        (acc, node) => ({ ...acc, [node.id]: node.data.color }), {}
+    );
 
+    console.log('Drawer re-render!');
 
     return (
     <div>

@@ -16,7 +16,6 @@ import {
   type DefaultEdgeOptions,
  } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-// import fakeGraph from './assets/fake_graph.png';
 
 // Analytics
 import { init as initFullStory } from '@fullstory/browser';
@@ -103,12 +102,13 @@ export default function App() {
 
   const [selectedRxnID, setSelectedRxnID] = useState<string>(initialEdges[0].id);
 
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
-
   const [simDrawerOpen, setSimDrawerOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [simulationStatus, setSimulationStatus] = useState<number>(0); // 0 = not started, 1 = running, 2 = complete
+  
+  const [simulationData, setSimulationData] = useState<Array<Record<string, number>>>([{'test': 10}]);
 
-  const sub_selection = useMemo(() => simulationData.filter((_, i) => (i) % 1 === 0), []);
+  const sub_selection = useMemo(() => simulationData.filter((_, i) => (i) % 1 === 0), []);  
 
 
   const nodesRef = useRef(nodes);
@@ -132,6 +132,19 @@ export default function App() {
     (changes) => setEdges((edgesSnapshot) => applyEdgeChanges<AppEdge>(changes, edgesSnapshot)),
     [setEdges],
   );
+
+  const onStartSimulation = useCallback(() => {
+    setSimulationStatus(1);
+  }, [setSimulationStatus]);
+
+  const onCompleteSimulation = useCallback(() => {
+    setSimulationStatus(2);
+  }, [setSimulationStatus]);
+
+  const onNewSimData = useCallback((data: Array<Record<string, number>>) => {
+    setSimulationData(data);
+  }, [setSimulationData]);
+
 
 
   const onToggleSimDrawer = useCallback(() => {
@@ -289,6 +302,8 @@ export default function App() {
 
   const callSimulation = useCallback(async () => {
 
+    onStartSimulation();
+
     const currentNodes = nodesRef.current;
     const currentEdges = edgesRef.current;
 
@@ -307,23 +322,31 @@ export default function App() {
     console.log('Simulation started! Payload: ', payload);
     
 
-    fetch('https://kinetics-editor.vercel.app/api/simulate', requestOptions).then(response => response.json()).then(data => console.log('Simulation results: ', data));
+    // fetch('https://kinetics-editor.vercel.app/api/simulate/v02', requestOptions).then(response => response.json()).then(data => console.log('Simulation results: ', data));
   
-    const response = await fetch('https://kinetics-editor.vercel.app/api/simulate', requestOptions);
+    const response = await fetch('https://kinetics-editor.vercel.app/api/simulate/v02', requestOptions);
 
-    const fake = await response.blob();
+    const responseJson = await response.json();
+    const payload_data = responseJson['data'];
 
-    console.log('Raw response blob: ', blob);
+    onCompleteSimulation();
+    onNewSimData(payload_data);
+
+    console.log('Simulation results: ', payload_data);
+
+
+    // console.log('Raw response blob: ', blob);
 
     // const jsonBlob = await fetch('./src/react-app/assets/data.json').then(response => response.json()).then((json) => console.log(json));
 
-    const imageUrl = URL.createObjectURL(blob);
+    // const imageUrl = URL.createObjectURL(blob);
 
-    setImageSrc(imageUrl);
+    // setImageSrc(imageUrl);
+
 
     console.log('Simulation Complete!');
     
-  }, []);
+  }, [onStartSimulation, onCompleteSimulation, onNewSimData]);
  
 
 
@@ -369,11 +392,9 @@ export default function App() {
           onInitialChange={onInitialChange}
         />
         
-        {imageSrc && <img src={imageSrc} style={{position: 'fixed', bottom: 10, right: 10}} />}
-        
         
 
-        <SimulationDrawer data={sub_selection} onSimulate={callSimulation} open={simDrawerOpen} onToggle={onToggleSimDrawer} />
+        <SimulationDrawer data={simulationData} speciesInfo={nodesWithCallbacks} onSimulate={callSimulation} open={simDrawerOpen} onToggle={onToggleSimDrawer} />
 
         
         {/* <button onClick={callSimulation} className="action-button" style={{position: 'fixed', top: 10, right: 10}}>SIMULATE</button> */}
