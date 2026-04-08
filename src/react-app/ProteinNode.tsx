@@ -23,12 +23,12 @@ const DEFAULT_HANDLE_STYLE = {
 export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNodeType>) {
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         data.onLabelChange(id, event.target.value);
-
     }
 
     const borderColorOp = selected ? '#747bff' : "#ccc";
     const borderSizeOp = selected ? '2px' : '0px';
     const selectPadding = selected ? '12px 9px' : '12px 12px';
+
 
     return (
 

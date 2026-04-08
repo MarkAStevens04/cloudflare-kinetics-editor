@@ -87,16 +87,28 @@ button:focus-visible {
 
 
 .action-button {
-	border-radius: 8px;
-	border: 1px solid transparent;
-	padding: 8px 16px;
 	font-size: 36px;
 	font-weight: 900;
 	font-family: Helios_Extended;
+
 	/* background-color: #06d471; */
 	background-image: linear-gradient(45deg, #06d471, #00746e);
 	background-size: 100%;
 	color: #ffffff;
+
+	border-radius: 8px;
+	border: 1px solid transparent;
+	padding: 0px 16px;
+
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	right: 20px;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
 	cursor: pointer;
 	transition: border-color 0.25s, background-size 0.4s;
 }
@@ -269,6 +281,81 @@ button:focus-visible {
 }
 
 
+.sim-box {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	color: rgba(255, 255, 255, 0.87);
+	background-color: rgba(255, 255, 255);
+
+	border: 5px transparent solid;
+	border-color: rgba(0, 0, 0, 0.1);
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+}
+
+.sim-progression {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 12px;
+	font-size: 14px;
+
+	color: rgba(0, 0, 0, 0.6);
+	padding: 0px 20px;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+}
+
+
+.feedback-box {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	color: rgba(255, 255, 255, 0.87);
+	background-color: rgba(116, 123, 255);
+
+	border: 5px transparent solid;
+	border-color: rgba(255, 255, 255, 0.51);
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	padding: 0px 0px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	/* width: 100% */
+
+}
+
+
+.feedback-button {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1;
+	font-weight: bold;
+	font-size: 24px;
+
+	color: rgba(255, 255, 255, 0.87);
+	
+	padding: 0px 0px;
+
+	/* font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale; */
+
+}
 
 
 .arrow-container {
@@ -288,6 +375,10 @@ button:focus-visible {
 	display: block;
 }
 
+
+math-field {
+	--smart-fence-color: red;
+}
 
 
 

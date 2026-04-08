@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { 
 	ReactFlow, 
 	Background,
@@ -16,7 +16,6 @@ import {
   type DefaultEdgeOptions,
  } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-// import fakeGraph from './assets/fake_graph.png';
 
 // Analytics
 import { init as initFullStory } from '@fullstory/browser';
@@ -30,10 +29,21 @@ FullStory('trackEvent', {
   },
 })
 
-// Initialize Protein and Reacction types
+// Initialize Protein and Reaction types
 import ProteinNode, { type AppNode } from './ProteinNode';
 import RxnEdge, { type AppEdge } from './RxnEdge';
 import RxnDrawer from './Drawer';
+import SimulationDrawer from './SimulationDrawer';
+import FeedbackDrawer from './FeedbackDrawer';
+
+// Import fake data
+import  simulationData  from './assets/data.json';
+
+// Stringify TODO: Move this to Drawer instead
+import { convertLatexToAsciiMath } from "mathlive";
+
+
+
 
 const nodeTypes = {
   protein: ProteinNode,
@@ -42,6 +52,7 @@ const nodeTypes = {
 const edgeTypes = {
   reaction: RxnEdge,
 };
+
 
 // Initialize set of possible colors for species nodes
 const NODE_COLORS = [
@@ -61,17 +72,28 @@ const getRandomColor = () => {
 
 const initialNodes: AppNode[] = [
   // { id: 'n0', position: { x: -500, y: -500 }, data: { label: 'DEFAULT NODE (ERROR)', onLabelChange: () => {}, color: '#ddd', initial: '' }, type: 'protein'},
-  { id: 'n1', position: { x: 0, y: -0 }, data: { label: 'Click to edit', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
-  { id: 'n2', position: { x: 500, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
+  { id: 'Na', position: { x: 0, y: -0 }, data: { label: 'Click to edit', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
+  { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
 ];
 
 let nextId= 3;
 
-const initialEdges: AppEdge[] = [{ id: 'n1_n2', source: 'n1', target: 'n2' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: ''}, }];
+const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: ''}, }];
  
 const defaultEdgeOptions: DefaultEdgeOptions = {
   type: 'reaction',
 };
+
+
+function cleanAsciiConversion(ascii: string) {
+  // Reactions replaces all " with empty character! Quotes are added when Latex 'Text' is converted to a command, but we do NOT want this!
+  // Reactions replaces all ^ with ** for exponentiation.
+  
+  console.log('Before cleaning: ', ascii);
+
+  return ascii.replace(/"/g, '').replace(/\^/g, '**');
+}
+
 
 export default function App() {
   const [nodes, setNodes] = useState<AppNode[]>(initialNodes);
@@ -80,7 +102,26 @@ export default function App() {
 
   const [selectedRxnID, setSelectedRxnID] = useState<string>(initialEdges[0].id);
 
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [simDrawerOpen, setSimDrawerOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [simulationStatus, setSimulationStatus] = useState<number>(0); // 0 = not started, 1 = running, 2 = complete
+  
+  const [simulationData, setSimulationData] = useState<Array<Record<string, number>>>([{'test': 10}]);
+
+  const sub_selection = useMemo(() => simulationData.filter((_, i) => (i) % 1 === 0), []);  
+
+
+  const nodesRef = useRef(nodes);
+  const edgesRef = useRef(edges);
+
+  useEffect(() => {
+    nodesRef.current = nodes;
+  }, [nodes]);
+
+  useEffect(() => {
+    edgesRef.current = edges;
+  }, [edges]);
+
 
   const onNodesChange: OnNodesChange<AppNode> = useCallback(
     (changes) => setNodes((nodesSnapshot) => applyNodeChanges<AppNode>(changes, nodesSnapshot)),
@@ -91,18 +132,36 @@ export default function App() {
     (changes) => setEdges((edgesSnapshot) => applyEdgeChanges<AppEdge>(changes, edgesSnapshot)),
     [setEdges],
   );
-  // const onConnect: OnConnect = useCallback(
-  //   (connection) => setEdges((edgesSnapshot) => addEdge(connection, edgesSnapshot)),
-  //   [setEdges],
-  // );
+
+  const onStartSimulation = useCallback(() => {
+    setSimulationStatus(1);
+  }, [setSimulationStatus]);
+
+  const onCompleteSimulation = useCallback(() => {
+    setSimulationStatus(2);
+  }, [setSimulationStatus]);
+
+  const onNewSimData = useCallback((data: Array<Record<string, number>>) => {
+    setSimulationData(data);
+  }, [setSimulationData]);
+
+
+
+  const onToggleSimDrawer = useCallback(() => {
+    setSimDrawerOpen(state => !state);
+  }, []);
 
   const onDrawerToggle = useCallback((id: string) => {
 
     setSelectedRxnID(id);
 
-    setDrawerToggle(!drawerToggle);
+    setDrawerToggle(state => !state);
 
-  }, [drawerToggle]);
+  }, []);
+
+  const onFeedbackToggle = useCallback(() => {
+    setFeedbackOpen(state => !state);
+  }, []);
 
   const selectedRxn = edges.find((edge) => edge.id === selectedRxnID) || edges[0];
 
@@ -195,17 +254,17 @@ export default function App() {
   );
 
   // update all nodes to have the correct callback
-  const nodesWithCallbacks: AppNode[] = nodes.map((node) => ({
+  const nodesWithCallbacks: AppNode[] = useMemo(() => nodes.map((node) => ({
     ...node,
     data: {
       ...node.data,
       onLabelChange: onLabelChange,
     }
-  }));
+  })), [nodes, onLabelChange]);
 
 
   // update all edges to have the correct callback
-  const edgesWithCallbacks: AppEdge[] = edges.map((edge) => {
+  const edgesWithCallbacks: AppEdge[] = useMemo(() => edges.map((edge) => {
 
     // Make sure edge has data
     if (!edge.data) return edge;
@@ -217,11 +276,18 @@ export default function App() {
         toggleDrawer: () => onDrawerToggle(edge.id)
       }
     }
-  });
+  }), [edges, onDrawerToggle]);
+
+
+  const numberToLetters = (num: number) => {
+    return String(num).split('').map((digit) => String.fromCharCode(97 + Number(digit))).join('');
+  }
+
+
 
   const addNode = useCallback(() => {
     const newNode: AppNode = {
-      id: 'n' + String(nextId++),
+      id: 'N' + numberToLetters(nextId++),
       position: {
         x: Math.random() * 300,
         y: Math.random() * 300,
@@ -235,9 +301,15 @@ export default function App() {
 
 
   const callSimulation = useCallback(async () => {
+
+    onStartSimulation();
+
+    const currentNodes = nodesRef.current;
+    const currentEdges = edgesRef.current;
+
     const payload = {
-      "Species": nodesWithCallbacks.map(({ id, data}) => ({'id': id, 'initial': Number(data.initial)})),
-      "Reactions": edgesWithCallbacks.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': data?.rate_law, 'Parameters': {'test1': 0.0}})),
+      "Species": currentNodes.map(({ id, data}) => ({'id': id, 'initial': Number(data.initial)})),
+      "Reactions": currentEdges.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': cleanAsciiConversion(convertLatexToAsciiMath(data?.rate_law || '')), 'Parameters': {'test1': 0.0}})),
       "Simulation": {"t_end": 300, "dt": 1, "method": "Euler"},
     };
 
@@ -247,20 +319,34 @@ export default function App() {
       body: JSON.stringify(payload)
     };
 
-    console.log('Request sent! Awaiting response...');
-
-    // fetch('https://kinetics-editor.vercel.app/api/simulate', requestOptions).then(response => response.json()).then(data => console.log('Simulation results: ', data));
-  
-    const response = await fetch('https://kinetics-editor.vercel.app/api/simulate', requestOptions);
-
-    const blob = await response.blob();
-
-    const imageUrl = URL.createObjectURL(blob);
-
-    setImageSrc(imageUrl);
-
     console.log('Simulation started! Payload: ', payload);
-  }, [nodesWithCallbacks, edgesWithCallbacks]);
+    
+
+    // fetch('https://kinetics-editor.vercel.app/api/simulate/v02', requestOptions).then(response => response.json()).then(data => console.log('Simulation results: ', data));
+  
+    const response = await fetch('https://kinetics-editor.vercel.app/api/simulate/v02', requestOptions);
+
+    const responseJson = await response.json();
+    const payload_data = responseJson['data'];
+
+    onCompleteSimulation();
+    onNewSimData(payload_data);
+
+    console.log('Simulation results: ', payload_data);
+
+
+    // console.log('Raw response blob: ', blob);
+
+    // const jsonBlob = await fetch('./src/react-app/assets/data.json').then(response => response.json()).then((json) => console.log(json));
+
+    // const imageUrl = URL.createObjectURL(blob);
+
+    // setImageSrc(imageUrl);
+
+
+    console.log('Simulation Complete!');
+    
+  }, [onStartSimulation, onCompleteSimulation, onNewSimData]);
  
 
 
@@ -292,6 +378,9 @@ export default function App() {
         </>
 
         <button onClick={addNode} style={{position: 'fixed', top: 10, left: 10}}>Add New Node</button>
+
+        <FeedbackDrawer open={feedbackOpen} onToggle={onFeedbackToggle} />
+
         <RxnDrawer 
           edge={selectedRxn} 
           nodes={nodesWithCallbacks}
@@ -303,12 +392,12 @@ export default function App() {
           onInitialChange={onInitialChange}
         />
         
-        {imageSrc && <img src={imageSrc} style={{position: 'fixed', bottom: 10, right: 10}} />}
         
 
+        <SimulationDrawer data={simulationData} speciesInfo={nodesWithCallbacks} onSimulate={callSimulation} open={simDrawerOpen} onToggle={onToggleSimDrawer} />
 
         
-        <button onClick={callSimulation} className="action-button" style={{position: 'fixed', top: 10, right: 10}}>SIMULATE</button>
+        {/* <button onClick={callSimulation} className="action-button" style={{position: 'fixed', top: 10, right: 10}}>SIMULATE</button> */}
         
       
     </div>
