@@ -21,6 +21,7 @@ export type SimulationDrawerProps = {
     onSimulate: () => void;
     data: Array<Record<string, number>>;
     speciesInfo: Array<AppNode>;
+    simStatus: number;
 }
 
 
@@ -31,6 +32,7 @@ function SimulationDrawer({
     onSimulate,
     data,
     speciesInfo,
+    simStatus,
 }:  SimulationDrawerProps
 ) {
 
@@ -74,6 +76,8 @@ function SimulationDrawer({
         (acc, node) => ({ ...acc, [node.id]: node.data.color }), {}
     );
 
+    const borderColor = simStatus === 0 ? 'rgba(0, 0, 0, 0.1)' : simStatus === 1 ? 'rgba(255, 0, 221, 0.3)' : 'rgba(16, 235, 78, 0.5)';
+
     console.log('Drawer re-render!');
 
     return (
@@ -86,6 +90,7 @@ function SimulationDrawer({
                 right: 10,
                 // background: '#000000',
                 borderRadius: 8,
+                borderColor: borderColor,
                 overflow: 'hidden',
                 ...springs,
             }}

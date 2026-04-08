@@ -36,9 +36,6 @@ import RxnDrawer from './Drawer';
 import SimulationDrawer from './SimulationDrawer';
 import FeedbackDrawer from './FeedbackDrawer';
 
-// Import fake data
-import  simulationData  from './assets/data.json';
-
 // Stringify TODO: Move this to Drawer instead
 import { convertLatexToAsciiMath } from "mathlive";
 
@@ -107,8 +104,6 @@ export default function App() {
   const [simulationStatus, setSimulationStatus] = useState<number>(0); // 0 = not started, 1 = running, 2 = complete
   
   const [simulationData, setSimulationData] = useState<Array<Record<string, number>>>([{'test': 10}]);
-
-  const sub_selection = useMemo(() => simulationData.filter((_, i) => (i) % 1 === 0), []);  
 
 
   const nodesRef = useRef(nodes);
@@ -394,7 +389,7 @@ export default function App() {
         
         
 
-        <SimulationDrawer data={simulationData} speciesInfo={nodesWithCallbacks} onSimulate={callSimulation} open={simDrawerOpen} onToggle={onToggleSimDrawer} />
+        <SimulationDrawer data={simulationData} speciesInfo={nodesWithCallbacks} onSimulate={callSimulation} open={simDrawerOpen} onToggle={onToggleSimDrawer} simStatus={simulationStatus} />
 
         
         {/* <button onClick={callSimulation} className="action-button" style={{position: 'fixed', top: 10, right: 10}}>SIMULATE</button> */}
