@@ -19,7 +19,7 @@
 		"@mui/x-charts": "^8.28.2",
 		"@react-spring/web": "^10.0.3",
 		"@xyflow/react": "^12.10.1",
-		"hono": "^4.12.9",
+		"hono": "^4.12.12",
 		"mathlive": "^0.109.0",
 		"react": "19.2.1",
 		"react-dom": "19.2.1"
@@ -38,7 +38,7 @@
 		"typescript": "5.8.3",
 		"typescript-eslint": "8.48.0",
 		"vite": "^6.0.0",
-		"wrangler": "^4.79.0"
+		"wrangler": "^4.81.0"
 	},
 	"private": true,
 	"scripts": {
