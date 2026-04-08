@@ -1,12 +1,29 @@
 [![N|Solid](src/react-app/assets/Bio_Builder_Banner.png)](https://biobuilder.app/)
 
+<div align="center">
+
+[![N|Solid](https://img.shields.io/website?url=https%3A%2F%2Fbiobuilder.app%2F&label=frontend)](https://biobuilder.app/)
+[![N|Solid](https://img.shields.io/website?url=https%3A%2F%2Fkinetics-editor.vercel.app%2Fapi%2Fhealth&label=backend&cacheSeconds=600)](https://kinetics-editor.vercel.app/api/health)
+![N|Solid](https://img.shields.io/github/check-runs/MarkAStevens04/cloudflare-kinetics-editor/main?label=build)
+[![N|Solid](https://img.shields.io/badge/github-backend-blue?logo=github)](https://github.com/MarkAStevens04/Kinetics-Editor)
+
+
+[![N|Solid](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/GmsKryYDGN) 
+[![N|Solid](https://img.shields.io/badge/-mark@biobuilder.app-blue?logo=gmail&label=Email)](mailto:mark@biobuilder.app)
+
+[![N|Solid](https://img.shields.io/badge/Give%20us%20feedback!!-magenta
+)](https://tally.so/r/VLYDpa)
+
+</div>
+
+
 # Basic Overview
 
-BioBuilder is a web-based biochemical kinetics editor and simulator! Built specifically to run simulations easily and quickly. 
+BioBuilder is a web-based biochemical kinetics editor and simulator! 🧪✨ Built specifically to run simulations easily and quickly. 
 
 # Philosophy
 
-Biochemical kinetics allows you to predict the future in biology. It allows you to know exactly which chemicals and how much will be produced, given some set of initial conditions.
+Biochemical kinetics allows you to predict the future in biology. 🔮 It allows you to know exactly which chemicals and how much will be produced, given some set of initial conditions.
 
 We believe that biochemists shouldn't need to be computer scientists to benefit from this technique. BioBuilder bridges the gap between biologists and computers, and allows you to start running simulations NOW!
 
@@ -64,8 +81,12 @@ Now you've set up your simulation, it's time to run it! Click "SIMULATE" in the 
 
 We LOVE feedback, and we're always looking for ways to improve the platform! Feel free to shoot me an email at <mark@biobuilder.app> with any suggestions or feedback, and I'd be happy to respond.
 
+You can also fill out [THIS](https://tally.so/r/VLYDpa) feedback form!
+
+
 # Build
 Locally, run `npx vite`
+
 To deploy, run 
 ```
 npm run build
@@ -148,6 +169,9 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 
 ### Right click
 - Allows you to add new node
+- Dropdown of edit options (delete, recolor, etc.)
+    - Beside each option, display shortcut to accomplish action
+
 
 ### Edge Editing
 - Sources can be both inputs OR outputs
