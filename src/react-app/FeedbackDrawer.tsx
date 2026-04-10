@@ -140,7 +140,7 @@ export default function FeedbackDrawer({
             data-tally-src={tallySrc}
             loading="lazy"
             width="281"
-            height={400}
+            height={350}
             frameBorder={0}
             marginHeight={0}
             marginWidth={0}
