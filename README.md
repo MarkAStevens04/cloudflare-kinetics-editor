@@ -154,6 +154,23 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 
 - Example systems! So users can quickly get up and running and see the end product
 
+- Opacity of graph lowers so you can see through (same with rates and stuff)?? Explore
+
+- Tree with your rates & nodes & whatever. Possibly look more like fusion?
+    - Little search bar or something on the side so you can search for a protein in your reaction.
+
+- Generate a new node where the user is already looking
+
+- make text boxes on reaction line smaller, make text boxes on reaction line editable
+    - Possibly make text bigger as you zoom out? Not 100% sure.
+
+- Make lines draggable. Maybe even just move text boxes around, line follows.
+
+- Right click, can edit edit nodes. Can edit their colors.
+
+- Show that buttons in rate editor are clickable! Meant to click buttons not type
+
+- Text at top that says "SIMULATE" should say "SIMULATING" when we run.
 
 ### Project Charter Document
 - What do we want out of this project?
@@ -217,13 +234,20 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - Possibly put mini-reaction-diagram in its own little div and make everything smaller
 - What if we just had a small arrow from species2 to species 3, and we edited the rate law beneach the mini-diagram?
 
+
+### Default Rxn Type Idea
+- At top of screen, have a litle box to make selections of arrows
+- You can select the arrow type (regular, inhibit, big circle to represent catalyzation, etc.)
+- Then, you use the arrow on the reactants! That way you can think high-level instead of thinking about rates.
+
 ### Urgent
 - Return differential equations
-- better logging in Python for vercel
+- **better logging in Python for vercel**
 - Data labels in graph
 - Better rate law editing
 - Weird labels on connections
 - Arrows shouldn't always output on right, should be able to go from either direction
+- HIGHLIGHT WHEN YOU HAVE AN EMPTY RATE LAW!!! When you click simulate, run quick check to make sure rate laws are all filled.
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
