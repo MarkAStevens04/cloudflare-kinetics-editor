@@ -76,7 +76,7 @@ export default function FeedbackDrawer({
 
     }, []);
 
-    const tallySrc = `https://tally.so/embed/${formId}?alignLeft=1&dynamicHeight=1`;
+    const tallySrc = `https://tally.so/embed/${formId}?alignLeft=1&height=350`;
 
 
 
