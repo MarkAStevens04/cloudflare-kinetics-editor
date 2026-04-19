@@ -55,20 +55,20 @@ const edgeTypes = {
 
 
 // Initialize set of possible colors for species nodes
-// const NODE_COLORS = [
-//   '#90f1ef', // Soft Cyan
-//   '#ffd6e0', // Petal Frost
-//   '#ffef9f', // Vanilla Custard
-//   '#c1fba4', // Light Green
-//   '#7bf1a8', // Light Green
-// ]
+const NODE_COLORS = [
+  '#90f1ef', // Soft Cyan
+  '#ffd6e0', // Petal Frost
+  '#ffef9f', // Vanilla Custard
+  '#c1fba4', // Light Green
+  '#7bf1a8', // Light Green
+]
 
-// let colIdx= 1;
+let colIdx= 1;
 
-// const getRandomColor = () => {
-//   colIdx = (colIdx + 1) % NODE_COLORS.length;
-//   return NODE_COLORS[colIdx];
-// }
+const getRandomColor = () => {
+  colIdx = (colIdx + 1) % NODE_COLORS.length;
+  return NODE_COLORS[colIdx];
+}
 
 // const initialNodes: AppNode[] = [
 //   // { id: 'n0', position: { x: -500, y: -500 }, data: { label: 'DEFAULT NODE (ERROR)', onLabelChange: () => {}, color: '#ddd', initial: '' }, type: 'protein'},
@@ -76,7 +76,7 @@ const edgeTypes = {
 //   { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
 // ];
 
-// let nextId= 3;
+let nextId= 3;
 
 // const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: ''}, }];
  
@@ -291,11 +291,6 @@ export default function App() {
   // }), [edges, onDrawerToggle]);
 
 
-  // const numberToLetters = (num: number) => {
-  //   return String(num).split('').map((digit) => String.fromCharCode(97 + Number(digit))).join('');
-  // }
-
-
 
   // const addNode = useCallback(() => {
   //   const newNode: AppNode = {
@@ -350,6 +345,19 @@ export default function App() {
   //   console.log('Simulation Complete!');
     
   // }, [onStartSimulation, onCompleteSimulation, onNewSimData]);
+
+  const numberToLetters = (num: number) => {
+    return String(num).split('').map((digit) => String.fromCharCode(97 + Number(digit))).join('');
+  };
+
+  // const onNewNode = () => {
+  //   const id = 'N' + numberToLetters(nextId++);
+  //   const label = 'Species ' + String(nextId - 1);
+  //   const color = getRandomColor();
+  //   useStore((store) => store.addNode(id, label, color, store));
+  // };
+
+  const addNode = useStore((store) => store.addNode);
  
 
 
@@ -383,7 +391,20 @@ export default function App() {
         
         </>
 
-        {/* <button onClick={addNode} style={{position: 'fixed', top: 10, left: 10}}>Add New Node</button> */}
+        <button 
+          onClick={() => {
+            const id = 'N' + numberToLetters(nextId++);
+            const label = 'Species ' + String(nextId - 1);
+            const color = getRandomColor();
+            addNode(id, label, color);
+          }}
+          style={{
+            position: 'fixed', 
+            top: 10, 
+            left: 10
+          }}>
+            Add New Node
+          </button>
 
         <FeedbackDrawer open={feedbackOpen} onToggle={onFeedbackToggle} />
 
