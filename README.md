@@ -172,6 +172,19 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 
 - Text at top that says "SIMULATE" should say "SIMULATING" when we run.
 
+- Little banner that pops up at top of page when a new build is deployed and the user is still on the old version. Something like "We just launched an update! Refresh the page to see the changes <3"
+
+
+### Parameters & Functions
+- Make it so you can input functions as parameters! Have a little equation editor for those parameter functions instead of constants. 
+- Like, you could say temp(t) = {31 @ 0 < t < 60sec, 42 @ 60sec < t < 30sec}. Little piecewise editor.
+- You could have parameters depend on concentrations and stuff, and get some really interesting complexity.
+- Possibly make this work on mobile?
+
+
+### Multi-Reactant Reactions
+- Make it so you can draw an arrow from one reactant to a REACTION! Like the little square on the reaction edge, make it so you can actually draw from another reactant to THAT square. THAT makes your reaction a multi-reactant reaction!
+
 ### Project Charter Document
 - What do we want out of this project?
     - * AMAZING DEFAULT OPTIONS! The program should think for you as much as possible.
