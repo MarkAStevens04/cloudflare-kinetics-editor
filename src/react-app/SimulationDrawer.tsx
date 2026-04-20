@@ -65,7 +65,7 @@ function SimulationDrawer() {
         (acc, node) => ({ ...acc, [node.id]: node.data.color }), {}
     );
 
-    const borderColor = simStatus === 0 ? 'rgba(0, 0, 0, 0.1)' : simStatus === 1 ? 'rgba(255, 0, 221, 0.3)' : 'rgba(16, 235, 78, 0.5)';
+    const borderColor = simStatus === 0 ? 'rgba(0, 0, 0, 0.1)' : simStatus === 1 ? 'rgba(255, 0, 221, 0.3)' : simStatus === 2 ? 'rgba(16, 235, 78, 0.5)' : 'rgba(255, 44, 44, 0.7)';
 
     return (
     <div>

@@ -242,6 +242,7 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - Verify rate laws are plausible
 - Better error handling
 - You can delete connection while drawer is open (drawer should automatically close)
+- When reaction drawer is open, border of "simulate" button looks weird
 
 ### Drawer
 - Possibly put mini-reaction-diagram in its own little div and make everything smaller

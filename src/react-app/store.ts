@@ -72,7 +72,7 @@ type AppState = {
   rxnDrawerOpen: boolean;
   setRxnDrawerOpen: (open: boolean) => void;
 
-  simulationStatus: number; // 0 = not started, 1 = running, 2 = complete
+  simulationStatus: number; // 0 = not started, 1 = running, 2 = complete, 3 = error
   simulationData: Array<Record<string, number>>;
   fetchSimulationData: () => void;
 
@@ -226,30 +226,38 @@ const useStore = create<AppState>((set, get) => ({
 
       set({simulationStatus: 1}); // Set status to "running"
 
-      const payload = {
-        "Species": get().species.map(({ id, initial}) => ({'id': id, 'initial': Number(initial)})),
-        "Reactions": get().reactions.map(({ id, sources, targets, rate_law}) => ({'id': id, 'Reactants': sources, 'Products': targets, 'rate_law': cleanAsciiConversion(convertLatexToAsciiMath(rate_law || '')), 'Parameters': {'test1': 0.0}})),
-        "Simulation": {"t_end": 300, "dt": 1, "method": "Euler"},
-      };    
+      try {
 
-      const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      };
+        const payload = {
+          "Species": get().species.map(({ id, initial}) => ({'id': id, 'initial': Number(initial)})),
+          "Reactions": get().reactions.map(({ id, sources, targets, rate_law}) => ({'id': id, 'Reactants': sources, 'Products': targets, 'rate_law': cleanAsciiConversion(convertLatexToAsciiMath(rate_law || '')), 'Parameters': {'test1': 0.0}})),
+          "Simulation": {"t_end": 300, "dt": 1, "method": "Euler"},
+        };    
 
-      console.log('Simulation started! Payload: ', payload);
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        };
 
-      const response = await fetch('https://kinetics-editor.vercel.app/api/simulate/v02', requestOptions);
+        console.log('Simulation started! Payload: ', payload);
 
-      const responseJson = await response.json();
-      const payload_data = responseJson['data'];
+        const response = await fetch('https://kinetics-editor.vercel.app/api/simulate/v02', requestOptions);
 
-      set({simulationStatus: 2}); // Set status to "complete"
-      set({simulationData: payload_data}); // Store sim data
+        const responseJson = await response.json();
+        const payload_data = responseJson['data'];
 
-      console.log('Simulation results: ', payload_data);
-      console.log('Simulation Complete!');
+        set({simulationStatus: 2}); // Set status to "complete"
+        set({simulationData: payload_data}); // Store sim data
+
+        console.log('Simulation results: ', payload_data);
+        console.log('Simulation Complete!'); 
+
+      } catch (error) {
+        
+        console.error('Error occurred while fetching simulation data:', error);
+        set({simulationStatus: 3}); // Reset status to "error"
+      }
     },
 
     // Open / close feedback form drawer
