@@ -4,6 +4,7 @@ import {
 } from '@react-spring/web';
 
 import { useEffect } from 'react';
+import useStore from './store';
 
 declare global {
     interface Window {
@@ -14,20 +15,11 @@ declare global {
 }
 
 
-// Create type for our simulation drawer
-export type FeedbackDrawerProps = {
-    open: boolean;
-    onToggle: () => void;
-}
-
-
 // Create FeedbackDrawer as an object
-export default function FeedbackDrawer({
-    open,
-    onToggle,
+export default function FeedbackDrawer() {
 
-}:  FeedbackDrawerProps
-) {
+    const open = useStore((store) => store.feedbackOpen);
+    const setFeedbackOpen = useStore((store) => store.setFeedbackOpen);
 
     const formId = 'VLYDpa';
 
@@ -79,8 +71,6 @@ export default function FeedbackDrawer({
     const tallySrc = `https://tally.so/embed/${formId}?alignLeft=1&height=350`;
 
 
-
-
     // Animation styling we'll use on opening and closing of the drawer
     const [springs, api] = useSpring(() => ({
         from: {height: 150, width: 34, bottom: 400},
@@ -98,7 +88,7 @@ export default function FeedbackDrawer({
         });
 
         // Perform toggle
-        onToggle();
+        setFeedbackOpen(!open);
     }
 
 
@@ -141,9 +131,6 @@ export default function FeedbackDrawer({
             loading="lazy"
             width="281"
             height={350}
-            frameBorder={0}
-            marginHeight={0}
-            marginWidth={0}
             title={'Tally form'}
             style={{ border: 'none', padding: '0px 0px', }}
             />

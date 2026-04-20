@@ -2,10 +2,11 @@
 import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
 import { ChangeEvent } from 'react';
 import './index.css';
+import useStore from './store';
 
 type ProteinNodeType = Node<{ 
     label: string; 
-    onLabelChange: (id: string, value: string) => void;
+    // onLabelChange: (id: string, value: string) => void;
     color: string;
     initial: string;
 }, 'protein'>;
@@ -21,8 +22,14 @@ const DEFAULT_HANDLE_STYLE = {
 
 
 export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNodeType>) {
+
+
+    const updateLabel = useStore((store) => store.updateSpeciesLabel);
+
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-        data.onLabelChange(id, event.target.value);
+        // data.onLabelChange(id, event.target.value);
+        updateLabel(id, event.target.value);
+
     }
 
     const borderColorOp = selected ? '#747bff' : "#ccc";

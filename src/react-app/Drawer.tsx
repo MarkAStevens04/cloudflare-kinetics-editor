@@ -8,69 +8,58 @@
 import { ChangeEvent, useRef, useEffect, useMemo } from 'react';
 import { animated, useTransition } from '@react-spring/web';
 
-import { type AppNode } from './ProteinNode';
-import { type AppEdge } from './RxnEdge';
-
-
 import './index.css';
 
 // For math live input
 import "mathlive";
 import { MathfieldElement } from 'mathlive';
+import useStore from './store';
 
-
-export type RxnDrawerProps = {
-    edge: AppEdge;
-    nodes: AppNode[];
-    open: boolean;
-    onToggle: () => void;
-    onRateLawChange: (id: string, rateLaw: string) => void;
-    onInitialChange: (currNode: AppNode, reactantInit: string) => void;
-    // children?: React.ReactNode;
-};
 
 type rateEditorProps = {
-    nodes: AppNode[];
     currentRateLaw?: string;
     onRateChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 
+export default function RxnDrawer() {
 
-export default function RxnDrawer({
-    edge, 
-    nodes,
-    open,
-    onToggle, 
-    onRateLawChange,
-    onInitialChange,
-}: RxnDrawerProps) {
+    const edge = useStore((store) => store.reactions.find((e) => e.id === store.selectedEdge)) || { id: '', label: '', sources: [''], targets: [''], rate_law: '' };
+    const nodes = useStore((store) => store.species);
 
-    const sourceNode = nodes.find((node) => node.id === edge.source) || nodes[0];
-    const targetNode = nodes.find((node) => node.id === edge.target) || nodes[0];
+    // const open = useStore((store) => store.rxnDrawerOpen, (prev, next) => {return false;});
+    const open = useStore((store) => store.rxnDrawerOpen);
+    const setRxnDrawerOpen = useStore((store) => store.setRxnDrawerOpen);
+
+    const updateRateLaw = useStore((store) => store.updateRateLaw);
+    const updateInitialConcentration = useStore((store) => store.updateInitialConcentration);
+
+    const sourceNode = nodes.find((node) => node.id === edge.sources[0]) || nodes[0];
+    const targetNode = nodes.find((node) => node.id === edge.targets[0]) || nodes[0];
 
     const RxnID = edge.id;
-    const rateLaw = edge.data?.rate_law;
+    const rateLaw = edge.rate_law;
 
-    const reactantInit = sourceNode.data.initial || '';
-    const productInit = targetNode.data.initial || '';
+    const reactantInit = sourceNode.initial || '';
+    const productInit = targetNode.initial || '';
 
-    const reactantLabel = sourceNode.data.label;
-    const productLabel = targetNode.data.label;
+    const reactantLabel = sourceNode.label;
+    const productLabel = targetNode.label;
 
-    const reactantColor = sourceNode.data.color;
-    const productColor = targetNode.data.color;
+    const reactantColor = sourceNode.color;
+    const productColor = targetNode.color;
 
+    
     const onRateChange = (event: ChangeEvent<HTMLInputElement>) => {
-        onRateLawChange(RxnID, event.target.value);
+        updateRateLaw(RxnID, event.target.value);
     }
 
     const onRChange = (event: ChangeEvent<HTMLInputElement>) => {
-        onInitialChange(sourceNode, event.target.value);
+        updateInitialConcentration(sourceNode.id, event.target.value);
     }
 
     const onPChange = (event: ChangeEvent<HTMLInputElement>) => {
-        onInitialChange(targetNode, event.target.value);
+        updateInitialConcentration(targetNode.id, event.target.value);
     }
 
     const transitions = useTransition(open ? [true] : [],  {
@@ -80,13 +69,8 @@ export default function RxnDrawer({
         config: { tension: 220, friction: 24 },
     });
 
-    // const interactiveBG = open ? 'block' : 'none';
+    // Allows user to start moving screen immediately after closing drawer.
     const pointerEvents = open ? 'auto' : 'none';
-
-    // const reactantButtons = nodes.map((node) => "<p className='autofill-species-box'>" + node.id + "</p>").join('');
-
-    // console.log(reactantButtons);
-
 
     return transitions((style, item) =>
         item ? (
@@ -94,7 +78,7 @@ export default function RxnDrawer({
                 {/* Closes when you click out of the drawer, but prevents moving around the screen. */}
                 <animated.div 
                     className="drawer-dimmer"
-                    onClick={onToggle}
+                    onClick={() => setRxnDrawerOpen(false)}
                     style={{
                         pointerEvents: pointerEvents,
                         position: 'fixed',
@@ -131,9 +115,6 @@ export default function RxnDrawer({
                     {/* Reactant Parameters */}
                     <div className="species-container" style={{
                         backgroundColor: reactantColor,
-                        // position: 'absolute',
-                        // top: '100px',
-
                     }}>
                         <div className="species-container-header"> {reactantLabel} </div>
                         <hr style={{
@@ -166,8 +147,6 @@ export default function RxnDrawer({
                     {/* Product Parameters */}
                     <div className="species-container" style={{
                         backgroundColor: productColor,
-                        // position: 'absolute',
-                        // bottom: '100px',
                     }}>
                         <div className="species-container-header"> {productLabel} </div>
                         <hr style={{
@@ -189,41 +168,13 @@ export default function RxnDrawer({
 
                     </div>
 
-                    {/* <div className="arrow-container">
-                        <svg className="down-arrow" viewBox="0 4 20 82" preserveAspectRatio="none">
-                            <path
-                                d="M10 5 L10 85 M4 79 L10 85 L16 79"
-                                stroke="rgba(0, 0, 0, 0.5)"
-                                strokeWidth="0.5"
-                                fill="none"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
-                        </svg>
-
-                    </div> */}
-
                 </div>
                 <br />
                 <hr />
 
                 {/* Edit Rate Laws */}
 
-                {/* <input 
-                        style={{
-                            backgroundColor: 'rgba(255, 255, 255, 1)',
-                            color: 'rgba(0, 0, 0, 0.8)',
-                            width: '95%',
-                            margin: '0px 0px',
-                            minWidth: '0px',
-                        }}
-                        className="species-param-input"
-                        placeholder="Rate Law" 
-                        value={rateLaw}
-                        onChange={onRateChange}
-                    />    */}
-
-                <RateEditor nodes={nodes} currentRateLaw={rateLaw} onRateChange={onRateChange} />
+                <RateEditor currentRateLaw={rateLaw} onRateChange={onRateChange} />
 
                        
 
@@ -237,12 +188,12 @@ export default function RxnDrawer({
 
 
 function RateEditor({
-    nodes,
     currentRateLaw,
     onRateChange,
 
 }: rateEditorProps) {
-    
+    const nodes = useStore((store) => store.species);
+
     const mfRef = useRef<MathfieldElement>(null); 
 
 
@@ -269,7 +220,7 @@ function RateEditor({
         return Object.fromEntries(
             // Very strange code here. We have args: 1 so that the parameter we add (\text{buttonID}) stays in the latex
             // We render our text as node.data.label, and in the backend, keep our latex as \objNXXX{\text{nXXX}}
-            nodes.map((node) => ['obj' + node.id, {args: 1, def: '\\text{' + node.data.label + '}'}])
+            nodes.map((node) => ['obj' + node.id, {args: 1, def: '\\text{' + node.label + '}'}])
         );
 
     }, [nodes]);
@@ -329,11 +280,11 @@ function RateEditor({
                 <div>
                 <p className='autofill-species-box' 
                 key={node.id} 
-                style={{backgroundColor: node.data.color}}
+                style={{backgroundColor: node.color}}
                 onClick={() => onButton(node.id)}
                 >
 
-                    {node.data.label}
+                    {node.label}
 
                 </p>
                 </div>))
