@@ -1,15 +1,20 @@
 import { create } from 'zustand';
-import { addEdge, applyNodeChanges, applyEdgeChanges } from '@xyflow/react';
-
-import { type AppNode } from './ProteinNode';
-import { type AppEdge } from './RxnEdge';
 
 import {
+  addEdge,
+  applyNodeChanges,
+  applyEdgeChanges,
+  MarkerType,
   type OnNodesChange,
   type OnEdgesChange,
   type OnConnect,
-  MarkerType,
+  
 } from '@xyflow/react';
+
+import { convertLatexToAsciiMath } from "mathlive";
+
+import { type AppNode } from './ProteinNode';
+import { type AppEdge } from './RxnEdge';
 
 
 type species = {
@@ -28,12 +33,12 @@ type reactions = {
 }
 
 const initialSpecies: species[] = [
-  { id: 'Na', label: 'Click to edit', initial: '10', color: '#90f1ef' },
+  { id: 'Na', label: 'Click to edit', initial: '', color: '#90f1ef' },
   { id: 'Nb', label: 'Species 2', initial: '0', color: '#ffd6e0' },
 ];
 
 const initialReactions: reactions[] = [
-  { id: 'Na_Nb', label: 'Reaction 1', sources: ['Na'], targets: ['Nb'], rate_law: '' },
+  { id: 'Na_Nb', label: 'test2', sources: ['Na'], targets: ['Nb'], rate_law: '' },
 ];
 
 const initialNodes: AppNode[] = [
@@ -67,10 +72,18 @@ type AppState = {
   rxnDrawerOpen: boolean;
   setRxnDrawerOpen: (open: boolean) => void;
 
+  simulationStatus: number; // 0 = not started, 1 = running, 2 = complete
+  simulationData: Array<Record<string, number>>;
+  fetchSimulationData: () => void;
+
+  simDrawerOpen: boolean;
+  setSimDrawerOpen: (open: boolean) => void;
+
+
   updateSpeciesLabel: (id: string, newLabel: string) => void;
   updateRateLaw: (id: string, newRateLaw: string) => void;
   updateInitialConcentration: (id: string, newInitial: string) => void;
-
+  
 };
 
 
@@ -195,32 +208,55 @@ const useStore = create<AppState>((set, get) => ({
 
      })),
 
+     simDrawerOpen: false,
+     setSimDrawerOpen: (open) => set({ simDrawerOpen: open }),
+
+    simulationStatus: 0,
+    simulationData: [],
+    fetchSimulationData: async () => {
+
+      set({simulationStatus: 1}); // Set status to "running"
+
+      const payload = {
+        "Species": get().species.map(({ id, initial}) => ({'id': id, 'initial': Number(initial)})),
+        "Reactions": get().reactions.map(({ id, sources, targets, rate_law}) => ({'id': id, 'Reactants': sources, 'Products': targets, 'rate_law': cleanAsciiConversion(convertLatexToAsciiMath(rate_law || '')), 'Parameters': {'test1': 0.0}})),
+        "Simulation": {"t_end": 300, "dt": 1, "method": "Euler"},
+      };    
+
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      };
+
+      console.log('Simulation started! Payload: ', payload);
+
+      const response = await fetch('https://kinetics-editor.vercel.app/api/simulate/v02', requestOptions);
+
+      const responseJson = await response.json();
+      const payload_data = responseJson['data'];
+
+      set({simulationStatus: 2}); // Set status to "complete"
+      set({simulationData: payload_data}); // Store sim data
+
+      console.log('Simulation results: ', payload_data);
+      console.log('Simulation Complete!');
+
+
+
+    },
 
 
 }));
 
 
-  // const onInitialChange = useCallback(
-  //   (currNode: AppNode, speciesInit: string, ) => {
-
-  //     const rID = currNode.id;
-
-  //     setNodes((nds) =>
-  //       nds.map((node) =>
-  //         node.id === rID
-  //           ? {
-  //               ...node,
-  //               data: {
-  //                 ...node.data,
-  //                 initial: speciesInit,
-  //               }
-  //           } : node
-  //       )
-  //     );
-  //   },
-  //   [setNodes]
-  // );
-
-
 export default useStore;
 
+function cleanAsciiConversion(ascii: string) {
+  // Reactions replaces all " with empty character! Quotes are added when Latex 'Text' is converted to a command, but we do NOT want this!
+  // Reactions replaces all ^ with ** for exponentiation.
+  
+  console.log('Before cleaning: ', ascii);
+
+  return ascii.replace(/"/g, '').replace(/\^/g, '**');
+}

@@ -5,36 +5,47 @@ import {
     config,
 } from '@react-spring/web';
 
-import {type AppNode } from './ProteinNode';
+// import {type AppNode } from './ProteinNode';
 
 import React from 'react';
 
 import { LineChart } from '@mui/x-charts/LineChart';
+import useStore from './store';
 // Could use visx or Chart.js (https://www.chartjs.org/docs/latest/getting-started/usage.html)
 // Instead using MUI's LineCharts! https://mui.com/x/react-charts/line-demo/#BiaxialLineChart
 
 
 // Create type for our simulation drawer
-export type SimulationDrawerProps = {
-    open: boolean;
-    onToggle: () => void;
-    onSimulate: () => void;
-    data: Array<Record<string, number>>;
-    speciesInfo: Array<AppNode>;
-    simStatus: number;
-}
+// export type SimulationDrawerProps = {
+//     // open: boolean;
+//     // onToggle: () => void;
+//     onSimulate: () => void;
+//     // data: Array<Record<string, number>>;
+//     // speciesInfo: Array<AppNode>;
+//     // simStatus: number;
+// }
 
 
 // Create SimulationDrawer as an object
-function SimulationDrawer({
-    open,
-    onToggle,
-    onSimulate,
-    data,
-    speciesInfo,
-    simStatus,
-}:  SimulationDrawerProps
-) {
+// function SimulationDrawer({
+//     // open,
+//     // onToggle,
+//     onSimulate,
+//     // data,
+//     // speciesInfo,
+//     // simStatus,
+// }:  SimulationDrawerProps
+// ) {
+
+function SimulationDrawer() {
+
+    const open = useStore((store) => store.simDrawerOpen);
+    const simStatus = useStore((store) => store.simulationStatus);
+    const data = useStore((store) => store.simulationData);
+    const speciesInfo = useStore((store) => store.visualNodes);
+
+    const setSimDrawerOpen = useStore((store) => store.setSimDrawerOpen);
+    const onSimulate = useStore((store) => store.fetchSimulationData);
 
     // Animation styling we'll use on opening and closing of the drawer
     const [springs, api] = useSpring(() => ({
@@ -53,7 +64,7 @@ function SimulationDrawer({
         });
 
         // Perform toggle
-        onToggle();
+        setSimDrawerOpen(!open);
     }
 
     // What happens when we click the inner "Simulate" button

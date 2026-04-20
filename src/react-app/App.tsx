@@ -34,7 +34,7 @@ FullStory('trackEvent', {
 import ProteinNode, { type AppNode } from './ProteinNode';
 import RxnEdge, { type AppEdge } from './RxnEdge';
 import RxnDrawer from './Drawer';
-// import SimulationDrawer from './SimulationDrawer';
+import SimulationDrawer from './SimulationDrawer';
 import FeedbackDrawer from './FeedbackDrawer';
 
 // Stringify TODO: Move this to Drawer instead
@@ -401,14 +401,12 @@ export default function App() {
             top: 10, 
             left: 10
           }}>
-            New node
+            Add New Node
           </button>
 
         <FeedbackDrawer open={feedbackOpen} onToggle={onFeedbackToggle} />
 
-        {/* {
-          rxnDrawerOpen && <RxnDrawer onRateLawChange={() => {}} onInitialChange={() => {}} />
-        } */}
+
         <RxnDrawer 
           // edge={selectedRxn} 
           // nodes={nodesWithCallbacks}
@@ -428,7 +426,8 @@ export default function App() {
         
 
         {/* <SimulationDrawer data={simulationData} speciesInfo={nodesWithCallbacks} onSimulate={callSimulation} open={simDrawerOpen} onToggle={onToggleSimDrawer} simStatus={simulationStatus} /> */}
-
+        
+        <SimulationDrawer onSimulate={() => {}} />
 
         
         {/* <button onClick={callSimulation} className="action-button" style={{position: 'fixed', top: 10, right: 10}}>SIMULATE</button> */}
