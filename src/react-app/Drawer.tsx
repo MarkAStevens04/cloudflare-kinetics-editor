@@ -57,6 +57,9 @@ export default function RxnDrawer() {
     const open = useStore((store) => store.rxnDrawerOpen);
     const setRxnDrawerOpen = useStore((store) => store.setRxnDrawerOpen);
 
+    const updateRateLaw = useStore((store) => store.updateRateLaw);
+    const updateInitialConcentration = useStore((store) => store.updateInitialConcentration);
+
     const sourceNode = nodes.find((node) => node.id === edge.sources[0]) || nodes[0];
     const targetNode = nodes.find((node) => node.id === edge.targets[0]) || nodes[0];
 
@@ -74,15 +77,15 @@ export default function RxnDrawer() {
 
     
     const onRateChange = (event: ChangeEvent<HTMLInputElement>) => {
-        // onRateLawChange(RxnID, event.target.value);
+        updateRateLaw(RxnID, event.target.value);
     }
 
     const onRChange = (event: ChangeEvent<HTMLInputElement>) => {
-        // onInitialChange(sourceNode, event.target.value);
+        updateInitialConcentration(sourceNode.id, event.target.value);
     }
 
     const onPChange = (event: ChangeEvent<HTMLInputElement>) => {
-        // onInitialChange(targetNode, event.target.value);
+        updateInitialConcentration(targetNode.id, event.target.value);
     }
 
     const transitions = useTransition(open ? [true] : [],  {

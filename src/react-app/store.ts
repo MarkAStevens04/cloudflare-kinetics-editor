@@ -15,7 +15,7 @@ import {
 type species = {
   id: string;
   label: string;
-  initial: number;
+  initial: string;
   color: string;
 }
 
@@ -28,8 +28,8 @@ type reactions = {
 }
 
 const initialSpecies: species[] = [
-  { id: 'Na', label: 'Click to edit', initial: 10, color: '#90f1ef' },
-  { id: 'Nb', label: 'Species 2', initial: 0, color: '#ffd6e0' },
+  { id: 'Na', label: 'Click to edit', initial: '10', color: '#90f1ef' },
+  { id: 'Nb', label: 'Species 2', initial: '0', color: '#ffd6e0' },
 ];
 
 const initialReactions: reactions[] = [
@@ -37,11 +37,11 @@ const initialReactions: reactions[] = [
 ];
 
 const initialNodes: AppNode[] = [
-  { id: 'Na', position: { x: 0, y: -0 }, data: { label: 'Click to edit', onLabelChange: () => {}, color: '#90f1ef', initial: '' }, type: 'protein'},
-  { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: '#ffd6e0', initial: '' }, type: 'protein'},
+  { id: 'Na', position: { x: 0, y: -0 }, data: { label: 'Click to edit', color: '#90f1ef', initial: '' }, type: 'protein'},
+  { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', color: '#ffd6e0', initial: '' }, type: 'protein'},
 ];
 
-const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: ''}, }];
+const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', rate_law: ''}, }];
 
 
 
@@ -68,6 +68,9 @@ type AppState = {
   setRxnDrawerOpen: (open: boolean) => void;
 
   updateSpeciesLabel: (id: string, newLabel: string) => void;
+  updateRateLaw: (id: string, newRateLaw: string) => void;
+  updateInitialConcentration: (id: string, newInitial: string) => void;
+
 };
 
 
@@ -99,7 +102,7 @@ const useStore = create<AppState>((set, get) => ({
 
     // Function to add a new Node to both visualNodes AND to species!
     addNode: (id, label, color) => set((store) => ({
-        species: [...store.species, { id: id, label: label, initial: 0, color: color }],
+        species: [...store.species, { id: id, label: label, initial: '', color: color }],
 
         visualNodes: [...store.visualNodes, 
         {
@@ -158,23 +161,62 @@ const useStore = create<AppState>((set, get) => ({
 
      })),
 
+    updateRateLaw: (id, newRateLaw) => set((store) => ({
+      reactions: store.reactions.map((r) => r.id === id ? { ...r, rate_law: newRateLaw } : r),
+
+      visualEdges: store.visualEdges.map((e) => {
+
+        if (e.id !== id) return e;
+        if (!e.data) return e;
+
+        return {
+          ...e, 
+          data: { 
+            ...e.data, 
+            rate_law: newRateLaw,
+          }
+        }
+      }),
+
+    })),
+
+    updateInitialConcentration: (id, newInitial) => set((store) => ({
+      species: store.species.map((s) => s.id === id ? { ...s, initial: newInitial } : s),
+
+      visualNodes: store.visualNodes.map((n) => n.id === id ? { 
+        ...n, 
+        data: { 
+          ...n.data, 
+          label: n.data.label, 
+          color: n.data.color,
+          initial: newInitial,
+         } 
+        } : n),
+
+     })),
+
+
+
 }));
 
 
-  // const onLabelChange = useCallback(
-  //   (id: string, value: string) => {
+  // const onInitialChange = useCallback(
+  //   (currNode: AppNode, speciesInit: string, ) => {
+
+  //     const rID = currNode.id;
+
   //     setNodes((nds) =>
   //       nds.map((node) =>
-  //         node.id === id
+  //         node.id === rID
   //           ? {
   //               ...node,
   //               data: {
   //                 ...node.data,
-  //                 label: value,
+  //                 initial: speciesInit,
   //               }
   //           } : node
   //       )
-  //     )
+  //     );
   //   },
   //   [setNodes]
   // );
