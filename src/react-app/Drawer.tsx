@@ -33,6 +33,7 @@ export default function RxnDrawer() {
 
     const updateRateLaw = useStore((store) => store.updateRateLaw);
     const updateInitialConcentration = useStore((store) => store.updateInitialConcentration);
+    const updateRateName = useStore((store) => store.updateRateName);
 
     const sourceNode = nodes.find((node) => node.id === edge.sources[0]) || nodes[0];
     const targetNode = nodes.find((node) => node.id === edge.targets[0]) || nodes[0];
@@ -48,7 +49,11 @@ export default function RxnDrawer() {
 
     const reactantColor = sourceNode.color;
     const productColor = targetNode.color;
+    
 
+    const onRNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+        updateRateName(RxnID, event.target.value);
+    }
     
     const onRateChange = (event: ChangeEvent<HTMLInputElement>) => {
         updateRateLaw(RxnID, event.target.value);
@@ -61,6 +66,7 @@ export default function RxnDrawer() {
     const onPChange = (event: ChangeEvent<HTMLInputElement>) => {
         updateInitialConcentration(targetNode.id, event.target.value);
     }
+    
 
     const transitions = useTransition(open ? [true] : [],  {
         from: { x: -240, opacity: 0 },
@@ -107,7 +113,17 @@ export default function RxnDrawer() {
                 <br /> <br />
                 {/* <button onClick={onClose} className="nodrag nopan action-button">Close</button> */}
 
-                <p className="species-text" > Reaction Name </p>
+                {/* Edit reaction name */}
+                <div className="species-text" style={{padding: '0.2em 0px', top: '20px'}}>
+                    <input 
+                        className="drawer-name-input"
+                        placeholder="Reaction Name"
+                        value={edge.label}
+                        onChange={onRNameChange}
+                        
+                    />
+                </div>
+                {/* <p className="species-text" > Reaction Name </p> */}
 
                 <br />
                 <div className="drawer-reaction-diagram">

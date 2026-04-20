@@ -83,6 +83,7 @@ type AppState = {
   updateSpeciesLabel: (id: string, newLabel: string) => void;
   updateRateLaw: (id: string, newRateLaw: string) => void;
   updateInitialConcentration: (id: string, newInitial: string) => void;
+  updateRateName: (id: string, newName: string) => void;
 
   feedbackOpen: boolean;
   setFeedbackOpen: (open: boolean) => void;
@@ -221,6 +222,26 @@ const useStore = create<AppState>((set, get) => ({
         } : n),
 
      })),
+
+     // Updates the label for a reaction
+     updateRateName: (id, newRateName) => set((store) => ({
+      reactions: store.reactions.map((r) => r.id === id ? { ...r, label: newRateName } : r),
+
+      visualEdges: store.visualEdges.map((e) => {
+
+        if (e.id !== id) return e;
+        if (!e.data) return e;
+
+        return {
+          ...e, 
+          data: { 
+            ...e.data, 
+            label: newRateName,
+          }
+        }
+      }),
+
+    })),
 
     // Open / close simulation drawer
     simDrawerOpen: false,
