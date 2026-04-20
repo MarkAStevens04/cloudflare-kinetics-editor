@@ -83,6 +83,9 @@ type AppState = {
   updateSpeciesLabel: (id: string, newLabel: string) => void;
   updateRateLaw: (id: string, newRateLaw: string) => void;
   updateInitialConcentration: (id: string, newInitial: string) => void;
+
+  feedbackOpen: boolean;
+  setFeedbackOpen: (open: boolean) => void;
   
 };
 
@@ -241,10 +244,10 @@ const useStore = create<AppState>((set, get) => ({
 
       console.log('Simulation results: ', payload_data);
       console.log('Simulation Complete!');
-
-
-
     },
+
+    feedbackOpen: false,
+    setFeedbackOpen: (open) => set({ feedbackOpen: open }),
 
 
 }));

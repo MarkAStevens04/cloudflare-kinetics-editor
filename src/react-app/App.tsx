@@ -175,178 +175,6 @@ export default function App() {
     setFeedbackOpen(state => !state);
   }, []);
 
-  // const selectedRxn = edges.find((edge) => edge.id === selectedRxnID) || edges[0];
-
-  // const onConnect: OnConnect = useCallback(
-  //   (params) => 
-  //     setEdges((eds) => 
-  //       addEdge(
-  //         {
-  //           ...params,
-  //           id: `${params.source}_${params.target}`,
-  //           type: 'reaction',
-  //           animated: true,
-  //           markerEnd: { 
-  //             type: MarkerType.ArrowClosed,
-  //             width: 20,
-  //             height: 20
-  //            },
-  //           data: { label: 't2', toggleDrawer: () => {}, rate_law: ''},
-            
-  //         },
-  //         eds,
-  //       ),
-  //     ),
-  //   [setEdges],
-  // );
-
-  // const onLabelChange = useCallback(
-  //   (id: string, value: string) => {
-  //     setNodes((nds) =>
-  //       nds.map((node) =>
-  //         node.id === id
-  //           ? {
-  //               ...node,
-  //               data: {
-  //                 ...node.data,
-  //                 label: value,
-  //               }
-  //           } : node
-  //       )
-  //     )
-  //   },
-  //   [setNodes]
-  // );
-
-
-  // const onRateLawChange = useCallback(
-  //   (EID: string, rateLaw: string) => {
-
-  //     setEdges((eds) =>
-  //       eds.map((edge) => {
-
-  //         // Make sure edge has data
-  //         if (edge.id != EID) return edge;
-  //         if (!edge.data) return edge;
-
-  //         return {
-  //               ...edge,
-  //               data: {
-  //                 ...edge.data,
-  //                 rate_law: rateLaw
-  //               }
-  //           }
-  //       })
-  //     );
-
-
-  //   },
-  //   [setEdges]
-  // );
-
-  // const onInitialChange = useCallback(
-  //   (currNode: AppNode, speciesInit: string, ) => {
-
-  //     const rID = currNode.id;
-
-  //     setNodes((nds) =>
-  //       nds.map((node) =>
-  //         node.id === rID
-  //           ? {
-  //               ...node,
-  //               data: {
-  //                 ...node.data,
-  //                 initial: speciesInit,
-  //               }
-  //           } : node
-  //       )
-  //     );
-  //   },
-  //   [setNodes]
-  // );
-
-  // update all nodes to have the correct callback
-  // const nodesWithCallbacks: AppNode[] = useMemo(() => nodes.map((node) => ({
-  //   ...node,
-  //   data: {
-  //     ...node.data,
-  //     onLabelChange: onLabelChange,
-  //   }
-  // })), [nodes, onLabelChange]);
-
-
-  // update all edges to have the correct callback
-  // const edgesWithCallbacks: AppEdge[] = useMemo(() => edges.map((edge) => {
-
-  //   // Make sure edge has data
-  //   if (!edge.data) return edge;
-
-  //   return {
-  //     ...edge,
-  //     data: {
-  //       ...edge.data,
-  //       toggleDrawer: () => onDrawerToggle(edge.id)
-  //     }
-  //   }
-  // }), [edges, onDrawerToggle]);
-
-
-
-  // const addNode = useCallback(() => {
-  //   const newNode: AppNode = {
-  //     id: 'N' + numberToLetters(nextId++),
-  //     position: {
-  //       x: Math.random() * 300,
-  //       y: Math.random() * 300,
-  //     },
-  //     data: { label: 'Species ' + String(nextId - 1), onLabelChange: () => {}, color: getRandomColor(), initial: '' },
-  //     type: 'protein',
-  //   };
-
-  //   setNodes((currentNodes) => [...currentNodes, newNode]);
-  // }, [setNodes]);
-
-
-  // const callSimulation = useCallback(async () => {
-
-  //   onStartSimulation();
-
-  //   const currentNodes = nodesRef.current;
-  //   const currentEdges = edgesRef.current;
-
-  //   const payload = {
-  //     "Species": currentNodes.map(({ id, data}) => ({'id': id, 'initial': Number(data.initial)})),
-  //     "Reactions": currentEdges.map(({ id, source, target, data}) => ({'id': id, 'Reactants': [source], 'Products': [target], 'rate_law': cleanAsciiConversion(convertLatexToAsciiMath(data?.rate_law || '')), 'Parameters': {'test1': 0.0}})),
-  //     "Simulation": {"t_end": 300, "dt": 1, "method": "Euler"},
-  //   };
-
-  //   const requestOptions = {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify(payload)
-  //   };
-
-  //   console.log('Simulation started! Payload: ', payload);
-    
-
-  //   // fetch('https://kinetics-editor.vercel.app/api/simulate/v02', requestOptions).then(response => response.json()).then(data => console.log('Simulation results: ', data));
-  
-  //   const response = await fetch('https://kinetics-editor.vercel.app/api/simulate/v02', requestOptions);
-
-  //   const responseJson = await response.json();
-  //   const payload_data = responseJson['data'];
-
-  //   onCompleteSimulation();
-  //   onNewSimData(payload_data);
-
-  //   console.log('Simulation results: ', payload_data);
-
-
-  //   console.log('Simulation Complete!');
-    
-  // }, [onStartSimulation, onCompleteSimulation, onNewSimData]);
-
-
   // Convert number into letters for NodeIDs 
   const numberToLetters = (num: number) => {
     return String(num).split('').map((digit) => String.fromCharCode(97 + Number(digit))).join('');
@@ -354,8 +182,6 @@ export default function App() {
 
   // Function to add a Node (uses Zustand store)
   const addNode = useStore((store) => store.addNode);
- 
-  // const rxnDrawerOpen = useStore((store) => store.rxnDrawerOpen);
 
 
   return (
@@ -404,33 +230,11 @@ export default function App() {
             Add New Node
           </button>
 
+
         <FeedbackDrawer open={feedbackOpen} onToggle={onFeedbackToggle} />
 
-
-        <RxnDrawer 
-          // edge={selectedRxn} 
-          // nodes={nodesWithCallbacks}
-          // edge={visualEdges[0]}
-          // nodes={visualNodes}
-
-          // open={drawerToggle} 
-          // POSSIBLE ERROR!! When we store onDrawerToggle(selectedRxnId) if selectedRxnId changes, we'll save our rate law to the NEW reaction id!
-          // onToggle={() => onDrawerToggle(selectedRxnID)} 
-          // onRateLawChange={onRateLawChange}
-          // onInitialChange={onInitialChange}
-
-          // onRateLawChange={() => {}}
-          // onInitialChange={() => {}}
-        />
-        
-        
-
-        {/* <SimulationDrawer data={simulationData} speciesInfo={nodesWithCallbacks} onSimulate={callSimulation} open={simDrawerOpen} onToggle={onToggleSimDrawer} simStatus={simulationStatus} /> */}
-        
-        <SimulationDrawer onSimulate={() => {}} />
-
-        
-        {/* <button onClick={callSimulation} className="action-button" style={{position: 'fixed', top: 10, right: 10}}>SIMULATE</button> */}
+        <RxnDrawer />
+        <SimulationDrawer />
         
       
     </div>

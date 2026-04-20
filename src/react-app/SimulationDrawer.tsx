@@ -89,7 +89,7 @@ function SimulationDrawer() {
 
     const borderColor = simStatus === 0 ? 'rgba(0, 0, 0, 0.1)' : simStatus === 1 ? 'rgba(255, 0, 221, 0.3)' : 'rgba(16, 235, 78, 0.5)';
 
-    console.log('Drawer re-render!');
+    // console.log('Drawer re-render!');
 
     return (
     <div>
