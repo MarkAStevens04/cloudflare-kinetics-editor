@@ -241,6 +241,7 @@ function RateEditor({
 
 
 
+
     return (
     <div className='rate-editor'>   
         <p className='drawer-text'>Rate Law</p>
