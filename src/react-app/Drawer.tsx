@@ -99,7 +99,7 @@ export default function RxnDrawer() {
 
     // console.log(reactantButtons);
 
-    console.log('Drawer Rendered with rate law: ' + rateLaw);
+    // console.log('Drawer Rendered with rate law: ' + rateLaw);
 
 
     return transitions((style, item) =>
