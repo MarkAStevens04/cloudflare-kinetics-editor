@@ -401,7 +401,7 @@ export default function App() {
             top: 10, 
             left: 10
           }}>
-            New node: {Math.random()}
+            New node
           </button>
 
         <FeedbackDrawer open={feedbackOpen} onToggle={onFeedbackToggle} />

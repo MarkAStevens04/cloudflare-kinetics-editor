@@ -66,6 +66,8 @@ type AppState = {
 
   rxnDrawerOpen: boolean;
   setRxnDrawerOpen: (open: boolean) => void;
+
+  updateSpeciesLabel: (id: string, newLabel: string) => void;
 };
 
 
@@ -103,7 +105,7 @@ const useStore = create<AppState>((set, get) => ({
         {
           id: id, 
           position: { x: Math.random() * 300, y: Math.random() * 300 }, 
-          data: { label: label, color: color, onLabelChange: () => {}, initial: ''}, 
+          data: { label: label, color: color, initial: ''}, 
           type: 'protein',
         }
       ],
@@ -126,7 +128,7 @@ const useStore = create<AppState>((set, get) => ({
               width: 20,
               height: 20
              },
-            data: { label: 't2', toggleDrawer: () => {}, rate_law: ''},
+            data: { label: 't2', rate_law: ''},
           },
           store.visualEdges
         ),
@@ -141,7 +143,41 @@ const useStore = create<AppState>((set, get) => ({
     rxnDrawerOpen: false,
     setRxnDrawerOpen: (open) => set({ rxnDrawerOpen: open }),
 
+    updateSpeciesLabel: (id, newLabel) => set((store) => ({
+      species: store.species.map((s) => s.id === id ? { ...s, label: newLabel } : s),
+
+      visualNodes: store.visualNodes.map((n) => n.id === id ? { 
+        ...n, 
+        data: { 
+          ...n.data, 
+          label: newLabel, 
+          color: n.data.color,
+          initial: n.data.initial,
+         } 
+        } : n),
+
+     })),
+
 }));
+
+
+  // const onLabelChange = useCallback(
+  //   (id: string, value: string) => {
+  //     setNodes((nds) =>
+  //       nds.map((node) =>
+  //         node.id === id
+  //           ? {
+  //               ...node,
+  //               data: {
+  //                 ...node.data,
+  //                 label: value,
+  //               }
+  //           } : node
+  //       )
+  //     )
+  //   },
+  //   [setNodes]
+  // );
 
 
 export default useStore;
