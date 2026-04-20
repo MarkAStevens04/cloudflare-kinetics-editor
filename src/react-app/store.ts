@@ -38,7 +38,7 @@ const initialSpecies: species[] = [
 ];
 
 const initialReactions: reactions[] = [
-  { id: 'Na_Nb', label: 'test2', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1' },
+  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1' },
 ];
 
 const initialNodes: AppNode[] = [
@@ -46,7 +46,7 @@ const initialNodes: AppNode[] = [
   { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', color: '#ffd6e0', initial: '' }, type: 'protein'},
 ];
 
-const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', rate_law: '(\\objNa{\\text{Na}})\\cdot0.1'}, }];
+const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'Change me!', rate_law: '(\\objNa{\\text{Na}})\\cdot0.1'}, }];
 
 
 
