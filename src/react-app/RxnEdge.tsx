@@ -8,6 +8,7 @@ import {
 } from '@xyflow/react';
 
 import './index.css';
+import useStore from './store';
 
 type RxnEdgeType = Edge<{ 
     label: string; 
@@ -38,8 +39,16 @@ export default function RxnEdge({
 
     const activeMarkerEnd = selected ? 'url(#selected-marker)' : markerEnd;
 
+    // const onToggle = () => {
+    //     data?.toggleDrawer(id);
+    // }
+
+    const setEdgeSelection = useStore((store) => store.setSelectedEdge);
+    const setRxnDrawerOpen = useStore((store) => store.setRxnDrawerOpen);
+
     const onToggle = () => {
-        data?.toggleDrawer(id);
+        setEdgeSelection(id);
+        setRxnDrawerOpen(true);
     }
 
     return (

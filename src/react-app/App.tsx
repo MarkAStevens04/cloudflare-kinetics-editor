@@ -33,7 +33,7 @@ FullStory('trackEvent', {
 // Initialize Protein and Reaction types
 import ProteinNode, { type AppNode } from './ProteinNode';
 import RxnEdge, { type AppEdge } from './RxnEdge';
-// import RxnDrawer from './Drawer';
+import RxnDrawer from './Drawer';
 // import SimulationDrawer from './SimulationDrawer';
 import FeedbackDrawer from './FeedbackDrawer';
 
@@ -346,19 +346,16 @@ export default function App() {
     
   // }, [onStartSimulation, onCompleteSimulation, onNewSimData]);
 
+
+  // Convert number into letters for NodeIDs 
   const numberToLetters = (num: number) => {
     return String(num).split('').map((digit) => String.fromCharCode(97 + Number(digit))).join('');
   };
 
-  // const onNewNode = () => {
-  //   const id = 'N' + numberToLetters(nextId++);
-  //   const label = 'Species ' + String(nextId - 1);
-  //   const color = getRandomColor();
-  //   useStore((store) => store.addNode(id, label, color, store));
-  // };
-
+  // Function to add a Node (uses Zustand store)
   const addNode = useStore((store) => store.addNode);
  
+  // const rxnDrawerOpen = useStore((store) => store.rxnDrawerOpen);
 
 
   return (
@@ -398,28 +395,35 @@ export default function App() {
             const color = getRandomColor();
             addNode(id, label, color);
           }}
+
           style={{
             position: 'fixed', 
             top: 10, 
             left: 10
           }}>
-            Add New Node
+            New node: {Math.random()}
           </button>
 
         <FeedbackDrawer open={feedbackOpen} onToggle={onFeedbackToggle} />
 
-        {/* <RxnDrawer 
+        {/* {
+          rxnDrawerOpen && <RxnDrawer onRateLawChange={() => {}} onInitialChange={() => {}} />
+        } */}
+        <RxnDrawer 
           // edge={selectedRxn} 
           // nodes={nodesWithCallbacks}
-          edge={visualEdges[0]}
-          nodes={visualNodes}
+          // edge={visualEdges[0]}
+          // nodes={visualNodes}
 
-          open={drawerToggle} 
+          // open={drawerToggle} 
           // POSSIBLE ERROR!! When we store onDrawerToggle(selectedRxnId) if selectedRxnId changes, we'll save our rate law to the NEW reaction id!
-          onToggle={() => onDrawerToggle(selectedRxnID)} 
-          onRateLawChange={onRateLawChange}
-          onInitialChange={onInitialChange}
-        /> */}
+          // onToggle={() => onDrawerToggle(selectedRxnID)} 
+          // onRateLawChange={onRateLawChange}
+          // onInitialChange={onInitialChange}
+
+          // onRateLawChange={() => {}}
+          // onInitialChange={() => {}}
+        />
         
         
 

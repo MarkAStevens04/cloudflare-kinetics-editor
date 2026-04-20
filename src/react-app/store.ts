@@ -8,29 +8,32 @@ import {
   type OnNodesChange,
   type OnEdgesChange,
   type OnConnect,
+  MarkerType,
 } from '@xyflow/react';
 
 
 type species = {
   id: string;
-  name: string;
+  label: string;
   initial: number;
+  color: string;
 }
 
 type reactions = {
   id: string;
-  name: string;
-  from: string[];
-  to: string[];
+  label: string;
+  sources: string[];
+  targets: string[];
+  rate_law: string;
 }
 
 const initialSpecies: species[] = [
-  { id: 'Na', name: 'Click to edit', initial: 10 },
-  { id: 'Nb', name: 'Species 2', initial: 0 },
+  { id: 'Na', label: 'Click to edit', initial: 10, color: '#90f1ef' },
+  { id: 'Nb', label: 'Species 2', initial: 0, color: '#ffd6e0' },
 ];
 
 const initialReactions: reactions[] = [
-  { id: 'Na_Nb', name: 'Reaction 1', from: ['Na'], to: ['Nb'] },
+  { id: 'Na_Nb', label: 'Reaction 1', sources: ['Na'], targets: ['Nb'], rate_law: '' },
 ];
 
 const initialNodes: AppNode[] = [
@@ -38,7 +41,7 @@ const initialNodes: AppNode[] = [
   { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: '#ffd6e0', initial: '' }, type: 'protein'},
 ];
 
-const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: ''}, }];
+const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: ''}, }];
 
 
 
@@ -57,6 +60,12 @@ type AppState = {
   setEdges: (edges: AppEdge[]) => void;
 
   addNode: (id: string, label: string, color: string) => void;
+
+  selectedEdge: string | null;
+  setSelectedEdge: (edgeId: string | null) => void;
+
+  rxnDrawerOpen: boolean;
+  setRxnDrawerOpen: (open: boolean) => void;
 };
 
 
@@ -69,6 +78,7 @@ const useStore = create<AppState>((set, get) => ({
     visualNodes: initialNodes,
     visualEdges: initialEdges,
 
+    // Default ReactFlow functions to update visualNode and visualEdge attributes
     onNodesChange: (changes) => {
       set({
         visualNodes: applyNodeChanges(changes, get().visualNodes),
@@ -81,52 +91,57 @@ const useStore = create<AppState>((set, get) => ({
       });
     },
 
-    onConnect: (connection) => {
-      set({
-        visualEdges: addEdge(connection, get().visualEdges),
-      });
-    },
-
     setNodes: (nodes) => set({ visualNodes: nodes }),
     setEdges: (edges) => set({ visualEdges: edges }),
 
-    // addNode: (node) => set((state) => ({ visualNodes: [...state.visualNodes, node], species: [...state.species, { id: node.id, name: node.data.label, initial: Number(node.data.initial) }] })),
-    // addNode: (id, label, color, state) => set((state) => {
-    //   const newNode: AppNode = {
-    //     id,
-    //     position: {
-    //       x: Math.random() * 300,
-    //       y: Math.random() * 300,
-    //     },
-    //     data: { label, onLabelChange: () => {}, color, initial: '' },
-    //     type: 'protein',
-    //   };
 
+    // Function to add a new Node to both visualNodes AND to species!
     addNode: (id, label, color) => set((store) => ({
+        species: [...store.species, { id: id, label: label, initial: 0, color: color }],
+
         visualNodes: [...store.visualNodes, 
         {
           id: id, 
-          position: { x: 300, y: 300 }, 
+          position: { x: Math.random() * 300, y: Math.random() * 300 }, 
           data: { label: label, color: color, onLabelChange: () => {}, initial: ''}, 
           type: 'protein',
         }
-      ]
+      ],
+
     })),
-    
-    // addEdge: (edge) => set((state) => ({ visualEdges: [...state.visualEdges, edge], logicalEdges: [...state.logicalEdges, edge] })),
+
+    // Function to add a new Edge to both visualEdges AND to reactions!
+    onConnect: (params) => {
+      set((store) => ({
+        
+        reactions: [...store.reactions, { id: `${params.source}_${params.target}`, label: 't2', sources: [params.source], targets: [params.target], rate_law: '' }],
+
+        visualEdges: addEdge(
+          {...params, 
+            id: `${params.source}_${params.target}`,
+            type: 'reaction',
+            animated: true,
+            markerEnd: { 
+              type: MarkerType.ArrowClosed,
+              width: 20,
+              height: 20
+             },
+            data: { label: 't2', toggleDrawer: () => {}, rate_law: ''},
+          },
+          store.visualEdges
+        ),
+
+      }));
+    },
+
+    // Track which edge is currently selected (for opening the drawer)
+    selectedEdge: null,
+    setSelectedEdge: (edgeId) => set({ selectedEdge: edgeId }),
+
+    rxnDrawerOpen: false,
+    setRxnDrawerOpen: (open) => set({ rxnDrawerOpen: open }),
+
 }));
-
-
-// const addNode = useCallback(() => {
-  //   const newNode: AppNode = {
-  //     id: 'N' + numberToLetters(nextId++),
-  //     position: {
-  //       x: Math.random() * 300,
-  //       y: Math.random() * 300,
-  //     },
-  //     data: { label: 'Species ' + String(nextId - 1), onLabelChange: () => {}, color: getRandomColor(), initial: '' },
-  //     type: 'protein',
-  //   };
 
 
 export default useStore;
