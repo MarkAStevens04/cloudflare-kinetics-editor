@@ -244,6 +244,17 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - You can delete connection while drawer is open (drawer should automatically close)
 - When reaction drawer is open, border of "simulate" button looks weird
 
+### Default Rate Laws
+- Make it so you can draw between two nodes. Then, you can spawn in a 3rd node, and draw an edge from that node TO THE REACTION.
+- OOOOOOO!!! THIS WOULD WORK SO WELL AFTER MAKING THE SIDE BAR ON THE RIGHT THAT LETS YOU ADD DIFF TYPES OF MOLECULES!!!
+- It could say "Oh, your enzyme is modulating your reaction? Let me help you out!" And it automatically populates with Enzyme kinetics or whatever.
+- But if instead you drew another ligand to the reaction, it would say "Oh is this two inputs becoming 1 output? Let me help you out!" And it automatically adds a multi-species reaction or whatever.
+
+**** TODO:
+- Add different TYPES of molecules
+- Add different TYPES of reactions
+- Allow you to draw multi molecules to a single reaction, auto populate.
+
 ### Drawer
 - Possibly put mini-reaction-diagram in its own little div and make everything smaller
 - What if we just had a small arrow from species2 to species 3, and we edited the rate law beneach the mini-diagram?
