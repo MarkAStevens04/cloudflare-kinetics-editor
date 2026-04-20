@@ -131,9 +131,6 @@ export default function FeedbackDrawer() {
             loading="lazy"
             width="281"
             height={350}
-            frameBorder={0}
-            marginHeight={0}
-            marginWidth={0}
             title={'Tally form'}
             style={{ border: 'none', padding: '0px 0px', }}
             />

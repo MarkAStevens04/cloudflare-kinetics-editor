@@ -15,28 +15,6 @@ import useStore from './store';
 // Instead using MUI's LineCharts! https://mui.com/x/react-charts/line-demo/#BiaxialLineChart
 
 
-// Create type for our simulation drawer
-// export type SimulationDrawerProps = {
-//     // open: boolean;
-//     // onToggle: () => void;
-//     onSimulate: () => void;
-//     // data: Array<Record<string, number>>;
-//     // speciesInfo: Array<AppNode>;
-//     // simStatus: number;
-// }
-
-
-// Create SimulationDrawer as an object
-// function SimulationDrawer({
-//     // open,
-//     // onToggle,
-//     onSimulate,
-//     // data,
-//     // speciesInfo,
-//     // simStatus,
-// }:  SimulationDrawerProps
-// ) {
-
 function SimulationDrawer() {
 
     const open = useStore((store) => store.simDrawerOpen);
@@ -89,8 +67,6 @@ function SimulationDrawer() {
 
     const borderColor = simStatus === 0 ? 'rgba(0, 0, 0, 0.1)' : simStatus === 1 ? 'rgba(255, 0, 221, 0.3)' : 'rgba(16, 235, 78, 0.5)';
 
-    // console.log('Drawer re-render!');
-
     return (
     <div>
         <animated.div
@@ -132,9 +108,6 @@ function SimulationDrawer() {
 
             height={300}
             width={500}
-            // skipAnimation
-            // slotProps={{tooltip: {trigger: 'item'}}}
-            // axisHighlight={{x: 'none', y: 'none'}}
             /> : null}
 
             <div className="sim-progression" >

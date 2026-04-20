@@ -1,19 +1,7 @@
-// import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import { useState, useCallback } from 'react';
 import { 
 	ReactFlow, 
 	Background,
 	Controls,
-  Panel,
-	// applyNodeChanges, 
-	// applyEdgeChanges, 
-	// addEdge,
-  // MarkerType,
-	// type Node,
-  // ConnectionMode,
-	// type OnNodesChange,
-	// type OnEdgesChange,
-	// type OnConnect,
   type DefaultEdgeOptions,
  } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
@@ -63,38 +51,25 @@ const NODE_COLORS = [
   '#7bf1a8', // Light Green
 ]
 
+// Where we are in the color cycle
 let colIdx= 1;
 
+// Function to get the next color in the cycle when generating new node
 const getRandomColor = () => {
   colIdx = (colIdx + 1) % NODE_COLORS.length;
   return NODE_COLORS[colIdx];
 }
 
-// const initialNodes: AppNode[] = [
-//   // { id: 'n0', position: { x: -500, y: -500 }, data: { label: 'DEFAULT NODE (ERROR)', onLabelChange: () => {}, color: '#ddd', initial: '' }, type: 'protein'},
-//   { id: 'Na', position: { x: 0, y: -0 }, data: { label: 'Click to edit', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
-//   { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', onLabelChange: () => {}, color: getRandomColor(), initial: '' }, type: 'protein'},
-// ];
-
+// ID for the next node to be added
 let nextId= 3;
 
-// const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'test2', toggleDrawer: () => {}, rate_law: ''}, }];
- 
+
 const defaultEdgeOptions: DefaultEdgeOptions = {
   type: 'reaction',
 };
 
 
-// function cleanAsciiConversion(ascii: string) {
-//   // Reactions replaces all " with empty character! Quotes are added when Latex 'Text' is converted to a command, but we do NOT want this!
-//   // Reactions replaces all ^ with ** for exponentiation.
-  
-//   console.log('Before cleaning: ', ascii);
-
-//   return ascii.replace(/"/g, '').replace(/\^/g, '**');
-// }
-
-const selector = (state) => ({
+const selector = (state: ReturnType<typeof useStore.getState>) => ({
   visualNodes: state.visualNodes,
   visualEdges: state.visualEdges,
   onNodesChange: state.onNodesChange,
@@ -109,72 +84,6 @@ export default function App() {
     useShallow(selector),
   );
 
-  // const [nodes, setNodes] = useState<AppNode[]>(initialNodes);
-  // const [edges, setEdges] = useState<AppEdge[]>(initialEdges);
-  // const [drawerToggle, setDrawerToggle] = useState(false);
-
-  // const [selectedRxnID, setSelectedRxnID] = useState<string>(initialEdges[0].id);
-
-  // const [simDrawerOpen, setSimDrawerOpen] = useState(false);
-  const [feedbackOpen, setFeedbackOpen] = useState(false);
-  // const [simulationStatus, setSimulationStatus] = useState<number>(0); // 0 = not started, 1 = running, 2 = complete
-
-  // const [simulationData, setSimulationData] = useState<Array<Record<string, number>>>([{'test': 10}]);
-
-
-  // const nodesRef = useRef(nodes);
-  // const edgesRef = useRef(edges);
-
-  // useEffect(() => {
-  //   nodesRef.current = nodes;
-  // }, [nodes]);
-
-  // useEffect(() => {
-  //   edgesRef.current = edges;
-  // }, [edges]);
-
-
-  // const onNodesChange: OnNodesChange<AppNode> = useCallback(
-  //   (changes) => setNodes((nodesSnapshot) => applyNodeChanges<AppNode>(changes, nodesSnapshot)),
-  //   [setNodes],
-  // );
-  
-  // const onEdgesChange: OnEdgesChange<AppEdge> = useCallback(
-  //   (changes) => setEdges((edgesSnapshot) => applyEdgeChanges<AppEdge>(changes, edgesSnapshot)),
-  //   [setEdges],
-  // );
-
-
-  // const onStartSimulation = useCallback(() => {
-  //   setSimulationStatus(1);
-  // }, [setSimulationStatus]);
-
-  // const onCompleteSimulation = useCallback(() => {
-  //   setSimulationStatus(2);
-  // }, [setSimulationStatus]);
-
-  // const onNewSimData = useCallback((data: Array<Record<string, number>>) => {
-  //   setSimulationData(data);
-  // }, [setSimulationData]);
-
-
-
-  // const onToggleSimDrawer = useCallback(() => {
-  //   setSimDrawerOpen(state => !state);
-  // }, []);
-
-  // const onDrawerToggle = useCallback((id: string) => {
-
-  //   setSelectedRxnID(id);
-
-  //   setDrawerToggle(state => !state);
-
-  // }, []);
-
-  const onFeedbackToggle = useCallback(() => {
-    setFeedbackOpen(state => !state);
-  }, []);
-
   // Convert number into letters for NodeIDs 
   const numberToLetters = (num: number) => {
     return String(num).split('').map((digit) => String.fromCharCode(97 + Number(digit))).join('');
@@ -188,9 +97,6 @@ export default function App() {
     <div style={{ width: '100vw', height: '100vh' }} className="app">
         <>
         <ReactFlow<AppNode, AppEdge>
-            // nodes={nodesWithCallbacks}
-            // edges={edgesWithCallbacks}
-
             nodes={visualNodes}
             edges={visualEdges}
             onNodesChange={onNodesChange}
@@ -203,15 +109,7 @@ export default function App() {
             defaultEdgeOptions={defaultEdgeOptions}>
           <Background />
           <Controls />
-
-          <Panel position="top-right"> 
-            
-          </Panel>
-          
-
         </ReactFlow>
-        
-        
         </>
 
         <button 
@@ -221,7 +119,6 @@ export default function App() {
             const color = getRandomColor();
             addNode(id, label, color);
           }}
-
           style={{
             position: 'fixed', 
             top: 10, 
@@ -231,7 +128,7 @@ export default function App() {
           </button>
 
 
-        <FeedbackDrawer open={feedbackOpen} onToggle={onFeedbackToggle} />
+        <FeedbackDrawer />
 
         <RxnDrawer />
         <SimulationDrawer />

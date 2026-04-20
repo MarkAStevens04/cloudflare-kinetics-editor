@@ -8,10 +8,6 @@
 import { ChangeEvent, useRef, useEffect, useMemo } from 'react';
 import { animated, useTransition } from '@react-spring/web';
 
-// import { type AppNode } from './ProteinNode';
-// import { type AppEdge } from './RxnEdge';
-
-
 import './index.css';
 
 // For math live input
@@ -20,32 +16,10 @@ import { MathfieldElement } from 'mathlive';
 import useStore from './store';
 
 
-// export type RxnDrawerProps = {
-//     // edge: AppEdge;
-//     // nodes: AppNode[];
-//     // open: boolean;
-//     // onToggle: () => void;
-//     onRateLawChange: (id: string, rateLaw: string) => void;
-//     onInitialChange: (currNode: AppNode, reactantInit: string) => void;
-//     // children?: React.ReactNode;
-// };
-
 type rateEditorProps = {
-    // nodes: AppNode[];
     currentRateLaw?: string;
     onRateChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
-
-
-
-// export default function RxnDrawer({
-//     // edge, 
-//     // nodes,
-//     // open,
-//     // onToggle, 
-//     onRateLawChange,
-//     onInitialChange,
-// }: RxnDrawerProps) {
 
 
 export default function RxnDrawer() {
@@ -95,15 +69,8 @@ export default function RxnDrawer() {
         config: { tension: 220, friction: 24 },
     });
 
-    // const interactiveBG = open ? 'block' : 'none';
+    // Allows user to start moving screen immediately after closing drawer.
     const pointerEvents = open ? 'auto' : 'none';
-
-    // const reactantButtons = nodes.map((node) => "<p className='autofill-species-box'>" + node.id + "</p>").join('');
-
-    // console.log(reactantButtons);
-
-    // console.log('Drawer Rendered with rate law: ' + rateLaw);
-
 
     return transitions((style, item) =>
         item ? (
@@ -148,9 +115,6 @@ export default function RxnDrawer() {
                     {/* Reactant Parameters */}
                     <div className="species-container" style={{
                         backgroundColor: reactantColor,
-                        // position: 'absolute',
-                        // top: '100px',
-
                     }}>
                         <div className="species-container-header"> {reactantLabel} </div>
                         <hr style={{
@@ -183,8 +147,6 @@ export default function RxnDrawer() {
                     {/* Product Parameters */}
                     <div className="species-container" style={{
                         backgroundColor: productColor,
-                        // position: 'absolute',
-                        // bottom: '100px',
                     }}>
                         <div className="species-container-header"> {productLabel} </div>
                         <hr style={{
@@ -206,39 +168,11 @@ export default function RxnDrawer() {
 
                     </div>
 
-                    {/* <div className="arrow-container">
-                        <svg className="down-arrow" viewBox="0 4 20 82" preserveAspectRatio="none">
-                            <path
-                                d="M10 5 L10 85 M4 79 L10 85 L16 79"
-                                stroke="rgba(0, 0, 0, 0.5)"
-                                strokeWidth="0.5"
-                                fill="none"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
-                        </svg>
-
-                    </div> */}
-
                 </div>
                 <br />
                 <hr />
 
                 {/* Edit Rate Laws */}
-
-                {/* <input 
-                        style={{
-                            backgroundColor: 'rgba(255, 255, 255, 1)',
-                            color: 'rgba(0, 0, 0, 0.8)',
-                            width: '95%',
-                            margin: '0px 0px',
-                            minWidth: '0px',
-                        }}
-                        className="species-param-input"
-                        placeholder="Rate Law" 
-                        value={rateLaw}
-                        onChange={onRateChange}
-                    />    */}
 
                 <RateEditor currentRateLaw={rateLaw} onRateChange={onRateChange} />
 

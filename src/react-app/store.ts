@@ -159,9 +159,11 @@ const useStore = create<AppState>((set, get) => ({
     selectedEdge: null,
     setSelectedEdge: (edgeId) => set({ selectedEdge: edgeId }),
 
+    // Open the Reaction Editor Drawer
     rxnDrawerOpen: false,
     setRxnDrawerOpen: (open) => set({ rxnDrawerOpen: open }),
 
+    // Update the label of a given species in both species and visualNodes
     updateSpeciesLabel: (id, newLabel) => set((store) => ({
       species: store.species.map((s) => s.id === id ? { ...s, label: newLabel } : s),
 
@@ -176,7 +178,8 @@ const useStore = create<AppState>((set, get) => ({
         } : n),
 
      })),
-
+     
+    // Update the rate law of a given reaction in both reactions and visualEdges
     updateRateLaw: (id, newRateLaw) => set((store) => ({
       reactions: store.reactions.map((r) => r.id === id ? { ...r, rate_law: newRateLaw } : r),
 
@@ -196,6 +199,7 @@ const useStore = create<AppState>((set, get) => ({
 
     })),
 
+    // Update the initial concentration of a given species in both species and visualNodes
     updateInitialConcentration: (id, newInitial) => set((store) => ({
       species: store.species.map((s) => s.id === id ? { ...s, initial: newInitial } : s),
 
@@ -211,9 +215,11 @@ const useStore = create<AppState>((set, get) => ({
 
      })),
 
-     simDrawerOpen: false,
-     setSimDrawerOpen: (open) => set({ simDrawerOpen: open }),
+    // Open / close simulation drawer
+    simDrawerOpen: false,
+    setSimDrawerOpen: (open) => set({ simDrawerOpen: open }),
 
+    // Simulation Information (status, data, fetching function)
     simulationStatus: 0,
     simulationData: [],
     fetchSimulationData: async () => {
@@ -246,6 +252,7 @@ const useStore = create<AppState>((set, get) => ({
       console.log('Simulation Complete!');
     },
 
+    // Open / close feedback form drawer
     feedbackOpen: false,
     setFeedbackOpen: (open) => set({ feedbackOpen: open }),
 
