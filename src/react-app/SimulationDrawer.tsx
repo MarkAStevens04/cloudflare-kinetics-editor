@@ -5,36 +5,25 @@ import {
     config,
 } from '@react-spring/web';
 
-import {type AppNode } from './ProteinNode';
+// import {type AppNode } from './ProteinNode';
 
 import React from 'react';
 
 import { LineChart } from '@mui/x-charts/LineChart';
+import useStore from './store';
 // Could use visx or Chart.js (https://www.chartjs.org/docs/latest/getting-started/usage.html)
 // Instead using MUI's LineCharts! https://mui.com/x/react-charts/line-demo/#BiaxialLineChart
 
 
-// Create type for our simulation drawer
-export type SimulationDrawerProps = {
-    open: boolean;
-    onToggle: () => void;
-    onSimulate: () => void;
-    data: Array<Record<string, number>>;
-    speciesInfo: Array<AppNode>;
-    simStatus: number;
-}
+function SimulationDrawer() {
 
+    const open = useStore((store) => store.simDrawerOpen);
+    const simStatus = useStore((store) => store.simulationStatus);
+    const data = useStore((store) => store.simulationData);
+    const speciesInfo = useStore((store) => store.visualNodes);
 
-// Create SimulationDrawer as an object
-function SimulationDrawer({
-    open,
-    onToggle,
-    onSimulate,
-    data,
-    speciesInfo,
-    simStatus,
-}:  SimulationDrawerProps
-) {
+    const setSimDrawerOpen = useStore((store) => store.setSimDrawerOpen);
+    const onSimulate = useStore((store) => store.fetchSimulationData);
 
     // Animation styling we'll use on opening and closing of the drawer
     const [springs, api] = useSpring(() => ({
@@ -53,7 +42,7 @@ function SimulationDrawer({
         });
 
         // Perform toggle
-        onToggle();
+        setSimDrawerOpen(!open);
     }
 
     // What happens when we click the inner "Simulate" button
@@ -76,9 +65,7 @@ function SimulationDrawer({
         (acc, node) => ({ ...acc, [node.id]: node.data.color }), {}
     );
 
-    const borderColor = simStatus === 0 ? 'rgba(0, 0, 0, 0.1)' : simStatus === 1 ? 'rgba(255, 0, 221, 0.3)' : 'rgba(16, 235, 78, 0.5)';
-
-    console.log('Drawer re-render!');
+    const borderColor = simStatus === 0 ? 'rgba(0, 0, 0, 0.1)' : simStatus === 1 ? 'rgba(255, 0, 221, 0.3)' : simStatus === 2 ? 'rgba(16, 235, 78, 0.5)' : 'rgba(255, 44, 44, 0.7)';
 
     return (
     <div>
@@ -121,9 +108,6 @@ function SimulationDrawer({
 
             height={300}
             width={500}
-            // skipAnimation
-            // slotProps={{tooltip: {trigger: 'item'}}}
-            // axisHighlight={{x: 'none', y: 'none'}}
             /> : null}
 
             <div className="sim-progression" >

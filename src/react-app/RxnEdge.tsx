@@ -8,10 +8,11 @@ import {
 } from '@xyflow/react';
 
 import './index.css';
+import useStore from './store';
 
 type RxnEdgeType = Edge<{ 
     label: string; 
-    toggleDrawer: (id: string) => void;
+    // toggleDrawer: (id: string) => void;
     rate_law: string;
 }, 'reaction'>;
 
@@ -38,8 +39,16 @@ export default function RxnEdge({
 
     const activeMarkerEnd = selected ? 'url(#selected-marker)' : markerEnd;
 
+    const setEdgeSelection = useStore((store) => store.setSelectedEdge);
+    const setRxnDrawerOpen = useStore((store) => store.setRxnDrawerOpen);
+
+    // const onToggle = () => {
+    //     data?.toggleDrawer(id);
+    // }
+
     const onToggle = () => {
-        data?.toggleDrawer(id);
+        setEdgeSelection(id);
+        setRxnDrawerOpen(true);
     }
 
     return (

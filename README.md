@@ -172,6 +172,19 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 
 - Text at top that says "SIMULATE" should say "SIMULATING" when we run.
 
+- Little banner that pops up at top of page when a new build is deployed and the user is still on the old version. Something like "We just launched an update! Refresh the page to see the changes <3"
+
+
+### Parameters & Functions
+- Make it so you can input functions as parameters! Have a little equation editor for those parameter functions instead of constants. 
+- Like, you could say temp(t) = {31 @ 0 < t < 60sec, 42 @ 60sec < t < 30sec}. Little piecewise editor.
+- You could have parameters depend on concentrations and stuff, and get some really interesting complexity.
+- Possibly make this work on mobile?
+
+
+### Multi-Reactant Reactions
+- Make it so you can draw an arrow from one reactant to a REACTION! Like the little square on the reaction edge, make it so you can actually draw from another reactant to THAT square. THAT makes your reaction a multi-reactant reaction!
+
 ### Project Charter Document
 - What do we want out of this project?
     - * AMAZING DEFAULT OPTIONS! The program should think for you as much as possible.
@@ -229,6 +242,18 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - Verify rate laws are plausible
 - Better error handling
 - You can delete connection while drawer is open (drawer should automatically close)
+- When reaction drawer is open, border of "simulate" button looks weird
+
+### Default Rate Laws
+- Make it so you can draw between two nodes. Then, you can spawn in a 3rd node, and draw an edge from that node TO THE REACTION.
+- OOOOOOO!!! THIS WOULD WORK SO WELL AFTER MAKING THE SIDE BAR ON THE RIGHT THAT LETS YOU ADD DIFF TYPES OF MOLECULES!!!
+- It could say "Oh, your enzyme is modulating your reaction? Let me help you out!" And it automatically populates with Enzyme kinetics or whatever.
+- But if instead you drew another ligand to the reaction, it would say "Oh is this two inputs becoming 1 output? Let me help you out!" And it automatically adds a multi-species reaction or whatever.
+
+**** TODO:
+- Add different TYPES of molecules
+- Add different TYPES of reactions
+- Allow you to draw multi molecules to a single reaction, auto populate.
 
 ### Drawer
 - Possibly put mini-reaction-diagram in its own little div and make everything smaller
