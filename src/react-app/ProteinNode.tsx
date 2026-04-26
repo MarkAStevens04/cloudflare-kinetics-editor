@@ -6,9 +6,9 @@ import useStore from './store';
 
 type ProteinNodeType = Node<{ 
     label: string; 
-    // onLabelChange: (id: string, value: string) => void;
     color: string;
     initial: string;
+    speciesType: string; // Types stored in store.ts
 }, 'protein'>;
 
 export type AppNode = ProteinNodeType;
@@ -36,6 +36,9 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
     const borderSizeOp = selected ? '2px' : '0px';
     const selectPadding = selected ? '12px 9px' : '12px 12px';
 
+    const borderRadius = data.speciesType === 'molecule' ? '24px' : '0px';
+    
+
 
     return (
 
@@ -44,6 +47,7 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
         backgroundColor: data.color, 
         borderWidth: borderSizeOp,
         padding: selectPadding,
+        borderRadius: borderRadius,
         
         }}>
         

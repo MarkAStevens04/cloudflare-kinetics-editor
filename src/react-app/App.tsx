@@ -117,7 +117,7 @@ export default function App() {
             const id = 'N' + numberToLetters(nextId++);
             const label = 'Species ' + String(nextId - 1);
             const color = getRandomColor();
-            addNode(id, label, color);
+            addNode(id, label, color, 'protein');
           }}
           style={{
             position: 'fixed', 

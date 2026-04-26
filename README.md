@@ -140,7 +140,18 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - Z index saved. So as you click, all Z-indices for edges come up
 - When adding multiple nodes, if a node is deleted, roll your index back by one so you get a new node that was the same color as the one you deleted!
 - Allow back and forth with reactions! Make them reversible if desired.
-    - See https://reactflow.dev/examples/nodes/easy-connect for details
+    - See https://reactflow.dev/examples/nodes/easy-connect for details\
+
+- Different types / names
+    - Protein, Enzyme / Catalyst
+    - Ligand, Substrate / Metabolite
+    - Complex
+    - DNA, RNA, DNA-Binding Protein, etc.
+
+
+### User stories!
+- Come up with some user stories! 
+- Who are the people you want to use this app? What would they use it for?
 
 ### Simulation
 - After simulating, change width and color of reaction networks
@@ -208,6 +219,8 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - Edges have arrows on them denoting direction
 - Can change where edge ends at (look at reconnectable attr https://reactflow.dev/api-reference/types/edge)
 - Copy and paste edges
+
+- When changing edge name, click anywhere on that gray box (not just directly over text) to edit
  
 
 ### Decoration

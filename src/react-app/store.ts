@@ -22,6 +22,7 @@ type species = {
   label: string;
   initial: string;
   color: string;
+  type: string; // types: enzyme, molecule, custom, (future: DNA, RNA, DNA-Binding Protein, Complex, etc.)
 }
 
 type reactions = {
@@ -33,8 +34,8 @@ type reactions = {
 }
 
 const initialSpecies: species[] = [
-  { id: 'Na', label: 'Click to edit', initial: '', color: '#90f1ef' },
-  { id: 'Nb', label: 'Species 2', initial: '0', color: '#ffd6e0' },
+  { id: 'Na', label: 'Click to edit', initial: '', color: '#90f1ef', type: 'molecule' },
+  { id: 'Nb', label: 'Species 2', initial: '0', color: '#ffd6e0', type: 'protein' },
 ];
 
 const initialReactions: reactions[] = [
@@ -42,8 +43,8 @@ const initialReactions: reactions[] = [
 ];
 
 const initialNodes: AppNode[] = [
-  { id: 'Na', position: { x: 0, y: -0 }, data: { label: 'Click to edit', color: '#90f1ef', initial: '' }, type: 'protein'},
-  { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', color: '#ffd6e0', initial: '' }, type: 'protein'},
+  { id: 'Na', position: { x: 0, y: -0 }, data: { label: 'Click to edit', color: '#90f1ef', initial: '', speciesType: 'molecule' }, type: 'protein'},
+  { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', color: '#ffd6e0', initial: '', speciesType: 'protein' }, type: 'protein'},
 ];
 
 const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'Change me!', rate_law: '(\\objNa{\\text{Na}})\\cdot0.1'}, }];
@@ -93,12 +94,17 @@ type AppState = {
 
 
 
+
+
 const useStore = create<AppState>((set, get) => ({
+
+    // Add Initial Variables
     species: initialSpecies,
     reactions: initialReactions,
 
     visualNodes: initialNodes,
     visualEdges: initialEdges,
+
 
     // Default ReactFlow functions to update visualNode and visualEdge attributes
     onNodesChange: (changes) => {
@@ -114,18 +120,19 @@ const useStore = create<AppState>((set, get) => ({
     },
 
     setNodes: (nodes) => set({ visualNodes: nodes }),
+
     setEdges: (edges) => set({ visualEdges: edges }),
 
 
     // Function to add a new Node to both visualNodes AND to species!
-    addNode: (id, label, color) => set((store) => ({
-        species: [...store.species, { id: id, label: label, initial: '', color: color }],
+    addNode: (id, label, color, speciesType) => set((store) => ({
+        species: [...store.species, { id: id, label: label, initial: '', color: color, speciesType: speciesType }],
 
         visualNodes: [...store.visualNodes, 
         {
           id: id, 
           position: { x: Math.random() * 300, y: Math.random() * 300 }, 
-          data: { label: label, color: color, initial: ''}, 
+          data: { label: label, color: color, initial: '', speciesType: speciesType }, 
           type: 'protein',
         }
       ],
@@ -153,7 +160,7 @@ const useStore = create<AppState>((set, get) => ({
               height: 20
              },
             data: { 
-              label: 't2', 
+              label: 'reaction', 
               rate_law: defRateLaw,
             },
           },
