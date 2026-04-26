@@ -2,6 +2,7 @@
 import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
 import { ChangeEvent } from 'react';
 import './index.css';
+import './nodeStyles.css'
 import useStore from './store';
 
 type ProteinNodeType = Node<{ 
@@ -17,6 +18,16 @@ const DEFAULT_HANDLE_STYLE = {
   width: '8px',
   height: '8px',
   background: 'black',
+};
+
+const DIAMOND_STYLE = {
+    width: '8px',
+    height: '8px',
+    background: 'dodgerblue',
+    borderRadius: '0px',
+    transform: 'rotate(45deg) translate(-8px, 0px)',
+    // transform: 'rotate(45deg)',
+    transformOrigin: 'center center',
 };
 
 
@@ -36,7 +47,9 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
     const borderSizeOp = selected ? '2px' : '0px';
     const selectPadding = selected ? '12px 9px' : '12px 12px';
 
-    const borderRadius = data.speciesType === 'molecule' ? '24px' : '0px';
+    const borderRadius = data.speciesType === 'molecule' ? '24px' : '0px'; // Previous was 4px
+
+    const handleColor = '#e63946';
     
 
 
@@ -94,17 +107,29 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
         <Handle 
             type="target" 
             position={Position.Left} 
-            style={{ 
-                ...DEFAULT_HANDLE_STYLE,
-                pointerEvents: 'all',
-            }} 
+            // style={{ 
+            //     ...DIAMOND_STYLE,
+            //     pointerEvents: 'all',
+            // }} 
+            style={{
+                background: 'none',
+                width: '1.5em',
+                height: '1.5em',
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: 'flex',
+                border: 'none',
+            }}
+            className="handle"
+
         >
-            <div
-                className="handle-hitbox"
-                style={{
-                    transform: 'translate(-35%, -35%)',
-                }}
-            />
+            {/* Diamond Shape */}
+            
+            {/* <div className="handle-diamond" style={{borderColor: handleColor, background: 'white'}} /> */}
+            <div className="handle-circle" style={{borderColor: handleColor, background: 'white'}} />
+            {/* <div className="handle-triangle" /> */}
+            {/* <TriangleWithBorder sColor={handleColor} bColor={'white'} /> */}
+
         </Handle>
 
 
@@ -127,5 +152,21 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
     </div>
 
 
+    );
+}
+
+
+
+function TriangleWithBorder({sColor, bColor}) {
+    return (
+        <svg width="44" height="44" viewBox="0 0 44 44">
+            <polygon
+                points="22,4 4,38 40,38"
+                fill={bColor}
+                stroke={sColor}
+                strokeWidth="4"
+                strokeLinejoin="round"
+            />
+        </svg>
     );
 }
