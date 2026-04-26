@@ -165,6 +165,33 @@ button:focus-visible {
 	padding: 20px 20px;
 }
 
+.drawer-name-input {
+
+	font-weight: inherit;
+	font-family: inherit;
+
+	padding: 0em 0.4em;
+	font-size: 1em;
+
+	margin: 0px 0px;
+	border: 2.5px transparent solid;
+	outline: 0px;
+	border-color: rgba(0, 0, 0, 0);
+	border-radius: 8px;
+
+	background-color: rgba(0, 0, 0, 0);
+
+	field-sizing: content;
+    min-width: 30px;
+
+	transition: border-color 0.2s;
+}
+
+.drawer-name-input:focus {
+	/* border-color: #747bff; */
+	border-color: rgba(0, 0, 0, 0.1);
+}
+
 .drawer-reaction-diagram{
 	/* background-color: rgba(0, 0, 0, 0.1); */
 	padding: 0px 0px;
