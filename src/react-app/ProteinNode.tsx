@@ -109,18 +109,25 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
 
         >
 
-            {/* Depending on species type, render different handle shapes */}
-            {data.speciesType === 'molecule' ? 
-                <div className="handle-circle" style={{borderColor: handleColor, background: 'white'}} />
-            : data.speciesType === 'protein' ?
-                <div className="handle-diamond" style={{borderColor: handleColor, background: 'white'}} />
-            :
-                <TriangleWithBorder sColor={handleColor} bColor={'white'} />
+        {/* Depending on species type, render different handle shapes */}
+        {data.speciesType === 'molecule' ? 
+            <div className="handle-circle" style={{borderColor: handleColor, background: 'white'}} />
+        : data.speciesType === 'protein' ?
+            <div className="handle-diamond" style={{borderColor: handleColor, background: 'white'}} />
+        :
+            <TriangleWithBorder sColor={handleColor} bColor={'white'} />
         }
             
             {/* <div className="handle-diamond" style={{borderColor: handleColor, background: 'white'}} /> */}
             {/* <div className="handle-circle" style={{borderColor: handleColor, background: 'white'}} /> */}
             {/* <TriangleWithBorder sColor={handleColor} bColor={'white'} /> */}
+
+            <div 
+                className="handle-hitbox" 
+                style={{
+                    transform: 'translate(-15%, -35%)',
+                }}
+            />
 
         </Handle>
 
@@ -140,21 +147,25 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
             }}
         > 
 
+            
 
-             {data.speciesType === 'molecule' ? 
-                <div className="handle-circle" style={{borderColor: 'rgba(255, 255, 255, 1)', background: handleColor}} />
-            : data.speciesType === 'protein' ?
-                <div className="handle-diamond" style={{borderColor: 'rgba(255, 255, 255, 1)', background: handleColor}} />
-            :
-                <TriangleWithBorder sColor={'rgba(255, 255, 255, 1)'} bColor={handleColor} />
+
+        {data.speciesType === 'molecule' ? 
+            <div className="handle-circle" style={{borderColor: 'rgba(255, 255, 255, 1)', background: handleColor}} />
+        : data.speciesType === 'protein' ?
+            <div className="handle-diamond" style={{borderColor: 'rgba(255, 255, 255, 1)', background: handleColor}} />
+        :
+            <TriangleWithBorder sColor={'rgba(255, 255, 255, 1)'} bColor={handleColor} />
         }
 
-            {/* <div 
+
+            <div 
                 className="handle-hitbox" 
                 style={{
                     transform: 'translate(-15%, -35%)',
                 }}
-            /> */}
+            />
+            
         </Handle>
 
     </div>

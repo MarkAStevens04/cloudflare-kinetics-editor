@@ -169,20 +169,37 @@ export default function App() {
         </ReactFlow>
         </>
 
-        <button 
+
+        {/* Drawer on left to add species */}
+        <div className="action-container"
+        > 
+
+          <button 
+
           onClick={() => {
             const id = 'N' + numberToLetters(nextId++);
             const label = 'Species ' + String(nextId - 1);
             const color = getRandomColor();
             addNode(id, label, color, 'protein');
           }}
+
           style={{
-            position: 'fixed', 
-            top: 10, 
-            left: 10
-          }}>
+            width: '80%',
+            height: '2em',
+            backgroundColor: '#ff0000',
+          }}
+
+          >
             Add New Node
           </button>
+
+          
+
+
+        </div>
+
+
+        
 
 
         <FeedbackDrawer />

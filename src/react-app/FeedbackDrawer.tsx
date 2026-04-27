@@ -73,7 +73,7 @@ export default function FeedbackDrawer() {
 
     // Animation styling we'll use on opening and closing of the drawer
     const [springs, api] = useSpring(() => ({
-        from: {height: 150, width: 34, bottom: 400},
+        from: {height: 150, width: 34, bottom: 200},
     }));
 
 
@@ -82,8 +82,8 @@ export default function FeedbackDrawer() {
 
         // Do animation
         api.start({
-            from: {height: 150, width: 34, bottom: 400},
-            to: {height: 350, width: 300, bottom: 300},
+            from: {height: 150, width: 34, bottom: 200},
+            to: {height: 350, width: 300, bottom: 100},
             reverse: open,
         });
 
