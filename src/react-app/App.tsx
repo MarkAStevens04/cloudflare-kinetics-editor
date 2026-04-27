@@ -43,13 +43,70 @@ const edgeTypes = {
 
 
 // Initialize set of possible colors for species nodes
+// const NODE_COLORS = [
+//   '#90f1ef', // Soft Cyan
+//   '#ffd6e0', // Petal Frost
+//   '#ffef9f', // Vanilla Custard
+//   '#c1fba4', // Light Green
+//   '#7bf1a8', // Light Green
+// ]
+
+// muted vibes
+// const NODE_COLORS = [
+//   '#d8e2dc',
+//   '#ffe5d9', 
+//   '#ffcad4',
+// ]
+
+// const NODE_COLORS = [
+//   '#c1121f',
+//   '#fdf0d5', 
+//   '#003049', 
+//   '#669bbc', 
+//   '#780000', 
+// ]
+
+// const NODE_COLORS = [
+//   '#ef476f', 
+//   '#ffd166', 
+//   '#06d6a0', 
+//   '#118ab2',
+// ]
+
+// const NODE_COLORS = [
+//   '#ffbe0b',
+//   '#fb5607',
+//   '#ff006e',
+//   '#8338ec',
+//   '#3a86ff',
+// ]
+
+
+// const NODE_COLORS = [
+//   '#edede9',
+//   '#d6ccc2',
+//   '#f5ebe0',
+//   '#e3d5ca',
+//   '#d5bdaf',
+// ]
+
+
+// const NODE_COLORS = [
+//   '#335C67',
+//   '#FFF3B0',
+//   '#E09F3E',
+//   '#9E2A2B',
+//   '#540B0E',
+// ]
+
+
 const NODE_COLORS = [
-  '#90f1ef', // Soft Cyan
-  '#ffd6e0', // Petal Frost
-  '#ffef9f', // Vanilla Custard
-  '#c1fba4', // Light Green
-  '#7bf1a8', // Light Green
+  '#4ECDC4',
+  '#FF6B6B',
+  '#FFE66D',
 ]
+
+
 
 // Where we are in the color cycle
 let colIdx= 1;

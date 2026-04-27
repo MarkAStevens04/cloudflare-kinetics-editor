@@ -101,6 +101,11 @@ export default function RxnEdge({
                     position: 'absolute',
                     transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
                     pointerEvents: 'all',
+                    padding: '0.25em',
+                    fontSize: '0.75em',
+                    fontWeight: '400',
+                    backgroundColor: '#ccc',
+
                 }}
                 className="nodrag nopan"
                 > {data?.label ?? 'Default Label'} </button>

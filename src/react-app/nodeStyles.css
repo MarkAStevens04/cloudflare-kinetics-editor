@@ -13,14 +13,6 @@
     border: 2px solid;
 }
 
-.handle-triangle {
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 15px solid red;
-}
-
 .handle-hitbox {
 	height: 30px;
     width: 20px;

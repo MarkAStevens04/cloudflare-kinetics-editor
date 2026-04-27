@@ -34,8 +34,8 @@ type reactions = {
 }
 
 const initialSpecies: species[] = [
-  { id: 'Na', label: 'Click to edit', initial: '', color: '#90f1ef', type: 'molecule' },
-  { id: 'Nb', label: 'Species 2', initial: '0', color: '#ffd6e0', type: 'protein' },
+  { id: 'Na', label: 'Click to edit', initial: '', color: '#4ECDC4', type: 'molecule' },
+  { id: 'Nb', label: 'Species 2', initial: '0', color: '#4ECDC4', type: 'molecule' },
 ];
 
 const initialReactions: reactions[] = [
@@ -43,8 +43,8 @@ const initialReactions: reactions[] = [
 ];
 
 const initialNodes: AppNode[] = [
-  { id: 'Na', position: { x: 0, y: -0 }, data: { label: 'Click to edit', color: '#90f1ef', initial: '', speciesType: 'molecule' }, type: 'protein'},
-  { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', color: '#ffd6e0', initial: '', speciesType: 'protein' }, type: 'protein'},
+  { id: 'Na', position: { x: 0, y: -0 }, data: { label: 'Click to edit', color: '#4ECDC4', initial: '', speciesType: 'molecule' }, type: 'protein'},
+  { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', color: '#4ECDC4', initial: '', speciesType: 'molecule' }, type: 'protein'},
 ];
 
 const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'Change me!', rate_law: '(\\objNa{\\text{Na}})\\cdot0.1'}, }];

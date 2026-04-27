@@ -14,22 +14,6 @@ type ProteinNodeType = Node<{
 
 export type AppNode = ProteinNodeType;
 
-const DEFAULT_HANDLE_STYLE = {
-  width: '8px',
-  height: '8px',
-  background: 'black',
-};
-
-const DIAMOND_STYLE = {
-    width: '8px',
-    height: '8px',
-    background: 'dodgerblue',
-    borderRadius: '0px',
-    transform: 'rotate(45deg) translate(-8px, 0px)',
-    // transform: 'rotate(45deg)',
-    transformOrigin: 'center center',
-};
-
 
 
 export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNodeType>) {
@@ -49,7 +33,8 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
 
     const borderRadius = data.speciesType === 'molecule' ? '24px' : '0px'; // Previous was 4px
 
-    const handleColor = '#e63946';
+    // const handleColor = '#e63946';
+    const handleColor = data.color;
     
 
 
@@ -123,11 +108,18 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
             className="handle"
 
         >
-            {/* Diamond Shape */}
+
+            {/* Depending on species type, render different handle shapes */}
+            {data.speciesType === 'molecule' ? 
+                <div className="handle-circle" style={{borderColor: handleColor, background: 'white'}} />
+            : data.speciesType === 'protein' ?
+                <div className="handle-diamond" style={{borderColor: handleColor, background: 'white'}} />
+            :
+                <TriangleWithBorder sColor={handleColor} bColor={'white'} />
+        }
             
             {/* <div className="handle-diamond" style={{borderColor: handleColor, background: 'white'}} /> */}
-            <div className="handle-circle" style={{borderColor: handleColor, background: 'white'}} />
-            {/* <div className="handle-triangle" /> */}
+            {/* <div className="handle-circle" style={{borderColor: handleColor, background: 'white'}} /> */}
             {/* <TriangleWithBorder sColor={handleColor} bColor={'white'} /> */}
 
         </Handle>
@@ -138,15 +130,31 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
             type="source" 
             position={Position.Right} 
             style={{
-             ...DEFAULT_HANDLE_STYLE
-             }}
+                background: 'none',
+                width: '1.5em',
+                height: '1.5em',
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: 'flex',
+                border: 'none',
+            }}
         > 
-            <div 
+
+
+             {data.speciesType === 'molecule' ? 
+                <div className="handle-circle" style={{borderColor: 'rgba(255, 255, 255, 1)', background: handleColor}} />
+            : data.speciesType === 'protein' ?
+                <div className="handle-diamond" style={{borderColor: 'rgba(255, 255, 255, 1)', background: handleColor}} />
+            :
+                <TriangleWithBorder sColor={'rgba(255, 255, 255, 1)'} bColor={handleColor} />
+        }
+
+            {/* <div 
                 className="handle-hitbox" 
                 style={{
                     transform: 'translate(-15%, -35%)',
                 }}
-            />
+            /> */}
         </Handle>
 
     </div>
@@ -164,7 +172,7 @@ function TriangleWithBorder({sColor, bColor}) {
                 points="22,4 4,38 40,38"
                 fill={bColor}
                 stroke={sColor}
-                strokeWidth="4"
+                strokeWidth="6"
                 strokeLinejoin="round"
             />
         </svg>
