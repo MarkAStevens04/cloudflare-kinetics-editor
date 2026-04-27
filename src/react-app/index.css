@@ -88,7 +88,7 @@ button:focus-visible {
 
 
 
-.action-button {
+.simulate-button {
 	font-size: 36px;
 	font-weight: 900;
 	font-family: Helios_Extended;
@@ -114,7 +114,7 @@ button:focus-visible {
 	cursor: pointer;
 	transition: border-color 0.25s, background-size 0.4s;
 }
-.action-button:hover {
+.simulate-button:hover {
 	border-color: #fff;
 	background-size: 300%
 }
@@ -401,8 +401,8 @@ button:focus-visible {
 	top: 10%;
 	left: 10px;;
 	width: 10vh;
-	height: 30vh;
-	background: white;
+	/* height: 30vh; */
+	background: rgba(255, 255, 255, 0.8);
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.12);
 
 	border-radius: 8px;
@@ -412,9 +412,35 @@ button:focus-visible {
 	border-color: rgba(0, 0, 0, 0.2);
 
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
+	align-items: center;
 }
 
+
+.action-button {
+	width: 80%;
+	background-color: rgba(0, 0, 0, 0.2);
+	padding: 2px 0px 5px 0px;
+
+	margin: 10px 0px;
+
+	font-size: 0.8em;
+	font-weight: 100;
+
+	line-height: 15px;
+	/* position: relative; */
+	/* display: absolute; */
+	
+	/* justify-content: center; */
+}
+
+.action-button-strong-text {
+	font-weight: 900;
+	font-size: 1.2em;
+	padding: 0px;
+	margin: 0px;
+}
 
 math-field {
 	--smart-fence-color: red;

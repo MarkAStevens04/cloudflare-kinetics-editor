@@ -84,7 +84,7 @@ function SimulationDrawer() {
             onClick={handleClick}
         >
 
-            <button onClick={handleSimulate} className="action-button" >SIMULATE</button>
+            <button onClick={handleSimulate} className="simulate-button" >SIMULATE</button>
         
             <br />
             <br />

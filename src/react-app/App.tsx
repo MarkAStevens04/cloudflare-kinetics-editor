@@ -102,8 +102,8 @@ const edgeTypes = {
 
 const NODE_COLORS = [
   '#4ECDC4',
-  '#FF6B6B',
   '#FFE66D',
+  '#FF6B6B',
 ]
 
 
@@ -175,22 +175,39 @@ export default function App() {
         > 
 
           <button 
+            className="action-button"
 
-          onClick={() => {
-            const id = 'N' + numberToLetters(nextId++);
-            const label = 'Species ' + String(nextId - 1);
-            const color = getRandomColor();
-            addNode(id, label, color, 'protein');
-          }}
+            onClick={() => {
+              const id = 'N' + numberToLetters(nextId++);
+              const label = 'Species ' + String(nextId - 1);
+              const color = getRandomColor();
+              addNode(id, label, color, 'protein');
+            }}
 
-          style={{
-            width: '80%',
-            height: '2em',
-            backgroundColor: '#ff0000',
-          }}
+            style={{
+              backgroundColor: NODE_COLORS[0]
+            }}
+          >
+            Add <div className="action-button-strong-text">Molecule</div>
+          </button>
+
+
+          <button 
+            className="action-button"
+
+            onClick={() => {
+              const id = 'N' + numberToLetters(nextId++);
+              const label = 'Species ' + String(nextId - 1);
+              const color = getRandomColor();
+              addNode(id, label, color, 'protein');
+            }}
+
+            style={{
+              backgroundColor: NODE_COLORS[1]
+            }}
 
           >
-            Add New Node
+            Add <div className="action-button-strong-text">Enzyme</div>
           </button>
 
           
