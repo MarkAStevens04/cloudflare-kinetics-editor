@@ -180,8 +180,8 @@ export default function App() {
             onClick={() => {
               const id = 'N' + numberToLetters(nextId++);
               const label = 'Species ' + String(nextId - 1);
-              const color = getRandomColor();
-              addNode(id, label, color, 'protein');
+              const color = NODE_COLORS[0];
+              addNode(id, label, color, 'molecule');
             }}
 
             style={{
@@ -198,7 +198,7 @@ export default function App() {
             onClick={() => {
               const id = 'N' + numberToLetters(nextId++);
               const label = 'Species ' + String(nextId - 1);
-              const color = getRandomColor();
+              const color = NODE_COLORS[1];
               addNode(id, label, color, 'protein');
             }}
 

@@ -406,7 +406,7 @@ button:focus-visible {
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.12);
 
 	border-radius: 8px;
-	padding: 0px 0px;
+	padding: 6px 0px;
 
 	border: 5px transparent solid;
 	border-color: rgba(0, 0, 0, 0.2);
@@ -419,27 +419,28 @@ button:focus-visible {
 
 
 .action-button {
-	width: 80%;
+	width: 85%;
 	background-color: rgba(0, 0, 0, 0.2);
 	padding: 2px 0px 5px 0px;
 
-	margin: 10px 0px;
+	margin: 5% 0%;
 
 	font-size: 0.8em;
 	font-weight: 100;
 
 	line-height: 15px;
-	/* position: relative; */
-	/* display: absolute; */
-	
-	/* justify-content: center; */
+
+	border: 3px solid transparent;
+	transition: border-color 0.25s;
+}
+
+.action-button:hover {
+	border-color: '#646cff';
 }
 
 .action-button-strong-text {
-	font-weight: 900;
+	font-weight: 800;
 	font-size: 1.2em;
-	padding: 0px;
-	margin: 0px;
 }
 
 math-field {
