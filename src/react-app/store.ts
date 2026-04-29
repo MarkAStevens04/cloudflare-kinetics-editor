@@ -32,7 +32,7 @@ type reactions = {
   sources: string[];
   targets: string[];
   rate_law: string;
-  
+
 }
 
 const initialSpecies: species[] = [
@@ -192,23 +192,37 @@ const useStore = create<AppState>((set, get) => ({
 
     // Handle connections which may not be to another node (when connecting from node to edge)
     onConnectEnd: (event, connectionState) => {
+      // connectionState has attributes: isValid, from, fromHandle, fromPosition, fromNode, to, toHandle, toPosition, toNode, pointer
 
       // When a connection is dropped on the pane it's not valid
-      if (!connectionState.isValid) {
-        if (get().edgeHovering) {
-          const targetRxnID = get().edgeHoverID;
-          const nodeToAdd = connectionState.fromNode.id
+      if (!connectionState.isValid && get().edgeHovering) {
+        const targetRxnID = get().edgeHoverID;
+        const nodeToAdd = connectionState.fromNode.id
 
-          const targetRxn = get().reactions.find(item => item.id === targetRxnID);
+        const targetRxn = get().reactions.find(item => item.id === targetRxnID);
 
+        // ToDo: Have some interaction when this returns false. Like make the edge red or something to let the user node this couldn't be added as a source.
+
+        // Handles differently depending on whether our connection originated from a source handle or a target handle...
+        if (connectionState.fromHandle.type === 'source') {
           addSource(nodeToAdd, targetRxn);
+          set({ debugState: 'connecting to edge! sources: ' + targetRxn.sources});
 
-          set({ debugState: 'connecting to edge! ' + targetRxn.sources});
+        } else if (connectionState.fromHandle.type === 'target') {
+          addTarget(nodeToAdd, targetRxn);
+          set({ debugState: 'connecting to edge! targets: ' + targetRxn.targets});
+
         } else {
-          set({ debugState: 'new position'});
+          // Default to adding it as a source...
+          // POSSIBLE ERROR! This is failing gracefully, but really we should be doing something if our target is an unknown handle type.
+          addSource(nodeToAdd, targetRxn);
+          console.log('ERROR!! Unknown Handle type, whether source or sink.');
+          console.log('When connecting from a species to a reaction edge, we gotta figure out whether we are starting from a source handle or a target handle. Right now, we dont know which it is.');
+          console.log(connectionState.fromHandle.type);
+          set({ debugState: 'unknown handle type...' + connectionState.fromHandle.type});
+
         }
-        // set({ debugState: 'new position'});
-        
+
       } else {
         set({ debugState: 'old position'});
       }
@@ -372,11 +386,28 @@ function addSource(source: string, reaction: reactions) {
 
   // Check for duplicate sources
   if (reaction.sources.includes(source)) {
-    return False;
+    return false;
   }
 
   // Add source node to the reaction's list of sources
   reaction.sources = [...reaction.sources, source];
+
+  // return a success
+  return true;
+}
+
+
+// Return true on success, false on failure
+// Adds a target node (assuming valid ID in target) to the reaction (array)
+function addTarget(target: string, reaction: reactions) {
+
+  // Check for duplicate sources
+  if (reaction.targets.includes(target)) {
+    return false;
+  }
+
+  // Add source node to the reaction's list of sources
+  reaction.targets = [...reaction.targets, target];
 
   // return a success
   return true;

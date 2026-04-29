@@ -286,6 +286,14 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - Weird labels on connections
 - Arrows shouldn't always output on right, should be able to go from either direction
 - HIGHLIGHT WHEN YOU HAVE AN EMPTY RATE LAW!!! When you click simulate, run quick check to make sure rate laws are all filled.
+- DELETING NODES AND EDGES DOESN'T REMOVE THEM FROM THE INTERNAL REPRESENTATION!!!!! Very strange. 
+    - CAN ADD DUPLICATE REACTIONS TO INTERNAL REPRESENTATION!! Should NOT be the case. Maybe need separate function to add and remove nodes and edges.
+
+
+### TODO
+- Add little hook inside reaction edges that run on adding a new source. Depending on type of reaction, handle does different things.
+    - Will need to also handle removing nodes.
+- 
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
