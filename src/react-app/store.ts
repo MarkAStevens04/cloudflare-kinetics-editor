@@ -32,6 +32,7 @@ type reactions = {
   sources: string[];
   targets: string[];
   rate_law: string;
+  
 }
 
 const initialSpecies: species[] = [
@@ -200,7 +201,7 @@ const useStore = create<AppState>((set, get) => ({
 
           const targetRxn = get().reactions.find(item => item.id === targetRxnID);
 
-          targetRxn.sources = [...targetRxn.sources, nodeToAdd];
+          addSource(nodeToAdd, targetRxn);
 
           set({ debugState: 'connecting to edge! ' + targetRxn.sources});
         } else {
@@ -363,4 +364,20 @@ function cleanAsciiConversion(ascii: string) {
   console.log('Before cleaning: ', ascii);
 
   return ascii.replace(/"/g, '').replace(/\^/g, '**');
+}
+
+// Return true on success, false on failure
+// Adds a source node (assuming valid ID in source) to the reaction (array)
+function addSource(source: string, reaction: reactions) {
+
+  // Check for duplicate sources
+  if (reaction.sources.includes(source)) {
+    return False;
+  }
+
+  // Add source node to the reaction's list of sources
+  reaction.sources = [...reaction.sources, source];
+
+  // return a success
+  return true;
 }
