@@ -26,23 +26,26 @@ Use this section for review hints, explanations or discussion points/todos.
 How to contribute: https://github.com/MarkAStevens04/cloudflare-kinetics-editor/blob/main/CONTRIBUTING.md
 
 
-## 📸 Screenshots 
+## 🤗 Message to Feedback Givers
 
-Screenshots or a screen recording of the visual changes associated with this PR.
+Users took the time to tell us what could be better, and this is our chance to close the loop.
 
-(Feel free to delete this section for non-visual changes.)
+When this PR is merged, the message below will be automatically sent to everyone who contributed to the GitHub Issue(s) addressed by this PR.
 
+Please write a short, friendly note that explains:
+- What you implemented
+- Any important details they should know
+- How their feedback helped shape the update
 
-## 🚀 Ready? 
+Keep it human, specific, and appreciative ✨
 
-Did you do any of the following? If not, no worries, but if you can
-it's really helpful.
+### Message that will be sent:
 
-- [ ] Documented what's new
-- [ ] Added in-code documentation (wherever needed)
-- [ ] Created a demo
+Thank you SO MUCH for sharing your feedback with us!! Your suggestion helped guide our project, and we've just shipped an update to address it. Here's a note the developer left for you:
 
+> YOUR MESSAGE HERE
 
+If there's something still missing, let us know HERE, and we'll get right on it!
 
 ## 📜 BioBuilder Contributor License Agreement
 

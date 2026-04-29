@@ -104,6 +104,8 @@ const NODE_COLORS = [
   '#4ECDC4',
   '#FFE66D',
   '#FF6B6B',
+  '#3a86ff',
+
 ]
 
 
@@ -132,12 +134,13 @@ const selector = (state: ReturnType<typeof useStore.getState>) => ({
   onNodesChange: state.onNodesChange,
   onEdgesChange: state.onEdgesChange,
   onConnect: state.onConnect,
+  onConnectEnd: state.onConnectEnd,
 });
 
 
 export default function App() {
 
-  const { visualNodes, visualEdges, onNodesChange, onEdgesChange, onConnect } = useStore(
+  const { visualNodes, visualEdges, onNodesChange, onEdgesChange, onConnect, onConnectEnd } = useStore(
     useShallow(selector),
   );
 
@@ -148,6 +151,12 @@ export default function App() {
 
   // Function to add a Node (uses Zustand store)
   const addNode = useStore((store) => store.addNode);
+  
+  // Debug labels
+  const updateLabel = useStore((store) => store.setDebugState);
+  const debugLabel = useStore((store) => store.debugState);
+  const updateLabel2 = useStore((store) => store.setDebugState2);
+  const debugLabel2 = useStore((store) => store.debugState2);
 
 
   return (
@@ -159,6 +168,7 @@ export default function App() {
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
+            onConnectEnd={onConnectEnd}
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
             // connectionMode={ConnectionMode.Loose}
@@ -208,6 +218,39 @@ export default function App() {
 
           >
             Add <div className="action-button-strong-text">Enzyme</div>
+          </button>
+
+
+
+
+          <button 
+            className="action-button"
+
+            onClick={
+              () => updateLabel('updated!')
+            }
+
+            style={{
+              backgroundColor: NODE_COLORS[2]
+            }}
+
+          >
+            Add <div className="action-button-strong-text">{debugLabel}</div>
+          </button>
+
+          <button 
+            className="action-button"
+
+            onClick={
+              () => updateLabel2('updated!')
+            }
+
+            style={{
+              backgroundColor: NODE_COLORS[3]
+            }}
+
+          >
+            Add <div className="action-button-strong-text">{debugLabel2}</div>
           </button>
 
           

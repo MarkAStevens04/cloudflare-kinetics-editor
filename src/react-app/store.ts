@@ -8,6 +8,7 @@ import {
   type OnNodesChange,
   type OnEdgesChange,
   type OnConnect,
+  type OnConnectEnd,
   
 } from '@xyflow/react';
 
@@ -53,6 +54,11 @@ const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , mar
 
 type AppState = {
 
+  debugState: string;
+  setDebugState: (newState: string) => void;
+  debugState2: string;
+  setDebugState2: (newState: string) => void;
+
   species: species[];
   reactions: reactions[];
 
@@ -62,6 +68,8 @@ type AppState = {
   onNodesChange: OnNodesChange<AppNode>;
   onEdgesChange: OnEdgesChange<AppEdge>;
   onConnect: OnConnect;
+  onConnectEnd: OnConnectEnd;
+
   setNodes: (nodes: AppNode[]) => void;
   setEdges: (edges: AppEdge[]) => void;
 
@@ -88,7 +96,6 @@ type AppState = {
 
   feedbackOpen: boolean;
   setFeedbackOpen: (open: boolean) => void;
-  
 };
 
 
@@ -99,6 +106,11 @@ type AppState = {
 const useStore = create<AppState>((set, get) => ({
 
     // Add Initial Variables
+    debugState: 'nothing',
+    setDebugState: (newState) => set({ debugState: newState }),
+    debugState2: 'nothing',
+    setDebugState2: (newState) => set({ debugState2: newState }),
+
     species: initialSpecies,
     reactions: initialReactions,
 
@@ -169,6 +181,21 @@ const useStore = create<AppState>((set, get) => ({
 
       }));
     },
+
+
+    // Check if we're connecting with node or edge
+    onConnectEnd: (event, connectionState) => {
+
+      // When a connection is dropped on the pane it's not valid
+      if (!connectionState.isValid) {
+        set({ debugState: 'new position'});
+      } else {
+        set({ debugState: 'old position'});
+      }
+    },
+
+
+
 
     // Track which edge is currently selected (for opening the drawer)
     selectedEdge: null,
@@ -298,6 +325,7 @@ const useStore = create<AppState>((set, get) => ({
     // Open / close feedback form drawer
     feedbackOpen: false,
     setFeedbackOpen: (open) => set({ feedbackOpen: open }),
+
 
 
 }));

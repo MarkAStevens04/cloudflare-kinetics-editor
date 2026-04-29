@@ -402,7 +402,7 @@ button:focus-visible {
 	left: 10px;;
 	width: 10vh;
 	/* height: 30vh; */
-	background: rgba(255, 255, 255, 0.8);
+	background: rgba(255, 255, 255, 0.6);
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.12);
 
 	border-radius: 8px;
@@ -421,6 +421,7 @@ button:focus-visible {
 .action-button {
 	width: 85%;
 	background-color: rgba(0, 0, 0, 0.2);
+	
 	padding: 2px 0px 5px 0px;
 
 	margin: 5% 0%;
@@ -429,6 +430,8 @@ button:focus-visible {
 	font-weight: 100;
 
 	line-height: 15px;
+
+	opacity: 0.9;
 
 	border: 3px solid transparent;
 	transition: border-color 0.25s;
