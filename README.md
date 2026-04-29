@@ -293,6 +293,9 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 ### TODO
 - Add little hook inside reaction edges that run on adding a new source. Depending on type of reaction, handle does different things.
     - Will need to also handle removing nodes.
+- Deleting a node on the other end of a reaction SHOULD allow the molecule to just degrade over time!
+    - Deleting a node on the front end of a reaction SHOULD allow the molecule to just be generated!
+    - Only when both source and target nodes are empty should we delete the reaction
 - 
 
 # React + Vite + Hono + Cloudflare Workers

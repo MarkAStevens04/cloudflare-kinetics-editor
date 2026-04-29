@@ -470,11 +470,20 @@ function predictRxnType(reaction: reactions, species: species[]) {
   // ===========
 
   // Logic to guess reaction type!
-  if (((sTypeCounts['molecule'] || 0) === 1) && ((sTypeCounts['enzyme'] || 0) === 1) && ((tTypeCounts['molecule'] || 0) >= 1)) {
+  if (((sTypeCounts['molecule'] || 0) === 1) && ((sTypeCounts['enzyme'] || 0) === 1) && ((tTypeCounts['molecule'] || 0) >= 1) && ((tTypeCounts['enzyme'] || 0) === 0)) {
     // one input + one enzyme -> at least 1 molecule 
     // Classic michaelis-menten
-    return 'michaelis-menten'
+    return 'michaelis_menten';
+  } else if (((sTypeCounts['molecule'] || 0) >= 1) && ((sTypeCounts['enzyme'] || 0) === 0) && ((tTypeCounts['molecule'] || 0) >= 1) && ((tTypeCounts['enzyme'] || 0) === 0)) {
+    // at least 1 molecule -> at least 1 molecule
+    // reversible mass action
+    return 'reversible_mass_action';
+  } else if (((sTypeCounts['molecule'] || 0) === 1) && ((sTypeCounts['enzyme'] || 0) === 1) && ((tTypeCounts['molecule'] || 0) >= 1) && ((tTypeCounts['enzyme'] || 0) === 1)) {
+    // one input + one enzyme -> one enzyme + any number of molecules
+    // Hill function
+    return 'hill_function';
   }
+
 
 
 
@@ -486,3 +495,5 @@ function predictRxnType(reaction: reactions, species: species[]) {
   return 'mass_action';
 
 }
+
+// Options: mass_action, reversible_mass_action, michaelis_menten, reversible_michaelis_menten, hill_function
