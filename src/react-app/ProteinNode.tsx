@@ -112,7 +112,7 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
         {/* Depending on species type, render different handle shapes */}
         {data.speciesType === 'molecule' ? 
             <div className="handle-circle" style={{borderColor: handleColor, background: 'white'}} />
-        : data.speciesType === 'protein' ?
+        : data.speciesType === 'enzyme' ?
             <div className="handle-diamond" style={{borderColor: handleColor, background: 'white'}} />
         :
             <TriangleWithBorder sColor={handleColor} bColor={'white'} />
@@ -152,7 +152,7 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
 
         {data.speciesType === 'molecule' ? 
             <div className="handle-circle" style={{borderColor: 'rgba(255, 255, 255, 1)', background: handleColor}} />
-        : data.speciesType === 'protein' ?
+        : data.speciesType === 'enzyme' ?
             <div className="handle-diamond" style={{borderColor: 'rgba(255, 255, 255, 1)', background: handleColor}} />
         :
             <TriangleWithBorder sColor={'rgba(255, 255, 255, 1)'} bColor={handleColor} />

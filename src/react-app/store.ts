@@ -23,7 +23,7 @@ type species = {
   label: string;
   initial: string;
   color: string;
-  type: string; // types: enzyme, molecule, custom, (future: DNA, RNA, DNA-Binding Protein, Complex, etc.)
+  speciesType: string; // types: enzyme, molecule, custom, (future: DNA, RNA, DNA-Binding Protein, Complex, etc.)
 }
 
 type reactions = {
@@ -32,16 +32,17 @@ type reactions = {
   sources: string[];
   targets: string[];
   rate_law: string;
+  rate_type: string; // types: mass_action
 
 }
 
 const initialSpecies: species[] = [
-  { id: 'Na', label: 'Click to edit', initial: '', color: '#4ECDC4', type: 'molecule' },
-  { id: 'Nb', label: 'Species 2', initial: '0', color: '#4ECDC4', type: 'molecule' },
+  { id: 'Na', label: 'Click to edit', initial: '', color: '#4ECDC4', speciesType: 'molecule' },
+  { id: 'Nb', label: 'Species 2', initial: '0', color: '#4ECDC4', speciesType: 'molecule' },
 ];
 
 const initialReactions: reactions[] = [
-  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1' },
+  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action' },
 ];
 
 const initialNodes: AppNode[] = [
@@ -49,7 +50,7 @@ const initialNodes: AppNode[] = [
   { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', color: '#4ECDC4', initial: '', speciesType: 'molecule' }, type: 'protein'},
 ];
 
-const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'Change me!', rate_law: '(\\objNa{\\text{Na}})\\cdot0.1'}, }];
+const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'Change me!', rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action'}, }];
 
 
 
@@ -164,9 +165,17 @@ const useStore = create<AppState>((set, get) => ({
       // Example LaTeX we want: \objNa{\text{Na}}\cdot\objNb{\text{Nb}}\\cdot0.1
       const defRateLaw = '(\\obj' + params.source + '{\\text{' + params.source + '}})\\cdot0.1';
 
+      const newRxn = { id: `${params.source}_${params.target}`, label: 't2', sources: [params.source], targets: [params.target], rate_law: defRateLaw, rate_type: '' };
+
+      const rateType = predictRxnType(newRxn, get().species);
+
+      newRxn.rate_type = rateType;
+
+      set({ debugState2: 'rate types: ' + rateType});
+
       set((store) => ({
         
-        reactions: [...store.reactions, { id: `${params.source}_${params.target}`, label: 't2', sources: [params.source], targets: [params.target], rate_law: defRateLaw }],
+        reactions: [...store.reactions, newRxn],
 
         visualEdges: addEdge(
           {...params, 
@@ -181,6 +190,7 @@ const useStore = create<AppState>((set, get) => ({
             data: { 
               label: 'reaction', 
               rate_law: defRateLaw,
+              rate_type: rateType,
             },
           },
           store.visualEdges
@@ -203,6 +213,7 @@ const useStore = create<AppState>((set, get) => ({
 
         // ToDo: Have some interaction when this returns false. Like make the edge red or something to let the user node this couldn't be added as a source.
 
+
         // Handles differently depending on whether our connection originated from a source handle or a target handle...
         if (connectionState.fromHandle.type === 'source') {
           addSource(nodeToAdd, targetRxn);
@@ -222,6 +233,10 @@ const useStore = create<AppState>((set, get) => ({
           set({ debugState: 'unknown handle type...' + connectionState.fromHandle.type});
 
         }
+
+        // Update connection type based on new connection
+        const rateType = predictRxnType(targetRxn, get().species);
+        set({ debugState2: 'rate types: ' + rateType});
 
       } else {
         set({ debugState: 'old position'});
@@ -371,6 +386,8 @@ const useStore = create<AppState>((set, get) => ({
 
 export default useStore;
 
+// ===================================================================================================================
+
 function cleanAsciiConversion(ascii: string) {
   // Reactions replaces all " with empty character! Quotes are added when Latex 'Text' is converted to a command, but we do NOT want this!
   // Reactions replaces all ^ with ** for exponentiation.
@@ -380,6 +397,7 @@ function cleanAsciiConversion(ascii: string) {
   return ascii.replace(/"/g, '').replace(/\^/g, '**');
 }
 
+// ===================================================================================================================
 // Return true on success, false on failure
 // Adds a source node (assuming valid ID in source) to the reaction (array)
 function addSource(source: string, reaction: reactions) {
@@ -397,6 +415,7 @@ function addSource(source: string, reaction: reactions) {
 }
 
 
+
 // Return true on success, false on failure
 // Adds a target node (assuming valid ID in target) to the reaction (array)
 function addTarget(target: string, reaction: reactions) {
@@ -411,4 +430,59 @@ function addTarget(target: string, reaction: reactions) {
 
   // return a success
   return true;
+}
+
+
+// Predicts the reaction type based on the sourcees & targets of the reaction.
+// Returns a string corresponding to the name of type of rate law.
+function predictRxnType(reaction: reactions, species: species[]) {
+  const sources = reaction.sources;
+  const targets = reaction.targets;
+
+
+  // ===========
+  // Create list of source types
+  const sTypes = sources.map((item) => {
+    const match = species.find((specie) => specie.id === item);
+    return match?.speciesType;
+  });
+
+  // Repeat above for targets
+  const tTypes = targets.map((item) => {
+    const match = species.find((specie) => specie.id === item);
+    return match?.speciesType;
+  });
+
+  // Translate this list into a dictionary with count of each species type.
+  // {'molecule': 3, 'enzyme': 1}
+  const sTypeCounts = sTypes.reduce((counts, specieType) => {
+    counts[specieType] = (counts[specieType] || 0) + 1;
+    return counts;
+  }, {});
+
+  // Repeat above for targets
+  // {'molecule': 3, 'enzyme': 1}
+  const tTypeCounts = tTypes.reduce((counts, specieType) => {
+    counts[specieType] = (counts[specieType] || 0) + 1;
+    return counts;
+  }, {});
+
+  // ===========
+
+  // Logic to guess reaction type!
+  if (((sTypeCounts['molecule'] || 0) === 1) && ((sTypeCounts['enzyme'] || 0) === 1) && ((tTypeCounts['molecule'] || 0) >= 1)) {
+    // one input + one enzyme -> at least 1 molecule 
+    // Classic michaelis-menten
+    return 'michaelis-menten'
+  }
+
+
+
+
+  // return tTypeCounts['enzyme'] || 0;
+
+
+  // Default is mass action
+  return 'mass_action';
+
 }

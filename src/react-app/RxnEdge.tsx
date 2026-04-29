@@ -14,6 +14,7 @@ type RxnEdgeType = Edge<{
     label: string; 
     // toggleDrawer: (id: string) => void;
     rate_law: string;
+    rate_type: string;
 }, 'reaction'>;
 
 export type AppEdge = RxnEdgeType;
@@ -133,7 +134,6 @@ export default function RxnEdge({
 
     );
 }
-
 
 
 

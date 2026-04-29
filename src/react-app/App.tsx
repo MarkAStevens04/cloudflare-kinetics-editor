@@ -155,8 +155,8 @@ export default function App() {
   // Debug labels
   const updateLabel = useStore((store) => store.setDebugState);
   const debugLabel = useStore((store) => store.debugState);
-  const updateLabel2 = useStore((store) => store.setEdgeHoveringLabel);
-  const debugLabel2 = useStore((store) => store.edgeHoverID);
+  const updateLabel2 = useStore((store) => store.setDebugState2);
+  const debugLabel2 = useStore((store) => store.debugState2);
 
 
   return (
@@ -209,7 +209,7 @@ export default function App() {
               const id = 'N' + numberToLetters(nextId++);
               const label = 'Species ' + String(nextId - 1);
               const color = NODE_COLORS[1];
-              addNode(id, label, color, 'protein');
+              addNode(id, label, color, 'enzyme');
             }}
 
             style={{
