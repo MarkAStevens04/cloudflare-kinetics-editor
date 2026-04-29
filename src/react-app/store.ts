@@ -96,6 +96,12 @@ type AppState = {
 
   feedbackOpen: boolean;
   setFeedbackOpen: (open: boolean) => void;
+
+  edgeHovering: boolean; // Whether we're currently hovering over an edge or not
+  edgeHoverID: string; // id of edge we're hoving over (if any)
+  setEdgeHovering: (open: boolean) => void;
+  setEdgeHoverID: (id: string) => void;
+
 };
 
 
@@ -183,12 +189,25 @@ const useStore = create<AppState>((set, get) => ({
     },
 
 
-    // Check if we're connecting with node or edge
+    // Handle connections which may not be to another node (when connecting from node to edge)
     onConnectEnd: (event, connectionState) => {
 
       // When a connection is dropped on the pane it's not valid
       if (!connectionState.isValid) {
-        set({ debugState: 'new position'});
+        if (get().edgeHovering) {
+          const targetRxnID = get().edgeHoverID;
+          const nodeToAdd = connectionState.fromNode.id
+
+          const targetRxn = get().reactions.find(item => item.id === targetRxnID);
+
+          targetRxn.sources = [...targetRxn.sources, nodeToAdd];
+
+          set({ debugState: 'connecting to edge! ' + targetRxn.sources});
+        } else {
+          set({ debugState: 'new position'});
+        }
+        // set({ debugState: 'new position'});
+        
       } else {
         set({ debugState: 'old position'});
       }
@@ -326,7 +345,11 @@ const useStore = create<AppState>((set, get) => ({
     feedbackOpen: false,
     setFeedbackOpen: (open) => set({ feedbackOpen: open }),
 
-
+    // Update what edge we're hovering over (if any)
+    edgeHovering: false,
+    edgeHoverID: 'default',
+    setEdgeHovering: (open) => set({ edgeHovering: open }),
+    setEdgeHoverID: (id: string) => set({ edgeHoverID: id }),
 
 }));
 

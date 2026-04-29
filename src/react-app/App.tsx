@@ -155,8 +155,8 @@ export default function App() {
   // Debug labels
   const updateLabel = useStore((store) => store.setDebugState);
   const debugLabel = useStore((store) => store.debugState);
-  const updateLabel2 = useStore((store) => store.setDebugState2);
-  const debugLabel2 = useStore((store) => store.debugState2);
+  const updateLabel2 = useStore((store) => store.setEdgeHoveringLabel);
+  const debugLabel2 = useStore((store) => store.edgeHoverID);
 
 
   return (

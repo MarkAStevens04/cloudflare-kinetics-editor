@@ -42,7 +42,8 @@ export default function RxnEdge({
     const setEdgeSelection = useStore((store) => store.setSelectedEdge);
     const setRxnDrawerOpen = useStore((store) => store.setRxnDrawerOpen);
 
-    const setDebugLabel = useStore((store) => store.setDebugState2);
+    const setEdgeHovering = useStore((store) => store.setEdgeHovering);
+    const setEdgeHoverID = useStore((store) => store.setEdgeHoverID);
 
     // const onToggle = () => {
     //     data?.toggleDrawer(id);
@@ -57,11 +58,13 @@ export default function RxnEdge({
     // Possible error here. May get weird IDs when two edges are hovering over each other, and the mouse goes directly from one edge to another.
     // With preliminary testing, this wasn't a problem, but it's something to be aware of.
     const onHover = () => {
-        setDebugLabel('hovering ' + id);
+        setEdgeHovering(true);
+        setEdgeHoverID(id);
     };
 
     const onLeave = () => {
-        setDebugLabel('NOT hovering ' + id);
+        setEdgeHovering(false);
+        setEdgeHoverID('');
     }
 
     return (
