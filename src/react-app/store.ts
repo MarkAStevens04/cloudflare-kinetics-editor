@@ -42,7 +42,7 @@ const initialSpecies: species[] = [
 ];
 
 const initialReactions: reactions[] = [
-  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action' },
+  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'reversible_mass_action' },
 ];
 
 const initialNodes: AppNode[] = [
@@ -50,7 +50,7 @@ const initialNodes: AppNode[] = [
   { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', color: '#4ECDC4', initial: '', speciesType: 'molecule' }, type: 'protein'},
 ];
 
-const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'Change me!', rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action'}, }];
+const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'Change me!', rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'reversible_mass_action'}, }];
 
 
 
@@ -93,6 +93,7 @@ type AppState = {
 
   updateSpeciesLabel: (id: string, newLabel: string) => void;
   updateRateLaw: (id: string, newRateLaw: string) => void;
+  updateEdgeType: (id: string, newEdgeType: string) => void;
   updateInitialConcentration: (id: string, newInitial: string) => void;
   updateRateName: (id: string, newName: string) => void;
 
@@ -171,6 +172,7 @@ const useStore = create<AppState>((set, get) => ({
 
       newRxn.rate_type = rateType;
 
+      get().updateEdgeType(newRxn.id, rateType); // Update the rate law type
       set({ debugState2: 'rate types: ' + rateType});
 
       set((store) => ({
@@ -236,7 +238,10 @@ const useStore = create<AppState>((set, get) => ({
 
         // Update connection type based on new connection
         const rateType = predictRxnType(targetRxn, get().species);
+        get().updateEdgeType(targetRxnID, rateType); // Update the rate law type
+
         set({ debugState2: 'rate types: ' + rateType});
+
 
       } else {
         set({ debugState: 'old position'});
@@ -284,6 +289,27 @@ const useStore = create<AppState>((set, get) => ({
           data: { 
             ...e.data, 
             rate_law: newRateLaw,
+          }
+        }
+      }),
+
+    })),
+
+
+    // Update the rate law of a given reaction in both reactions and visualEdges
+    updateEdgeType: (id, newEdgeType) => set((store) => ({
+      reactions: store.reactions.map((r) => r.id === id ? { ...r, rate_type: newEdgeType } : r),
+
+      visualEdges: store.visualEdges.map((e) => {
+
+        if (e.id !== id) return e;
+        if (!e.data) return e;
+
+        return {
+          ...e, 
+          data: { 
+            ...e.data, 
+            rate_type: newEdgeType,
           }
         }
       }),
@@ -478,18 +504,12 @@ function predictRxnType(reaction: reactions, species: species[]) {
     // at least 1 molecule -> at least 1 molecule
     // reversible mass action
     return 'reversible_mass_action';
-  } else if (((sTypeCounts['molecule'] || 0) === 1) && ((sTypeCounts['enzyme'] || 0) === 1) && ((tTypeCounts['molecule'] || 0) >= 1) && ((tTypeCounts['enzyme'] || 0) === 1)) {
+  } else if (((sTypeCounts['molecule'] || 0) === 1) && ((sTypeCounts['enzyme'] || 0) === 1) && ((tTypeCounts['molecule'] || 0) >= 0) && ((tTypeCounts['enzyme'] || 0) === 1)) {
     // one input + one enzyme -> one enzyme + any number of molecules
-    // Hill function
+    // Hill function, ligands binding to macromolecules
+    // Could also be for gene production
     return 'hill_function';
   }
-
-
-
-
-
-  // return tTypeCounts['enzyme'] || 0;
-
 
   // Default is mass action
   return 'mass_action';
