@@ -42,7 +42,7 @@ const initialSpecies: species[] = [
 ];
 
 const initialReactions: reactions[] = [
-  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'reversible_mass_action' },
+  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: '' },
 ];
 
 const initialNodes: AppNode[] = [
@@ -462,6 +462,13 @@ function addTarget(target: string, reaction: reactions) {
 // Predicts the reaction type based on the sourcees & targets of the reaction.
 // Returns a string corresponding to the name of type of rate law.
 function predictRxnType(reaction: reactions, species: species[]) {
+
+
+  // Do NOT update if we already have a rate type given
+  // if (reaction.rate_type && reaction.rate_type !== '') {
+  //   return reaction.rate_type;
+  // }
+  
   const sources = reaction.sources;
   const targets = reaction.targets;
 
