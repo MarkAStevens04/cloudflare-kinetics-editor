@@ -11,6 +11,17 @@ import '../index.css';
 import useStore from '../store';
 
 
+import { type AppNode } from '../ProteinNode';
+
+export type RevMAEdgeType = Edge<{ 
+    label: string; 
+    // toggleDrawer: (id: string) => void;
+    rate_law: string;
+    rate_type: string; 
+}, 'rev_mass_action'>;
+
+
+
 export default function ReversibleMassActionEdge({ 
     id, 
     sourceX, 

@@ -15,7 +15,16 @@ import {
 import { convertLatexToAsciiMath } from "mathlive";
 
 import { type AppNode } from './ProteinNode';
-import { type AppEdge } from './RxnEdge';
+// import { type AppEdge } from './RxnEdge';
+import { 
+  MichaelisMentenEdge, 
+  ReversibleMassActionEdge, 
+  MassActionEdge,
+  type MichaelisEdgeType,
+  type RevMAEdgeType,
+  type MAEdgeType,
+  type AppEdge,
+} from './edges'
 
 
 type species = {
@@ -50,7 +59,7 @@ const initialNodes: AppNode[] = [
   { id: 'Nb', position: { x: 500, y: 100 }, data: { label: 'Species 2', color: '#4ECDC4', initial: '', speciesType: 'molecule' }, type: 'protein'},
 ];
 
-const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'reaction', data: { label: 'Change me!', rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'reversible_mass_action'}, }];
+const initialEdges: AppEdge[] = [{ id: 'Na_Nb', source: 'Na', target: 'Nb' , markerEnd: { type: MarkerType.ArrowClosed, width: 20, height: 20 }, animated: true, type: 'rev_mass_action', data: { label: 'Change me!', rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action'}, }];
 
 
 

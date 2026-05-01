@@ -20,10 +20,14 @@ FullStory('trackEvent', {
 
 // Initialize Protein and Reaction types
 import ProteinNode, { type AppNode } from './ProteinNode';
-import RxnEdge, { type AppEdge } from './RxnEdge';
 import RxnDrawer from './Drawer';
 import SimulationDrawer from './SimulationDrawer';
 import FeedbackDrawer from './FeedbackDrawer';
+
+import { 
+  edgeTypes,
+  type AppEdge,
+} from './edges'
 
 // Stringify TODO: Move this to Drawer instead
 // import { convertLatexToAsciiMath } from "mathlive";
@@ -37,9 +41,12 @@ const nodeTypes = {
   protein: ProteinNode,
 };
 
-const edgeTypes = {
-  reaction: RxnEdge,
-};
+// const edgeTypes = {
+//   mass_action: MassActionEdge,
+//   rev_mass_action: ReversibleMassActionEdge,
+//   michaelismenten: MichaelisMentenEdge,
+
+// };
 
 
 // Initialize set of possible colors for species nodes
@@ -124,7 +131,7 @@ let nextId= 3;
 
 
 const defaultEdgeOptions: DefaultEdgeOptions = {
-  type: 'reaction',
+  type: 'mass-action',
 };
 
 

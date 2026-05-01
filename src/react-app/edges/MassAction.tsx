@@ -10,6 +10,14 @@ import {
 import '../index.css';
 import useStore from '../store';
 
+import { type AppNode } from '../ProteinNode';
+
+export type MAEdgeType = Edge<{ 
+    label: string; 
+    // toggleDrawer: (id: string) => void;
+    rate_law: string;
+    rate_type: string; 
+}, 'mass_action'>;
 
 export default function MassActionEdge({ 
     id, 

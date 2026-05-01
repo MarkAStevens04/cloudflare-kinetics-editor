@@ -11,6 +11,17 @@ import {
 import '../index.css';
 import useStore from '../store';
 
+import { type AppNode } from '../ProteinNode';
+
+
+export type MichaelisEdgeType = Edge<{ 
+    label: string; 
+    // toggleDrawer: (id: string) => void;
+    rate_law: string;
+    rate_type: string; 
+    enzyme_node: AppNode;
+}, 'michaelis_menten'>;
+
 
 
 export default function MichaelisMentenEdge({ 
