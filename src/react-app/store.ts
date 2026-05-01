@@ -305,7 +305,7 @@ const useStore = create<AppState>((set, get) => ({
     })),
 
 
-    // Update the rate law of a given reaction in both reactions and visualEdges
+    // Update the rate law type of a given reaction in both reactions and visualEdges
     updateEdgeType: (id, newEdgeType) => set((store) => ({
       reactions: store.reactions.map((r) => r.id === id ? { ...r, rate_type: newEdgeType } : r),
 
@@ -315,7 +315,8 @@ const useStore = create<AppState>((set, get) => ({
         if (!e.data) return e;
 
         return {
-          ...e, 
+          ...e,
+          type: newEdgeType,
           data: { 
             ...e.data, 
             rate_type: newEdgeType,
@@ -519,7 +520,7 @@ function predictRxnType(reaction: reactions, species: species[]) {
   } else if (((sTypeCounts['molecule'] || 0) >= 1) && ((sTypeCounts['enzyme'] || 0) === 0) && ((tTypeCounts['molecule'] || 0) >= 1) && ((tTypeCounts['enzyme'] || 0) === 0)) {
     // at least 1 molecule -> at least 1 molecule
     // reversible mass action
-    return 'reversible_mass_action';
+    return 'rev_mass_action';
   } else if (((sTypeCounts['molecule'] || 0) === 1) && ((sTypeCounts['enzyme'] || 0) === 1) && ((tTypeCounts['molecule'] || 0) >= 0) && ((tTypeCounts['enzyme'] || 0) === 1)) {
     // one input + one enzyme -> one enzyme + any number of molecules
     // Hill function, ligands binding to macromolecules
@@ -532,4 +533,4 @@ function predictRxnType(reaction: reactions, species: species[]) {
 
 }
 
-// Options: mass_action, reversible_mass_action, michaelis_menten, reversible_michaelis_menten, hill_function
+// Options: mass_action, rev_mass_action, michaelis_menten, reversible_michaelis_menten, hill_function
