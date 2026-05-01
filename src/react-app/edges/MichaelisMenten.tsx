@@ -2,6 +2,7 @@ import {
     BaseEdge, 
     EdgeLabelRenderer,
     getBezierPath,
+    getStraightPath,
     // useReactFlow, 
     type Edge,
     type EdgeProps,
@@ -25,7 +26,7 @@ export default function MichaelisMentenEdge({
     data,
 }: EdgeProps<RxnEdgeType>) {
     // const { deleteElements } = useReactFlow();
-    const [edgePath, labelX, labelY] = getBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
+    
 
     const edgeColorOp = selected ? '#747bff' : '#ccc';
     const textColorOp = selected ? '#fff' : '#000';
@@ -38,8 +39,27 @@ export default function MichaelisMentenEdge({
     const setEdgeHovering = useStore((store) => store.setEdgeHovering);
     const setEdgeHoverID = useStore((store) => store.setEdgeHoverID);
 
-    const current = useStore((store) => store.reactions.find(item => item.id = id));
+
+    const current = useStore((store) => store.reactions.find(item => item.id === id));
+    const currentEnzymeID = current.sources[1];
+    const currentEnzymeNode = useStore(store => store.visualNodes.find(item => item.id === currentEnzymeID));
+
+    // To print properties of the current enzyme in the console, do: console.log('current enzyme node: ' + Object.keys(currentEnzymeNode));
     
+
+    const enzymeX = currentEnzymeNode.position.x;
+    const enzymeY = currentEnzymeNode.position.x;
+    const enzymePosition = currentEnzymeNode.position;
+    
+    console.log('current enzyme x: ' + sourceY);
+    console.log('current enzyme node: ' + Object.keys(currentEnzymeNode));
+
+
+
+    const [edgePath, labelX, labelY] = getBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
+    const [edgePathTwo, labelXTwo, labelYTwo, offsetX, offsetY ] = getStraightPath({ sourceX, sourceY, enzymeX, enzymeY });
+
+    console.log('current edgePathTwo: ' + edgePathTwo);
 
     // const onToggle = () => {
     //     data?.toggleDrawer(id);
@@ -95,6 +115,17 @@ export default function MichaelisMentenEdge({
       </svg>
 
 
+            <BaseEdge 
+                id={id + '_sub_1'} 
+                path={edgePathTwo} 
+                // markerEnd={activeMarkerEnd}
+                style={{
+                    stroke: 'black',
+                    strokeWidth: '2px',
+                }}
+        
+            />
+
 
 
             <BaseEdge 
@@ -124,16 +155,7 @@ export default function MichaelisMentenEdge({
             </EdgeLabelRenderer>
 
 
-            <BaseEdge 
-                id={id + '_sub_1'} 
-                path={edgePath} 
-                markerEnd={activeMarkerEnd}
-                style={{
-                    stroke: edgeColorOp,
-                    strokeWidth: '2px',
-                }}
-        
-            />
+            
             
         </>
 
