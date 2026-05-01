@@ -64,7 +64,9 @@ export default function MichaelisMentenEdge({
     const enzymeY = currentEnzymeNode.position.x;
     const enzymePosition = currentEnzymeNode.position;
     
-    console.log('current enzyme x: ' + sourceY);
+    console.log('current enzyme x: ' + enzymeX);
+    console.log('current enzyme y: ' + enzymeY);
+    console.log('current enzyme id: ' + currentEnzymeNode.id)
     console.log('current enzyme node: ' + Object.keys(currentEnzymeNode));
 
 
