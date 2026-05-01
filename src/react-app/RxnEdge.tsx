@@ -7,6 +7,12 @@ import {
     type EdgeProps,
 } from '@xyflow/react';
 
+// import MichaelisMentenEdge from './edges/MichaelisMenten';
+// import ReversibleMassActionEdge from './edges/ReversibleMassAction';
+// import MassActionEdge from './edges/MassAction';
+
+import { MichaelisMentenEdge, ReversibleMassActionEdge, MassActionEdge } from './edges'
+
 import './index.css';
 import useStore from './store';
 
@@ -65,6 +71,23 @@ export default function RxnEdge({
         data={data}
         />
         );
+    } else if (data.rate_type === 'michaelis_menten') { 
+        return (
+        <MichaelisMentenEdge
+        id={id}
+        sourceX={sourceX}
+        sourceY={sourceY}
+        targetX={targetX}
+        targetY={targetY}
+        sourcePosition={sourcePosition}
+        targetPosition={targetPosition}
+        selected={selected}
+        markerEnd={markerEnd}
+        data={data}
+        />
+        );
+        
+    
     } else {
         return (
         <MassActionEdge 
@@ -90,227 +113,16 @@ export default function RxnEdge({
 // ===================================================================================================================
 
 
-function MassActionEdge({ 
-    id, 
-    sourceX, 
-    sourceY, 
-    targetX, 
-    targetY, 
-    sourcePosition, 
-    targetPosition,
-    selected,
-    markerEnd,
-    data,
-}: EdgeProps<RxnEdgeType>) {
-    // const { deleteElements } = useReactFlow();
-    const [edgePath, labelX, labelY] = getBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
 
-    const edgeColorOp = selected ? '#747bff' : '#ccc';
-
-    const activeMarkerEnd = selected ? 'url(#selected-marker)' : markerEnd;
-
-    const setEdgeSelection = useStore((store) => store.setSelectedEdge);
-    const setRxnDrawerOpen = useStore((store) => store.setRxnDrawerOpen);
-
-    const setEdgeHovering = useStore((store) => store.setEdgeHovering);
-    const setEdgeHoverID = useStore((store) => store.setEdgeHoverID);
-
-    // const onToggle = () => {
-    //     data?.toggleDrawer(id);
-    // }
-
-    const onToggle = () => {
-        setEdgeSelection(id);
-        setRxnDrawerOpen(true);
-    };
-
-
-    // Possible error here. May get weird IDs when two edges are hovering over each other, and the mouse goes directly from one edge to another.
-    // With preliminary testing, this wasn't a problem, but it's something to be aware of.
-    const onHover = () => {
-        setEdgeHovering(true);
-        setEdgeHoverID(id);
-    };
-
-    const onLeave = () => {
-        setEdgeHovering(false);
-        setEdgeHoverID('');
-    }
-
-    return (
-        <>
-        
-        <svg style={{ position: 'absolute', top: 0, left: 0 }}>
-        <defs>
-          <marker
-            className="react-flow__arrowhead"
-            id="selected-marker"
-            markerWidth="20"
-            markerHeight="20"
-            viewBox="-10 -10 20 20"
-            markerUnits="userSpaceOnUse"
-            orient="auto-start-reverse"
-            refX="0"
-            refY="0"
-          >
-            <polyline
-              className="arrowclosed"
-              style={{
-                strokeWidth: 1,
-                stroke: '#747bff',
-                fill: '#747bff',
-              }}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              points="-5,-4 0,0 -5,4 -5,-4"
-            />
-          </marker>
-        </defs>
-      </svg>
-
-
-
-
-            <BaseEdge 
-            id={id} 
-            path={edgePath} 
-            markerEnd={activeMarkerEnd}
-            style={{
-                stroke: edgeColorOp,
-                strokeWidth: '1px',
-            }}
-            />
-            <EdgeLabelRenderer>
-                <button 
-                onClick={onToggle}
-                style={{
-                    transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
-                }}
-                className="edge-box nodrag nopan"
-
-                onMouseEnter={() => onHover()}
-                onMouseLeave={() => onLeave()}
-                > {data?.label ?? 'Default Label'} </button>
-            </EdgeLabelRenderer>
-        </>
-
-    );
-}
 
 
 // ===================================================================================================================
 
-function ReversibleMassActionEdge({ 
-    id, 
-    sourceX, 
-    sourceY, 
-    targetX, 
-    targetY, 
-    sourcePosition, 
-    targetPosition,
-    selected,
-    markerEnd,
-    data,
-}: EdgeProps<RxnEdgeType>) {
-    // const { deleteElements } = useReactFlow();
-    const [edgePath, labelX, labelY] = getBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
-
-    const edgeColorOp = selected ? '#747bff' : '#ccc';
-    const textColorOp = selected ? '#fff' : '#000';
-
-    const activeMarkerEnd = selected ? 'url(#selected-marker)' : markerEnd;
-
-    const setEdgeSelection = useStore((store) => store.setSelectedEdge);
-    const setRxnDrawerOpen = useStore((store) => store.setRxnDrawerOpen);
-
-    const setEdgeHovering = useStore((store) => store.setEdgeHovering);
-    const setEdgeHoverID = useStore((store) => store.setEdgeHoverID);
-
-    // const onToggle = () => {
-    //     data?.toggleDrawer(id);
-    // }
-
-    const onToggle = () => {
-        setEdgeSelection(id);
-        setRxnDrawerOpen(true);
-    };
-
-
-    // Possible error here. May get weird IDs when two edges are hovering over each other, and the mouse goes directly from one edge to another.
-    // With preliminary testing, this wasn't a problem, but it's something to be aware of.
-    const onHover = () => {
-        setEdgeHovering(true);
-        setEdgeHoverID(id);
-    };
-
-    const onLeave = () => {
-        setEdgeHovering(false);
-        setEdgeHoverID('');
-    }
-
-    return (
-        <>
-        
-        <svg style={{ position: 'absolute', top: 0, left: 0 }}>
-        <defs>
-          <marker
-            className="react-flow__arrowhead"
-            id="selected-marker"
-            markerWidth="20"
-            markerHeight="20"
-            viewBox="-10 -10 20 20"
-            markerUnits="userSpaceOnUse"
-            orient="auto-start-reverse"
-            refX="0"
-            refY="0"
-          >
-            <polyline
-              className="arrowclosed"
-              style={{
-                strokeWidth: '2px',
-                stroke: '#747bff',
-                fill: '#747bff',
-              }}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              points="-5,-4 0,0 -5,4 -5,-4"
-            />
-          </marker>
-        </defs>
-      </svg>
 
 
 
 
-            <BaseEdge 
-            id={id} 
-            path={edgePath} 
-            markerEnd={activeMarkerEnd}
-            style={{
-                stroke: edgeColorOp,
-                strokeWidth: '2px',
-            }}
-            />
-            <EdgeLabelRenderer>
-                <button 
-                onClick={onToggle}
-                style={{
-                    transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
-                    // borderColor: edgeColorOp, // Makes it so edge is highlighted when selected, but overrides natural highlighting on hover 
-                    backgroundColor: edgeColorOp,
-                    color: textColorOp,
-                    outline: '0px',
-                }}
-                className="edge-box nodrag nopan"
-
-                onMouseEnter={() => onHover()}
-                onMouseLeave={() => onLeave()}
-                > {data?.label ?? 'Default Label'} </button>
-            </EdgeLabelRenderer>
-        </>
-
-    );
-}
+// ===================================================================================================================
 
 
 
