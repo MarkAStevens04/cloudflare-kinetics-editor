@@ -184,16 +184,9 @@ function MassActionEdge({
                 <button 
                 onClick={onToggle}
                 style={{
-                    position: 'absolute',
                     transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
-                    pointerEvents: 'all',
-                    padding: '0.25em',
-                    fontSize: '0.75em',
-                    fontWeight: '400',
-                    backgroundColor: '#ccc',
-
                 }}
-                className="nodrag nopan"
+                className="edge-box nodrag nopan"
 
                 onMouseEnter={() => onHover()}
                 onMouseLeave={() => onLeave()}
@@ -223,6 +216,7 @@ function ReversibleMassActionEdge({
     const [edgePath, labelX, labelY] = getBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
 
     const edgeColorOp = selected ? '#747bff' : '#ccc';
+    const textColorOp = selected ? '#fff' : '#000';
 
     const activeMarkerEnd = selected ? 'url(#selected-marker)' : markerEnd;
 
@@ -301,16 +295,13 @@ function ReversibleMassActionEdge({
                 <button 
                 onClick={onToggle}
                 style={{
-                    position: 'absolute',
                     transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
-                    pointerEvents: 'all',
-                    padding: '0.25em',
-                    fontSize: '0.75em',
-                    fontWeight: '400',
-                    backgroundColor: '#ccc',
-
+                    // borderColor: edgeColorOp, // Makes it so edge is highlighted when selected, but overrides natural highlighting on hover 
+                    backgroundColor: edgeColorOp,
+                    color: textColorOp,
+                    outline: '0px',
                 }}
-                className="nodrag nopan"
+                className="edge-box nodrag nopan"
 
                 onMouseEnter={() => onHover()}
                 onMouseLeave={() => onLeave()}

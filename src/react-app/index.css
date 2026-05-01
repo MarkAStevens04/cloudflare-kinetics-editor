@@ -336,6 +336,30 @@ button:focus-visible {
 }
 
 
+.edge-box {
+	font-size: 0.75em;
+	font-weight: 400;
+
+	padding: 0.25em;
+	position: absolute;
+
+	background-color: #ccc;
+	border: 2.5px transparent solid;
+	outline: 0px;
+
+	pointer-events: all;
+
+	transition: border-color 0.2s background-color 0.2s;
+}
+
+
+.edge-box:hover {
+	border-color: #747bff;
+	/* background-color: #747bff; */
+	/* color: #fff; */
+}
+
+
 .feedback-box {
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
