@@ -51,9 +51,11 @@ export default function MichaelisMentenEdge({
     const setEdgeHoverID = useStore((store) => store.setEdgeHoverID);
 
 
-    const current = useStore((store) => store.reactions.find(item => item.id === id));
-    const currentEnzymeID = current.sources[1];
-    const currentEnzymeNode = useStore(store => store.visualNodes.find(item => item.id === currentEnzymeID));
+    // const current = useStore((store) => store.reactions.find(item => item.id === id));
+    // const currentEnzymeID = current.sources[1];
+    // const currentEnzymeNode = useStore(store => store.visualNodes.find(item => item.id === currentEnzymeID));
+
+    const currentEnzymeNode = data.enzyme_node
 
     // To print properties of the current enzyme in the console, do: console.log('current enzyme node: ' + Object.keys(currentEnzymeNode));
     

@@ -314,14 +314,36 @@ const useStore = create<AppState>((set, get) => ({
         if (e.id !== id) return e;
         if (!e.data) return e;
 
-        return {
-          ...e,
-          type: newEdgeType,
-          data: { 
-            ...e.data, 
-            rate_type: newEdgeType,
+        
+
+        if (newEdgeType !== 'michaelis_menten') {
+            return {
+            ...e,
+            type: newEdgeType,
+            data: { 
+              ...e.data, 
+              rate_type: newEdgeType,
+            }
           }
+        } else {
+          
+          const current = get().reactions.find(item => item.id === id);
+          const currentEnzymeID = current.sources[1];
+          const currentEnzymeNode = get().visualNodes.find(item => item.id === currentEnzymeID);
+
+          return {
+            ...e,
+            type: newEdgeType,
+            data: { 
+              ...e.data, 
+              rate_type: newEdgeType,
+              enzyme_node: currentEnzymeNode,
+            }
+          }
+
         }
+
+        
       }),
 
     })),
