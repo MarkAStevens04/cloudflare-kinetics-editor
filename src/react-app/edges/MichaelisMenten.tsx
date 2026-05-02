@@ -60,7 +60,7 @@ export default function MichaelisMentenEdge({
     
     console.log('current enzyme x: ' + enzymeX);
     console.log('current enzyme y: ' + enzymeY);
-    console.log('current enzyme id: ' + currentEnzymeNode.id)
+    console.log('current enzyme id: ' + currentEnzymeNode.measured.height);
     console.log('current enzyme node: ' + Object.keys(currentEnzymeNode));
 
 
@@ -73,7 +73,18 @@ export default function MichaelisMentenEdge({
         targetY: enzymeY,
     });
 
-    const edgePathThree = "M " + enzymeX + " " + enzymeY + " Q " + labelX + " " + labelY + " " + targetX + " " + targetY;
+    const startX = enzymeX - 10;
+    const startY = enzymeY + (currentEnzymeNode.measured.height / 2);
+    const endX = enzymeX + currentEnzymeNode.measured.width + 10;
+    const endY = enzymeY + (currentEnzymeNode.measured.height / 2);
+
+    // const edgePathThree = "M " + startX + " " + startY + " Q " + enzymeX + " " + labelY + " " + labelX + " " + labelY + " T " + endX + " " + endY;
+
+
+    const cx = 2 * labelX - 0.5 * startX - 0.5 * endX;
+    const cy = 2 * labelY - 0.5 * startY - 0.5 * endY;
+
+    const edgePathThree = "M " + startX + " " + startY + " Q " + cx + " " + cy + " " + endX + " " + endY;
 
     console.log('current edgePathTwo: ' + edgePathTwo);
     console.log('current edgePathThree: ' + edgePathThree);
