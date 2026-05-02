@@ -337,7 +337,7 @@ const useStore = create<AppState>((set, get) => ({
             data: { 
               ...e.data, 
               rate_type: newEdgeType,
-              enzyme_node: currentEnzymeNode,
+              enzymeID: currentEnzymeID,
             }
           }
 

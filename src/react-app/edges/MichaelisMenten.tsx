@@ -19,7 +19,7 @@ export type MichaelisEdgeType = Edge<{
     // toggleDrawer: (id: string) => void;
     rate_law: string;
     rate_type: string; 
-    enzyme_node: AppNode;
+    enzymeID: string;
 }, 'michaelis_menten'>;
 
 
@@ -53,9 +53,9 @@ export default function MichaelisMentenEdge({
 
     // const current = useStore((store) => store.reactions.find(item => item.id === id));
     // const currentEnzymeID = current.sources[1];
-    // const currentEnzymeNode = useStore(store => store.visualNodes.find(item => item.id === currentEnzymeID));
+    const currentEnzymeNode = useStore(store => store.visualNodes.find(item => item.id === data.enzymeID)) as AppNode;
 
-    const currentEnzymeNode = data.enzyme_node
+    // const currentEnzymeNode = data.enzyme_node
 
     // To print properties of the current enzyme in the console, do: console.log('current enzyme node: ' + Object.keys(currentEnzymeNode));
     
@@ -66,8 +66,8 @@ export default function MichaelisMentenEdge({
     
     console.log('current enzyme x: ' + enzymeX);
     console.log('current enzyme y: ' + enzymeY);
-    console.log('current enzyme id: ' + currentEnzymeNode.id)
-    console.log('current enzyme node: ' + Object.keys(currentEnzymeNode));
+    // console.log('current enzyme id: ' + currentEnzymeNode.id)
+    // console.log('current enzyme node: ' + Object.keys(currentEnzymeNode));
 
 
 
