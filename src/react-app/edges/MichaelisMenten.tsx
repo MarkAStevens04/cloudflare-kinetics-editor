@@ -61,7 +61,7 @@ export default function MichaelisMentenEdge({
     
 
     const enzymeX = currentEnzymeNode.position.x;
-    const enzymeY = currentEnzymeNode.position.x;
+    const enzymeY = currentEnzymeNode.position.y;
     const enzymePosition = currentEnzymeNode.position;
     
     console.log('current enzyme x: ' + enzymeX);
@@ -72,7 +72,12 @@ export default function MichaelisMentenEdge({
 
 
     const [edgePath, labelX, labelY] = getBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
-    const [edgePathTwo, labelXTwo, labelYTwo, offsetX, offsetY ] = getStraightPath({ sourceX, sourceY, enzymeX, enzymeY });
+    const [edgePathTwo, labelXTwo, labelYTwo, offsetX, offsetY ] = getStraightPath({
+        sourceX,
+        sourceY,
+        targetX: enzymeX,
+        targetY: enzymeY,
+    });
 
     console.log('current edgePathTwo: ' + edgePathTwo);
 
