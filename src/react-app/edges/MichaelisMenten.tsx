@@ -66,19 +66,17 @@ export default function MichaelisMentenEdge({
 
 
     const [edgePath, labelX, labelY] = getBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
-    const [edgePathTwo, labelXTwo, labelYTwo, offsetX, offsetY ] = getStraightPath({
-        sourceX,
-        sourceY,
-        targetX: enzymeX,
-        targetY: enzymeY,
-    });
 
-    const startX = enzymeX - 10;
+    const startX = enzymeX - 30;
     const startY = enzymeY + (currentEnzymeNode.measured.height / 2);
-    const endX = enzymeX + currentEnzymeNode.measured.width + 10;
+    const endX = enzymeX + currentEnzymeNode.measured.width + 30;
     const endY = enzymeY + (currentEnzymeNode.measured.height / 2);
 
-    // const edgePathThree = "M " + startX + " " + startY + " Q " + enzymeX + " " + labelY + " " + labelX + " " + labelY + " T " + endX + " " + endY;
+
+    // const startX = enzymeX - 30;
+    // const startY = (enzymeY + labelY) * 0.5;
+    // const endX = enzymeX + currentEnzymeNode.measured.width + 30;
+    // const endY = (enzymeY + labelY) * 0.5;
 
 
     const cx = 2 * labelX - 0.5 * startX - 0.5 * endX;
@@ -86,7 +84,6 @@ export default function MichaelisMentenEdge({
 
     const edgePathThree = "M " + startX + " " + startY + " Q " + cx + " " + cy + " " + endX + " " + endY;
 
-    console.log('current edgePathTwo: ' + edgePathTwo);
     console.log('current edgePathThree: ' + edgePathThree);
 
     // const onToggle = () => {
@@ -147,9 +144,11 @@ export default function MichaelisMentenEdge({
                 id={id + '_sub_1'} 
                 path={edgePathThree} 
                 // markerEnd={activeMarkerEnd}
+                markerEnd={activeMarkerEnd}
+                animated={false}
                 style={{
                     stroke: 'black',
-                    strokeWidth: '2px',
+                    strokeWidth: '4px',
                 }}
         
             />

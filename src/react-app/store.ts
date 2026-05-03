@@ -191,7 +191,7 @@ const useStore = create<AppState>((set, get) => ({
         visualEdges: addEdge(
           {...params, 
             id: `${params.source}_${params.target}`,
-            type: 'reaction',
+            type: 'mass_action',
             animated: true,
             markerEnd: { 
               type: MarkerType.ArrowClosed,
@@ -334,6 +334,7 @@ const useStore = create<AppState>((set, get) => ({
           return {
             ...e,
             type: newEdgeType,
+            animated: false,
             data: { 
               ...e.data, 
               rate_type: newEdgeType,
