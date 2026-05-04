@@ -127,11 +127,11 @@ export default function MassActionEdge({
 }
 
 
-export function MassActionDrawerInfo() {
+export function MassActionDrawerInfo({edgeID}: {edgeID: string;}) {
     return (
         <>
         
-        <p> MASS ACTION TEST </p>
+        <p> MASS ACTION TEST {edgeID} </p>
 
         </>
     );

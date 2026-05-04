@@ -242,6 +242,7 @@ export default function RxnDrawer() {
                             key={type.id}
                             value={type.id}
                             selected={type.id === rate_type}
+                            title={type.desc}
                         >
                             {type.label}
                         </option>
@@ -251,11 +252,11 @@ export default function RxnDrawer() {
 
                 {
                     edge.rate_type === 'mass_action' ? 
-                        <MassActionDrawerInfo />
+                        <MassActionDrawerInfo edgeID={edge.id} />
                     : edge.rate_type === 'rev_mass_action' ?
                         <ReversibleMassActionDrawerInfo />  
                     : edge.rate_type === 'michaelis_menten' ?
-                        <MichaelisMentenDrawerInfo />
+                        <MichaelisMentenDrawerInfo edgeID={edge.id} />
                     :
                         <p> { edge.rate_type } </p>
                 }

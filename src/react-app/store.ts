@@ -42,6 +42,7 @@ type reactions = {
   targets: string[];
   rate_law: string;
   rate_type: string; // types: mass_action
+  enzymeID: string;
 
 }
 
@@ -51,7 +52,7 @@ const initialSpecies: species[] = [
 ];
 
 const initialReactions: reactions[] = [
-  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action' },
+  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action', enzymeID: '' },
 ];
 
 const initialNodes: AppNode[] = [
@@ -175,7 +176,7 @@ const useStore = create<AppState>((set, get) => ({
       // Example LaTeX we want: \objNa{\text{Na}}\cdot\objNb{\text{Nb}}\\cdot0.1
       const defRateLaw = '(\\obj' + params.source + '{\\text{' + params.source + '}})\\cdot0.1';
 
-      const newRxn = { id: `${params.source}_${params.target}`, label: 't2', sources: [params.source], targets: [params.target], rate_law: defRateLaw, rate_type: '' };
+      const newRxn = { id: `${params.source}_${params.target}`, label: 't2', sources: [params.source], targets: [params.target], rate_law: defRateLaw, rate_type: '', enzymeID: '' };
 
       const rateType = predictRxnType(newRxn, get().species);
 
@@ -307,13 +308,25 @@ const useStore = create<AppState>((set, get) => ({
 
     // Update the rate law type of a given reaction in both reactions and visualEdges
     updateEdgeType: (id, newEdgeType) => set((store) => ({
-      reactions: store.reactions.map((r) => r.id === id ? { ...r, rate_type: newEdgeType } : r),
+      reactions: store.reactions.map((r) => {
+        if (r.id !== id) return r;
+
+        if (newEdgeType !== 'michaelis_menten') {
+          return r.id === id ? { ...r, rate_type: newEdgeType } : r;
+
+        } else {
+          const current = get().reactions.find(item => item.id === id) || {sources: [], targets: []};
+          const currentEnzymeID = current.sources[1] || '';
+
+          return r.id === id ? { ...r, rate_type: newEdgeType, enzymeID: currentEnzymeID } : r;
+        }
+        
+    }),
 
       visualEdges: store.visualEdges.map((e) => {
 
         if (e.id !== id) return e;
         if (!e.data) return e;
-
         
 
         if (newEdgeType !== 'michaelis_menten') {

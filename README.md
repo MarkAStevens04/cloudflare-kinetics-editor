@@ -298,7 +298,8 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
     - Only when both source and target nodes are empty should we delete the reaction
 - Default Reaction updates with different reaction types
 - Reaction type dropdown selection
-    - Interpret rate laws differently depending on reaction type
+    - Different options depending on reaction type
+    - *** Interpret rate laws differently depending on reaction type!! ***
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)

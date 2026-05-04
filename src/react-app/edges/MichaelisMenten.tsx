@@ -180,11 +180,18 @@ export default function MichaelisMentenEdge({
 
 
 
-export function MichaelisMentenDrawerInfo() {
+export function MichaelisMentenDrawerInfo({edgeID}: {edgeID: string;}) {
+
+    const currentEnzymeID = useStore(store => {
+        const current = store.reactions.find(item => item.id === edgeID) || {sources: [], targets: []};
+        return current.sources[1] || '';
+    });
+
     return (
         <>
         
         <p> MICHAELIS-MENTEN TEST </p>
+        <p> Catalyzing enzyme: {currentEnzymeID} </p>
 
         </>
     );
