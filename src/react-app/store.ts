@@ -191,7 +191,7 @@ const useStore = create<AppState>((set, get) => ({
         visualEdges: addEdge(
           {...params, 
             id: `${params.source}_${params.target}`,
-            type: 'mass_action',
+            type: rateType,
             animated: true,
             markerEnd: { 
               type: MarkerType.ArrowClosed,
@@ -320,6 +320,7 @@ const useStore = create<AppState>((set, get) => ({
             return {
             ...e,
             type: newEdgeType,
+            animated: true,
             data: { 
               ...e.data, 
               rate_type: newEdgeType,
@@ -327,9 +328,8 @@ const useStore = create<AppState>((set, get) => ({
           }
         } else {
           
-          const current = get().reactions.find(item => item.id === id);
-          const currentEnzymeID = current.sources[1];
-          const currentEnzymeNode = get().visualNodes.find(item => item.id === currentEnzymeID);
+          const current = get().reactions.find(item => item.id === id) || {sources: [], targets: []};
+          const currentEnzymeID = current.sources[1] || '';
 
           return {
             ...e,
@@ -548,7 +548,7 @@ function predictRxnType(reaction: reactions, species: species[]) {
     // one input + one enzyme -> one enzyme + any number of molecules
     // Hill function, ligands binding to macromolecules
     // Could also be for gene production
-    return 'hill_function';
+    return 'hill_equation';
   }
 
   // Default is mass action
@@ -556,4 +556,4 @@ function predictRxnType(reaction: reactions, species: species[]) {
 
 }
 
-// Options: mass_action, rev_mass_action, michaelis_menten, reversible_michaelis_menten, hill_function
+// Options: mass_action, rev_mass_action, michaelis_menten, reversible_michaelis_menten, hill_equation

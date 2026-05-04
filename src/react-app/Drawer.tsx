@@ -78,7 +78,7 @@ export default function RxnDrawer() {
             'desc': 'When you want to simulate a simple, reversible reaction, of some reactant(s) becoming some product(s) and vice versa.'
         },
         {
-            'id': 'hill_function',
+            'id': 'hill_equation',
             'label': 'Hill Equation',
             'desc': 'When you want to simulate a ligand binding to a molecule with multiple binding sites, like oxygen binding to hemoglobin.'
         },

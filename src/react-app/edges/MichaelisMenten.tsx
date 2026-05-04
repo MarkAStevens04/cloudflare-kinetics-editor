@@ -49,34 +49,26 @@ export default function MichaelisMentenEdge({
     const setEdgeHovering = useStore((store) => store.setEdgeHovering);
     const setEdgeHoverID = useStore((store) => store.setEdgeHoverID);
 
-    const currentEnzymeNode = useStore(store => store.visualNodes.find(item => item.id === data.enzymeID)) as AppNode;
-
-    // To print properties of the current enzyme in the console, do: console.log('current enzyme node: ' + Object.keys(currentEnzymeNode));
-    
-
-    const enzymeX = currentEnzymeNode.position.x;
-    const enzymeY = currentEnzymeNode.position.y;
-    const enzymePosition = currentEnzymeNode.position;
-    
-    console.log('current enzyme x: ' + enzymeX);
-    console.log('current enzyme y: ' + enzymeY);
-    console.log('current enzyme id: ' + currentEnzymeNode.measured.height);
-    console.log('current enzyme node: ' + Object.keys(currentEnzymeNode));
-
-
 
     const [edgePath, labelX, labelY] = getBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
+    const currentEnzymeNode = useStore(store => store.visualNodes.find(item => item.id === data.enzymeID)) as AppNode;
+
+
+    // Alternative occurs when there's no enzyme node.
+    const enzymeX = currentEnzymeNode ? currentEnzymeNode.position.x : labelX - 40;
+    const enzymeY = currentEnzymeNode ? currentEnzymeNode.position.y : labelY - 50;
+
+    const measured_height = currentEnzymeNode?.measured?.height || 40;
+    const measured_width = currentEnzymeNode?.measured?.width || 100;
+
+    console.log('current enzyme x: ' + enzymeX);
+    console.log('current enzyme y: ' + enzymeY);
+    // console.log('current enzyme node: ' + Object.keys(currentEnzymeNode));
 
     const startX = enzymeX - 30;
-    const startY = enzymeY + (currentEnzymeNode.measured.height / 2);
-    const endX = enzymeX + currentEnzymeNode.measured.width + 30;
-    const endY = enzymeY + (currentEnzymeNode.measured.height / 2);
-
-
-    // const startX = enzymeX - 30;
-    // const startY = (enzymeY + labelY) * 0.5;
-    // const endX = enzymeX + currentEnzymeNode.measured.width + 30;
-    // const endY = (enzymeY + labelY) * 0.5;
+    const startY = enzymeY + (measured_height / 2);
+    const endX = enzymeX + measured_width + 30;
+    const endY = enzymeY + (measured_height / 2);
 
 
     const cx = 2 * labelX - 0.5 * startX - 0.5 * endX;
@@ -85,10 +77,7 @@ export default function MichaelisMentenEdge({
     const edgePathThree = "M " + startX + " " + startY + " Q " + cx + " " + cy + " " + endX + " " + endY;
 
     console.log('current edgePathThree: ' + edgePathThree);
-
-    // const onToggle = () => {
-    //     data?.toggleDrawer(id);
-    // }
+    
 
     const onToggle = () => {
         setEdgeSelection(id);
