@@ -15,6 +15,12 @@ import "mathlive";
 import { MathfieldElement } from 'mathlive';
 import useStore from './store';
 
+import { 
+  MichaelisMentenDrawerInfo, 
+  MassActionDrawerInfo,
+  ReversibleMassActionDrawerInfo,
+} from './edges'
+
 
 type rateEditorProps = {
     currentRateLaw?: string;
@@ -24,8 +30,11 @@ type rateEditorProps = {
 
 export default function RxnDrawer() {
 
-    const edge = useStore((store) => store.reactions.find((e) => e.id === store.selectedEdge)) || { id: '', label: '', sources: [''], targets: [''], rate_law: '' };
+    const edge = useStore((store) => store.reactions.find((e) => e.id === store.selectedEdge)) || { id: '', label: '', sources: [''], targets: [''], rate_law: '', rate_type: ''};
     const nodes = useStore((store) => store.species);
+
+    const rate_type = useStore((store) => store.reactions.find((e) => e.id === edge.id)?.rate_type) || 'mass_action';
+    
 
     // const open = useStore((store) => store.rxnDrawerOpen, (prev, next) => {return false;});
     const open = useStore((store) => store.rxnDrawerOpen);
@@ -34,6 +43,8 @@ export default function RxnDrawer() {
     const updateRateLaw = useStore((store) => store.updateRateLaw);
     const updateInitialConcentration = useStore((store) => store.updateInitialConcentration);
     const updateRateName = useStore((store) => store.updateRateName);
+
+    const updateEdgeType = useStore((store) => store.updateEdgeType);
 
     const sourceNode = nodes.find((node) => node.id === edge.sources[0]) || nodes[0];
     const targetNode = nodes.find((node) => node.id === edge.targets[0]) || nodes[0];
@@ -49,6 +60,34 @@ export default function RxnDrawer() {
 
     const reactantColor = sourceNode.color;
     const productColor = targetNode.color;
+
+    const reactionTypes = [
+        {
+            'id': 'michaelis_menten',
+            'label': 'Michaelis-Menten',
+            'desc': 'When you want to simulate an enzyme catalyzing some reaction.'
+        },
+        {
+            'id': 'mass_action',
+            'label': 'Mass Action',
+            'desc': 'When you want to simulate a simple reaction, of some reactant(s) becoming some product(s).'
+        },
+        {
+            'id': 'rev_mass_action',
+            'label': 'Reversible Mass Action',
+            'desc': 'When you want to simulate a simple, reversible reaction, of some reactant(s) becoming some product(s) and vice versa.'
+        },
+        {
+            'id': 'hill_function',
+            'label': 'Hill Equation',
+            'desc': 'When you want to simulate a ligand binding to a molecule with multiple binding sites, like oxygen binding to hemoglobin.'
+        },
+        {
+            'id': 'custom',
+            'label': 'Custom',
+            'desc': 'When you want to define a custom rate law using your own equations.'
+        },
+    ];
     
 
     const onRNameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -192,7 +231,39 @@ export default function RxnDrawer() {
 
                 <RateEditor currentRateLaw={rateLaw} onRateChange={onRateChange} />
 
-                       
+                
+                {/* Dropdown to select reaction type (Michaelis-Menten, Mass Action, etc.) */}
+                <select
+                    value={rate_type}
+                    onChange={(e) => updateEdgeType(edge.id, e.target.value)}
+                >
+                    {reactionTypes.map((type) => (
+                        <option 
+                            key={type.id}
+                            value={type.id}
+                            selected={type.id === rate_type}
+                        >
+                            {type.label}
+                        </option>
+                    ))}
+                </select>
+
+
+                {
+                    edge.rate_type === 'mass_action' ? 
+                        <MassActionDrawerInfo />
+                    : edge.rate_type === 'rev_mass_action' ?
+                        <ReversibleMassActionDrawerInfo />  
+                    : edge.rate_type === 'michaelis_menten' ?
+                        <MichaelisMentenDrawerInfo />
+                    :
+                        <p> { edge.rate_type } </p>
+                }
+
+                
+                
+                
+
 
                 </animated.div>
             </>

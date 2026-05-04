@@ -188,3 +188,15 @@ export default function MichaelisMentenEdge({
 
     );
 }
+
+
+
+export function MichaelisMentenDrawerInfo() {
+    return (
+        <>
+        
+        <p> MICHAELIS-MENTEN TEST </p>
+
+        </>
+    );
+}

@@ -125,3 +125,14 @@ export default function MassActionEdge({
 
     );
 }
+
+
+export function MassActionDrawerInfo() {
+    return (
+        <>
+        
+        <p> MASS ACTION TEST </p>
+
+        </>
+    );
+}

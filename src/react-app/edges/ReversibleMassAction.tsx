@@ -138,3 +138,14 @@ export default function ReversibleMassActionEdge({
 
     );
 }
+
+
+export function ReversibleMassActionDrawerInfo() {
+    return (
+        <>
+        
+        <p> REVERSIBLE MASS ACTION TEST </p>
+
+        </>
+    );
+}
