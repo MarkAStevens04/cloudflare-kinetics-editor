@@ -43,6 +43,7 @@ type reactions = {
   rate_law: string;
   rate_type: string; // types: mass_action
   enzymeID: string;
+  params: {id: string; val: string }[];
 
 }
 
@@ -52,7 +53,7 @@ const initialSpecies: species[] = [
 ];
 
 const initialReactions: reactions[] = [
-  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action', enzymeID: '' },
+  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action', enzymeID: '', params: {} },
 ];
 
 const initialNodes: AppNode[] = [
@@ -176,7 +177,16 @@ const useStore = create<AppState>((set, get) => ({
       // Example LaTeX we want: \objNa{\text{Na}}\cdot\objNb{\text{Nb}}\\cdot0.1
       const defRateLaw = '(\\obj' + params.source + '{\\text{' + params.source + '}})\\cdot0.1';
 
-      const newRxn = { id: `${params.source}_${params.target}`, label: 't2', sources: [params.source], targets: [params.target], rate_law: defRateLaw, rate_type: '', enzymeID: '' };
+      const newRxn = { 
+        id: `${params.source}_${params.target}`, 
+        label: 't2', 
+        sources: [params.source], 
+        targets: [params.target], 
+        rate_law: defRateLaw, 
+        rate_type: '',
+        enzymeID: '',
+        params: {},
+        };
 
       const rateType = predictRxnType(newRxn, get().species);
 
@@ -311,14 +321,16 @@ const useStore = create<AppState>((set, get) => ({
       reactions: store.reactions.map((r) => {
         if (r.id !== id) return r;
 
+        const newRateLaw = getDefaultRateLaw(newEdgeType, r, get().species);
+
         if (newEdgeType !== 'michaelis_menten') {
-          return r.id === id ? { ...r, rate_type: newEdgeType } : r;
+          return r.id === id ? { ...r, rate_type: newEdgeType, rate_law: newRateLaw } : r;
 
         } else {
           const current = get().reactions.find(item => item.id === id) || {sources: [], targets: []};
           const currentEnzymeID = current.sources[1] || '';
 
-          return r.id === id ? { ...r, rate_type: newEdgeType, enzymeID: currentEnzymeID } : r;
+          return r.id === id ? { ...r, rate_type: newEdgeType, enzymeID: currentEnzymeID, rate_law: newRateLaw } : r;
         }
         
     }),
@@ -570,3 +582,18 @@ function predictRxnType(reaction: reactions, species: species[]) {
 }
 
 // Options: mass_action, rev_mass_action, michaelis_menten, reversible_michaelis_menten, hill_equation
+
+
+// Gets the default rate law for a given rate law type!
+function getDefaultRateLaw(rateLaw: string, reaction: reactions, species: species[]) {
+  // if (rateLaw === 'michaelis_menten') {
+
+  // }
+
+  // const defRateLaw = '(\\obj' + params.source + '{\\text{' + params.source + '}})\\cdot0.1';
+
+  const newRateLaw = reaction.sources.map((s) => {return '(\\obj' + s + '{\\text{' + s + '}})\\cdot'}).join('') + '0.1';
+  console.log('new rate law: ' + newRateLaw);
+
+  return newRateLaw
+}

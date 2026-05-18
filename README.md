@@ -288,18 +288,26 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - HIGHLIGHT WHEN YOU HAVE AN EMPTY RATE LAW!!! When you click simulate, run quick check to make sure rate laws are all filled.
 - DELETING NODES AND EDGES DOESN'T REMOVE THEM FROM THE INTERNAL REPRESENTATION!!!!! Very strange. 
     - CAN ADD DUPLICATE REACTIONS TO INTERNAL REPRESENTATION!! Should NOT be the case. Maybe need separate function to add and remove nodes and edges.
-
-
-### TODO
-- Add little hook inside reaction edges that run on adding a new source. Depending on type of reaction, handle does different things.
-    - Will need to also handle removing nodes.
 - Deleting a node on the other end of a reaction SHOULD allow the molecule to just degrade over time!
     - Deleting a node on the front end of a reaction SHOULD allow the molecule to just be generated!
     - Only when both source and target nodes are empty should we delete the reaction
-- Default Reaction updates with different reaction types
-- Reaction type dropdown selection
+
+### TODO
+- Right click node to edit properties
+    - Initial value
+    - Color
+    - Copy (including all edges) or copy (not including all edges)
+- Graph visual changes
+    - Edit properties like simulation time
+    - Zoom in / out on graph
+    - button to allow you to select what reactants to visualize
+- Different edges for each reaction input / output. Like, michaelis-menten, the catalyst arrow is its own edge.
+    - Selecting the central rectangle selects all inputs / outputs.
+- Picking up and dragging a handle drags that shape
+    - Dragging a diamond causes a little diamond shape to move around!
+- Reaction type dropdown selection in drawer
     - Different options depending on reaction type
-    - *** Interpret rate laws differently depending on reaction type!! ***
+    - *** Interpret rate laws differently depending on reaction type!! *** Like, when packaging info to send to simulation engine, handle each reaction type differently.
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)

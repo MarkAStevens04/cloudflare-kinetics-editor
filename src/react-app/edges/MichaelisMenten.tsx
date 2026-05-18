@@ -136,8 +136,8 @@ export default function MichaelisMentenEdge({
                 markerEnd={activeMarkerEnd}
                 animated={false}
                 style={{
-                    stroke: 'black',
-                    strokeWidth: '4px',
+                    stroke: edgeColorOp,
+                    strokeWidth: '2px',
                 }}
         
             />
@@ -150,7 +150,7 @@ export default function MichaelisMentenEdge({
             markerEnd={activeMarkerEnd}
             style={{
                 stroke: edgeColorOp,
-                strokeWidth: '2px',
+                strokeWidth: '3px',
             }}
             />
             <EdgeLabelRenderer>
@@ -192,6 +192,8 @@ export function MichaelisMentenDrawerInfo({edgeID}: {edgeID: string;}) {
         
         <p> MICHAELIS-MENTEN TEST </p>
         <p> Catalyzing enzyme: {currentEnzymeID} </p>
+        <p> RATE: V * a / K_m + a, where V is limiting rate, a is concentration of substrate, K_m is the Michaelis Constant.</p>
+        <p> NOTE: We're making the assumption that enzyme concentration is much less than substrate concentration!</p>
 
         </>
     );

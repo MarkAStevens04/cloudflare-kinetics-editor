@@ -150,7 +150,6 @@ export default function RxnDrawer() {
                     }}
                 > 
                 <br /> <br />
-                {/* <button onClick={onClose} className="nodrag nopan action-button">Close</button> */}
 
                 {/* Edit reaction name */}
                 <div className="species-text" style={{padding: '0.2em 0px', top: '20px'}}>
@@ -162,7 +161,6 @@ export default function RxnDrawer() {
                         
                     />
                 </div>
-                {/* <p className="species-text" > Reaction Name </p> */}
 
                 <br />
                 <div className="drawer-reaction-diagram">
@@ -228,6 +226,8 @@ export default function RxnDrawer() {
                 <hr />
 
                 {/* Edit Rate Laws */}
+
+                <p> Rate Law: {rateLaw} </p>
 
                 <RateEditor currentRateLaw={rateLaw} onRateChange={onRateChange} />
 
