@@ -204,15 +204,24 @@ export function initializeMichaelisEdge(id: string, currRxn: reaction) {
 
     const addSimParam = useStore.getState().addSimParam; 
     const currentEnzymeID = currRxn.sources[1] || '';
+    const currentSubstrID = currRxn.sources[0] || '';
+
+    // Define parameter ids
+    const kmID = id + '_k_m';
+    const vmaxID = id + '_V_max';
 
     // Add parameters to our simulation
-    addSimParam(id + '_k_m', '100');
-    addSimParam(id + '_V_max', '100');
+    addSimParam(kmID, '100');
+    addSimParam(vmaxID, '100');
 
     // console.log('sim params: ' + JSON.stringify(get().simParams, null, 2));
 
+    const kmLatex = '(\\obj' + kmID + '{\\text{' + kmID + '}})';
+    const vmaxLatex = '(\\obj' + vmaxID + '{\\text{' + vmaxID + '}})';
+    const substrLatex = '(\\obj' + currentSubstrID + '{\\text{' + currentSubstrID + '}})';
 
-    const newRateLaw = '';
+
+    const newRateLaw = '\\frac{' + vmaxLatex + '\\cdot' + substrLatex + '}{' + kmLatex + '+' + substrLatex + '}';
 
     return { ...currRxn, rate_type: 'michaelis_menten', enzymeID: currentEnzymeID, rate_law: newRateLaw };
 
