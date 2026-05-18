@@ -198,3 +198,24 @@ export function MichaelisMentenDrawerInfo({edgeID}: {edgeID: string;}) {
         </>
     );
 }
+
+export function initializeMichaelisEdge(id: string, currRxn: reaction) {
+    // const current = get().reactions.find(item => item.id === id) || {sources: [], targets: []};
+
+    const addSimParam = useStore.getState().addSimParam; 
+    const currentEnzymeID = currRxn.sources[1] || '';
+
+    // Add parameters to our simulation
+    addSimParam(id + '_k_m', '100');
+    addSimParam(id + '_V_max', '100');
+
+    // console.log('sim params: ' + JSON.stringify(get().simParams, null, 2));
+
+
+    const newRateLaw = '';
+
+    return { ...currRxn, rate_type: 'michaelis_menten', enzymeID: currentEnzymeID, rate_law: newRateLaw };
+
+    // return 'slay!';
+
+};

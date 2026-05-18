@@ -20,6 +20,7 @@ import {
   MichaelisMentenEdge, 
   ReversibleMassActionEdge, 
   MassActionEdge,
+  initializeMichaelisEdge,
   type MichaelisEdgeType,
   type RevMAEdgeType,
   type MAEdgeType,
@@ -43,8 +44,12 @@ type reactions = {
   rate_law: string;
   rate_type: string; // types: mass_action
   enzymeID: string;
-  params: {id: string; val: string }[];
 
+}
+
+type params = {
+  id: string;
+  val: string;
 }
 
 const initialSpecies: species[] = [
@@ -53,7 +58,10 @@ const initialSpecies: species[] = [
 ];
 
 const initialReactions: reactions[] = [
-  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action', enzymeID: '', params: {} },
+  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action', enzymeID: '' },
+];
+
+const initialSimParams: params[] = [
 ];
 
 const initialNodes: AppNode[] = [
@@ -74,6 +82,7 @@ type AppState = {
 
   species: species[];
   reactions: reactions[];
+  simParams: params[];
 
   visualNodes: AppNode[];
   visualEdges: AppEdge[];
@@ -107,6 +116,7 @@ type AppState = {
   updateEdgeType: (id: string, newEdgeType: string) => void;
   updateInitialConcentration: (id: string, newInitial: string) => void;
   updateRateName: (id: string, newName: string) => void;
+  addSimParam: (paramID: string, paramVal: string) => void;
 
   feedbackOpen: boolean;
   setFeedbackOpen: (open: boolean) => void;
@@ -136,6 +146,8 @@ const useStore = create<AppState>((set, get) => ({
 
     visualNodes: initialNodes,
     visualEdges: initialEdges,
+
+    simParams: initialSimParams,
 
 
     // Default ReactFlow functions to update visualNode and visualEdge attributes
@@ -185,7 +197,6 @@ const useStore = create<AppState>((set, get) => ({
         rate_law: defRateLaw, 
         rate_type: '',
         enzymeID: '',
-        params: {},
         };
 
       const rateType = predictRxnType(newRxn, get().species);
@@ -321,16 +332,13 @@ const useStore = create<AppState>((set, get) => ({
       reactions: store.reactions.map((r) => {
         if (r.id !== id) return r;
 
-        const newRateLaw = getDefaultRateLaw(newEdgeType, r, get().species);
-
+    
         if (newEdgeType !== 'michaelis_menten') {
-          return r.id === id ? { ...r, rate_type: newEdgeType, rate_law: newRateLaw } : r;
+          const newRateLaw = getDefaultRateLaw(r);
+          return { ...r, rate_type: newEdgeType, rate_law: newRateLaw };
 
         } else {
-          const current = get().reactions.find(item => item.id === id) || {sources: [], targets: []};
-          const currentEnzymeID = current.sources[1] || '';
-
-          return r.id === id ? { ...r, rate_type: newEdgeType, enzymeID: currentEnzymeID, rate_law: newRateLaw } : r;
+          return initializeMichaelisEdge(id, r);
         }
         
     }),
@@ -374,6 +382,15 @@ const useStore = create<AppState>((set, get) => ({
 
     })),
 
+
+    // Adds a simulation parameter iff the parameter does not already exist!
+    addSimParam: (paramID: string, paramVal: string) => set((store) => {
+      if (store.simParams.some(entry => entry.id === paramID)) {
+        return store;
+      }
+      return { simParams: [...store.simParams, { paramID, paramVal }] };
+    }),
+    
     // Update the initial concentration of a given species in both species and visualNodes
     updateInitialConcentration: (id, newInitial) => set((store) => ({
       species: store.species.map((s) => s.id === id ? { ...s, initial: newInitial } : s),
@@ -585,15 +602,10 @@ function predictRxnType(reaction: reactions, species: species[]) {
 
 
 // Gets the default rate law for a given rate law type!
-function getDefaultRateLaw(rateLaw: string, reaction: reactions, species: species[]) {
-  // if (rateLaw === 'michaelis_menten') {
-
-  // }
-
-  // const defRateLaw = '(\\obj' + params.source + '{\\text{' + params.source + '}})\\cdot0.1';
-
+function getDefaultRateLaw(reaction: reactions) {
+  // Default is mass_action (reactant1 * reactant2 * ... * 0.1)
   const newRateLaw = reaction.sources.map((s) => {return '(\\obj' + s + '{\\text{' + s + '}})\\cdot'}).join('') + '0.1';
-  console.log('new rate law: ' + newRateLaw);
-
   return newRateLaw
 }
+
+

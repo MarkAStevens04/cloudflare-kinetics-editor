@@ -14,6 +14,7 @@ import MichaelisMentenEdge from "./MichaelisMenten"
 export { default as MichaelisMentenEdge } from "./MichaelisMenten";
 export type { MichaelisEdgeType } from "./MichaelisMenten";
 export { MichaelisMentenDrawerInfo } from "./MichaelisMenten";
+export { initializeMichaelisEdge } from "./MichaelisMenten";
 
 
 export type AppEdge = MichaelisEdgeType | RevMAEdgeType | MAEdgeType;
