@@ -314,6 +314,9 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - Reaction type dropdown selection in drawer
     - Different options depending on reaction type
     - *** Interpret rate laws differently depending on reaction type!! *** Like, when packaging info to send to simulation engine, handle each reaction type differently.
+- Handle parameters better
+    - Package them for simulation
+    - Allow editing in SIMULATE dropdown menu
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)

@@ -66,7 +66,7 @@ const initialSimParams: params[] = [
   {
     id: 'Pa',
     display: 'firstP',
-    value: '100',
+    val: '100',
   }
 ];
 
@@ -126,6 +126,7 @@ type AppState = {
   updateRateName: (id: string, newName: string) => void;
   addSimParam: (paramName: string, paramVal: string) => string;
   associateParam: (paramID: string, rxnID: string) => void;
+  updateParamValue: (paramID: string, newValue: string) => void;
 
   feedbackOpen: boolean;
   setFeedbackOpen: (open: boolean) => void;
@@ -411,6 +412,11 @@ const useStore = create<AppState>((set, get) => ({
           : r
       ),
     })),
+
+    // Update a parameters value
+    updateParamValue: (paramID: string, newValue: string) => set((store) => ({
+      params: store.simParams.map((p) => p.id === paramID ? { ...p, value: newValue } : p),
+    })),
     
     // Update the initial concentration of a given species in both species and visualNodes
     updateInitialConcentration: (id, newInitial) => set((store) => ({
@@ -461,9 +467,23 @@ const useStore = create<AppState>((set, get) => ({
 
       try {
 
+        // Building a cute little map for O(1) lookups instead of scanning for every paramID
+        const paramLookup = new Map(get().simParams.map(p => [p.id, p.val]));
+        console.log('param lookup: ' + paramLookup.has('Pb'));
+        // associated_params.map(PID => {PID, paramLookup.get(PID)})
+        console.log('reactions: ' + JSON.stringify(get().reactions, null, 2));
+
         const payload = {
           "Species": get().species.map(({ id, initial}) => ({'id': id, 'initial': Number(initial)})),
-          "Reactions": get().reactions.map(({ id, sources, targets, rate_law}) => ({'id': id, 'Reactants': sources, 'Products': targets, 'rate_law': cleanAsciiConversion(convertLatexToAsciiMath(rate_law || '')), 'Parameters': {'test1': 0.0}})),
+
+          "Reactions": get().reactions.map(({ id, sources, targets, rate_law, associated_params}) => ({
+              'id': id, 
+              'Reactants': sources, 
+              'Products': targets, 
+              'rate_law': cleanAsciiConversion(convertLatexToAsciiMath(rate_law || '')), 
+              'Parameters': associated_params,
+          })),
+          
           "Simulation": {"t_end": 300, "dt": 1, "method": "Euler"},
         };    
 

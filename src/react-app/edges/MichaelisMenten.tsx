@@ -213,8 +213,8 @@ export function initializeMichaelisEdge(id: string, currRxn: reaction) {
     const vmaxID = addSimParam('Vmax', '100');
 
     // Associate newly added parameters to our rxn
-    associateParam(kmID, currRxn.id);
-    associateParam(vmaxID, currRxn.id);
+    // associateParam(kmID, currRxn.id);
+    // associateParam(vmaxID, currRxn.id);
     
 
     console.log('sim params: ' + JSON.stringify(useStore.getState().simParams, null, 2));
@@ -227,6 +227,6 @@ export function initializeMichaelisEdge(id: string, currRxn: reaction) {
 
     const newRateLaw = '\\frac{' + vmaxLatex + '\\cdot' + substrLatex + '}{' + kmLatex + '+' + substrLatex + '}';
 
-    return { ...currRxn, rate_type: 'michaelis_menten', enzymeID: currentEnzymeID, rate_law: newRateLaw };
+    return { ...currRxn, rate_type: 'michaelis_menten', enzymeID: currentEnzymeID, rate_law: newRateLaw, associated_params: [...currRxn.associated_params, kmID, vmaxID] };
 
 };
