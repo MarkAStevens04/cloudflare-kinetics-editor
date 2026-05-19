@@ -472,16 +472,18 @@ const useStore = create<AppState>((set, get) => ({
         console.log('param lookup: ' + paramLookup.has('Pb'));
         // associated_params.map(PID => {PID, paramLookup.get(PID)})
         console.log('reactions: ' + JSON.stringify(get().reactions, null, 2));
-
+        
         const payload = {
           "Species": get().species.map(({ id, initial}) => ({'id': id, 'initial': Number(initial)})),
 
-          "Reactions": get().reactions.map(({ id, sources, targets, rate_law, associated_params}) => ({
+          "Reactions": get().reactions.map(({ id, sources, targets, rate_law, associated_params, enzymeID}) => ({
               'id': id, 
-              'Reactants': sources, 
+              'Reactants': sources.filter(id => id !== enzymeID), // POSSIBLE ERROR!! What if we WANT the enzyme to be included! Should have more fine-tunable reactants that change depending on reaction type.
               'Products': targets, 
               'rate_law': cleanAsciiConversion(convertLatexToAsciiMath(rate_law || '')), 
-              'Parameters': associated_params,
+
+              // Lowkey this is bad code. Instead of putting parameters with the reactions, we should have parameters be their own object. Requires refactoring simulation engine.
+              'Parameters': Object.fromEntries(associated_params.map(PID => [PID, paramLookup.get(PID)] )),
           })),
           
           "Simulation": {"t_end": 300, "dt": 1, "method": "Euler"},
