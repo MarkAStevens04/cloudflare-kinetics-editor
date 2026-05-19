@@ -281,6 +281,7 @@ function RateEditor({
 
 }: rateEditorProps) {
     const nodes = useStore((store) => store.species);
+    const params = useStore((store) => store.simParams);
 
     const mfRef = useRef<MathfieldElement>(null); 
 
@@ -305,13 +306,16 @@ function RateEditor({
     }
 
     const macros = useMemo(() => {
-        return Object.fromEntries(
+        return Object.fromEntries([
             // Very strange code here. We have args: 1 so that the parameter we add (\text{buttonID}) stays in the latex
             // We render our text as node.data.label, and in the backend, keep our latex as \objNXXX{\text{nXXX}}
-            nodes.map((node) => ['obj' + node.id, {args: 1, def: '\\text{' + node.label + '}'}])
-        );
+            ...nodes.map((node) => ['obj' + node.id, {args: 1, def: '\\text{' + node.label + '}'}]),
 
-    }, [nodes]);
+            // Do similar for params
+            ...params.map((param) => ['obj' + param.id, {args: 1, def: '\\text{' + param.display + '}'}])
+        ]);
+
+    }, [nodes, params]);
 
 
     useEffect(() => {

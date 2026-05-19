@@ -203,28 +203,30 @@ export function initializeMichaelisEdge(id: string, currRxn: reaction) {
     // const current = get().reactions.find(item => item.id === id) || {sources: [], targets: []};
 
     const addSimParam = useStore.getState().addSimParam; 
+    const associateParam = useStore.getState().associateParam;
+
     const currentEnzymeID = currRxn.sources[1] || '';
     const currentSubstrID = currRxn.sources[0] || '';
 
-    // Define parameter ids
-    const kmID = id + '_k_m';
-    const vmaxID = id + '_V_max';
+    // Add parameters and get their ids
+    const kmID = addSimParam('Km', '100');
+    const vmaxID = addSimParam('Vmax', '100');
 
-    // Add parameters to our simulation
-    addSimParam(kmID, '100');
-    addSimParam(vmaxID, '100');
+    // Associate newly added parameters to our rxn
+    associateParam(kmID, currRxn.id);
+    associateParam(vmaxID, currRxn.id);
+    
 
-    // console.log('sim params: ' + JSON.stringify(get().simParams, null, 2));
+    console.log('sim params: ' + JSON.stringify(useStore.getState().simParams, null, 2));
+    console.log('associated params: ' + JSON.stringify(useStore.getState().reactions, null, 2))
 
-    const kmLatex = '(\\obj' + kmID + '{\\text{' + kmID + '}})';
-    const vmaxLatex = '(\\obj' + vmaxID + '{\\text{' + vmaxID + '}})';
-    const substrLatex = '(\\obj' + currentSubstrID + '{\\text{' + currentSubstrID + '}})';
+    const kmLatex = '\\obj' + kmID + '{\\text{' + kmID + '}}';
+    const vmaxLatex = '\\obj' + vmaxID + '{\\text{' + vmaxID + '}}';
+    const substrLatex = '\\obj' + currentSubstrID + '{\\text{' + currentSubstrID + '}}';
 
 
     const newRateLaw = '\\frac{' + vmaxLatex + '\\cdot' + substrLatex + '}{' + kmLatex + '+' + substrLatex + '}';
 
     return { ...currRxn, rate_type: 'michaelis_menten', enzymeID: currentEnzymeID, rate_law: newRateLaw };
-
-    // return 'slay!';
 
 };

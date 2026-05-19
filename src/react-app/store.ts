@@ -44,11 +44,12 @@ type reactions = {
   rate_law: string;
   rate_type: string; // types: mass_action
   enzymeID: string;
-
+  associated_params: string[]; // List of param IDs which are associated with this reaction
 }
 
 type params = {
   id: string;
+  display: string;
   val: string;
 }
 
@@ -58,10 +59,15 @@ const initialSpecies: species[] = [
 ];
 
 const initialReactions: reactions[] = [
-  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action', enzymeID: '' },
+  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action', enzymeID: '', associated_params: [] },
 ];
 
 const initialSimParams: params[] = [
+  {
+    id: 'Pa',
+    display: 'firstP',
+    value: '100',
+  }
 ];
 
 const initialNodes: AppNode[] = [
@@ -83,6 +89,8 @@ type AppState = {
   species: species[];
   reactions: reactions[];
   simParams: params[];
+
+  nextPID: number; // the next parameter id
 
   visualNodes: AppNode[];
   visualEdges: AppEdge[];
@@ -116,7 +124,8 @@ type AppState = {
   updateEdgeType: (id: string, newEdgeType: string) => void;
   updateInitialConcentration: (id: string, newInitial: string) => void;
   updateRateName: (id: string, newName: string) => void;
-  addSimParam: (paramID: string, paramVal: string) => void;
+  addSimParam: (paramName: string, paramVal: string) => string;
+  associateParam: (paramID: string, rxnID: string) => void;
 
   feedbackOpen: boolean;
   setFeedbackOpen: (open: boolean) => void;
@@ -125,6 +134,7 @@ type AppState = {
   edgeHoverID: string; // id of edge we're hoving over (if any)
   setEdgeHovering: (open: boolean) => void;
   setEdgeHoverID: (id: string) => void;
+
 
 };
 
@@ -148,6 +158,7 @@ const useStore = create<AppState>((set, get) => ({
     visualEdges: initialEdges,
 
     simParams: initialSimParams,
+    nextPID: initialSimParams.length,
 
 
     // Default ReactFlow functions to update visualNode and visualEdge attributes
@@ -197,6 +208,7 @@ const useStore = create<AppState>((set, get) => ({
         rate_law: defRateLaw, 
         rate_type: '',
         enzymeID: '',
+        associated_params: [],
         };
 
       const rateType = predictRxnType(newRxn, get().species);
@@ -383,13 +395,22 @@ const useStore = create<AppState>((set, get) => ({
     })),
 
 
-    // Adds a simulation parameter iff the parameter does not already exist!
-    addSimParam: (paramID: string, paramVal: string) => set((store) => {
-      if (store.simParams.some(entry => entry.id === paramID)) {
-        return store;
-      }
-      return { simParams: [...store.simParams, { paramID, paramVal }] };
-    }),
+    // Adds a simulation parameter! Always with a unique ID. Returns the ID of the added parameter.
+    addSimParam: (paramName: string, paramVal: string) => {
+      const paramID = 'P' + numberToLetters(get().nextPID++);
+      set((store) => ({ simParams: [...store.simParams, { id: paramID, display: paramName, val: paramVal }] }));
+      return paramID;
+    },
+
+    // Associate a parameter with a reaction.
+    associateParam: (paramID: string, rxnID: string) => set((store) => ({
+      reactions: store.reactions.map((r) => 
+        // Make sure we have the right rxn AND prevent duplicates
+        r.id === rxnID && !r.associated_params.includes(paramID)
+          ? { ...r, associated_params: [...r.associated_params, paramID] } 
+          : r
+      ),
+    })),
     
     // Update the initial concentration of a given species in both species and visualNodes
     updateInitialConcentration: (id, newInitial) => set((store) => ({
@@ -608,4 +629,8 @@ function getDefaultRateLaw(reaction: reactions) {
   return newRateLaw
 }
 
+// Converts a number to letters (used for getting string of paramID)
+function numberToLetters(num: number) {
+    return String(num).split('').map((digit) => String.fromCharCode(97 + Number(digit))).join('');
+}
 

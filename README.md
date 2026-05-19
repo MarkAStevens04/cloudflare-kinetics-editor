@@ -278,6 +278,12 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - You can select the arrow type (regular, inhibit, big circle to represent catalyzation, etc.)
 - Then, you use the arrow on the reactants! That way you can think high-level instead of thinking about rates.
 
+### Merge parameters
+- When looking at params, have a list. Name: `param_name`, In reactions: `list of associated rxns`, checkbox
+- You can select all the checkboxes of the params you want to merge, then click `merge params` which merges all of the parameters!
+- Might need to implement a function like `scan_rxn` which looks for all associated parameters, and updates the `associated_params` attribute.
+    - AFTER doing this, you can search rxns by their associated_params, then update the relevant parameters.
+
 ### Urgent
 - Return differential equations
 - **better logging in Python for vercel**
