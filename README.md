@@ -284,6 +284,9 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - Might need to implement a function like `scan_rxn` which looks for all associated parameters, and updates the `associated_params` attribute.
     - AFTER doing this, you can search rxns by their associated_params, then update the relevant parameters.
 
+### Optimizations
+- Update in store.ts the reactions, params, and species to be maps so you can lookup by id.
+
 ### Urgent
 - Return differential equations
 - **better logging in Python for vercel**

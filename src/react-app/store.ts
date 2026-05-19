@@ -415,8 +415,10 @@ const useStore = create<AppState>((set, get) => ({
 
     // Update a parameters value
     updateParamValue: (paramID: string, newValue: string) => set((store) => ({
-      params: store.simParams.map((p) => p.id === paramID ? { ...p, value: newValue } : p),
+      simParams: store.simParams.map((p) => p.id === paramID ? { ...p, val: newValue } : p),
     })),
+
+    
     
     // Update the initial concentration of a given species in both species and visualNodes
     updateInitialConcentration: (id, newInitial) => set((store) => ({
