@@ -469,9 +469,6 @@ const useStore = create<AppState>((set, get) => ({
 
         // Building a cute little map for O(1) lookups instead of scanning for every paramID
         const paramLookup = new Map(get().simParams.map(p => [p.id, p.val]));
-        console.log('param lookup: ' + paramLookup.has('Pb'));
-        // associated_params.map(PID => {PID, paramLookup.get(PID)})
-        console.log('reactions: ' + JSON.stringify(get().reactions, null, 2));
         
         const payload = {
           "Species": get().species.map(({ id, initial}) => ({'id': id, 'initial': Number(initial)})),
