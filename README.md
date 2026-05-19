@@ -287,6 +287,17 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 ### Optimizations
 - Update in store.ts the reactions, params, and species to be maps so you can lookup by id.
 
+### Modifying preset reactions
+- When modifying the rate law of a pre-defineed reaction (like modifying michaelis-menten), call it something else. Like "modified michaelis-menten" so that it's clear that this is NOT vanilla michaelis-menten. Add a little button on the side that allows you to reset back to default michaelis-menten.
+
+### General
+- Add link to GitHub from biobuilder page!
+
+### Types of mechanisms
+- Have like parent types of reaction mechanisms, and child types that can be edited
+- So you can select "inhibition", then easily change what type of inhibition is occurring.
+- Or with michaelis-menten, you can select "simplified" or "explicit" to swap between michaelis-menten version and full enzymatic version!
+
 ### Urgent
 - Return differential equations
 - **better logging in Python for vercel**
@@ -320,6 +331,13 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - Handle parameters better
     - Package them for simulation
     - Allow editing in SIMULATE dropdown menu
+    - BUGFIX!! Do simple michaelis menten, then add a 2nd product. Vmax and Km get duplicated. Need to double check params don't exist before adding more.
+- Michaelis-Menten, change what your enzyme is
+    - Modify what your enzymeID is in the Michaelis-Menten kinetics!
+    - More Robust "important chemical" handling. Make it a dictionary or something instead? So instead of "enzymeID: string" we would have "keystoneIDs: string[]"
+- Add Inhibition mechanism!
+- Fix deleting rates.
+
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
