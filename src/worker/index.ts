@@ -115,7 +115,7 @@ const app = new Hono<{ Bindings: Env }>();
 
 app.get("/api/", (c) => c.json({ name: "Cloudflare" }));
 
-app.get("/.well-known/api-catalog", (c) => {
+app.get("/.well-known/api-catalog", () => {
 	return new Response(JSON.stringify(API_CATALOG, null, 2), {
 		headers: {
 			"Content-Type": "application/linkset+json",
