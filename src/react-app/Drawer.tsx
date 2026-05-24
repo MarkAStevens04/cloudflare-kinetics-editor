@@ -9,11 +9,23 @@ import { ChangeEvent, useRef, useEffect, useMemo } from 'react';
 import { animated, useTransition } from '@react-spring/web';
 
 import './index.css';
+import './radix.css';
 
 // For math live input
 import "mathlive";
 import { MathfieldElement } from 'mathlive';
 import useStore from './store';
+
+// import * as React from "react";
+import { Select } from 'radix-ui';
+import { 
+    CheckIcon,
+    ChevronDownIcon,
+    ChevronUpIcon,
+
+} from "@radix-ui/react-icons";
+
+
 
 import { 
   MichaelisMentenDrawerInfo, 
@@ -232,25 +244,52 @@ export default function RxnDrawer() {
 
                 <RateEditor currentRateLaw={rateLaw} onRateChange={onRateChange} />
 
-                
+
                 {/* Dropdown to select reaction type (Michaelis-Menten, Mass Action, etc.) */}
-                <select
-                    value={rate_type}
-                    onChange={(e) => updateEdgeType(edge.id, e.target.value)}
+                <Select.Root
+                    onValueChange={(value) => updateEdgeType(edge.id, value)}
+                    defaultValue={rate_type}
                 >
-                    {reactionTypes.map((type) => (
-                        <option 
-                            key={type.id}
-                            value={type.id}
-                            selected={type.id === rate_type}
-                            title={type.desc}
-                        >
-                            {type.label}
-                        </option>
-                    ))}
-                </select>
+                    <Select.Trigger className="SelectTrigger" aria-label="ReactionType">
+                        <Select.Value placeholder="Select Reaction Type" />
+                        <Select.Icon className="SelectIcon">
+                            <ChevronDownIcon />
+                        </Select.Icon>
+                    </Select.Trigger>
+
+                    <Select.Portal>
+                        <Select.Content className="SelectContent">
+                            <Select.ScrollUpButton className="SelectScrollButton">
+                                <ChevronUpIcon />
+                            </Select.ScrollUpButton>
+
+                            <Select.Viewport className="SelectViewport">
+                                <Select.Group>
+                                    {/* <Select.Label className="SelectLabel">Reaction Type</Select.Label> */}
+
+                                    {reactionTypes.map((type) => (
+                                        <Select.Item className="SelectItem" value={type.id}>
+                                            <Select.ItemText> {type.label} </Select.ItemText>
+                                            <Select.ItemIndicator className="SelectItemIndicator">
+                                                <CheckIcon />
+                                            </Select.ItemIndicator>
+                                        </Select.Item>
+                                    ))}
+                                    
+                                </Select.Group>
+                            </Select.Viewport>
+                            <Select.ScrollDownButton className="SelectScrollButton">
+                                <ChevronDownIcon />
+                            </Select.ScrollDownButton>
+
+                        </Select.Content>
+
+                    </Select.Portal>
+                </Select.Root>
 
 
+
+                {/* Include rate type specific options */}
                 {
                     edge.rate_type === 'mass_action' ? 
                         <MassActionDrawerInfo edgeID={edge.id} />
@@ -413,7 +452,7 @@ function ParameterInput({ paramID }: { paramID: string} ) {
 
     return (
         <>
-            <div class="species-params">
+            <div className="species-params">
                 {paramDisp} : 
                 <input
                     className="item species-param-input"
@@ -427,3 +466,7 @@ function ParameterInput({ paramID }: { paramID: string} ) {
         </>
     );
 }
+
+
+// Radix UI, helpful components: Separator, Radio Group, Accordian, Collapsible, Select, Scroll Area, 
+// Extra also helpful: Popover, Slider,
