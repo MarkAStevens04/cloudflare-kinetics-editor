@@ -317,6 +317,7 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
     - Initial value
     - Color
     - Copy (including all edges) or copy (not including all edges)
+    - Called a "Context menu"
 - Graph visual changes
     - Edit properties like simulation time
     - Zoom in / out on graph
