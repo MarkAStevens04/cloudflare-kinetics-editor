@@ -309,6 +309,20 @@ export default function RxnDrawer() {
                 </div>
 
 
+
+                <hr />
+                
+                {/* List all of our parameter inputs */}
+                <div >
+                    <p className="DrawerSection">Tunable Parameters: </p>
+                    {
+                        associated_params.map(PID => (
+                            <ParameterInput paramID={PID} />
+                        ))
+                    }
+                </div>
+
+
                 <hr />
 
                 {/* Edit Rate Laws */}
@@ -333,15 +347,7 @@ export default function RxnDrawer() {
 
                 
 
-                {/* List all of our parameter inputs */}
-                <div >
-                    <p className="DrawerSection">Tunable Parameters: </p>
-                    {
-                        associated_params.map(PID => (
-                            <ParameterInput paramID={PID} />
-                        ))
-                    }
-                </div>
+                
 
                 
                 
