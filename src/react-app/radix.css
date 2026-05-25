@@ -182,12 +182,14 @@
 }
 
 .MathInput {
+	font-size: 14px;
 	display: block;
 	border: 4px transparent solid;
 	border-radius: 8px;
 	border-color: rgba(0, 0, 0, 0.1);
 	outline: 0px;
 	transition: border-color 0.2s;
+	
 }
 
 .MathInput:hover,
