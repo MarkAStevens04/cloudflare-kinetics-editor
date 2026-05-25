@@ -252,11 +252,6 @@ button:focus-visible {
 	border-color: #747bff;
 }
 
-.rate-editor {
-	color: #1a1a1a;
-	padding: 0px 0px;
-}
-
 .autofill-species-box {
 	font-family: Helios_Extended;
 	font-weight: normal;

@@ -239,94 +239,82 @@ export default function RxnDrawer() {
 
                 </div>
                 <br />
+
+                <hr />
+                {/* <p> Rate Law: {rateLaw} </p> */}
+
+                {/* Dropdown to select reaction type (Michaelis-Menten, Mass Action, etc.) */}
+                <div className="DrawerSection">
+                    <p>Reaction type: </p>
+
+                    <Select.Root
+                        onValueChange={(value) => updateEdgeType(edge.id, value)}
+                        defaultValue={rate_type}
+                    >
+                        <Select.Trigger className="SelectTrigger" aria-label="ReactionType">
+                            <Select.Value placeholder="Select Reaction Type" />
+                            <Select.Icon className="SelectIcon">
+                                <ChevronDownIcon />
+                            </Select.Icon>
+                        </Select.Trigger>
+
+                        <Select.Portal>
+                            <Select.Content className="SelectContent" position="popper" sideOffset={4}>
+                                <Select.ScrollUpButton className="SelectScrollButton">
+                                    <ChevronUpIcon />
+                                </Select.ScrollUpButton>
+
+                                <Select.Viewport className="SelectViewport">
+                                    <Select.Group>
+                                        {/* <Select.Label className="SelectLabel">Reaction Type</Select.Label> */}
+
+                                        {reactionTypes.map((type) => (
+
+                                            <Select.Item className="SelectItem" value={type.id}>
+                                                <Select.ItemText> {type.label} </Select.ItemText>
+                                                <Select.ItemIndicator className="SelectItemIndicator">
+                                                    <CheckIcon />
+                                                </Select.ItemIndicator>
+
+                                                <Tooltip.Provider>
+                                                    <Tooltip.Root delayDuration={200}>
+                                                        <Tooltip.Trigger asChild>
+                                                            <button className="InfoIcon">
+                                                                <InfoCircledIcon />
+                                                            </button>
+                                                        </Tooltip.Trigger>
+                                                        
+                                                        <Tooltip.Portal>
+                                                            <Tooltip.Content className="TooltipContent" sideOffset={5}>
+                                                                {type.desc}
+                                                                <Tooltip.Arrow className="TooltipArrow" />
+                                                            </Tooltip.Content>
+                                                        </Tooltip.Portal>
+
+                                                    </Tooltip.Root>
+                                                </Tooltip.Provider>
+                                            </Select.Item>
+                                        ))}
+                                        
+                                    </Select.Group>
+                                </Select.Viewport>
+                                <Select.ScrollDownButton className="SelectScrollButton">
+                                    <ChevronDownIcon />
+                                </Select.ScrollDownButton>
+
+                            </Select.Content>
+
+                        </Select.Portal>
+                    </Select.Root>
+                </div>
+
+
                 <hr />
 
                 {/* Edit Rate Laws */}
-
-                <p> Rate Law: {rateLaw} </p>
-
                 <RateEditor currentRateLaw={rateLaw} onRateChange={onRateChange} />
 
-
-                {/* Dropdown to select reaction type (Michaelis-Menten, Mass Action, etc.) */}
-                <Select.Root
-                    onValueChange={(value) => updateEdgeType(edge.id, value)}
-                    defaultValue={rate_type}
-                >
-                    <Select.Trigger className="SelectTrigger" aria-label="ReactionType">
-                        <Select.Value placeholder="Select Reaction Type" />
-                        <Select.Icon className="SelectIcon">
-                            <ChevronDownIcon />
-                        </Select.Icon>
-                    </Select.Trigger>
-
-                    <Select.Portal>
-                        <Select.Content className="SelectContent" position="popper" sideOffset={4}>
-                            <Select.ScrollUpButton className="SelectScrollButton">
-                                <ChevronUpIcon />
-                            </Select.ScrollUpButton>
-
-                            <Select.Viewport className="SelectViewport">
-                                <Select.Group>
-                                    {/* <Select.Label className="SelectLabel">Reaction Type</Select.Label> */}
-
-                                    {/* {reactionTypes.map((type) => (
-                                        <Select.Item className="SelectItem" value={type.id}>
-                                            <Select.ItemText> {type.label} </Select.ItemText>
-                                            <Select.ItemIndicator className="SelectItemIndicator">
-                                                <CheckIcon />
-                                            </Select.ItemIndicator>
-
-                                
-                                        </Select.Item>
-                                    ))} */}
-
-                                    {reactionTypes.map((type) => (
-
-                                            <Select.Item className="SelectItem" value={type.id}>
-                                                            <Select.ItemText> {type.label} </Select.ItemText>
-                                                            <Select.ItemIndicator className="SelectItemIndicator">
-                                                                <CheckIcon />
-                                                            </Select.ItemIndicator>
-
-                                                            <Tooltip.Provider>
-                                                                <Tooltip.Root delayDuration={200}>
-                                                                    <Tooltip.Trigger asChild>
-                                                                        <button className="InfoIcon">
-                                                                            <InfoCircledIcon />
-                                                                        </button>
-                                                                    </Tooltip.Trigger>
-                                                                    
-                                                                    <Tooltip.Portal>
-                                                                        <Tooltip.Content className="TooltipContent" sideOffset={5}>
-                                                                            {type.desc}
-                                                                            <Tooltip.Arrow className="TooltipArrow" />
-                                                                        </Tooltip.Content>
-                                                                    </Tooltip.Portal>
-
-                                                                </Tooltip.Root>
-                                                            </Tooltip.Provider>
-                                            </Select.Item>
-                                        
-
-                                            
-                                
-                                        
-                                    ))}
-                                    
-                                </Select.Group>
-                            </Select.Viewport>
-                            <Select.ScrollDownButton className="SelectScrollButton">
-                                <ChevronDownIcon />
-                            </Select.ScrollDownButton>
-
-                        </Select.Content>
-
-                    </Select.Portal>
-                </Select.Root>
-
-
-
+                <hr />
 
 
 
@@ -426,22 +414,21 @@ function RateEditor({
 
 
     return (
-    <div className='rate-editor'>   
-        <p className='drawer-text'>Rate Law</p>
+    <div >   
+        <p className='DrawerSection'>Customize Rate Law:</p>
+        <br />
+        <br />
 
         <math-field
                 id="formula"
                 ref={mfRef}
                 onInput={onChange}
-                style={{
-                    display: 'block',
-                }}
+                className="MathInput"
             >
                 {currentRateLaw}
             </math-field>
 
 
-        <br />
         <p className='drawer-text' style={{fontSize: '0.8em', margin: '10px 0px',}}>Add species to rate law</p>
 
         {/* Add Reactant Handles */}

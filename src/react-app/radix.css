@@ -2,6 +2,18 @@
 @import "@radix-ui/colors/black-alpha.css";
 @import "@radix-ui/colors/violet.css";
 
+.DrawerSection {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	/* gap: 10px; */
+	/* margin-bottom: 20px; */
+
+	font-weight: 500;
+	padding: 0px;
+	line-height: 0px;
+}
+
 .SelectTrigger {
 	display: inline-flex;
 	align-items: center;
@@ -158,13 +170,21 @@
 	justify-content: right;
 	color: rgba(0, 0, 0, 0.5);
 	background-color: rgba(255, 0, 0, 0);
-	/* box-shadow: 0 2px 10px var(--black-a7); */
+
 	user-select: none;
 	outline: 0px;
 	border: 0px transparent solid;
 }
 .InfoIcon:hover {
 	color: rgba(0, 0, 0, 1);
+}
+
+.MathInput {
+	display: block;
+	border: 4px transparent solid;
+	border-radius: 8px;
+	border-color: rgba(0, 0, 0, 0.1);
+	outline: 0px;
 }
 
 @keyframes slideUpAndFade {
