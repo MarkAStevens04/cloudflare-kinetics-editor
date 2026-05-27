@@ -198,6 +198,16 @@
 	outline: 0px;
 }
 
+.SeparatorRoot {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+.SeparatorRoot[data-orientation="vertical"] {
+	/* Explicitly setting height will break what's happening in the Drawer for reactant quantity editing. */
+	/* height: 100%; */ 
+	width: 1px;
+}
+
+
 @keyframes slideUpAndFade {
 	from {
 		opacity: 0;

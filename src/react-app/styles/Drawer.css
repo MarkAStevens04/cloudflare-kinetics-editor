@@ -1,0 +1,14 @@
+/* Flexbox CheatSheet https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
+
+.DrawerRow {
+	display: flex;
+    width: 100%;
+    /* background-color: rgba(0, 255, 0, 0.1); */
+    /* align-items: stretch; */
+}
+
+.DrawerHalf {
+	/* background-color: rgba(255, 0, 0, 0.1); */
+    flex: 1;
+    padding: 0 5px;
+}

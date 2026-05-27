@@ -10,6 +10,7 @@ import { animated, useTransition } from '@react-spring/web';
 
 import './index.css';
 import './radix.css';
+import './styles/Drawer.css';
 
 // For math live input
 import "mathlive";
@@ -17,7 +18,12 @@ import { MathfieldElement } from 'mathlive';
 import useStore from './store';
 
 // import * as React from "react";
-import { Select } from 'radix-ui';
+import { 
+    Select,
+    Tooltip,
+    Separator,
+ } from 'radix-ui';
+
 import { 
     CheckIcon,
     ChevronDownIcon,
@@ -26,7 +32,6 @@ import {
 
 } from "@radix-ui/react-icons";
 
-import { Tooltip } from 'radix-ui';
 
 
 
@@ -236,9 +241,14 @@ export default function RxnDrawer() {
                         </div>    
 
                     </div>
-
                 </div>
                 <br />
+
+
+                <hr />
+
+                <ReactantEditor rxnID={RxnID} />
+
 
                 <hr />
                 {/* <p> Rate Law: {rateLaw} </p> */}
@@ -358,6 +368,44 @@ export default function RxnDrawer() {
             </>
         ) : null
     );
+
+}
+
+function ReactantEditor(
+    rxnID
+) {
+    const reactantIDs = useStore((store) => store.reactions.find((r) => r.id === rxnID)?.sources) || [''];
+    const productIDs = useStore((store) => store.reactions.find((r) => r.id === rxnID)?.targets) || [''];
+
+    return (
+    <div className="DrawerRow">
+        <div className="DrawerHalf" >
+            <p> Reactants: </p>
+            <p> test </p>
+
+            
+            
+
+        </div>
+
+        <Separator.Root
+                        className="SeparatorRoot"
+                        decorative
+                        orientation="vertical"
+                        style={{ 
+                            margin: "0 0px",
+                            
+                         }}
+                    />
+        
+
+
+        <div className="DrawerHalf" >
+            <p> Products: </p>
+        </div>
+    </div>
+    );
+
 
 }
 
