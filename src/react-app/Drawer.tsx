@@ -50,6 +50,7 @@ type rateEditorProps = {
 type reactantEditorProps = {
     sourceIDs: string[];
     targetIDs: string[];
+    rxnID: string;
 }
 
 
@@ -252,7 +253,7 @@ export default function RxnDrawer() {
 
                 <hr />
 
-                <ReactantEditor sourceIDs={edge.sources} targetIDs={edge.targets} />
+                <ReactantEditor sourceIDs={edge.sources} targetIDs={edge.targets} rxnID={edge.id} />
 
 
                 <hr />
@@ -379,16 +380,25 @@ export default function RxnDrawer() {
 function ReactantEditor({
     sourceIDs,
     targetIDs,
+    rxnID,
 }: reactantEditorProps) {
 
     const reactants = useStore((store) => store.species).filter(r => sourceIDs.includes(r.id)); 
     const products = useStore((store) => store.species).filter(r => targetIDs.includes(r.id));
 
+    const getCoefficient = useStore((store) => store.getCoefficient);
+    const changeCoefficient = useStore((store) => store.changeCoefficient);
+
+    // TODO: Fix this so that we only change coefficient after the input loses focus. Don't continuously update this. 
+    const updateCoefficient = (reactantID: string, newCoefficient: number) => {
+        changeCoefficient(reactantID, newCoefficient, rxnID);
+    }
+
     if (! sourceIDs || !targetIDs || sourceIDs.length === 0 || targetIDs.length === 0) {
         return null;
     }
 
-    console.log('reactant IDs: ' + JSON.stringify(reactants));
+    // console.log('reactant IDs: ' + JSON.stringify(reactants));
 
 
     return (
@@ -405,8 +415,8 @@ function ReactantEditor({
                 <input
                     className="item species-param-input"
                     placeholder={`0`}
-                    value={'2'}
-                    // onChange={onParamUpdate}
+                    value={getCoefficient(reactant.id, rxnID).toString()}
+                    onChange={(e) => updateCoefficient(reactant.id, parseInt(e.target.value) || 0)}
                     style={{
                         minWidth: '10px',
                         margin: '0px 0px'
@@ -448,8 +458,8 @@ function ReactantEditor({
                 <input
                     className="item species-param-input"
                     placeholder={`0`}
-                    value={'2'}
-                    // onChange={onParamUpdate}
+                    value={(-1 * getCoefficient(product.id, rxnID)).toString()}
+                    onChange={(e) => updateCoefficient(product.id, -1 * parseInt(e.target.value) || 0)}
                     style={{
                         minWidth: '10px',
                         margin: '0px 0px'

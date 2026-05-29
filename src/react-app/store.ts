@@ -47,6 +47,15 @@ type reactions = {
   associated_params: string[]; // List of param IDs which are associated with this reaction
 }
 
+// IDEA for new data structure for reaactions.
+// Change sources and targets to instead be list of objs.
+// {
+//  'id': 'Na',
+//  'role': 'reactant' / 'product' / 'catalyst' ,
+//  'coefficient': 1,
+// }
+
+
 type params = {
   id: string;
   display: string;
@@ -127,6 +136,9 @@ type AppState = {
   addSimParam: (paramName: string, paramVal: string) => string;
   associateParam: (paramID: string, rxnID: string) => void;
   updateParamValue: (paramID: string, newValue: string) => void;
+
+  getCoefficient: (reactantID: string, reactionID: string) => number;
+  changeCoefficient: (reactantID: string, newCoefficient: number, reactionID: string) => void;
 
   feedbackOpen: boolean;
   setFeedbackOpen: (open: boolean) => void;
@@ -456,6 +468,85 @@ const useStore = create<AppState>((set, get) => ({
 
     })),
 
+
+    // Get the coefficient of a reactant in some reaction.
+    // Returns # reactants - # products, so negative for products.
+    getCoefficient: (reactantID: string, reactionID: string) => {
+      const reaction = get().reactions.find(r => r.id === reactionID);
+      if (!reaction) {
+        return 0; // Reaction not found
+      }
+      console.log('Reaction found: ' + JSON.stringify(reaction));
+
+      const numOccurences = reaction.sources.filter(s => s === reactantID).length - reaction.targets.filter(s => s === reactantID).length;
+
+      console.log('Number of occurrences: ' + numOccurences);
+
+      return numOccurences;
+    },
+
+
+    // I really don't love this code. This will change once we change data structure of reactants and products.
+    changeCoefficient: (reactantID: string, newCoefficient: number, reactionID: string) => {
+      const prevCoefficient = get().getCoefficient(reactantID, reactionID);
+      const reaction = get().reactions.find(r => r.id === reactionID);
+
+      let diff = newCoefficient - prevCoefficient;
+
+      
+
+      if (!reaction || diff === 0 || newCoefficient === 0) {
+        return; // Reaction not found OR no change in coefficient
+      } 
+
+      let sources = reaction.sources;
+      let targets = reaction.targets;
+
+      console.log('trying to change coefficient! Diff: ' + diff);
+      if (diff < 0) {
+        // Need to remove some! 
+        // Check whether we remove from reactants or add to products.
+        // newCoefficient < prevCoefficient. 
+        // if prevCoefficient > 0, then we need to subtract down to newCoeffficient in reactants.
+        // if prevCoefficient < 0, then we need to add to newCoefficient from products (aka subtract from products)
+        if (prevCoefficient > 0) {
+          // We need to remove from reactants diff times.
+          const [newSources, remainingDiff] = removeLastN(sources, reactantID, -1 * diff);
+          sources = newSources;
+          diff = -1 * remainingDiff;
+        }
+        // Need to add to products
+        targets = [...targets, ...Array(-1 * diff).fill(reactantID)];
+
+      }
+
+      if (diff > 0) {
+        // Need to add some!
+        // Check whether we add to reactants or remove from products.
+
+        if (prevCoefficient < 0) {
+          // We need to remove from products diff times.
+          const [newTargets, remainingDiff] = removeLastN(targets, reactantID, diff);
+          targets = newTargets;
+          diff = remainingDiff;
+        }
+        // Need to add to reactants
+        sources = [...sources, ...Array(diff).fill(reactantID)];
+      }
+
+      console.log('sending updated reaction' + JSON.stringify(reaction));
+      // Now we set the updated reaction back in the reactions list to trigger a re-render.
+      set((store) => ({
+        'reactions': store.reactions.map((r) => r.id === reactionID ? { ...reaction, sources, targets } : r),
+      }));
+
+      console.log('new reactions list: ' + JSON.stringify(get().reactions));
+
+    },
+
+
+
+
     // Open / close simulation drawer
     simDrawerOpen: false,
     setSimDrawerOpen: (open) => set({ simDrawerOpen: open }),
@@ -655,3 +746,16 @@ function numberToLetters(num: number) {
     return String(num).split('').map((digit) => String.fromCharCode(97 + Number(digit))).join('');
 }
 
+// Remove last N elements of x from array
+function removeLastN(arr: string[], x: string, n: number): [string[], number] {
+  let toRemove = n;
+  const result = [];
+  for (let i = arr.length - 1; i >= 0; i--) {
+    if (arr[i] === x && toRemove > 0) {
+      toRemove--;
+      continue; // skip this one
+    }
+    result.push(arr[i]);
+  } 
+  return [result.reverse(), toRemove];
+}
