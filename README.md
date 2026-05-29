@@ -341,6 +341,7 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 
 - Change number of reactants in a reaction! 
     - Like 2X + Y -> Z
+    - Little button at bottom that lets you add reactants / products straight from drawer
 
 
 # React + Vite + Hono + Cloudflare Workers

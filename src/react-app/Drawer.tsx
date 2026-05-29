@@ -442,6 +442,32 @@ function ReactantEditor({
 
         <div className="DrawerHalf" >
             <p> Products: </p>
+
+            {products.map((product) => (
+                <div style={{display: 'flex', padding: '5px 0px'}}>
+                <input
+                    className="item species-param-input"
+                    placeholder={`0`}
+                    value={'2'}
+                    // onChange={onParamUpdate}
+                    style={{
+                        minWidth: '10px',
+                        margin: '0px 0px'
+                    }}
+                />
+
+                <p className='autofill-species-box' 
+                key={product.id} 
+                style={{backgroundColor: product.color}}
+                // onClick={() => onButton(product.id)}
+                >
+
+                    {product.label}
+
+                </p>
+                </div>))
+            }
+
         </div>
     </div>
     </>
