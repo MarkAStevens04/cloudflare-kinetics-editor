@@ -417,13 +417,15 @@ function ReactantEditor({
                     onChange={(e) => updateCoefficient(reactant.id, parseInt(e.target.value) || 0)}
                     style={{
                         minWidth: '10px',
-                        margin: '0px 0px'
+                        margin: '0px 0px',
+                        padding: '0px 0.8em 0px 0.2em',
                     }}
                 />
 
+
                 <p className='autofill-species-box' 
                 key={reactant.id} 
-                style={{backgroundColor: reactant.color, borderColor: reactant.color, cursor: 'default'}}
+                style={{backgroundColor: reactant.color, borderColor: reactant.color, cursor: 'default', transform: 'translateX(-1em)'}}
                 // onClick={() => onButton(reactant.id)}
                 >
 
@@ -459,14 +461,14 @@ function ReactantEditor({
                     value={(getCoefficient(product.id, rxnID)).toString()}
                     onChange={(e) => updateCoefficient(product.id, parseInt(e.target.value) || 0)}
                     style={{
-                        minWidth: '10px',
+                        // minWidth: '10px',
                         margin: '0px 0px'
                     }}
                 />
 
                 <p className='autofill-species-box' 
                 key={product.id} 
-                style={{backgroundColor: product.color, borderColor: product.color, cursor: 'default'}}
+                style={{backgroundColor: product.color, borderColor: product.color, cursor: 'default', transform: 'translateX(-15px)'}}
                 // onClick={() => onButton(product.id)}
                 >
 
