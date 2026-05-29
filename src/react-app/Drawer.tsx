@@ -48,15 +48,14 @@ type rateEditorProps = {
 }
 
 type reactantEditorProps = {
-    sourceIDs: string[];
-    targetIDs: string[];
+    participants: {id: string, role: string, coefficient: number}[];
     rxnID: string;
 }
 
 
 export default function RxnDrawer() {
 
-    const edge = useStore((store) => store.reactions.find((e) => e.id === store.selectedEdge)) || { id: '', label: '', sources: [''], targets: [''], rate_law: '', rate_type: ''};
+    const edge = useStore((store) => store.reactions.find((e) => e.id === store.selectedEdge)) || { id: '', label: '', rate_law: '', rate_type: '', participants: []};
     const nodes = useStore((store) => store.species);
 
     const rate_type = useStore((store) => store.reactions.find((e) => e.id === edge.id)?.rate_type) || 'mass_action';
@@ -73,8 +72,8 @@ export default function RxnDrawer() {
 
     const updateEdgeType = useStore((store) => store.updateEdgeType);
 
-    const sourceNode = nodes.find((node) => node.id === edge.sources[0]) || nodes[0];
-    const targetNode = nodes.find((node) => node.id === edge.targets[0]) || nodes[0];
+    const sourceNode = nodes.find((node) => node.id === edge.participants.find((p) => p.role === 'reactant')?.id) || nodes[0];
+    const targetNode = nodes.find((node) => node.id === edge.participants.find((p) => p.role === 'product')?.id) || nodes[0];
 
     const RxnID = edge.id;
     const rateLaw = edge.rate_law;
@@ -253,7 +252,7 @@ export default function RxnDrawer() {
 
                 <hr />
 
-                <ReactantEditor sourceIDs={edge.sources} targetIDs={edge.targets} rxnID={edge.id} />
+                <ReactantEditor participants={edge.participants} rxnID={edge.id} />
 
 
                 <hr />
@@ -378,13 +377,12 @@ export default function RxnDrawer() {
 }
 
 function ReactantEditor({
-    sourceIDs,
-    targetIDs,
+    participants,
     rxnID,
 }: reactantEditorProps) {
 
-    const reactants = useStore((store) => store.species).filter(r => sourceIDs.includes(r.id)); 
-    const products = useStore((store) => store.species).filter(r => targetIDs.includes(r.id));
+    const reactants = useStore((store) => store.species).filter(r => participants.filter(p => p.role === 'reactant').map(p => p.id).includes(r.id));
+    const products = useStore((store) => store.species).filter(r => participants.filter(p => p.role === 'product').map(p => p.id).includes(r.id));
 
     const getCoefficient = useStore((store) => store.getCoefficient);
     const changeCoefficient = useStore((store) => store.changeCoefficient);
@@ -394,7 +392,7 @@ function ReactantEditor({
         changeCoefficient(reactantID, newCoefficient, rxnID);
     }
 
-    if (! sourceIDs || !targetIDs || sourceIDs.length === 0 || targetIDs.length === 0) {
+    if (! participants || participants.length === 0) {
         return null;
     }
 
@@ -415,7 +413,7 @@ function ReactantEditor({
                 <input
                     className="item species-param-input"
                     placeholder={`0`}
-                    value={getCoefficient(reactant.id, rxnID).toString()}
+                    value={getCoefficient(reactant.id, rxnID) === 0 ? '' : getCoefficient(reactant.id, rxnID).toString()}
                     onChange={(e) => updateCoefficient(reactant.id, parseInt(e.target.value) || 0)}
                     style={{
                         minWidth: '10px',
@@ -425,7 +423,7 @@ function ReactantEditor({
 
                 <p className='autofill-species-box' 
                 key={reactant.id} 
-                style={{backgroundColor: reactant.color}}
+                style={{backgroundColor: reactant.color, borderColor: reactant.color, cursor: 'default'}}
                 // onClick={() => onButton(reactant.id)}
                 >
 
@@ -458,8 +456,8 @@ function ReactantEditor({
                 <input
                     className="item species-param-input"
                     placeholder={`0`}
-                    value={(-1 * getCoefficient(product.id, rxnID)).toString()}
-                    onChange={(e) => updateCoefficient(product.id, -1 * parseInt(e.target.value) || 0)}
+                    value={(getCoefficient(product.id, rxnID)).toString()}
+                    onChange={(e) => updateCoefficient(product.id, parseInt(e.target.value) || 0)}
                     style={{
                         minWidth: '10px',
                         margin: '0px 0px'
@@ -468,7 +466,7 @@ function ReactantEditor({
 
                 <p className='autofill-species-box' 
                 key={product.id} 
-                style={{backgroundColor: product.color}}
+                style={{backgroundColor: product.color, borderColor: product.color, cursor: 'default'}}
                 // onClick={() => onButton(product.id)}
                 >
 

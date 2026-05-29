@@ -36,15 +36,30 @@ type species = {
   speciesType: string; // types: enzyme, molecule, custom, (future: DNA, RNA, DNA-Binding Protein, Complex, etc.)
 }
 
+// type reactions = {
+//   id: string;
+//   label: string;
+//   sources: string[];
+//   targets: string[];
+//   rate_law: string;
+//   rate_type: string; // types: mass_action
+//   enzymeID: string;
+//   associated_params: string[]; // List of param IDs which are associated with this reaction
+// }
+
 type reactions = {
   id: string;
   label: string;
-  sources: string[];
-  targets: string[];
   rate_law: string;
-  rate_type: string; // types: mass_action
-  enzymeID: string;
+  rate_type: string; // types: mass_action, michaelis_menten, hill_equation, etc.
   associated_params: string[]; // List of param IDs which are associated with this reaction
+
+  participants: {
+    id: string;
+    role: string; // 'reactant' | 'product' | 'catalyst'
+    coefficient: number;
+  }[];
+
 }
 
 // IDEA for new data structure for reaactions.
@@ -68,7 +83,7 @@ const initialSpecies: species[] = [
 ];
 
 const initialReactions: reactions[] = [
-  { id: 'Na_Nb', label: 'Change me!', sources: ['Na'], targets: ['Nb'], rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action', enzymeID: '', associated_params: [] },
+  { id: 'Na_Nb', label: 'Change me!', rate_law: '(\\objNa{\\text{Na}})\\cdot0.1', rate_type: 'mass_action', associated_params: [], participants: [{ id: 'Na', role: 'reactant', coefficient: 1 }, { id: 'Nb', role: 'product', coefficient: 1 }] }
 ];
 
 const initialSimParams: params[] = [
@@ -112,7 +127,7 @@ type AppState = {
   setNodes: (nodes: AppNode[]) => void;
   setEdges: (edges: AppEdge[]) => void;
 
-  addNode: (id: string, label: string, color: string) => void;
+  addNode: (id: string, label: string, color: string, speciesType: string) => void;
 
   selectedEdge: string | null;
   setSelectedEdge: (edgeId: string | null) => void;
@@ -193,7 +208,7 @@ const useStore = create<AppState>((set, get) => ({
 
 
     // Function to add a new Node to both visualNodes AND to species!
-    addNode: (id, label, color, speciesType) => set((store) => ({
+    addNode: (id: string, label: string, color: string, speciesType: string) => set((store) => ({
         species: [...store.species, { id: id, label: label, initial: '', color: color, speciesType: speciesType }],
 
         visualNodes: [...store.visualNodes, 
@@ -216,12 +231,14 @@ const useStore = create<AppState>((set, get) => ({
       const newRxn = { 
         id: `${params.source}_${params.target}`, 
         label: 't2', 
-        sources: [params.source], 
-        targets: [params.target], 
         rate_law: defRateLaw, 
         rate_type: '',
-        enzymeID: '',
         associated_params: [],
+
+        participants: [
+          { id: params.source, role: "reactant", coefficient: 1 },
+          { id: params.target, role: "product", coefficient: 1 },
+        ]
         };
 
       const rateType = predictRxnType(newRxn, get().species);
@@ -263,7 +280,7 @@ const useStore = create<AppState>((set, get) => ({
       // connectionState has attributes: isValid, from, fromHandle, fromPosition, fromNode, to, toHandle, toPosition, toNode, pointer
 
       // When a connection is dropped on the pane it's not valid
-      if (!connectionState.isValid && get().edgeHovering) {
+      if (!connectionState.isValid && get().edgeHovering && connectionState.fromNode && connectionState.fromHandle) {
         const targetRxnID = get().edgeHoverID;
         const nodeToAdd = connectionState.fromNode.id
 
@@ -386,8 +403,8 @@ const useStore = create<AppState>((set, get) => ({
           }
         } else {
           
-          const current = get().reactions.find(item => item.id === id) || {sources: [], targets: []};
-          const currentEnzymeID = current.sources[1] || '';
+          const current = get().reactions.find(item => item.id === id) || {participants: []};
+          const currentEnzymeID = current.participants.find(p => p.role === 'catalyst')?.id || '';
 
           return {
             ...e,
@@ -470,7 +487,6 @@ const useStore = create<AppState>((set, get) => ({
 
 
     // Get the coefficient of a reactant in some reaction.
-    // Returns # reactants - # products, so negative for products.
     getCoefficient: (reactantID: string, reactionID: string) => {
       const reaction = get().reactions.find(r => r.id === reactionID);
       if (!reaction) {
@@ -478,67 +494,43 @@ const useStore = create<AppState>((set, get) => ({
       }
       console.log('Reaction found: ' + JSON.stringify(reaction));
 
-      const numOccurences = reaction.sources.filter(s => s === reactantID).length - reaction.targets.filter(s => s === reactantID).length;
+      const coeff = reaction.participants.find(p => p.id === reactantID)?.coefficient ?? 0;
 
-      console.log('Number of occurrences: ' + numOccurences);
+      console.log('Coefficient: ' + coeff);
 
-      return numOccurences;
+      return coeff;
     },
 
 
     // I really don't love this code. This will change once we change data structure of reactants and products.
     changeCoefficient: (reactantID: string, newCoefficient: number, reactionID: string) => {
-      const prevCoefficient = get().getCoefficient(reactantID, reactionID);
+      // const prevCoefficient = get().getCoefficient(reactantID, reactionID);
       const reaction = get().reactions.find(r => r.id === reactionID);
 
-      let diff = newCoefficient - prevCoefficient;
+      // const participant = reaction?.participants.find(p => p.id === reactantID);
 
-      
+      // const newParticipant = {
+      //   id: reactantID,
+      //   role: participant?.role,
+      //   coefficient: newCoefficient,
+      // };
 
-      if (!reaction || diff === 0 || newCoefficient === 0) {
-        return; // Reaction not found OR no change in coefficient
-      } 
+      const participants = reaction?.participants.map(p => p.id === reactantID ? { ...p, coefficient: newCoefficient } : p) || [];
 
-      let sources = reaction.sources;
-      let targets = reaction.targets;
 
-      console.log('trying to change coefficient! Diff: ' + diff);
-      if (diff < 0) {
-        // Need to remove some! 
-        // Check whether we remove from reactants or add to products.
-        // newCoefficient < prevCoefficient. 
-        // if prevCoefficient > 0, then we need to subtract down to newCoeffficient in reactants.
-        // if prevCoefficient < 0, then we need to add to newCoefficient from products (aka subtract from products)
-        if (prevCoefficient > 0) {
-          // We need to remove from reactants diff times.
-          const [newSources, remainingDiff] = removeLastN(sources, reactantID, -1 * diff);
-          sources = newSources;
-          diff = -1 * remainingDiff;
-        }
-        // Need to add to products
-        targets = [...targets, ...Array(-1 * diff).fill(reactantID)];
 
-      }
-
-      if (diff > 0) {
-        // Need to add some!
-        // Check whether we add to reactants or remove from products.
-
-        if (prevCoefficient < 0) {
-          // We need to remove from products diff times.
-          const [newTargets, remainingDiff] = removeLastN(targets, reactantID, diff);
-          targets = newTargets;
-          diff = remainingDiff;
-        }
-        // Need to add to reactants
-        sources = [...sources, ...Array(diff).fill(reactantID)];
-      }
-
-      console.log('sending updated reaction' + JSON.stringify(reaction));
+      // const newParticipants = reaction?.participants.map(p => p.id === reactantID ? newParticipant : p) || [];
+      // console.log('sending updated reaction' + JSON.stringify(reaction));
       // Now we set the updated reaction back in the reactions list to trigger a re-render.
-      set((store) => ({
-        'reactions': store.reactions.map((r) => r.id === reactionID ? { ...reaction, sources, targets } : r),
-      }));
+      // set((store) => ({
+      //   'reactions': store.reactions.map((r) => r.id === reactionID ? { ...reaction, participants: newParticipants } : r),
+      // }));
+
+      if (reaction) {
+        set((store) => ({
+          'reactions': store.reactions.map((r) => r.id === reactionID ? { ...reaction, participants: participants } : r),
+        }));
+      }
 
       console.log('new reactions list: ' + JSON.stringify(get().reactions));
 
@@ -637,12 +629,12 @@ function cleanAsciiConversion(ascii: string) {
 function addSource(source: string, reaction: reactions) {
 
   // Check for duplicate sources
-  if (reaction.sources.includes(source)) {
+  if (reaction.participants.find((p) => p.id === source)) {
     return false;
   }
 
   // Add source node to the reaction's list of sources
-  reaction.sources = [...reaction.sources, source];
+  reaction.participants = [...reaction.participants, { id: source, role: 'reactant', coefficient: 1 }];
 
   // return a success
   return true;
@@ -655,12 +647,12 @@ function addSource(source: string, reaction: reactions) {
 function addTarget(target: string, reaction: reactions) {
 
   // Check for duplicate sources
-  if (reaction.targets.includes(target)) {
+  if (reaction.participants.find((p) => p.id === target)) {
     return false;
   }
 
   // Add source node to the reaction's list of sources
-  reaction.targets = [...reaction.targets, target];
+  reaction.participants = [...reaction.participants, { id: target, role: 'product', coefficient: 1 }];
 
   // return a success
   return true;
@@ -677,8 +669,8 @@ function predictRxnType(reaction: reactions, species: species[]) {
   //   return reaction.rate_type;
   // }
   
-  const sources = reaction.sources;
-  const targets = reaction.targets;
+  const sources = reaction.participants.filter(p => p.role === 'reactant').map(p => p.id) || [];
+  const targets = reaction.participants.filter(p => p.role === 'product').map(p => p.id) || [];
 
 
   // ===========
@@ -696,14 +688,16 @@ function predictRxnType(reaction: reactions, species: species[]) {
 
   // Translate this list into a dictionary with count of each species type.
   // {'molecule': 3, 'enzyme': 1}
-  const sTypeCounts = sTypes.reduce((counts, specieType) => {
+  const sTypeCounts = sTypes.reduce((counts: Record<string, number>, specieType) => {
+    if (!specieType) return counts;
     counts[specieType] = (counts[specieType] || 0) + 1;
     return counts;
   }, {});
 
   // Repeat above for targets
   // {'molecule': 3, 'enzyme': 1}
-  const tTypeCounts = tTypes.reduce((counts, specieType) => {
+  const tTypeCounts = tTypes.reduce((counts: Record<string, number>, specieType) => {
+    if (!specieType) return counts;
     counts[specieType] = (counts[specieType] || 0) + 1;
     return counts;
   }, {});
@@ -737,25 +731,11 @@ function predictRxnType(reaction: reactions, species: species[]) {
 // Gets the default rate law for a given rate law type!
 function getDefaultRateLaw(reaction: reactions) {
   // Default is mass_action (reactant1 * reactant2 * ... * 0.1)
-  const newRateLaw = reaction.sources.map((s) => {return '(\\obj' + s + '{\\text{' + s + '}})\\cdot'}).join('') + '0.1';
+  const newRateLaw = reaction.participants.filter((p) => p.role === 'reactant').map((s) => {return '(\\obj' + s.id + '{\\text{' + s.id + '}})\\cdot'}).join('') + '0.1';
   return newRateLaw
 }
 
 // Converts a number to letters (used for getting string of paramID)
 function numberToLetters(num: number) {
     return String(num).split('').map((digit) => String.fromCharCode(97 + Number(digit))).join('');
-}
-
-// Remove last N elements of x from array
-function removeLastN(arr: string[], x: string, n: number): [string[], number] {
-  let toRemove = n;
-  const result = [];
-  for (let i = arr.length - 1; i >= 0; i--) {
-    if (arr[i] === x && toRemove > 0) {
-      toRemove--;
-      continue; // skip this one
-    }
-    result.push(arr[i]);
-  } 
-  return [result.reverse(), toRemove];
 }

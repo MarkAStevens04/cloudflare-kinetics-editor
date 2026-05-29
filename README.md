@@ -345,6 +345,9 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 
 - Internal representation of reactants & products
 
+- Global vs local parameters?
+    - Similar to adding species, add parameters!
+
 
 # React + Vite + Hono + Cloudflare Workers
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
