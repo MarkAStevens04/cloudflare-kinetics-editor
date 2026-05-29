@@ -12,6 +12,7 @@ import '../index.css';
 import useStore from '../store';
 
 import { type AppNode } from '../ProteinNode';
+import { continuousColorLegendClasses } from '@mui/x-charts';
 
 
 export type MichaelisEdgeType = Edge<{ 
@@ -181,12 +182,12 @@ export default function MichaelisMentenEdge({
 export function MichaelisMentenDrawerInfo({edgeID}: {edgeID: string;}) {
 
     const currentEnzymeID = useStore(store => {
-        const current = store.reactions.find(item => item.id === edgeID) || {sources: [], targets: []};
-        return current.sources[1] || '';
+        const current = store.reactions.find(item => item.id === edgeID) || {participants: []};
+        return current.participants.find(p => p.role === 'enzyme')?.id || '';
     });
 
     const associated_params = useStore(store => {
-        const current = store.reactions.find(item => item.id === edgeID) || {sources: [], targets: []};
+        const current = store.reactions.find(item => item.id === edgeID) || {associated_params: []};
         return current.associated_params
     });
 
@@ -210,17 +211,30 @@ export function initializeMichaelisEdge(id: string, currRxn: reaction) {
     const addSimParam = useStore.getState().addSimParam; 
     const associateParam = useStore.getState().associateParam;
 
-    const currentEnzymeID = currRxn.sources[1] || '';
-    const currentSubstrID = currRxn.sources[0] || '';
+    const currParams = useStore.getState().simParams.filter(param => currRxn.associated_params.includes(param.id));
+    console.log('curr params: ' + JSON.stringify(currParams, null, 2));
 
-    // Add parameters and get their ids
-    const kmID = addSimParam('Km', '100');
-    const vmaxID = addSimParam('Vmax', '100');
+    // const existingSpecies = 
+    const currParticipants = currRxn.participants.map(p => p.id);
+
+    const currentEnzymeID = useStore.getState().species.filter(s => currParticipants.includes(s.id) && s.speciesType === 'enzyme').map(s => s.id)[0] || '';
+    const currentSubstrID = useStore.getState().species.filter(s => currParticipants.includes(s.id) && s.speciesType === 'molecule').map(s => s.id)[0] || '';
+    
+
+    let kmID = '';
+    let vmaxID = '';
+
+    // Find the Km parameter in our parameter list. If there's not one, create it. 
+    const existingKm = currParams.find(param => param.display.includes('Km'));
+    kmID = existingKm ? existingKm.id : addSimParam('Km', '100');
+    
+    // Find the Vmax parameter in our parameter list. If there's not one, create it.
+    const existingVmax = currParams.find(param => param.display.includes('Vmax'));
+    vmaxID = existingVmax ? existingVmax.id : addSimParam('Vmax', '100');
 
     // Associate newly added parameters to our rxn
-    // associateParam(kmID, currRxn.id);
-    // associateParam(vmaxID, currRxn.id);
-    
+    if (!existingKm) { associateParam(kmID, currRxn.id); }
+    if (!existingVmax) { associateParam(vmaxID, currRxn.id); }
 
     // console.log('sim params: ' + JSON.stringify(useStore.getState().simParams, null, 2));
     // console.log('associated params: ' + JSON.stringify(useStore.getState().reactions, null, 2))
@@ -231,7 +245,16 @@ export function initializeMichaelisEdge(id: string, currRxn: reaction) {
 
 
     const newRateLaw = '\\frac{' + vmaxLatex + '\\cdot' + substrLatex + '}{' + kmLatex + '+' + substrLatex + '}';
+    
+    const newParticipants = currRxn.participants.map(p => {
+        if (p.id !== currentEnzymeID) { return p; }
 
-    return { ...currRxn, rate_type: 'michaelis_menten', enzymeID: currentEnzymeID, rate_law: newRateLaw, associated_params: [...currRxn.associated_params, kmID, vmaxID] };
+        return { ...p, id: currentEnzymeID, role: 'catalyst' };
+    });
+
+
+    console.log('new participants: ' + JSON.stringify(newParticipants, null, 2));
+
+    return { ...currRxn, rate_type: 'michaelis_menten', participants: newParticipants, rate_law: newRateLaw, associated_params: [...currRxn.associated_params, kmID, vmaxID] };
 
 };

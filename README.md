@@ -349,8 +349,17 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 
 - Global vs local parameters?
     - Similar to adding species, add parameters!
+    - Fix local vs global params. Very weird stuff rn.
 
 - Fix coefficients not working when DOING simulation!
+
+- Make CSV downloadable
+
+- Draw Multiple reactants and Products.
+
+- Edit attributes of species by right clicking! (Initial values)
+
+- Fix auto michaelis-menten
 
 
 # React + Vite + Hono + Cloudflare Workers

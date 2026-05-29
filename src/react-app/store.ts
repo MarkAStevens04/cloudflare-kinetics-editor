@@ -370,18 +370,24 @@ const useStore = create<AppState>((set, get) => ({
 
 
     // Update the rate law type of a given reaction in both reactions and visualEdges
-    updateEdgeType: (id, newEdgeType) => set((store) => ({
+    updateEdgeType: (id, newEdgeType) => set((store) => {
+
+      let newEdge = {} as reactions; // Kinda sketchy but idk how else to do this without changing a lot of code. This is just a placeholder variable we can use to hold the updated reaction with new edge type, which we can then use to update visualEdges correctly. This is mainly for handling the MichaelisMenten case where we need to add enzymeID and associated params when we change to that type.
+
+      return {
       reactions: store.reactions.map((r) => {
         if (r.id !== id) return r;
 
     
         if (newEdgeType !== 'michaelis_menten') {
           const newRateLaw = getDefaultRateLaw(r);
-          return { ...r, rate_type: newEdgeType, rate_law: newRateLaw };
+          newEdge = { ...r, rate_type: newEdgeType, rate_law: newRateLaw };
 
         } else {
-          return initializeMichaelisEdge(id, r);
+          newEdge = initializeMichaelisEdge(id, r)
         }
+
+        return newEdge;
         
     }),
 
@@ -403,8 +409,9 @@ const useStore = create<AppState>((set, get) => ({
           }
         } else {
           
-          const current = get().reactions.find(item => item.id === id) || {participants: []};
-          const currentEnzymeID = current.participants.find(p => p.role === 'catalyst')?.id || '';
+          // const current = get().reactions.find(item => item.id === id) || {participants: []};
+          const currentEnzymeID = newEdge.participants.find(p => p.role === 'catalyst')?.id || '';
+          console.log('current enzyme id: ' + JSON.stringify(newEdge));
 
           return {
             ...e,
@@ -413,7 +420,7 @@ const useStore = create<AppState>((set, get) => ({
             data: { 
               ...e.data, 
               rate_type: newEdgeType,
-              enzymeID: currentEnzymeID,
+              enzymeID: currentEnzymeID, // Lowkey kinda sketchy to create new attribute and send it like this. Should really have a different way for MichaelisMenten edge to find catalystID.
             }
           }
 
@@ -422,7 +429,7 @@ const useStore = create<AppState>((set, get) => ({
         
       }),
 
-    })),
+    }}),
 
 
     // Adds a simulation parameter! Always with a unique ID. Returns the ID of the added parameter.
@@ -669,7 +676,7 @@ function predictRxnType(reaction: reactions, species: species[]) {
   //   return reaction.rate_type;
   // }
   
-  const sources = reaction.participants.filter(p => p.role === 'reactant').map(p => p.id) || [];
+  const sources = reaction.participants.filter(p => p.role === 'reactant' || p.role === 'catalyst').map(p => p.id) || [];
   const targets = reaction.participants.filter(p => p.role === 'product').map(p => p.id) || [];
 
 
@@ -685,6 +692,7 @@ function predictRxnType(reaction: reactions, species: species[]) {
     const match = species.find((specie) => specie.id === item);
     return match?.speciesType;
   });
+
 
   // Translate this list into a dictionary with count of each species type.
   // {'molecule': 3, 'enzyme': 1}
