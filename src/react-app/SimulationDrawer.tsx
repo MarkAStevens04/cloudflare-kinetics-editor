@@ -110,9 +110,9 @@ function SimulationDrawer() {
             width={500}
             /> : null}
 
-            <div className="sim-progression" >
+            {/* <div className="sim-progression" >
                 <SimulationProgression open={open} />
-            </div>
+            </div> */}
 
         </animated.div>   
 
@@ -129,22 +129,22 @@ export default React.memo(SimulationDrawer);
 
 
 
-function SimulationProgression({ steps = ['Double-Checking Values', 'Generating ODEs', 'Optimizing equations for speed'], open }: { steps?: string[]; open: boolean }) {
+// function SimulationProgression({ steps = ['Double-Checking Values', 'Generating ODEs', 'Optimizing equations for speed'], open }: { steps?: string[]; open: boolean }) {
 
-    console.log('open: ', open);
-    const transitions = useTransition(open ? steps : [], {
-        from: { opacity: 0, x: '-50px' },
-        enter: { opacity: 1, x: '0px' },
-        leave: {opacity: 0, x: '50px' },
-        config: config.default,
-        trail: open ? 1000 / steps.length : 50 / steps.length,
-    });
+//     console.log('open: ', open);
+//     const transitions = useTransition(open ? steps : [], {
+//         from: { opacity: 0, x: '-50px' },
+//         enter: { opacity: 1, x: '0px' },
+//         leave: {opacity: 0, x: '50px' },
+//         config: config.default,
+//         trail: open ? 1000 / steps.length : 50 / steps.length,
+//     });
 
-    return transitions((style, item) => 
-    item ? (
-        <animated.div style={style}>{item}</animated.div>
-    ) : null
-)
+//     return transitions((style, item) => 
+//     item ? (
+//         <animated.div style={style}>{item}</animated.div>
+//     ) : null
+// )
 
 
-}
+// }

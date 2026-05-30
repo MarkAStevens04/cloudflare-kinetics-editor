@@ -156,6 +156,11 @@ type AppState = {
   getCoefficient: (reactantID: string, reactionID: string) => number;
   changeCoefficient: (reactantID: string, newCoefficient: number, reactionID: string) => void;
 
+  tempParamName: string; // For storring parameter name and value when creating a new parameter in drawer.
+  tempParamValue: string;
+  setTempParamName: (name: string) => void;
+  setTempParamValue: (value: string) => void;
+
   feedbackOpen: boolean;
   setFeedbackOpen: (open: boolean) => void;
 
@@ -179,6 +184,8 @@ const useStore = create<AppState>((set, get) => ({
     setDebugState: (newState) => set({ debugState: newState }),
     debugState2: 'nothing',
     setDebugState2: (newState) => set({ debugState2: newState }),
+    tempParamName: '',
+    tempParamValue: '',
 
     species: initialSpecies,
     reactions: initialReactions,
@@ -623,6 +630,10 @@ const useStore = create<AppState>((set, get) => ({
     // Open / close feedback form drawer
     feedbackOpen: false,
     setFeedbackOpen: (open) => set({ feedbackOpen: open }),
+
+    // Changes our temporary parameter name and value, which will be used wwhen creating a parameter.
+    setTempParamName: (name) => set({ tempParamName: name }),
+    setTempParamValue: (value) => set({ tempParamValue: value }),
 
     // Update what edge we're hovering over (if any)
     edgeHovering: false,

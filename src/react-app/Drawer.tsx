@@ -22,6 +22,7 @@ import {
     Select,
     Tooltip,
     Separator,
+    Popover,
  } from 'radix-ui';
 
 import { 
@@ -45,6 +46,7 @@ import {
 type rateEditorProps = {
     currentRateLaw?: string;
     onRateChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    onParamButton: (buttonID: string) => void;
 }
 
 type reactantEditorProps = {
@@ -69,6 +71,7 @@ export default function RxnDrawer() {
     const updateRateLaw = useStore((store) => store.updateRateLaw);
     const updateInitialConcentration = useStore((store) => store.updateInitialConcentration);
     const updateRateName = useStore((store) => store.updateRateName);
+    const associateParam = useStore((store) => store.associateParam);
 
     const updateEdgeType = useStore((store) => store.updateEdgeType);
 
@@ -130,6 +133,10 @@ export default function RxnDrawer() {
 
     const onPChange = (event: ChangeEvent<HTMLInputElement>) => {
         updateInitialConcentration(targetNode.id, event.target.value);
+    }
+
+    const onParamButton = (buttonID: string) => {
+        associateParam(buttonID, RxnID);
     }
     
 
@@ -341,7 +348,7 @@ export default function RxnDrawer() {
                 <hr />
 
                 {/* Edit Rate Laws */}
-                <RateEditor currentRateLaw={rateLaw} onRateChange={onRateChange} />
+                <RateEditor currentRateLaw={rateLaw} onRateChange={onRateChange} onParamButton={onParamButton} />
 
                 <hr />
 
@@ -492,13 +499,13 @@ function ReactantEditor({
 function RateEditor({
     currentRateLaw,
     onRateChange,
+    onParamButton,
 
 }: rateEditorProps) {
     const nodes = useStore((store) => store.species);
     const params = useStore((store) => store.simParams);
 
     const mfRef = useRef<MathfieldElement>(null); 
-
 
     // When our input is changed
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -517,6 +524,11 @@ function RateEditor({
         // mfRef.current?.applyStyle({
         //     color: buttonColor,
         // });
+    }
+
+    const onParamButtonSelect = (buttonID: string) => {
+        onParamButton(buttonID);
+        onButton(buttonID);
     }
 
     const macros = useMemo(() => {
@@ -616,13 +628,15 @@ function RateEditor({
             }}
         >
 
+            <CreateParameter />
+
             {/* Populate our parameter chips */}
             {params.map((param) => (
                 <div>
                 <p className='autofill-species-box' 
                 key={param.id} 
                 style={{backgroundColor: 'rgba(0, 0, 0, 0.1)'}}
-                onClick={() => onButton(param.id)}
+                onClick={() => onParamButtonSelect(param.id)}
                 >
 
                     {param.display}
@@ -645,6 +659,7 @@ function ParameterInput({ paramID }: { paramID: string} ) {
     
     const updateParam = useStore((store) => store.updateParamValue);
 
+
     const onParamUpdate = (event: ChangeEvent<HTMLInputElement>) => {
         updateParam(paramID, event.target.value);
     }
@@ -652,7 +667,7 @@ function ParameterInput({ paramID }: { paramID: string} ) {
     return (
         <>
             <div className="DrawerSection">
-                {paramDisp} 
+                <p style={{padding: '0px', margin: '0px', fontWeight: '500', color: 'rgba(0, 0, 0, 0.5)' }}>{paramDisp} </p>
                 <input
                     className="item species-param-input"
                     placeholder={`0`}
@@ -669,6 +684,87 @@ function ParameterInput({ paramID }: { paramID: string} ) {
     );
 }
 
+function CreateParameter({}) {
+    const addSimParam = useStore.getState().addSimParam; 
+    const paramTempName = useStore((store) => store.tempParamName);
+    const paramTempValue = useStore((store) => store.tempParamValue);
+
+    const associateParamToRxn = useStore((store) => store.associateParamToRxn);
+
+    const setTempParamName = useStore((store) => store.setTempParamName);
+    const setTempParamValue = useStore((store) => store.setTempParamValue);
+
+    const onTempParamNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setTempParamName(event.target.value);
+    }
+    
+    const onTempParamValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setTempParamValue(event.target.value);
+    }
+
+    const onCreate = () => {
+        const tVal = paramTempValue;
+        const tName = paramTempName;
+        setTempParamValue('');
+        setTempParamName('');
+        addSimParam(tName, tVal);
+    }
+
+
+    return (
+    <>
+    <Popover.Root>
+    <Popover.Trigger asChild>
+        <button 
+            className='autofill-species-box' 
+            style={{backgroundColor:'#fff', fontWeight: 'bold', color: '#fff', width: '2.5em', height: '2.5em', justifyContent: 'center', alignItems: 'center', display: 'flex', borderRadius: '50%', cursor: 'pointer', borderColor: 'rgba(0, 0, 0, 0.2)', borderStyle: 'solid', borderWidth: '3px'}} 
+            // onClick={() => addSimParam()}
+        >
+            <p style={{fontSize: '2em', color: 'rgba(0, 0, 0, 0.5)'}}>+</p>
+        </button>
+    </Popover.Trigger>
+
+    <Popover.Content className='PopoverContent' sideOffset={5} collisionPadding={30} >
+        <div style={{display: 'flex', flexDirection: 'column', gap: '10px', width: '200px'}} >
+            {/* <h3 style={{margin: '0px'}}>Create Parameter!</h3> */}
+            <div className='DrawerSection' >
+                Param Name:
+                <input
+                    className="item species-param-input"
+                    placeholder={`name`}
+                    value={paramTempName}
+                    onChange={onTempParamNameChange}
+                />
+            </div>
+
+            <div className='DrawerSection' >
+                Param Value:
+                <input
+                    className="item species-param-input"
+                    placeholder={`0`}
+                    value={paramTempValue}
+                    onChange={onTempParamValueChange}
+                />
+            </div>
+
+            <button
+                style={{
+                    backgroundColor: '#646cff',
+                    color: '#fff'
+                }}
+                onClick={onCreate}
+            >
+                Create Parameter!
+            </button>
+        </div>
+        
+        {/* <p>Create Parameter</p> */}
+
+    </Popover.Content>
+    </Popover.Root>
+    </>
+    );
+}
 
 // Radix UI, helpful components: Separator, Radio Group, Accordian, Collapsible, Select, Scroll Area, 
 // Extra also helpful: Popover, Slider,
