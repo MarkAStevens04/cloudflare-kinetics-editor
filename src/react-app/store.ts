@@ -147,6 +147,7 @@ type AppState = {
   updateRateLaw: (id: string, newRateLaw: string) => void;
   updateEdgeType: (id: string, newEdgeType: string) => void;
   updateInitialConcentration: (id: string, newInitial: string) => void;
+  updateColor: (id: string, newColor: string) => void;
   updateRateName: (id: string, newName: string) => void;
   addSimParam: (paramName: string, paramVal: string) => string;
   associateParam: (paramID: string, rxnID: string) => void;
@@ -466,6 +467,22 @@ const useStore = create<AppState>((set, get) => ({
           label: n.data.label, 
           color: n.data.color,
           initial: newInitial,
+         } 
+        } : n),
+
+     })),
+     
+     // Update the initial concentration of a given species in both species and visualNodes
+    updateColor: (id, newColor) => set((store) => ({
+      species: store.species.map((s) => s.id === id ? { ...s, color: newColor } : s),
+
+      visualNodes: store.visualNodes.map((n) => n.id === id ? { 
+        ...n, 
+        data: { 
+          ...n.data, 
+          label: n.data.label, 
+          color: newColor,
+          initial: n.data.initial,
          } 
         } : n),
 

@@ -2,13 +2,10 @@
 import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
 import { ChangeEvent } from 'react';
 import './index.css';
-import './styles/nodeStyles.css'
+import './styles/Nodes.css'
 import './radix.css';
 import useStore from './store';
 
-import { 
-    Popover, // Dropdown to edit node properties
- } from 'radix-ui';
 
 type ProteinNodeType = Node<{ 
     label: string; 
@@ -26,7 +23,7 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
 
     const updateLabel = useStore((store) => store.updateSpeciesLabel);
     const updateInitialConcentration = useStore((store) => store.updateInitialConcentration);
-
+    const updateColor = useStore((store) => store.updateColor);
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         // data.onLabelChange(id, event.target.value);
@@ -38,9 +35,13 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
         updateInitialConcentration(id, event.target.value);
     }
 
+    const onColorChange = (event: ChangeEvent<HTMLInputElement>) => {
+        updateColor(id, event.target.value);
+    }
+
     const borderColorOp = selected ? '#747bff' : "#ccc";
     const borderSizeOp = selected ? '2px' : '0px';
-    const selectPadding = selected ? '12px 9px' : '12px 12px';
+    const selectPadding = selected ? '12px 9px 6px 9px' : '12px 12px';
 
     const borderRadius = data.speciesType === 'molecule' ? '24px' : '0px'; // Previous was 4px
 
@@ -48,21 +49,19 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
     const handleColor = data.color;
     
 
-
     return (
+        <div 
+            className="custom-node" 
+            style={{
+                borderColor : borderColorOp, 
+                backgroundColor: data.color, 
+                borderWidth: borderSizeOp,
+                padding: selectPadding,
+                borderRadius: borderRadius,
+                // height: selected ? '6em' : '3em',
+            }}
 
-    
-    <Popover.Root>
-        {/* Popover is what lets us right click and have a custom dropdown */}
-    <Popover.Trigger asChild>
-        <div className="custom-node" style={{
-        borderColor : borderColorOp, 
-        backgroundColor: data.color, 
-        borderWidth: borderSizeOp,
-        padding: selectPadding,
-        borderRadius: borderRadius,
-        
-        }}>
+        >
         
         {/* Option where you have to double click */}
         {selected ? <input 
@@ -103,6 +102,43 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
                 outline: '0px',
             }}
             /> */}
+
+
+        { selected && 
+            <div className="NodeEditor">
+                <div className="NodeRow">
+                    Initial Value: 
+                    <input
+                        className="item species-param-input NodeRowItem"
+                        placeholder={`0`}
+                        value={data.initial}
+                        onChange={(e) => onInitChange(e)}
+                        style={{fontSize: '0.8em', borderRadius: '4px', borderWidth: '2px'}}
+                    />
+                </div>
+
+                <div className="NodeRow">
+                    Color:
+                    <input
+                        className="item species-param-input NodeRowItem"
+                        type="color"
+                        defaultValue={data.color}
+                        onChange={(e) => onColorChange(e)}
+                        style={{
+                            backgroundColor: 'rgba(255, 255, 255, 1)',
+                            padding: '0px',
+                        }}
+                    />
+                </div>
+
+
+            </div>
+        }
+        
+
+
+
+
 
         <Handle 
             type="target" 
@@ -184,27 +220,6 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
         </Handle>
 
         </div>
-    </Popover.Trigger>
-
-    <Popover.Portal>
-        <Popover.Content
-            className="PopoverContent"
-        >
-
-                Initial Value: 
-                <input
-                    className="item species-param-input"
-                    placeholder={`0`}
-                    value={data.initial}
-                    onChange={(e) => onInitChange(e)}
-                />
-        </Popover.Content>   
-
-    </Popover.Portal>
-    
-
-    </Popover.Root>
-
 
     );
 }

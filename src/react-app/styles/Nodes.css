@@ -1,0 +1,89 @@
+.handle-diamond {
+    width: 8px;
+    height: 8px;
+    border-radius: 0px;
+    transform: rotate(45deg);
+    border: 2px solid;
+    position: absolute;
+    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.handle-circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    border: 2px solid;
+    position: absolute;
+    box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.handle-hitbox {
+	height: 30px;
+    width: 20px;
+    background-color: rgba(255, 0, 0, 0);
+    position: absolute;
+    top: 25%;
+    left: 10%
+    /* border-radius: 50%; */
+	/* transform: translate(-55%, -40%); */
+}
+
+.NodeEditor {
+    padding: 4px 0px 0px 0px;
+    font-size: 0.8em;
+    color: rgba(0, 0, 0, 0.5);
+
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	font-weight: 600;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.NodeRow {
+    display: flex;
+    padding: 2px 0px;
+    /* background-color: rgba(255, 0, 0, 0.1); */
+    height: 1em;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.NodeRowItem {
+    flex: 0;
+    cursor: pointer;
+}
+
+
+
+input[type="color"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 1em;
+  height: 1em;
+  border: 1px solid #fff;   /* your border */
+  border-radius: 4px;
+  padding: 4px;                 /* space around the swatch */
+  background-color: #1a1a1a;    /* the area around the swatch */
+  cursor: pointer;
+}
+
+/* Chrome/Edge/Safari: kill the default padding wrapper */
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+/* the swatch itself */
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 2px;
+
+  /* background-image: linear-gradient(to right,
+  red, orange, yellow, green, blue, indigo, violet); */
+
+  background-image: linear-gradient(to right,
+  #ffbe0b, #fb5607, #ff006e, #8338ec, #3a86ff);
+}
