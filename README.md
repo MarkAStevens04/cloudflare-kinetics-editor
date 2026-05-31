@@ -393,11 +393,10 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
     - [X] Create new parameters
     - [X] Associate Parameter to reaction when added to rate law
 
-- [ ] Correctly update internal representation on node / edge deletion
-    - [ ] Update on Edge Deletion
-    - [ ] Update on Node Deletion
-        - [ ] Update Rate Laws
-    - [ ] BOTH Edge and Node (onDelete)
+- [X] Correctly update internal representation on node / edge deletion
+    - [X] Update on Edge Deletion
+    - [X] Update on Node Deletion
+        - [X] Update Rate Laws
 
 - [ ] Multi-reactant arrows!
     - [ ] Show multiple inputs / outputs

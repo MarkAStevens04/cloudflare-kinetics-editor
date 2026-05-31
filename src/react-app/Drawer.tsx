@@ -263,7 +263,7 @@ export default function RxnDrawer() {
 
 
                 <hr />
-                <p> Rate Law: {rateLaw} </p>
+                {/* <p> Rate Law: {rateLaw} </p> */}
 
                 {/* Dropdown to select reaction type (Michaelis-Menten, Mass Action, etc.) */}
                 <div className="DrawerSection">
