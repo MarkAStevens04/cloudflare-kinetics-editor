@@ -9,6 +9,7 @@ import {
   type OnEdgesChange,
   type OnConnect,
   type OnConnectEnd,
+  type OnEdgesDelete,
   
 } from '@xyflow/react';
 
@@ -123,6 +124,8 @@ type AppState = {
   onEdgesChange: OnEdgesChange<AppEdge>;
   onConnect: OnConnect;
   onConnectEnd: OnConnectEnd;
+  onEdgesDelete: OnEdgesDelete;
+
 
   setNodes: (nodes: AppNode[]) => void;
   setEdges: (edges: AppEdge[]) => void;
@@ -329,6 +332,16 @@ const useStore = create<AppState>((set, get) => ({
       }
     },
 
+    
+    // When edges are deleted, update internal representation as well
+    onEdgesDelete: (edges) => {
+      const edgeIDsToDelete = edges.map(e => e.id);
+      set((store) => ({
+        reactions: store.reactions.filter(r => !edgeIDsToDelete.includes(r.id)),
+        visualEdges: store.visualEdges.filter(e => !edgeIDsToDelete.includes(e.id)),
+      }));
+      // console.log('Deleting edges: ' + JSON.stringify(edges, null, 2));
+    },
 
 
 
