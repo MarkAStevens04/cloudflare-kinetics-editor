@@ -5,6 +5,7 @@ import {
   applyNodeChanges,
   applyEdgeChanges,
   MarkerType,
+  useInternalNode,
   type OnNodesChange,
   type OnEdgesChange,
   type OnConnect,
@@ -173,6 +174,8 @@ type AppState = {
   edgeHoverID: string; // id of edge we're hoving over (if any)
   setEdgeHovering: (open: boolean) => void;
   setEdgeHoverID: (id: string) => void;
+
+  getInternalNode(id: string) : AppNode | undefined;
 
 
 };
@@ -694,6 +697,11 @@ const useStore = create<AppState>((set, get) => ({
     edgeHoverID: 'default',
     setEdgeHovering: (open) => set({ edgeHovering: open }),
     setEdgeHoverID: (id: string) => set({ edgeHoverID: id }),
+
+    getInternalNode: (id: string) => {
+      const node = useInternalNode(id);
+      return node;
+    }
 
 }));
 

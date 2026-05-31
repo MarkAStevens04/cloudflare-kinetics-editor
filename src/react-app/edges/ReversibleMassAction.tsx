@@ -2,7 +2,7 @@ import {
     BaseEdge, 
     EdgeLabelRenderer,
     getBezierPath,
-    // useReactFlow, 
+    // useReactFlow,
     type Edge,
     type EdgeProps,
 } from '@xyflow/react';
@@ -12,6 +12,7 @@ import useStore from '../store';
 
 
 import { type AppNode } from '../ProteinNode';
+import { accordionActionsClasses } from '@mui/material/AccordionActions';
 
 export type RevMAEdgeType = Edge<{ 
     label: string; 
@@ -34,7 +35,42 @@ export default function ReversibleMassActionEdge({
     markerEnd,
     data,
 }: EdgeProps<RxnEdgeType>) {
-    // const { deleteElements } = useReactFlow();
+
+    // const reactantIDs = useStore(store => store.reactions.find(r => r.id === id)?.participants.filter(p => p.role === 'reactant').map(p => p.id)) ?? [];
+    const reactantIDs = useStore(store => store.reactions.find(r => r.id === id)?.participants)?.filter(p => p.role === 'reactant').map(p => p.id) ?? [];
+    const productIDs = useStore(store => store.reactions.find(r => r.id === id)?.participants)?.filter(p => p.role === 'product').map(p => p.id) ?? [];
+    
+    const getInternalNode = useStore(store => store.getInternalNode);
+
+    // const reactantNodes = useStore(store => store.visualNodes).filter(n => reactantIDs.includes(n.id));
+    // const productNodes = useStore(store => store.visualNodes).filter(n => productIDs.includes(n.id));
+
+    const reactantNodes = reactantIDs.map(id => getInternalNode(id));
+    const productNodes = productIDs.map(id => getInternalNode(id));
+
+    // const reactantNodes = useStore(s => s.nodeLookup.get(reactantIDs[0]).internals.handleBounds);
+
+    // console.log('Reactant Nodes: ', JSON.stringify(reactantNodes[0].internals.handleBounds.source[0]));
+    // console.log('First reactant handle: ', Object.keys(productNodes));
+
+    // TODO: Change this to instead be based on handle position
+    // Should really change this to be a parent edge with many child sub-edges, that way handles will update more efficiently!
+    // const avgX = [...reactantNodes, ...productNodes].reduce((acc, node) => { return acc + node.position.x; }, 0) / (reactantNodes.length + productNodes.length);
+    // const avgY = [...reactantNodes, ...productNodes].reduce((acc, node) => { return acc + node.position.y; }, 0) / (reactantNodes.length + productNodes.length);
+
+    const avgX = reactantNodes.reduce((acc, node) => { return acc + node.internals.handleBounds.target[0].x + 0.5 * node.internals.handleBounds.target[0].width; }, 0) / reactantNodes.length;
+    const avgY = reactantNodes.reduce((acc, node) => { return acc + node.internals.handleBounds.target[0].y + 0.5 * node.internals.handleBounds.target[0].height; }, 0) / reactantNodes.length;
+
+
+    const forwardPaths = reactantNodes.map(reactant => getBezierPath({ 
+        sourceX: reactant.position.x + 100, 
+        sourceY: reactant.position.y + 30,
+        sourcePosition: sourcePosition,
+        targetX: avgX, 
+        targetY: avgY, 
+        targetPosition: targetPosition,
+    }));
+
     const [edgePath, labelX, labelY] = getBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
 
     const edgeColorOp = selected ? '#747bff' : '#ccc';
@@ -103,6 +139,23 @@ export default function ReversibleMassActionEdge({
       </svg>
 
 
+            // Render all forward paths
+            {
+                forwardPaths.map((path, index) => (
+                    <BaseEdge 
+                        key={index}
+                        id={id + '_sub_' + index}
+                        path={path}
+                        // markerEnd={activeMarkerEnd}
+                        // markerEnd={null}
+                        // animated={true}
+                        style={{
+                            stroke: edgeColorOp,
+                            strokeWidth: '2px',
+                        }}
+                    />
+                ))
+            }
 
 
             <BaseEdge 
@@ -118,7 +171,8 @@ export default function ReversibleMassActionEdge({
                 <button 
                 onClick={onToggle}
                 style={{
-                    transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
+                    // transform: `translate(-50%, -50%) translate(${avgX}px, ${avgY}px)`,
+                    transform: `translate(${avgX}px, ${avgY}px)`,
                     // borderColor: edgeColorOp, // Makes it so edge is highlighted when selected, but overrides natural highlighting on hover 
                     backgroundColor: edgeColorOp,
                     color: textColorOp,

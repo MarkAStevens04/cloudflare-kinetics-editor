@@ -381,6 +381,9 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 
 - Add "catalysts" underneath "edit coefficients"
 
+- Change edges to be parent & sub edge, that way you can more efficiently call updates.
+    - Like reversible mass action, each edge to middle should be an independent edge, and each edge out of middle should be indep too.
+
 - When adding species / parameter to rate law, add a multiplication sign if there's not already one between two objects!
 
 - Smart / Snap Deleting!
