@@ -390,6 +390,9 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 
 - Move index.css and radix.css into styles folder
 
+- Add little "learn" and "overview" buttons at top!
+    - Similar to Navigation-Menu from radix-ui! https://www.radix-ui.com/primitives/docs/components/navigation-menu
+
 - Turn many areas where we have lists of parameters / edges into scrollable elements!
 
 - Smart / Snap Deleting!
@@ -410,9 +413,9 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - [X] Multi-reactant arrows!
     - [X] Show multiple inputs / outputs
 
-- [ ] Banner on top
-    - GitHub
-    - "BioBuilder Light"
+- [X] Banner on top
+    - [X] GitHub
+    - [X] "BioBuilder Light"
 
 - [ ] Better tooltips everywhere!
     - [ ] Clean up "Customize Rate Law" (remove hamburger and keyboard buttons)
@@ -425,6 +428,8 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - [ ] Make build passing
 
 - [ ] Make video tutorial
+    - [ ] Little sign that says "Hey! Looks like you're new here. Please watch this 2min tutorial!"
+    - [ ] Youtube thumbnail at top so anyone can re-watch the tutorial.
 
 
 # React + Vite + Hono + Cloudflare Workers

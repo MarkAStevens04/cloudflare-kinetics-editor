@@ -10,6 +10,9 @@ import './index.css';
 import './radix.css';
 import './styles/Banner.css';
 
+import { Separator } from "radix-ui";
+import { GitHubLogoIcon, DiscordLogoIcon } from "@radix-ui/react-icons";
+
 // Analytics
 import { init as initFullStory } from '@fullstory/browser';
 initFullStory({ orgId: 'o-24H0HZ-na1' });
@@ -294,20 +297,40 @@ export default function App() {
 
 
 function Banner() {
+
+  // NOTE: Cute color palette: #f00, #0ff, #0077b6
+
   return (
   <div className="Banner">
 
+    {/* Title */}
     <div className="BannerSection" >
           <div className="BannerTitle">BIOBUILDER</div> 
           <div className="BannerSubtitle">LIGHT</div>
     </div>
 
-    <div className="BannerSection" style={{backgroundColor: '#0ff'}} />
+    {/* Calls to action */}
+    <div className="BannerSection" style={{justifyContent: 'center', alignItems: 'center'}}>
+      <GitHubLogoIcon className="BannerLogo" onClick={() => window.open('https://github.com/MarkAStevens04/cloudflare-kinetics-editor', '_blank')} />
 
-    <div className="BannerSection" style={{backgroundColor: '#0077b6'}} />
+        {/* <Separator.Root
+          className="SeparatorRoot"
+          decorative
+          orientation="vertical"
+          style={{ 
+              margin: "0 0px",
+              padding: "10px 10px",
+              color: "rgba(0, 0, 0, 1)",
+              }}
+        /> */}
+                
+      <DiscordLogoIcon className="BannerLogo" onClick={() => window.open('https://discord.gg/GmsKryYDGN', '_blank')} />
 
-  
-  
+    </div>
+
+
+    {/* Last section */}
+    <div className="BannerSection" />
   
   </div>
   );
