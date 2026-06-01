@@ -4,9 +4,9 @@
   // to run that function, and I'll do it for you." The parent board is taking over this
   // child's job because the parent knows the right parameters to give it, wheras the
   // child wouldn't be able to provide ANY parameters to the function.
-// import React from 'react';
-import { ChangeEvent, useRef, useEffect, useMemo } from 'react';
+import { ChangeEvent, useRef, useEffect, useMemo, ReactNode } from 'react';
 import { animated, useTransition } from '@react-spring/web';
+import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 
 import './index.css';
 
@@ -15,19 +15,36 @@ import "mathlive";
 import { MathfieldElement } from 'mathlive';
 import useStore from './store';
 
-
 type rateEditorProps = {
     currentRateLaw?: string;
     onRateChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    sources: string[];
+    targets: string[];
 }
-
+function ScrollArea({ children, orientation = 'vertical', className = '', style = {} }: {
+  children: ReactNode;
+  orientation?: 'vertical' | 'horizontal';
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <ScrollAreaPrimitive.Root className={`scroll-area-root ${className}`} style={style}>
+      <ScrollAreaPrimitive.Viewport className="scroll-area-viewport">
+        {children}
+      </ScrollAreaPrimitive.Viewport>
+      <ScrollAreaPrimitive.Scrollbar className="scroll-area-scrollbar" orientation={orientation}>
+        <ScrollAreaPrimitive.Thumb className="scroll-area-thumb" />
+      </ScrollAreaPrimitive.Scrollbar>
+      <ScrollAreaPrimitive.Corner className="scroll-area-corner" />
+    </ScrollAreaPrimitive.Root>
+  );
+}
 
 export default function RxnDrawer() {
 
     const edge = useStore((store) => store.reactions.find((e) => e.id === store.selectedEdge)) || { id: '', label: '', sources: [''], targets: [''], rate_law: '' };
     const nodes = useStore((store) => store.species);
 
-    // const open = useStore((store) => store.rxnDrawerOpen, (prev, next) => {return false;});
     const open = useStore((store) => store.rxnDrawerOpen);
     const setRxnDrawerOpen = useStore((store) => store.setRxnDrawerOpen);
 
@@ -35,21 +52,8 @@ export default function RxnDrawer() {
     const updateInitialConcentration = useStore((store) => store.updateInitialConcentration);
     const updateRateName = useStore((store) => store.updateRateName);
 
-    const sourceNode = nodes.find((node) => node.id === edge.sources[0]) || nodes[0];
-    const targetNode = nodes.find((node) => node.id === edge.targets[0]) || nodes[0];
-
     const RxnID = edge.id;
     const rateLaw = edge.rate_law;
-
-    const reactantInit = sourceNode.initial || '';
-    const productInit = targetNode.initial || '';
-
-    const reactantLabel = sourceNode.label;
-    const productLabel = targetNode.label;
-
-    const reactantColor = sourceNode.color;
-    const productColor = targetNode.color;
-    
 
     const onRNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         updateRateName(RxnID, event.target.value);
@@ -59,14 +63,17 @@ export default function RxnDrawer() {
         updateRateLaw(RxnID, event.target.value);
     }
 
-    const onRChange = (event: ChangeEvent<HTMLInputElement>) => {
-        updateInitialConcentration(sourceNode.id, event.target.value);
-    }
+    const reactantNodes = useMemo(() => {
+        return (edge.sources || [])
+            .map((srcId) => nodes.find((node) => node.id === srcId))
+            .filter((node): node is Exclude<typeof node, undefined> => !!node);
+    }, [edge.sources, nodes]);
 
-    const onPChange = (event: ChangeEvent<HTMLInputElement>) => {
-        updateInitialConcentration(targetNode.id, event.target.value);
-    }
-    
+    const productNodes = useMemo(() => {
+        return (edge.targets || [])
+            .map((tgtId) => nodes.find((node) => node.id === tgtId))
+            .filter((node): node is Exclude<typeof node, undefined> => !!node);
+    }, [edge.targets, nodes]);
 
     const transitions = useTransition(open ? [true] : [],  {
         from: { x: -240, opacity: 0 },
@@ -107,11 +114,11 @@ export default function RxnDrawer() {
                         borderRight: "1px solid #ddd",
                         boxShadow: "0 0 20px rgba(0, 0, 0, 0.12)",
                         transform: style.x.to((x) => `translate3d(${x}px, 0, 0)`),
-                        opacity: style.opacity
+                        opacity: style.opacity,
+                        overflowY: 'auto'
                     }}
                 > 
                 <br /> <br />
-                {/* <button onClick={onClose} className="nodrag nopan action-button">Close</button> */}
 
                 {/* Edit reaction name */}
                 <div className="species-text" style={{padding: '0.2em 0px', top: '20px'}}>
@@ -120,68 +127,85 @@ export default function RxnDrawer() {
                         placeholder="Reaction Name"
                         value={edge.label}
                         onChange={onRNameChange}
-                        
                     />
                 </div>
-                {/* <p className="species-text" > Reaction Name </p> */}
 
                 <br />
-                <div className="drawer-reaction-diagram">
+                <div className="drawer-reaction-diagram" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
 
-                    {/* Reactant Parameters */}
-                    <div className="species-container" style={{
-                        backgroundColor: reactantColor,
-                    }}>
-                        <div className="species-container-header"> {reactantLabel} </div>
-                        <hr style={{
-                            border: 'none',
-                            height: '1px',
-                            backgroundColor: 'rgba(0, 0, 0, 0.15)',
-                            margin: '0px 0',
-                            padding: 0,
-                        }} />
-                        <div className="species-params">     
-                            Initial: 
-                            <input 
-                                className="item species-param-input"
-                                placeholder={`0`} 
-                                value={reactantInit === '' ? '' : reactantInit}
-                                onChange={onRChange}
-                            />
-                        </div>    
-
+                    {/* Reactants List */}
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                        <p style={{ margin: '0 0 8px 0', fontSize: '0.8em', fontWeight: 600, color: 'rgba(0,0,0,0.6)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Reactants</p>
+                        <ScrollArea style={{ maxHeight: '180px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingRight: '4px' }}>
+                                {reactantNodes.map((sNode) => (
+                                    <div key={sNode.id} className="species-container" style={{ backgroundColor: sNode.color }}>
+                                        <div className="species-container-header" style={{ fontSize: '1.1em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={sNode.label}>
+                                            {sNode.label}
+                                        </div>
+                                        <hr style={{
+                                            border: 'none',
+                                            height: '1px',
+                                            backgroundColor: 'rgba(0, 0, 0, 0.15)',
+                                            margin: '0px 0',
+                                            padding: 0,
+                                        }} />
+                                        <div className="species-params" style={{ fontSize: '0.85em', display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '4px 0' }}>     
+                                            <span>Initial:</span>
+                                            <input 
+                                                className="item species-param-input"
+                                                placeholder="0" 
+                                                value={sNode.initial === '' ? '' : sNode.initial}
+                                                onChange={(e) => updateInitialConcentration(sNode.id, e.target.value)}
+                                                style={{ width: '50px', margin: 0, padding: '2px 4px' }}
+                                            />
+                                        </div>    
+                                    </div>
+                                ))}
+                            </div>
+                        </ScrollArea>
                     </div>
-
 
                     {/* Arrow connecting reactants to products */}
                     <p style={{
                         fontSize: '24px',
+                        fontWeight: 'bold',
+                        margin: '0 4px',
+                        alignSelf: 'center',
+                        color: 'rgba(0,0,0,0.4)',
                     }}>→</p>
-                    
 
-
-                    {/* Product Parameters */}
-                    <div className="species-container" style={{
-                        backgroundColor: productColor,
-                    }}>
-                        <div className="species-container-header"> {productLabel} </div>
-                        <hr style={{
-                            border: 'none',
-                            height: '1px',
-                            backgroundColor: 'rgba(0, 0, 0, 0.15)',
-                            margin: '0px 0',
-                            padding: 0,
-                        }} />
-                        <div className="species-params">     
-                            Initial: 
-                            <input 
-                                className="item species-param-input"
-                                placeholder={`0`} 
-                                value={productInit === '' ? '' : productInit}
-                                onChange={onPChange}
-                            />
-                        </div>    
-
+                    {/* Products List */}
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                        <p style={{ margin: '0 0 8px 0', fontSize: '0.8em', fontWeight: 600, color: 'rgba(0,0,0,0.6)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Products</p>
+                        <ScrollArea style={{ maxHeight: '180px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingRight: '4px' }}>
+                                {productNodes.map((tNode) => (
+                                    <div key={tNode.id} className="species-container" style={{ backgroundColor: tNode.color }}>
+                                        <div className="species-container-header" style={{ fontSize: '1.1em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={tNode.label}>
+                                            {tNode.label}
+                                        </div>
+                                        <hr style={{
+                                            border: 'none',
+                                            height: '1px',
+                                            backgroundColor: 'rgba(0, 0, 0, 0.15)',
+                                            margin: '0px 0',
+                                            padding: 0,
+                                        }} />
+                                        <div className="species-params" style={{ fontSize: '0.85em', display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '4px 0' }}>     
+                                            <span>Initial:</span>
+                                            <input 
+                                                className="item species-param-input"
+                                                placeholder="0" 
+                                                value={tNode.initial === '' ? '' : tNode.initial}
+                                                onChange={(e) => updateInitialConcentration(tNode.id, e.target.value)}
+                                                style={{ width: '50px', margin: 0, padding: '2px 4px' }}
+                                            />
+                                        </div>    
+                                    </div>
+                                ))}
+                            </div>
+                        </ScrollArea>
                     </div>
 
                 </div>
@@ -189,10 +213,12 @@ export default function RxnDrawer() {
                 <hr />
 
                 {/* Edit Rate Laws */}
-
-                <RateEditor currentRateLaw={rateLaw} onRateChange={onRateChange} />
-
-                       
+                <RateEditor 
+                    currentRateLaw={rateLaw} 
+                    onRateChange={onRateChange} 
+                    sources={edge.sources} 
+                    targets={edge.targets} 
+                />
 
                 </animated.div>
             </>
@@ -201,17 +227,15 @@ export default function RxnDrawer() {
 
 }
 
-
-
 function RateEditor({
     currentRateLaw,
     onRateChange,
-
+    sources,
+    targets,
 }: rateEditorProps) {
     const nodes = useStore((store) => store.species);
 
     const mfRef = useRef<MathfieldElement>(null); 
-
 
     // When our input is changed
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -221,16 +245,28 @@ function RateEditor({
     // When a variable button is clicked
     const onButton = (buttonID: string) => {
         mfRef.current?.insert('\\obj'+ buttonID + '{\\text{' + buttonID + '}}', {
-            // focus: true,
             insertionMode: "replaceSelection",
             selectionMode: "item",
+            focus: true,
         });
         console.log('Macros: ' + mfRef.current?.macros);
-
-        // mfRef.current?.applyStyle({
-        //     color: buttonColor,
-        // });
     }
+
+    // When a parameter button is clicked
+    const onParameter = (paramName: string) => {
+        mfRef.current?.insert(paramName, {
+            insertionMode: "replaceSelection",
+            focus: true,
+        });
+    }
+
+    // Prioritize species involved in the reaction (reactants or products)
+    const sortedNodes = useMemo(() => {
+        const involvedIds = new Set([...sources, ...targets]);
+        const involved = nodes.filter(node => involvedIds.has(node.id));
+        const others = nodes.filter(node => !involvedIds.has(node.id));
+        return [...involved, ...others];
+    }, [nodes, sources, targets]);
 
     const macros = useMemo(() => {
         return Object.fromEntries(
@@ -240,7 +276,6 @@ function RateEditor({
         );
 
     }, [nodes]);
-
 
     useEffect(() => {
         const mf = mfRef.current;
@@ -254,9 +289,6 @@ function RateEditor({
 
         mf.smartFence = false;
     }, [macros]);
-
-
-
 
     return (
     <div className='rate-editor'>   
@@ -277,36 +309,40 @@ function RateEditor({
         <br />
         <p className='drawer-text' style={{fontSize: '0.8em', margin: '10px 0px',}}>Add species to rate law</p>
 
-        {/* Add Reactant Handles */}
-        <div className="species-param-input" 
-        style={{
-                backgroundColor: 'rgba(255, 255, 255, 1)',
-                color: 'rgba(0, 0, 0, 0.8)',
-                width: '95%',
-                margin: '0px 0px',
-                minWidth: '0px',
-                display: 'flex',
-                flexWrap: 'wrap',
-                padding: '5px 5px',
-                gap: '5px',
-            }}
-        >
+        {/* Add Reactant Handles (Horizontal Scrollable) */}
+        <ScrollArea orientation="horizontal" style={{ width: '95%', margin: '0px 0px' }}>
+            <div style={{ display: 'flex', gap: '6px', paddingBottom: '6px' }}>
+                {sortedNodes.map((node) => (
+                    <div key={node.id}>
+                        <p className='autofill-species-box' 
+                        style={{backgroundColor: node.color, whiteSpace: 'nowrap'}}
+                        onClick={() => onButton(node.id)}
+                        >
+                            {node.label}
+                        </p>
+                    </div>
+                ))}
+            </div>
+        </ScrollArea>
 
-            {/* Populate our rate law buttons */}
-            {nodes.map((node) => (
-                <div>
-                <p className='autofill-species-box' 
-                key={node.id} 
-                style={{backgroundColor: node.color}}
-                onClick={() => onButton(node.id)}
-                >
+        <br />
+        <p className='drawer-text' style={{fontSize: '0.8em', margin: '10px 0px',}}>Add parameter to rate law</p>
 
-                    {node.label}
-
-                </p>
-                </div>))
-            }
-        </div>
+        {/* Add Parameter Handles (Horizontal Scrollable) */}
+        <ScrollArea orientation="horizontal" style={{ width: '95%', margin: '0px 0px' }}>
+            <div style={{ display: 'flex', gap: '6px', paddingBottom: '6px' }}>
+                {['k', 'k_f', 'k_r', 'V_{max}', 'K_m'].map((param) => (
+                    <div key={param}>
+                        <p className='autofill-species-box' 
+                        style={{backgroundColor: '#e2e8f0', whiteSpace: 'nowrap'}}
+                        onClick={() => onParameter(param)}
+                        >
+                            {param.replace('_{max}', 'max').replace('_', '')}
+                        </p>
+                    </div>
+                ))}
+            </div>
+        </ScrollArea>
 
     </div>
     );
