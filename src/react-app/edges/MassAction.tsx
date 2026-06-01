@@ -82,6 +82,7 @@ export default function MassActionEdge({
     });
 
     const edgeColorOp = selected ? '#747bff' : '#ccc';
+    const textColorOp = selected ? '#fff' : '#000';
 
     const activeMarkerEnd = selected ? 'url(#selected-marker)' : markerEnd;
 
@@ -188,6 +189,11 @@ export default function MassActionEdge({
                 onClick={onToggle}
                 style={{
                     transform: `translate(-50%, -50%) translate(${avgX}px, ${avgY}px)`,
+                    // transform: `translate(${avgX}px, ${avgY}px)`,
+                    // borderColor: edgeColorOp, // Makes it so edge is highlighted when selected, but overrides natural highlighting on hover 
+                    backgroundColor: edgeColorOp,
+                    color: textColorOp,
+                    outline: '0px',
                 }}
                 className="edge-box nodrag nopan"
 

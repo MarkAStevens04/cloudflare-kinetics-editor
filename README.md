@@ -425,8 +425,8 @@ I'll use this in the tooltips to help users address common mistakes!
     - [ ] Clean up debug bubbles
     - [ ] Say "Coming Soon" to non-implemented reaction types
 
-- [ ] Better Errors when things don't run!
-    - [ ] Say what's wrong with the sim
+- [X] Better Errors when things don't run!
+    - [X] Say what's wrong with the sim
     - [X] Improve error logging on Python side
 
 - [ ] Make build passing
