@@ -30,3 +30,19 @@
     padding: 0 5px;
 }
 
+
+math-field {
+	--smart-fence-color: red;
+}
+
+/* Hide virtual keyboard in math field */
+@media not (pointer: coarse) {
+  math-field::part(virtual-keyboard-toggle) {
+    display: none;
+  }
+}
+
+/* Hide menu in math field */
+math-field::part(menu-toggle) {
+  display: none;
+}

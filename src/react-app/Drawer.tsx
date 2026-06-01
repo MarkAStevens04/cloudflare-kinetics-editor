@@ -20,9 +20,9 @@ import useStore from './store';
 // import * as React from "react";
 import { 
     Select,
-    Tooltip,
     Separator,
     Popover,
+    Tooltip,
  } from 'radix-ui';
 
 import { 
@@ -42,6 +42,12 @@ import {
   ReversibleMassActionDrawerInfo,
   CustomDrawerInfo,
 } from './edges'
+
+import {
+     TooltipRoot, 
+     TooltipContent, 
+     TooltipTrigger 
+} from './Tooltips'
 
 
 type rateEditorProps = {
@@ -95,13 +101,13 @@ export default function RxnDrawer() {
         {
             'id': 'michaelis_menten',
             'label': 'Michaelis-Menten',
-            'desc': 'When you want to simulate an enzyme catalyzing some reaction. \n \n ASSUMPTIONS: Substrate is in excess, enzyme is very small.',
+            'desc': 'An enzyme catalyzing some reaction. \n \n ASSUMPTIONS: Substrate is in excess, enzyme is very small.',
             'implemented': true,
         },
         {
             'id': 'mass_action',
             'label': 'Mass Action',
-            'desc': 'When you want to simulate a simple reaction, of some reactant(s) becoming some product(s).',
+            'desc': 'The default. Simple reaction, some reactant(s) becoming some product(s).',
             'implemented': true,
         },
         {
@@ -120,7 +126,7 @@ export default function RxnDrawer() {
         {
             'id': 'custom',
             'label': 'Custom',
-            'desc': 'When you want to define a custom rate law using your own equations.',
+            'desc': 'Define your own custom rate law!',
             'implemented': true,
         },
     ];
@@ -265,7 +271,6 @@ export default function RxnDrawer() {
 
 
                 <hr />
-
                 <ReactantEditor participants={edge.participants} rxnID={edge.id} />
 
 
@@ -305,7 +310,7 @@ export default function RxnDrawer() {
                                                     <CheckIcon />
                                                 </Select.ItemIndicator>
 
-                                                <Tooltip.Provider>
+                                                {/* <Tooltip.Provider>
                                                     <Tooltip.Root delayDuration={200}>
                                                         <Tooltip.Trigger asChild>
                                                             <button className="InfoIcon">
@@ -321,7 +326,22 @@ export default function RxnDrawer() {
                                                         </Tooltip.Portal>
 
                                                     </Tooltip.Root>
-                                                </Tooltip.Provider>
+                                                </Tooltip.Provider> */}
+
+
+                                                <TooltipRoot>
+                                                        <TooltipTrigger>
+                                                            <button className="InfoIcon">
+                                                                <InfoCircledIcon />
+                                                            </button>
+                                                        </TooltipTrigger>
+                                                        
+                                                        <TooltipContent side='right'>
+                                                                {type.desc}
+                                                        </TooltipContent>
+                                                </TooltipRoot>
+
+
                                             </Select.Item>
                                         ))}
                                         
@@ -417,7 +437,18 @@ function ReactantEditor({
 
     return (
     <>
-    <p className="DrawerSection"> Edit Coefficients: </p>
+
+    {/* // Header with little info about editing coefficients */}
+    <TooltipRoot>
+        <TooltipTrigger>
+            <p className="DrawerSection"> Edit Coefficients: </p>
+        </TooltipTrigger>
+
+        <TooltipContent>
+            Edit the coefficients of your reaction! Coefficients represent how many molecules of each reactant are needed to produce how many molecules of each product. For example, in the reaction 2A + B → 3C, the coefficient for A would be 2, the coefficient for B would be 1, and the coefficient for C would be 3.
+        </TooltipContent>
+    </TooltipRoot>
+
     <div className="DrawerRow">
         
 
@@ -566,12 +597,23 @@ function RateEditor({
         mf.smartFence = false;
     }, [macros]);
 
-
+    const headerToolContent = 'Define your rate law here! How quickly your reactants become products. Supports most math functions, similar to Desmos! If you get stuck, reset the reaction type to Mass Action for an example.  \n\n NOTE: You cannot type the name of species or parameters, you must click the corresponding button! \n\n NOTE: You cannot use square or curly brackets, only parentheses (otherwise Python thinks it is a list or set).';
+ 
 
 
     return (
-    <div >   
-        <p className='DrawerSection'>Customize Rate Law:</p>
+    <div > 
+
+        {/* Title for customizing the rate law, plus info on hover! */}
+        <TooltipRoot>
+            <TooltipTrigger>
+            <p className='DrawerSection'>Customize Rate Law:</p>
+            </TooltipTrigger>
+
+            <TooltipContent>
+                {headerToolContent}
+            </TooltipContent>
+        </TooltipRoot>  
         <br />
         <br />
 

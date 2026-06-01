@@ -396,6 +396,8 @@ I'll use this in the tooltips to help users address common mistakes!
 - Add little "learn" and "overview" buttons at top!
     - Similar to Navigation-Menu from radix-ui! https://www.radix-ui.com/primitives/docs/components/navigation-menu
 
+- Bring back virtual keyboard and menu in math field in drawer! But fix them to be a little more explanatory.
+
 - Turn many areas where we have lists of parameters / edges into scrollable elements!
 
 - Smart / Snap Deleting!
@@ -420,10 +422,10 @@ I'll use this in the tooltips to help users address common mistakes!
     - [X] GitHub
     - [X] "BioBuilder Light"
 
-- [ ] Better tooltips everywhere!
-    - [ ] Clean up "Customize Rate Law" (remove hamburger and keyboard buttons)
+- [X] Better tooltips everywhere!
+    - [X] Clean up "Customize Rate Law" (remove hamburger and keyboard buttons)
     - [ ] Clean up debug bubbles
-    - [ ] Say "Coming Soon" to non-implemented reaction types
+    - [X] Say "Coming Soon" to non-implemented reaction types
 
 - [X] Better Errors when things don't run!
     - [X] Say what's wrong with the sim

@@ -37,6 +37,12 @@ import {
   type AppEdge,
 } from './edges'
 
+import {
+     TooltipRoot, 
+     TooltipContent, 
+     TooltipTrigger 
+} from './Tooltips'
+
 // Stringify TODO: Move this to Drawer instead
 // import { convertLatexToAsciiMath } from "mathlive";
 
@@ -380,9 +386,8 @@ function ToastError() {
           ))} */}
 
           {errorReasons.map((reason, idx) => (
-            <Tooltip.Provider>
-              <Tooltip.Root delayDuration={200}>
-                  <Tooltip.Trigger asChild>
+            <TooltipRoot>
+                  <TooltipTrigger>
                       <div className="ToastItems" key={idx}>
                         <div >{reason.message}</div>
                         {reason.linked_edges && reason.linked_edges.map((edgeID) => (
@@ -406,17 +411,14 @@ function ToastError() {
                         ))}
                       </div>
                       
-                  </Tooltip.Trigger>
+                  </TooltipTrigger>
                   
-                  <Tooltip.Portal>
-                      <Tooltip.Content className="TooltipContent" sideOffset={5} side="right">
-                          {reason.full_detail}
-                          <Tooltip.Arrow className="TooltipArrow" />
-                      </Tooltip.Content>
-                  </Tooltip.Portal>
+                  <TooltipContent side="left" sideOffset={20} style={{maxWidth: '500px'}}>
+                      {reason.full_detail}
+                      <Tooltip.Arrow className="TooltipArrow" />
+                  </TooltipContent>
 
-              </Tooltip.Root>
-          </Tooltip.Provider>
+            </TooltipRoot>
         ))}
 
         </Toast.Description>

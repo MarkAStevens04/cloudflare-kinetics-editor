@@ -463,13 +463,6 @@ button:focus-visible {
 }
 
 
-math-field {
-	--smart-fence-color: red;
-}
-
-
-
-
 @media (prefers-color-scheme: light) {
 	:root {
 		color: #213547;
