@@ -2,6 +2,7 @@ import {
 	ReactFlow, 
 	Background,
 	Controls,
+  useReactFlow,
   type DefaultEdgeOptions,
  } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
@@ -10,8 +11,8 @@ import './index.css';
 import './radix.css';
 import './styles/Banner.css';
 
-import { Separator } from "radix-ui";
-import { GitHubLogoIcon, DiscordLogoIcon } from "@radix-ui/react-icons";
+import { Toast, Tooltip } from "radix-ui";
+import { GitHubLogoIcon, DiscordLogoIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 
 // Analytics
 import { init as initFullStory } from '@fullstory/browser';
@@ -41,6 +42,8 @@ import {
 
 import useStore from './store';
 import { useShallow } from 'zustand/react/shallow';
+import React from 'react';
+import { useEffect } from 'react';
 
 
 
@@ -173,6 +176,7 @@ export default function App() {
   const debugLabel = useStore((store) => store.debugState);
   const updateLabel2 = useStore((store) => store.setDebugState2);
   const debugLabel2 = useStore((store) => store.debugState2);
+  const openToast = useStore((store) => store.setErrorOpen);
 
 
   return (
@@ -194,6 +198,7 @@ export default function App() {
             defaultEdgeOptions={defaultEdgeOptions}>
           <Background />
           <Controls />
+          <FocusController />
         </ReactFlow>
         </>
 
@@ -260,7 +265,7 @@ export default function App() {
             className="action-button"
 
             onClick={
-              () => updateLabel2('updated!')
+              () => openToast(true)
             }
 
             style={{
@@ -281,8 +286,8 @@ export default function App() {
 
 
         <FeedbackDrawer />
-
         <Banner />
+        <ToastError />
 
         <RxnDrawer />
         <SimulationDrawer />
@@ -334,4 +339,116 @@ function Banner() {
   
   </div>
   );
+}
+
+// function ToastError(reasons: string[]) {
+function ToastError() {
+
+  const open = useStore((state) => state.errorOpen);
+  const setOpen = useStore((state) => state.setErrorOpen);
+  const errorReasons = useStore((state) => state.errorReasons);
+  const errorDuration = useStore((state) => state.errorDuration);
+
+  const focusEdge = useStore((state) => state.focusEdge);
+  const focusNode = useStore((state) => state.focusNode);
+
+  const onFixEdge = (edgeId: string) => {
+    focusEdge(edgeId);
+  }
+
+  const onFixNode = (nodeId: string) => {
+    focusNode(nodeId);
+  }
+
+
+  // const addErrorReason = useStore((state) => state.addErrorReason);
+
+  // if (errorReasons.length === 0) {
+  //   addErrorReason('An unknown error occurred with this simulation.');
+  // }
+
+
+  return (
+    <>
+    <Toast.Provider swipeDirection="right" duration={errorDuration} >
+
+      <Toast.Root className="ToastRoot" open={open} onOpenChange={setOpen}>
+        <Toast.Title className="ToastTitle">ERROR: Invalid Reaction</Toast.Title>
+        <Toast.Description className="ToastDescription">
+          {/* {errorReasons.map((reason, idx) => (
+            <div className="ToastItems" key={idx}>{reason.message + (reason.full_detail ? ` (${reason.full_detail})` : '')}</div>
+          ))} */}
+
+          {errorReasons.map((reason, idx) => (
+            <Tooltip.Provider>
+              <Tooltip.Root delayDuration={200}>
+                  <Tooltip.Trigger asChild>
+                      <div className="ToastItems" key={idx}>
+                        <div >{reason.message}</div>
+                        {reason.linked_edges && reason.linked_edges.map((edgeID) => (
+                          <button
+                            className="ToastActionButton"
+                            onClick={() => onFixEdge(edgeID)}
+                          > 
+                            <div>Fix</div>
+                            <ChevronRightIcon /> 
+                          </button>
+                        ))}
+
+                        {reason.linked_nodes && reason.linked_nodes.map((nodeID) => (
+                          <button
+                            className="ToastActionButton"
+                            onClick={() => onFixNode(nodeID)}
+                          > 
+                            <div>Fix</div>
+                            <ChevronRightIcon /> 
+                          </button>
+                        ))}
+                      </div>
+                      
+                  </Tooltip.Trigger>
+                  
+                  <Tooltip.Portal>
+                      <Tooltip.Content className="TooltipContent" sideOffset={5} side="right">
+                          {reason.full_detail}
+                          <Tooltip.Arrow className="TooltipArrow" />
+                      </Tooltip.Content>
+                  </Tooltip.Portal>
+
+              </Tooltip.Root>
+          </Tooltip.Provider>
+        ))}
+
+        </Toast.Description>
+      </Toast.Root>
+
+      <Toast.Viewport className="ToastViewport" />
+    </Toast.Provider>
+    </>
+  );
+}
+
+function FocusController() {
+  console.log('focusing...');
+  const { fitView } = useReactFlow();
+  const focusedTarget = useStore((state) => state.focusedTarget);
+  const setFocusedTarget = useStore((state) => state.setFocusedTarget); // Will use this to clear selected edge afterwards
+
+  useEffect(() => {
+    if (!focusedTarget) return;
+
+    let nodes;
+    if (focusedTarget.type === 'node') {
+      nodes = [{id: focusedTarget.id}];
+    } else {
+      // For edges, we want to focus on source and target nodes
+      const edge = useStore.getState().visualEdges.find((edge) => edge.id === focusedTarget.id);
+      nodes = [{ id: edge?.source }, { id: edge?.target }];
+    }
+    
+    fitView({ nodes: nodes, duration: 800, padding: 0.2 });  
+    setFocusedTarget(null); // Clear focused target after focusing
+  }, [focusedTarget, fitView, setFocusedTarget]);
+
+  return null;
 }

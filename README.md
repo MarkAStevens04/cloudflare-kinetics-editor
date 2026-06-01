@@ -298,7 +298,10 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - So you can select "inhibition", then easily change what type of inhibition is occurring.
 - Or with michaelis-menten, you can select "simplified" or "explicit" to swap between michaelis-menten version and full enzymatic version!
 
-
+### Common Failure reasons
+I'll use this in the tooltips to help users address common mistakes!
+- Using Square Brackets
+- Using Curly Brackets
 
 ### Urgent
 - Return differential equations
@@ -424,6 +427,7 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 
 - [ ] Better Errors when things don't run!
     - [ ] Say what's wrong with the sim
+    - [X] Improve error logging on Python side
 
 - [ ] Make build passing
 

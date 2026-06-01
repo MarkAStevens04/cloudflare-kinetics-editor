@@ -64,6 +64,13 @@ type reactions = {
 
 }
 
+type errorMSG = {
+  message: string;
+  full_detail: string;
+  linked_nodes: string[];
+  linked_edges: string[];
+}
+
 // IDEA for new data structure for reaactions.
 // Change sources and targets to instead be list of objs.
 // {
@@ -174,6 +181,18 @@ type AppState = {
   setEdgeHovering: (open: boolean) => void;
   setEdgeHoverID: (id: string) => void;
 
+  errorOpen: boolean;
+  errorDuration: number;
+  setErrorOpen: (open: boolean) => void;
+  errorReasons: errorMSG[];
+  addErrorReason: (message: string, fullDetail?: string, linkedNodes?: string[], linkedEdges?: string[]) => void;
+  clearErrorReasons: () => void; // Remove all error reasons
+
+  focusedTarget: {id: string, type: 'node' | 'edge'} | null; // Currently focused target. Really only used when fixing invalid rxns.
+  setFocusedTarget: (target: {id: string, type: 'node' | 'edge'} | null) => void; 
+  focusEdge: (edgeID: string) => void; // Focuses on a given edge!
+  focusNode: (nodeID: string) => void; // Focuses on a given node!
+
 
 };
 
@@ -192,6 +211,9 @@ const useStore = create<AppState>((set, get) => ({
     tempParamName: '',
     tempParamValue: '',
 
+    focusedTarget: null,
+    setFocusedTarget: (target) => set({ focusedTarget: target }),
+
     species: initialSpecies,
     reactions: initialReactions,
 
@@ -200,7 +222,23 @@ const useStore = create<AppState>((set, get) => ({
 
     simParams: initialSimParams,
     nextPID: initialSimParams.length,
+    
+    errorOpen: false,
+    errorDuration: 5000, // 5 seconds
+    setErrorOpen: (open) => {
+      if (!open) get().clearErrorReasons();
+      set({ errorOpen: open });
+    },
+    errorReasons: [],
+    clearErrorReasons: () => set({ errorReasons: [], errorDuration: 5000, }),
 
+    addErrorReason: (message: string, fullDetail?: string, linkedNodes?: string[], linkedEdges?: string[]) => set((store) => {
+      // Add another second to the error duration on each reason we add.
+      return { errorReasons: [...store.errorReasons, { message, full_detail: fullDetail, linked_nodes: linkedNodes, linked_edges: linkedEdges }], errorDuration: store.errorDuration + 1000, };
+    }),
+
+    
+    
 
     // Default ReactFlow functions to update visualNode and visualEdge attributes
     onNodesChange: (changes) => {
@@ -640,7 +678,14 @@ const useStore = create<AppState>((set, get) => ({
         const paramLookup = new Map(get().simParams.map(p => [p.id, p.val]));
         
         const payload = {
-          "Species": get().species.map(({ id, initial}) => ({'id': id, 'initial': Number(initial)})),
+          "Species": get().species.map(({ id, initial}) => { 
+            if (isNaN(Number(initial))) {
+              const reactantName = get().species.find(s => s.id === id)?.label || id;
+              get().addErrorReason(`Invalid initial concentration for species ${reactantName}: "${initial}". Please enter a valid number.`, undefined, [id], []);
+            }
+
+            return {'id': id, 'initial': Number(initial)}; 
+          }),
 
           "Reactions": get().reactions.map(({ id, rate_law, associated_params, participants}) => ({
               'id': id, 
@@ -668,6 +713,43 @@ const useStore = create<AppState>((set, get) => ({
         const responseJson = await response.json();
         const payload_data = responseJson['data'];
 
+        console.log('Raw response: ', responseJson);
+
+        console.log('Is response ok? ', response.ok);
+
+        if (!response.ok) {
+          
+          // Different errors get thrown depending on who's throwing them.
+          // Errors thrown by FastAPI interpreter (like for improper initial concentrations) will have different shape than errors thrown inside the simulation (like when parsing the rate laws)
+          if (Array.isArray(responseJson.detail) && responseJson.detail[0].msg === "Input should be a valid number") {
+            throw new Error(`FastAPI doesn't like the initial concentration: ${responseJson.detail[0]}`);
+
+          } else {
+            const errMsg = responseJson.detail?.message;
+            
+            // The message we're sending to the user
+            let msgToUser = `Simulation failed: ${response.status} - ${responseJson.detail.message}`;
+            const fullErrMsg = JSON.stringify(responseJson, null, 2);
+
+            // Try to extract any objects mentioned at beginning of error message
+            const i = errMsg.indexOf(' ');
+            const potential_obj = errMsg.slice(0, i);
+            const rest = errMsg.slice(i + 1); // Store everything AFTER the object. Only send THIS if there is actually an object!
+
+            // Check if object we might have found is actually an object.
+            // If so, add to the relevant position!
+            if (get().reactions.find(r => r.id === potential_obj)) {
+              get().addErrorReason(rest, fullErrMsg, [], [potential_obj]);
+            } else if (get().species.find(s => s.id === potential_obj)) {
+              get().addErrorReason(rest, fullErrMsg, [potential_obj], []);
+            } else {
+              get().addErrorReason(msgToUser, fullErrMsg);
+            }
+            
+            throw new Error(`Server error: ${response.status} - ${response.statusText}`);
+          }
+        }
+
         set({simulationStatus: 2}); // Set status to "complete"
         set({simulationData: payload_data}); // Store sim data
 
@@ -675,7 +757,7 @@ const useStore = create<AppState>((set, get) => ({
         console.log('Simulation Complete!'); 
 
       } catch (error) {
-        
+        get().setErrorOpen(true);
         console.error('Error occurred while fetching simulation data:', error);
         set({simulationStatus: 3}); // Reset status to "error"
       }
@@ -694,6 +776,19 @@ const useStore = create<AppState>((set, get) => ({
     edgeHoverID: 'default',
     setEdgeHovering: (open) => set({ edgeHovering: open }),
     setEdgeHoverID: (id: string) => set({ edgeHoverID: id }),
+
+    focusEdge: (edgeID: string) => {
+      get().setSelectedEdge(edgeID); // Set state for focused edge, tells drawer what edge to go to
+      get().setRxnDrawerOpen(true); // Open the drawer
+      get().onEdgesChange([{ id: edgeID, type: 'select', selected: true }]); // Select the edge in the visualizer
+      get().setFocusedTarget({id: edgeID, type: 'edge'}); // Set the focused target to this edge
+    },
+
+    focusNode: (nodeID: string) => {
+      get().setRxnDrawerOpen(false);
+      get().onNodesChange([{ id: nodeID, type: 'select', selected: true }]); // Select the node in the visualizer
+      get().setFocusedTarget({id: nodeID, type: 'node'});
+    }
 
 }));
 
