@@ -416,6 +416,7 @@ I'll use this in the tooltips to help users address common mistakes!
     - Select which parameters are visible / invisible
 
 - BUG: Mobile & Dark Mode don't display correctly
+    - Fixed.
 
 - Smart / Snap Deleting!
     - When we delete a node, automatically re-infer the reaction type for any involved reactions.

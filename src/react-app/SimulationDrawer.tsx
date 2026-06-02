@@ -9,6 +9,14 @@ import React from 'react';
 
 import { LineChart } from '@mui/x-charts/LineChart';
 import useStore from './store';
+
+import { 
+    ChevronDownIcon
+
+} from "@radix-ui/react-icons";
+
+import './index.css';
+import './styles/Simulation.css';
 // Could use visx or Chart.js (https://www.chartjs.org/docs/latest/getting-started/usage.html)
 // Instead using MUI's LineCharts! https://mui.com/x/react-charts/line-demo/#BiaxialLineChart
 
@@ -28,6 +36,11 @@ function SimulationDrawer() {
         from: {height: 90, width: 300},
     }));
 
+    // Animation styling we'll use on opening and closing of the drawer
+    const [rotateSpring, rotateApi] = useSpring(() => ({
+        from: {rotate: 0, y: '0px'},
+    }));
+
 
     // When the outer drawer is clicked, spring open / closed
     const handleClick = () => {
@@ -36,6 +49,12 @@ function SimulationDrawer() {
         api.start({
             from: {height: 90, width: 300},
             to: {height: 500, width: 500},
+            reverse: open,
+        });
+
+        rotateApi.start({
+            from: {rotate: 0, y: '0px'},
+            to: {rotate: 180, y: '2px'},
             reverse: open,
         });
 
@@ -68,7 +87,7 @@ function SimulationDrawer() {
     return (
     <div>
         <animated.div
-            className='sim-box'
+            className='SimulationDrawer'
             style={{
                 position: 'fixed',
                 top: 10,
@@ -76,12 +95,12 @@ function SimulationDrawer() {
                 // background: '#000000',
                 borderRadius: 8,
                 borderColor: borderColor,
-                overflow: 'hidden',
+                // overflow: 'hidden',
                 ...springs,
             }}
             onClick={handleClick}
         >
-
+            <div>
             <button onClick={handleSimulate} className="simulate-button" >{simStatus === 0 ? 'SIMULATE' : simStatus === 1 ? 'SIMULATING...' : 'SIMULATE'}</button>
         
             <br />
@@ -109,9 +128,14 @@ function SimulationDrawer() {
             width={500}
             /> : null}
 
-            {/* <div className="sim-progression" >
+            
+
+            {/* <div className="SimulationProgression" >
                 <SimulationProgression open={open} />
             </div> */}
+
+        </div>
+        <button className="SimulationCloseButton" onClick={handleClick} style={{ borderColor: borderColor }} > <animated.div className="SimulationChevron" style={{ outline: '0px', ...rotateSpring}}> <ChevronDownIcon className="SimulationChevron" /> </animated.div> </button>
 
         </animated.div>   
 
