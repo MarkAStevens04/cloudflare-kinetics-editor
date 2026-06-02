@@ -426,7 +426,7 @@ I'll use this in the tooltips to help users address common mistakes!
 
 - [X] Better tooltips everywhere!
     - [X] Clean up "Customize Rate Law" (remove hamburger and keyboard buttons)
-    - [ ] Clean up debug bubbles
+    - [X] Clean up debug bubbles
     - [X] Say "Coming Soon" to non-implemented reaction types
 
 - [X] Better Errors when things don't run!

@@ -12,7 +12,7 @@ import './radix.css';
 import './styles/Banner.css';
 
 import { Toast, Tooltip } from "radix-ui";
-import { GitHubLogoIcon, DiscordLogoIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import { GitHubLogoIcon, DiscordLogoIcon, VideoIcon, ChevronRightIcon, Cross1Icon } from "@radix-ui/react-icons";
 
 // Analytics
 import { init as initFullStory } from '@fullstory/browser';
@@ -47,6 +47,7 @@ import {
 // import { convertLatexToAsciiMath } from "mathlive";
 
 import useStore from './store';
+import useThemeStore from './ThemeStore';
 import { useShallow } from 'zustand/react/shallow';
 import React from 'react';
 import { useEffect } from 'react';
@@ -253,6 +254,8 @@ export default function App() {
         <Banner />
         <ToastError />
 
+        <TutorialPopup />
+
         <RxnDrawer />
         <SimulationDrawer />
         
@@ -263,11 +266,12 @@ export default function App() {
 
 
 // Lets use a Nav menu at the top of our project as a banner! https://www.radix-ui.com/primitives/docs/components/navigation-menu
-
-
+// This is banner with the "BioBuilder" logo, alongside links to GitHub, Discord, and Youtube.
 function Banner() {
 
-  // NOTE: Cute color palette: #f00, #0ff, #0077b6
+  // REMINDER: Cute color palette: #f00, #0ff, #0077b6. Not required to use, but helpful if wanting to come back later lol.
+  const tutorialPhase = useThemeStore((state) => state.tutorialPhase);
+  const setTutorialPhase = useThemeStore((state) => state.setTutorialPhase);
 
   return (
   <div className="Banner">
@@ -281,19 +285,20 @@ function Banner() {
     {/* Calls to action */}
     <div className="BannerSection" style={{justifyContent: 'center', alignItems: 'center'}}>
       <GitHubLogoIcon className="BannerLogo" onClick={() => window.open('https://github.com/MarkAStevens04/cloudflare-kinetics-editor', '_blank')} />
-
-        {/* <Separator.Root
-          className="SeparatorRoot"
-          decorative
-          orientation="vertical"
-          style={{ 
-              margin: "0 0px",
-              padding: "10px 10px",
-              color: "rgba(0, 0, 0, 1)",
-              }}
-        /> */}
                 
       <DiscordLogoIcon className="BannerLogo" onClick={() => window.open('https://discord.gg/GmsKryYDGN', '_blank')} />
+
+      <TooltipRoot open={tutorialPhase === 1} onOpenChange={() => setTutorialPhase(2)}>
+      {/* <TooltipRoot defaultOpen={tutorialPhase === 1} > */}
+        <TooltipTrigger>
+        <VideoIcon className="BannerLogo" onClick={() => window.open('https://youtu.be/dQw4w9WgXcQ?si=XU1shs6t-HQlZqqY', '_blank')} />
+      </TooltipTrigger>
+
+      <TooltipContent side="bottom" sideOffset={10}>
+        Re-watch the walkthrough video here!
+        <Tooltip.Arrow className="TooltipArrow" />
+      </TooltipContent>
+      </TooltipRoot>
 
     </div>
 
@@ -411,4 +416,61 @@ function FocusController() {
   }, [focusedTarget, fitView, setFocusedTarget]);
 
   return null;
+}
+
+
+// This is a little popup when the user opens BioBuilder for the very first time!
+// CSS style stored in Banner.css, but can move if we want
+function TutorialPopup() {
+  const tutorialPhase = useThemeStore((state) => state.tutorialPhase);
+  const setTutorialPhase = useThemeStore((state) => state.setTutorialPhase);
+
+  // if (tutorialPhase !== 0) {setTutorialPhase(0);} // Meant for debugging, force popup to always be open.
+
+  const pointerEvents = tutorialPhase === 0 ? 'auto' : 'none';
+
+  const clickToClose = () => {
+    if (tutorialPhase === 0) {
+      setTutorialPhase(1);
+    }
+  }
+
+  return tutorialPhase === 0 && (
+    <>
+      <div 
+        className="drawer-dimmer"
+        onClick={clickToClose}
+        style={{
+            pointerEvents: pointerEvents,
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0, 0, 0, 0.1)',
+            opacity: 1,
+        }}
+    />
+
+      <div className="TutorialPopup">
+        <Cross1Icon className="TutorialCloseButton" onClick={clickToClose} />
+        
+        <div className="TutorialTitle">Hey! Looks like you're new here.</div>
+        <div className="TutorialText">Please watch this quick 2min video explaining how to use the software! I promise, it'll make your life a lot easier.</div>
+      
+        <div className="TutorialVideoContainer">
+          <iframe 
+            width="560" 
+            height="315" 
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=xYtizBm_S8NSFFjD" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+            style={{display: 'block'}}
+          >
+          </iframe>
+        </div>
+      </div>
+    </>
+  );
+
 }
