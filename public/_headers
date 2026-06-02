@@ -1,0 +1,8 @@
+/*
+  Link: </sitemap.xml>; rel="sitemap"; type="application/xml"
+  Link: </llms.txt>; rel="alternate"; type="text/plain"; title="LLM-friendly site summary"
+  Link: </.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600

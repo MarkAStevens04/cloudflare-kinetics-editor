@@ -4,11 +4,94 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/src/react-app/assets/PFP_No_BG.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>BioBuilder</title>
+		<title>BioBuilder — Interactive Biochemical Kinetics Editor & Simulator</title>
+
+		<meta
+			name="description"
+			content="BioBuilder is a free, web-based biochemical kinetics editor and simulator. Draw reaction networks visually, set rate laws and initial conditions, and get real ODE simulation results in seconds — no coding or differential equations required, but full access to the underlying math when you want it."
+		/>
+		<meta
+			name="keywords"
+			content="biochemical kinetics, ODE simulator, reaction network, enzyme kinetics, Michaelis-Menten, metabolic modeling, systems biology, mass action, rate law editor, biology simulation"
+		/>
+		<meta name="author" content="Mark Stevens" />
+		<meta name="robots" content="index, follow" />
+		<link rel="canonical" href="https://biobuilder.app/" />
+
+		<link rel="alternate" type="text/plain" title="LLM-friendly site summary" href="/llms.txt" />
+		<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="BioBuilder" />
+		<meta property="og:title" content="BioBuilder — Interactive Biochemical Kinetics Editor & Simulator" />
+		<meta
+			property="og:description"
+			content="Draw reaction networks, set rate laws, and run real ODE simulations in your browser. The power of a professional biochemical kinetics tool, without the friction."
+		/>
+		<meta property="og:url" content="https://biobuilder.app/" />
+		<meta property="og:image" content="https://biobuilder.app/Bio_Builder_Banner.png" />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="BioBuilder — Interactive Biochemical Kinetics Editor & Simulator" />
+		<meta
+			name="twitter:description"
+			content="Visual biochemical kinetics editor with real ODE simulation. Built for biologists who need simulation results without writing code."
+		/>
+		<meta name="twitter:image" content="https://biobuilder.app/Bio_Builder_Banner.png" />
+
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "SoftwareApplication",
+				"name": "BioBuilder",
+				"alternateName": "BioBuilder Kinetics Editor",
+				"url": "https://biobuilder.app/",
+				"applicationCategory": "ScienceApplication",
+				"applicationSubCategory": "Biochemical Kinetics Simulator",
+				"operatingSystem": "Web",
+				"browserRequirements": "Requires JavaScript. Modern desktop browser recommended.",
+				"description": "BioBuilder is a free, web-based biochemical kinetics editor and simulator. Users build reaction networks visually — adding species nodes and reaction edges, setting rate laws and initial conditions — and run real ODE simulations to see time-course concentrations of every species. Designed so biologists never need to write differential equations by hand, while still exposing the full underlying math for users who want it. As powerful as significantly more laborious biochemical kinetics tools, optimized for speed and ease of use.",
+				"featureList": [
+					"Visual reaction network editor (nodes for species, edges for reactions)",
+					"Real ODE-based simulation of biochemical systems",
+					"Automatic default rate laws (mass action, Michaelis-Menten for catalyzed reactions)",
+					"Editable rate-law expressions with LaTeX-style equation editing",
+					"Multi-reactant and enzyme-catalyzed reaction support",
+					"Time-course plots of every chemical species",
+					"Inspect and edit the underlying differential equations directly",
+					"Runs entirely in the browser — no install, no account required"
+				],
+				"offers": {
+					"@type": "Offer",
+					"price": "0",
+					"priceCurrency": "USD"
+				},
+				"creator": {
+					"@type": "Person",
+					"name": "Mark Stevens",
+					"email": "mark@biobuilder.app"
+				},
+				"sameAs": [
+					"https://github.com/MarkAStevens04/cloudflare-kinetics-editor",
+					"https://github.com/MarkAStevens04/Kinetics-Editor",
+					"https://discord.gg/GmsKryYDGN"
+				]
+			}
+		</script>
 	</head>
 
 	<body>
 		<div id="root"></div>
+		<noscript>
+			<h1>BioBuilder — Interactive Biochemical Kinetics Editor & Simulator</h1>
+			<p>
+				BioBuilder is a free, web-based biochemical kinetics editor and simulator. Build reaction
+				networks visually, set rate laws and initial conditions, and run real ODE simulations in
+				the browser — no coding required. Visit
+				<a href="https://biobuilder.app/">biobuilder.app</a> in a JavaScript-enabled browser to use
+				the editor.
+			</p>
+		</noscript>
 		<script type="module" src="/src/react-app/main.tsx"></script>
 	</body>
 </html>
