@@ -58,6 +58,11 @@
     /* background-color: #f00; */
 
     cursor: pointer;
+    transition: color 0.25s;
+}
+
+.BannerLogo:hover {
+    color: #747bff;
 }
 
 .TutorialPopup {

@@ -10,8 +10,6 @@ import {
 import '../index.css';
 import useStore from '../store';
 
-import { type AppNode } from '../ProteinNode';
-
 export type MAEdgeType = Edge<{ 
     label: string; 
     // toggleDrawer: (id: string) => void;
@@ -21,16 +19,16 @@ export type MAEdgeType = Edge<{
 
 export default function MassActionEdge({ 
     id, 
-    sourceX, 
-    sourceY, 
-    targetX, 
-    targetY, 
+    // sourceX, 
+    // sourceY, 
+    // targetX, 
+    // targetY, 
     sourcePosition, 
     targetPosition,
     selected,
     markerEnd,
     data,
-}: EdgeProps<RxnEdgeType>) {
+}: EdgeProps<MAEdgeType>) {
     const reactantIDs = useStore(store => store.reactions.find(r => r.id === id)?.participants)?.filter(p => p.role === 'reactant').map(p => p.id) ?? [];
     const productIDs = useStore(store => store.reactions.find(r => r.id === id)?.participants)?.filter(p => p.role === 'product').map(p => p.id) ?? [];
     
@@ -54,7 +52,7 @@ export default function MassActionEdge({
         const reactantX = reactant.position.x + measured_width;
         const reactantY = reactant.position.y + measured_height / 2;
 
-        return getBezierPath({ 
+        const [path] = getBezierPath({ 
             sourceX: reactantX, 
             sourceY: reactantY,
             sourcePosition: sourcePosition,
@@ -62,6 +60,8 @@ export default function MassActionEdge({
             targetY: avgY, 
             targetPosition: targetPosition,
         });
+
+        return path;
     });
 
     const reversePaths = productNodes.map(product => {
@@ -71,7 +71,7 @@ export default function MassActionEdge({
         const productX = product.position.x - 10;
         const productY = product.position.y + measured_height / 2;
 
-        return getBezierPath({ 
+        const [path] = getBezierPath({ 
             sourceX: avgX, 
             sourceY: avgY,
             sourcePosition: sourcePosition,
@@ -79,6 +79,8 @@ export default function MassActionEdge({
             targetY: productY, 
             targetPosition: targetPosition,
         });
+
+        return path;
     });
 
     const edgeColorOp = selected ? '#747bff' : '#ccc';
@@ -206,8 +208,8 @@ export default function MassActionEdge({
     );
 }
 
-
-export function MassActionDrawerInfo({edgeID}: {edgeID: string;}) {
+// Specific drawer info for Mass Action edges. Shows reactants, products, and rate laws.
+export function MassActionDrawerInfo() {
     return (
         <>
         

@@ -2,7 +2,6 @@ import {
     BaseEdge, 
     EdgeLabelRenderer,
     getBezierPath,
-    getStraightPath,
     // useReactFlow, 
     type Edge,
     type EdgeProps,
@@ -12,8 +11,6 @@ import '../index.css';
 import useStore from '../store';
 
 import { type AppNode } from '../ProteinNode';
-import { continuousColorLegendClasses } from '@mui/x-charts';
-
 
 export type MichaelisEdgeType = Edge<{ 
     label: string; 
@@ -35,7 +32,7 @@ export default function MichaelisMentenEdge({
     selected,
     markerEnd,
     data,
-}: EdgeProps<RxnEdgeType>) {
+}: EdgeProps<MichaelisEdgeType>) {
     // const { deleteElements } = useReactFlow();
     
 
@@ -52,7 +49,7 @@ export default function MichaelisMentenEdge({
 
 
     const [edgePath, labelX, labelY] = getBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
-    const currentEnzymeNode = useStore(store => store.visualNodes.find(item => item.id === data.enzymeID)) as AppNode;
+    const currentEnzymeNode = useStore(store => store.visualNodes.find(item => item.id === data?.enzymeID)) as AppNode;
 
 
     // Alternative occurs when there's no enzyme node.
@@ -135,7 +132,6 @@ export default function MichaelisMentenEdge({
                 path={edgePathThree} 
                 // markerEnd={activeMarkerEnd}
                 markerEnd={activeMarkerEnd}
-                animated={false}
                 style={{
                     stroke: edgeColorOp,
                     strokeWidth: '2px',
@@ -179,7 +175,9 @@ export default function MichaelisMentenEdge({
 
 
 
-export function MichaelisMentenDrawerInfo({edgeID}: {edgeID: string;}) {
+// Specific drawer info for Michaelis-Menten edges. Shows enzyme, rate law, and assumptions.
+// export function MichaelisMentenDrawerInfo({edgeID}: {edgeID: string;}) {
+export function MichaelisMentenDrawerInfo() {
 
     // const currentEnzymeID = useStore(store => {
     //     const current = store.reactions.find(item => item.id === edgeID) || {participants: []};
@@ -205,7 +203,21 @@ export function MichaelisMentenDrawerInfo({edgeID}: {edgeID: string;}) {
 
 
 
-export function initializeMichaelisEdge(id: string, currRxn: reaction) {
+export type ReactionLike = {
+    id: string;
+  label: string;
+  rate_law: string;
+  rate_type: string; // types: mass_action, michaelis_menten, hill_equation, etc.
+  associated_params: string[]; // List of param IDs which are associated with this reaction
+
+  participants: {
+    id: string;
+    role: string; // 'reactant' | 'product' | 'catalyst'
+    coefficient: number;
+  }[];
+};
+
+export function initializeMichaelisEdge(id: string, currRxn: ReactionLike) {
     // const current = get().reactions.find(item => item.id === id) || {sources: [], targets: []};
 
     const addSimParam = useStore.getState().addSimParam; 

@@ -66,9 +66,9 @@ type reactions = {
 
 type errorMSG = {
   message: string;
-  full_detail: string;
-  linked_nodes: string[];
-  linked_edges: string[];
+  full_detail?: string;
+  linked_nodes?: string[];
+  linked_edges?: string[];
 }
 
 
@@ -316,6 +316,7 @@ const useStore = create<AppState>((set, get) => ({
         const nodeToAdd = connectionState.fromNode.id
 
         const targetRxn = get().reactions.find(item => item.id === targetRxnID);
+        if (!targetRxn) { return; } // Should always find target reaction, but end early if we don't find it.
 
         // ToDo: Have some interaction when this returns false. Like make the edge red or something to let the user node this couldn't be added as a source.
 
@@ -358,7 +359,7 @@ const useStore = create<AppState>((set, get) => ({
     // When nodes are deleted, update internal representations and re-calculate involved reactions & rate laws.
     onNodesDelete: (nodes) => {
       const nodeIDsToDelete = nodes.map(n => n.id);
-      let updatedReactions = [];
+      const updatedReactions: { id: string; rateType: string }[] = [];
 
       // Remove this node from the species and visualNodes
       // For all reactions that use this node, re-infer the reaction type!
@@ -436,7 +437,7 @@ const useStore = create<AppState>((set, get) => ({
             ...e.data, 
             rate_law: newRateLaw,
           }
-        }
+        } as AppEdge;
       }),
 
     })),
@@ -480,7 +481,7 @@ const useStore = create<AppState>((set, get) => ({
               ...e.data, 
               rate_type: newEdgeType,
             }
-          }
+          } as AppEdge;
         } else {
           
           const currentEnzymeID = newEdge.participants.find(p => p.role === 'catalyst')?.id || '';
@@ -494,7 +495,7 @@ const useStore = create<AppState>((set, get) => ({
               rate_type: newEdgeType,
               enzymeID: currentEnzymeID, // Lowkey kinda sketchy to create new attribute and send it like this. Should really have a different way for MichaelisMenten edge to find catalystID.
             }
-          }
+          } as AppEdge;
 
         }
 
@@ -575,7 +576,7 @@ const useStore = create<AppState>((set, get) => ({
             ...e.data, 
             label: newRateName,
           }
-        }
+        } as AppEdge;
       }),
 
     })),
@@ -701,7 +702,7 @@ const useStore = create<AppState>((set, get) => ({
             const errMsg = responseJson.detail?.message;
             
             // The message we're sending to the user
-            let msgToUser = `Simulation failed: ${response.status} - ${responseJson.detail.message}`;
+            const msgToUser = `Simulation failed: ${response.status} - ${responseJson.detail.message}`;
             const fullErrMsg = JSON.stringify(responseJson, null, 2);
 
             // Try to extract any objects mentioned at beginning of error message
@@ -767,6 +768,7 @@ const useStore = create<AppState>((set, get) => ({
 
 
 export default useStore;
+export type { reactions };
 
 // ===================================================================================================================
 
@@ -880,7 +882,8 @@ function predictRxnType(reaction: reactions, species: species[]) {
     // Could also be for gene production
 
     // changed because not yet implemented
-    return 'hill_equation';
+    // return 'hill_equation';
+    return 'mass_action';
   }
 
   // Default is mass action

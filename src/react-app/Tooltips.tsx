@@ -10,7 +10,7 @@ type TooltipTriggerProps = React.PropsWithChildren<{ className?: string } & Reac
 
 const TooltipRoot = React.forwardRef<HTMLDivElement, TooltipRootProps>(
 // const TooltipRoot = React.forwardRef(
-	({ children, className, ...props }, forwardedRef) => {
+	({ children, ...props }) => {
 		return (
 			<Tooltip.Provider>
                 <Tooltip.Root
@@ -46,12 +46,12 @@ const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
 );
 
 const TooltipTrigger = React.forwardRef<HTMLDivElement, TooltipTriggerProps>(
-	({ children, className, ...props }, forwardedRef) => {
+	({ children, className, ...props }) => {
 		return (
 			<Tooltip.Trigger asChild
 				{...props}
-				ref={forwardedRef}
                 style={{...props.style, cursor: 'pointer'}}
+				className={classnames("TooltipTrigger", className)}
 			>
 				{children}
 			</Tooltip.Trigger>

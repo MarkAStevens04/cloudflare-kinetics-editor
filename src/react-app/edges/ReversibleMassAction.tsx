@@ -10,10 +10,6 @@ import {
 import '../index.css';
 import useStore from '../store';
 
-
-import { type AppNode } from '../ProteinNode';
-import { accordionActionsClasses } from '@mui/material/AccordionActions';
-
 export type RevMAEdgeType = Edge<{ 
     label: string; 
     // toggleDrawer: (id: string) => void;
@@ -25,16 +21,16 @@ export type RevMAEdgeType = Edge<{
 
 export default function ReversibleMassActionEdge({ 
     id, 
-    sourceX, 
-    sourceY, 
-    targetX, 
-    targetY, 
+    // sourceX, 
+    // sourceY, 
+    // targetX, 
+    // targetY, 
     sourcePosition, 
     targetPosition,
     selected,
     markerEnd,
     data,
-}: EdgeProps<RxnEdgeType>) {
+}: EdgeProps<RevMAEdgeType>) {
 
     // const reactantIDs = useStore(store => store.reactions.find(r => r.id === id)?.participants.filter(p => p.role === 'reactant').map(p => p.id)) ?? [];
     const reactantIDs = useStore(store => store.reactions.find(r => r.id === id)?.participants)?.filter(p => p.role === 'reactant').map(p => p.id) ?? [];
@@ -60,7 +56,7 @@ export default function ReversibleMassActionEdge({
         const reactantX = reactant.position.x + measured_width;
         const reactantY = reactant.position.y + measured_height / 2;
 
-        return getBezierPath({ 
+        const [path] = getBezierPath({ 
             sourceX: reactantX, 
             sourceY: reactantY,
             sourcePosition: sourcePosition,
@@ -68,6 +64,8 @@ export default function ReversibleMassActionEdge({
             targetY: avgY, 
             targetPosition: targetPosition,
         });
+
+        return path;
     });
 
     const reversePaths = productNodes.map(product => {
@@ -77,7 +75,7 @@ export default function ReversibleMassActionEdge({
         const productX = product.position.x - 10;
         const productY = product.position.y + measured_height / 2;
 
-        return getBezierPath({ 
+        const [path] = getBezierPath({ 
             sourceX: avgX, 
             sourceY: avgY,
             sourcePosition: sourcePosition,
@@ -85,10 +83,9 @@ export default function ReversibleMassActionEdge({
             targetY: productY, 
             targetPosition: targetPosition,
         });
+
+        return path;
     });
-
-
-    const [edgePath, labelX, labelY] = getBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
 
     const edgeColorOp = selected ? '#747bff' : '#ccc';
     const textColorOp = selected ? '#fff' : '#000';
@@ -219,7 +216,7 @@ export default function ReversibleMassActionEdge({
     );
 }
 
-
+// Specific drawer info for Reversible Mass Action edges. Shows reactants, products, and rate laws.
 export function ReversibleMassActionDrawerInfo() {
     return (
         <>

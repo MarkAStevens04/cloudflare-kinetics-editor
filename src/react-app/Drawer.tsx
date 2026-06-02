@@ -22,7 +22,6 @@ import {
     Select,
     Separator,
     Popover,
-    Tooltip,
  } from 'radix-ui';
 
 import { 
@@ -384,14 +383,15 @@ export default function RxnDrawer() {
 
                 {/* Include rate type specific options */}
                 {
+                    // Could pass edgeID if helpful!
                     edge.rate_type === 'mass_action' ? 
-                        <MassActionDrawerInfo edgeID={edge.id} />
+                        <MassActionDrawerInfo />
                     : edge.rate_type === 'rev_mass_action' ?
                         <ReversibleMassActionDrawerInfo />  
                     : edge.rate_type === 'michaelis_menten' ?
-                        <MichaelisMentenDrawerInfo edgeID={edge.id} />
+                        <MichaelisMentenDrawerInfo />
                     : edge.rate_type === 'custom' ?
-                        <CustomDrawerInfo edgeID={edge.id} />
+                        <CustomDrawerInfo />
                     :
                         <p> { edge.rate_type } </p>
                 }
@@ -735,12 +735,10 @@ function ParameterInput({ paramID }: { paramID: string} ) {
     );
 }
 
-function CreateParameter({}) {
+function CreateParameter() {
     const addSimParam = useStore.getState().addSimParam; 
     const paramTempName = useStore((store) => store.tempParamName);
     const paramTempValue = useStore((store) => store.tempParamValue);
-
-    const associateParamToRxn = useStore((store) => store.associateParamToRxn);
 
     const setTempParamName = useStore((store) => store.setTempParamName);
     const setTempParamValue = useStore((store) => store.setTempParamValue);

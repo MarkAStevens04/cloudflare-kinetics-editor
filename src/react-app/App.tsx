@@ -49,7 +49,6 @@ import {
 import useStore from './store';
 import useThemeStore from './ThemeStore';
 import { useShallow } from 'zustand/react/shallow';
-import React from 'react';
 import { useEffect } from 'react';
 
 
@@ -131,17 +130,6 @@ const NODE_COLORS = [
   '#3a86ff',
 
 ]
-
-
-
-// Where we are in the color cycle
-let colIdx= 1;
-
-// Function to get the next color in the cycle when generating new node
-const getRandomColor = () => {
-  colIdx = (colIdx + 1) % NODE_COLORS.length;
-  return NODE_COLORS[colIdx];
-}
 
 // ID for the next node to be added
 let nextId= 3;
@@ -402,12 +390,13 @@ function FocusController() {
   useEffect(() => {
     if (!focusedTarget) return;
 
-    let nodes;
+    let nodes: { id: string }[]; // Initialize as empty array of node IDs
     if (focusedTarget.type === 'node') {
       nodes = [{id: focusedTarget.id}];
     } else {
       // For edges, we want to focus on source and target nodes
       const edge = useStore.getState().visualEdges.find((edge) => edge.id === focusedTarget.id);
+      if (!edge) return; // Edge not found, exit early. This should never happen, but for making type safety happy.
       nodes = [{ id: edge?.source }, { id: edge?.target }];
     }
     
@@ -461,10 +450,10 @@ function TutorialPopup() {
             height="315" 
             src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=xYtizBm_S8NSFFjD" 
             title="YouTube video player" 
-            frameborder="0" 
+            frameBorder="0" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
             style={{display: 'block'}}
           >
           </iframe>
