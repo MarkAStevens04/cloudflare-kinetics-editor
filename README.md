@@ -436,8 +436,8 @@ I'll use this in the tooltips to help users address common mistakes!
 - [ ] Make build passing
 
 - [ ] Make video tutorial
-    - [ ] Little sign that says "Hey! Looks like you're new here. Please watch this 2min tutorial!"
-    - [ ] Youtube thumbnail at top so anyone can re-watch the tutorial.
+    - [X] Little sign that says "Hey! Looks like you're new here. Please watch this 2min tutorial!"
+    - [X] Youtube thumbnail at top so anyone can re-watch the tutorial.
 
 
 # React + Vite + Hono + Cloudflare Workers
