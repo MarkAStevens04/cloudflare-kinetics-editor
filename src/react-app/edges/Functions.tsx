@@ -25,11 +25,11 @@ export function initializeMichaelisEdge(currRxn: reactions) {
 
     // Find the Km parameter in our parameter list. If there's not one, create it. 
     const existingKm = currParams.find(param => param.display.includes('Km'));
-    kmID = existingKm ? existingKm.id : addSimParam('Km', '100');
+    kmID = existingKm ? existingKm.id : addSimParam('Km', '0.3');
     
     // Find the Vmax parameter in our parameter list. If there's not one, create it.
     const existingVmax = currParams.find(param => param.display.includes('Vmax'));
-    vmaxID = existingVmax ? existingVmax.id : addSimParam('Vmax', '100');
+    vmaxID = existingVmax ? existingVmax.id : addSimParam('Vmax', '2.5');
 
     // Associate newly added parameters to our rxn
     if (!existingKm) { associateParam(kmID, currRxn.id); }
