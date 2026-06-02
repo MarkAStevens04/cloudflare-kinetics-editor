@@ -407,10 +407,15 @@ I'll use this in the tooltips to help users address common mistakes!
 - BUG: Changing to mass action should change all catalysts to inputs!
 - BUG: Delete first reactant, have arrow from 3rd reactant to first, catalyze reaction, and now your product is acting as the reactant!! No good.
     - Fixed.
+- BUG: Coefficient editing
+    - Fixed.
 
 - Better simulation parameter adjustments
     - Start time, end time
     - Simulation method
+    - Select which parameters are visible / invisible
+
+- BUG: Mobile & Dark Mode don't display correctly
 
 - Smart / Snap Deleting!
     - When we delete a node, automatically re-infer the reaction type for any involved reactions.

@@ -201,7 +201,54 @@ export default function MassActionEdge({
 
                 onMouseEnter={() => onHover()}
                 onMouseLeave={() => onLeave()}
-                > {data?.label ?? 'Default Label'} </button>
+                > <div>{data?.label ?? 'Default Label'}</div>
+
+                    <div style={{
+                        // background: 'rgba(255, 0, 0, 0.5)',
+                        display: 'flex',
+                        position: 'absolute',
+                        // top: '100%',
+                        left: '50%',
+                        // width: '200px',
+                        minWidth: '30px',
+                        width: '50%',
+                        // maxWidth: '80px',
+                        height: '20px',
+                        transform: 'translate(-50%, -15%)',
+                        alignItems: 'center',
+                    }}>
+                
+                        <div className="handle-circle" style={{
+                            background: '#fff',
+                            width: '0.7em',
+                            height: '0.7em',
+                            // alignItems: 'center',
+                            // justifyContent: 'center',
+                            display: 'flex',
+                            color: '#4ECDC4',
+                            // position: 'absolute',
+                            left: '0%',
+                            boxShadow: 'none',
+                            // opacity: '0.8',
+                        }} />
+
+                        <div className="handle-diamond" style={{
+                            background: '#fff',
+                            width: '6px',
+                            height: '6px',
+                            // alignItems: 'center',
+                            // justifyContent: 'center',
+                            display: 'flex',
+                            color: '#FFE66D',
+                            position: 'absolute',
+                            right: '1px',
+                            // bottom: '-10px',
+                            boxShadow: 'none',
+                            // opacity: '0.8',
+                        }} />
+                        </div>
+                
+                </button>
             </EdgeLabelRenderer>
         </>
 
