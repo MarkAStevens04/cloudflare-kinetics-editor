@@ -67,21 +67,6 @@ button:focus-visible {
 }
 
 
-.custom-node {
-	border-radius: 5px;
-	border: 2px solid #ccc;
-	padding: 12px;
-	font-family: Helios_Extended;
-	font-size: 12px;
-	font-weight: normal;
-	background-color: #fff;
-	transition: border-color 0.2s, box-shadow 0.1s ease;
-}
-.custom-node:hover {
-	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
-}
-
-
 
 .simulate-button {
 	font-size: 36px;
@@ -149,12 +134,6 @@ button:focus-visible {
 
 }
 
-
-.drawer {
-	margin: 0;
-	padding: 20px 20px;
-}
-
 .drawer-name-input {
 
 	font-weight: inherit;
@@ -170,6 +149,8 @@ button:focus-visible {
 	border-radius: 8px;
 
 	background-color: rgba(0, 0, 0, 0);
+
+	color: rgba(0, 0, 0, 1);
 
 	field-sizing: content;
     min-width: 30px;
@@ -437,6 +418,8 @@ button:focus-visible {
 .action-button {
 	width: 85%;
 	background-color: rgba(0, 0, 0, 0.2);
+
+	color: rgba(0, 0, 0, 0.9);
 	
 	padding: 2px 0px 5px 0px;
 

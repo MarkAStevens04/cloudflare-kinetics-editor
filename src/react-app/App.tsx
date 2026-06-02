@@ -166,6 +166,8 @@ export default function App() {
   // Function to add a Node (uses Zustand store)
   const addNode = useStore((store) => store.addNode);
 
+  // For handling dark mode
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
   return (
     <div style={{ width: '100vw', height: '100vh' }} className="app">
@@ -183,7 +185,10 @@ export default function App() {
             edgeTypes={edgeTypes}
             // connectionMode={ConnectionMode.Loose}
             fitView
-            defaultEdgeOptions={defaultEdgeOptions}>
+            defaultEdgeOptions={defaultEdgeOptions}
+            colorMode={prefersDark ? 'dark' : 'light'}
+            
+            >
           <Background />
           <Controls />
           <FocusController />

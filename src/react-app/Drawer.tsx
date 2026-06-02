@@ -182,14 +182,13 @@ export default function RxnDrawer() {
                 
 
                 <animated.div
-                    className="drawer"
+                    className="Drawer"
                     style={{
                         position: 'fixed',
                         top: 0,
                         left: 0,
                         width: 400,
                         height: '100vh',
-                        background: 'white',
                         borderRight: "1px solid #ddd",
                         boxShadow: "0 0 20px rgba(0, 0, 0, 0.12)",
                         transform: style.x.to((x) => `translate3d(${x}px, 0, 0)`),
@@ -227,7 +226,7 @@ export default function RxnDrawer() {
                         <div className="species-params">     
                             Initial: 
                             <input 
-                                className="item species-param-input"
+                                className="item DrawerLongInput"
                                 placeholder={`0`} 
                                 value={reactantInit === '' ? '' : reactantInit}
                                 onChange={onRChange}
@@ -259,7 +258,7 @@ export default function RxnDrawer() {
                         <div className="species-params">     
                             Initial: 
                             <input 
-                                className="item species-param-input"
+                                className="item DrawerLongInput"
                                 placeholder={`0`} 
                                 value={productInit === '' ? '' : productInit}
                                 onChange={onPChange}
@@ -460,7 +459,7 @@ function ReactantEditor({
             {reactants.map((reactant) => (
                 <div style={{display: 'flex', padding: '5px 0px'}}>
                 <input
-                    className="item species-param-input"
+                    className="item DrawerLongInput"
                     placeholder={`0`}
                     value={getCoefficient(reactant.id, rxnID) === 0 ? '' : getCoefficient(reactant.id, rxnID).toString()}
                     onChange={(e) => updateCoefficient(reactant.id, parseInt(e.target.value) || 0)}
@@ -505,7 +504,7 @@ function ReactantEditor({
             {products.map((product) => (
                 <div style={{display: 'flex', padding: '5px 0px'}}>
                 <input
-                    className="item species-param-input"
+                    className="item DrawerLongInput"
                     placeholder={`0`}
                     value={getCoefficient(product.id, rxnID) === 0 ? '' : getCoefficient(product.id, rxnID).toString()}
                     onChange={(e) => updateCoefficient(product.id, parseInt(e.target.value) || 0)}
@@ -632,7 +631,7 @@ function RateEditor({
         <p className='DrawerSection'>Add species to rate law:</p>
 
         {/* Add Reactant Chips */}
-        <div className="species-param-input" 
+        <div className="DrawerLongInput" 
         style={{
                 backgroundColor: 'rgba(255, 255, 255, 1)',
                 color: 'rgba(0, 0, 0, 0.8)',
@@ -667,7 +666,7 @@ function RateEditor({
          <p className='DrawerSection'>Add parameter to rate law:</p>
 
         {/* Add Parameter Chips */}
-        <div className="species-param-input" 
+        <div className="DrawerLongInput" 
         style={{
                 backgroundColor: 'rgba(255, 255, 255, 1)',
                 color: 'rgba(0, 0, 0, 0.8)',
@@ -719,15 +718,15 @@ function ParameterInput({ paramID }: { paramID: string} ) {
 
     return (
         <>
-            <div className="DrawerSection">
-                <p style={{padding: '0px', margin: '0px', fontWeight: '500', color: 'rgba(0, 0, 0, 0.5)' }}>{paramDisp} </p>
+            <div className="DrawerSection DrawerSubtext">
+                <p style={{ margin: '0px', }}>{paramDisp} </p>
                 <input
-                    className="item species-param-input"
+                    className="item DrawerLongInput"
                     placeholder={`0`}
                     value={paramVal}
                     onChange={onParamUpdate}
                     style={{
-                        minWidth: '80%',
+                        minWidth: '70%',
                     }}
                 />
             </div>
@@ -768,7 +767,21 @@ function CreateParameter() {
     <Popover.Trigger asChild>
         <button 
             className='autofill-species-box' 
-            style={{backgroundColor:'#fff', fontWeight: 'bold', color: '#fff', width: '2.5em', height: '2.5em', justifyContent: 'center', alignItems: 'center', display: 'flex', borderRadius: '50%', cursor: 'pointer', borderColor: 'rgba(0, 0, 0, 0.2)', borderStyle: 'solid', borderWidth: '3px'}} 
+            style={{
+                backgroundColor:'#fff', 
+                fontWeight: 'bold', 
+                color: '#fff', 
+                width: '2.5em', 
+                height: '2.5em', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                display: 'flex', 
+                borderRadius: '50%', 
+                cursor: 'pointer', 
+                borderColor: 'rgba(0, 0, 0, 0.2)', 
+                borderStyle: 'solid', 
+                borderWidth: '3px'
+            }} 
             // onClick={() => addSimParam()}
         >
             <p style={{fontSize: '2em', color: 'rgba(0, 0, 0, 0.5)'}}>+</p>
@@ -781,7 +794,7 @@ function CreateParameter() {
             <div className='DrawerSection' >
                 Param Name:
                 <input
-                    className="item species-param-input"
+                    className="item DrawerLongInput"
                     placeholder={`name`}
                     value={paramTempName}
                     onChange={onTempParamNameChange}
@@ -791,7 +804,7 @@ function CreateParameter() {
             <div className='DrawerSection' >
                 Param Value:
                 <input
-                    className="item species-param-input"
+                    className="item DrawerLongInput"
                     placeholder={`0`}
                     value={paramTempValue}
                     onChange={onTempParamValueChange}

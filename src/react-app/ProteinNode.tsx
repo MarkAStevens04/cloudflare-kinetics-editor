@@ -79,6 +79,7 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
                 padding: '0px 0px',
                 outline: '0px',
                 transition: 'border-color 0.5s',
+                color: 'rgba(0, 0, 0, 1)',
             }}
             /> : <div style={{ fontSize: 24, color: '#000'}}>{data.label}</div>
         }
