@@ -93,10 +93,11 @@ function SimulationDrawer() {
             dataset={data}
             xAxis={[
                 { dataKey: 'time',
-                    valueFormatter: (value: number) => value.toString()
+                    valueFormatter: (value: number) => value.toString(),
+                    label: 'time',
                 },
             ]}
-            yAxis={[{ width: 50 }]}
+            yAxis={[{ width: 50, label: 'concentration', }]}
             series={Object.keys(keyToLabel).map((key) => ({
                 dataKey: key,
                 label: keyToLabel[key],

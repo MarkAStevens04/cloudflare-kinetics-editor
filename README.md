@@ -406,6 +406,11 @@ I'll use this in the tooltips to help users address common mistakes!
 
 - BUG: Changing to mass action should change all catalysts to inputs!
 - BUG: Delete first reactant, have arrow from 3rd reactant to first, catalyze reaction, and now your product is acting as the reactant!! No good.
+    - Fixed.
+
+- Better simulation parameter adjustments
+    - Start time, end time
+    - Simulation method
 
 - Smart / Snap Deleting!
     - When we delete a node, automatically re-infer the reaction type for any involved reactions.
@@ -442,6 +447,7 @@ I'll use this in the tooltips to help users address common mistakes!
 
 - [ ] Make video tutorial
     - Fun example of sin(glucose * 20) * 0.005 + glucose * 0.01
+    - Show keystrokes & clicks as you make them. Show deleting nodes. Show hovering over drawers for info. Show 2 output doesn't currently work. Show breaking through sometimes. Show clicking on side to open / close simulation.
     - [X] Little sign that says "Hey! Looks like you're new here. Please watch this 2min tutorial!"
     - [X] Youtube thumbnail at top so anyone can re-watch the tutorial.
 
