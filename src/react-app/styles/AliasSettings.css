@@ -1,0 +1,86 @@
+.alias-settings-container {
+  padding: 20px;
+  max-width: 600px;
+}
+
+.alias-settings-container h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #333;
+}
+
+.alias-settings-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.alias-settings-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+}
+
+.alias-settings-table thead {
+  background-color: #f5f5f5;
+}
+
+.alias-settings-table th,
+.alias-settings-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.alias-settings-table th {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.alias-settings-table td {
+  font-size: 14px;
+}
+
+.default-term {
+  color: #555;
+  font-weight: 500;
+}
+
+.alias-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.alias-input:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+}
+
+.reset-aliases-button {
+  padding: 10px 16px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.reset-aliases-button:hover {
+  background-color: #eeeeee;
+}
+
+.reset-aliases-button:active {
+  background-color: #e0e0e0;
+}

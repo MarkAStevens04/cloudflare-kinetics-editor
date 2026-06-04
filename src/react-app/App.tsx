@@ -24,6 +24,7 @@ import RxnEdge, { type AppEdge } from './RxnEdge';
 import RxnDrawer from './Drawer';
 import SimulationDrawer from './SimulationDrawer';
 import FeedbackDrawer from './FeedbackDrawer';
+import SettingsDrawer from './SettingsDrawer';
 
 // Stringify TODO: Move this to Drawer instead
 // import { convertLatexToAsciiMath } from "mathlive";
@@ -91,7 +92,7 @@ export default function App() {
 
   // Function to add a Node (uses Zustand store)
   const addNode = useStore((store) => store.addNode);
-
+  const setSettingsDrawerOpen = useStore((store) => store.setSettingsDrawerOpen);
 
   return (
     <div style={{ width: '100vw', height: '100vh' }} className="app">
@@ -127,13 +128,27 @@ export default function App() {
             Add New Node
           </button>
 
+        <button 
+          onClick={() => setSettingsDrawerOpen(true)}
+          style={{
+            position: 'fixed', 
+            top: 10, 
+            right: 10,
+            padding: '8px 16px',
+            backgroundColor: '#f5f5f5',
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '14px',
+          }}>
+            ⚙️ Settings
+          </button>
 
         <FeedbackDrawer />
 
         <RxnDrawer />
         <SimulationDrawer />
-        
-      
+        <SettingsDrawer />
     </div>
   );
 }

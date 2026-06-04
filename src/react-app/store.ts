@@ -79,6 +79,8 @@ type AppState = {
   simDrawerOpen: boolean;
   setSimDrawerOpen: (open: boolean) => void;
 
+  settingsDrawerOpen: boolean;
+  setSettingsDrawerOpen: (open: boolean) => void;
 
   updateSpeciesLabel: (id: string, newLabel: string) => void;
   updateRateLaw: (id: string, newRateLaw: string) => void;
@@ -246,6 +248,10 @@ const useStore = create<AppState>((set, get) => ({
     // Open / close simulation drawer
     simDrawerOpen: false,
     setSimDrawerOpen: (open) => set({ simDrawerOpen: open }),
+
+    // Open / close settings drawer
+    settingsDrawerOpen: false,
+    setSettingsDrawerOpen: (open) => set({ settingsDrawerOpen: open }),
 
     // Simulation Information (status, data, fetching function)
     simulationStatus: 0,

@@ -14,6 +14,7 @@ import './index.css';
 import "mathlive";
 import { MathfieldElement } from 'mathlive';
 import useStore from './store';
+import { useAliases } from './context/AliasContext';
 
 
 type rateEditorProps = {
@@ -23,6 +24,8 @@ type rateEditorProps = {
 
 
 export default function RxnDrawer() {
+
+    const { aliases } = useAliases();
 
     const edge = useStore((store) => store.reactions.find((e) => e.id === store.selectedEdge)) || { id: '', label: '', sources: [''], targets: [''], rate_law: '' };
     const nodes = useStore((store) => store.species);
@@ -132,7 +135,7 @@ export default function RxnDrawer() {
                     <div className="species-container" style={{
                         backgroundColor: reactantColor,
                     }}>
-                        <div className="species-container-header"> {reactantLabel} </div>
+                        <div className="species-container-header">{aliases.reactant}: {reactantLabel}</div>
                         <hr style={{
                             border: 'none',
                             height: '1px',
@@ -164,7 +167,7 @@ export default function RxnDrawer() {
                     <div className="species-container" style={{
                         backgroundColor: productColor,
                     }}>
-                        <div className="species-container-header"> {productLabel} </div>
+                        <div className="species-container-header">{aliases.product}: {productLabel}</div>
                         <hr style={{
                             border: 'none',
                             height: '1px',
@@ -260,7 +263,7 @@ function RateEditor({
 
     return (
     <div className='rate-editor'>   
-        <p className='drawer-text'>Rate Law</p>
+        <p className='drawer-text'>{useAliases().aliases.rate} Law</p>
 
         <math-field
                 id="formula"

@@ -1,0 +1,42 @@
+.settings-drawer-dimmer {
+  /* Background overlay when drawer is open */
+}
+
+.settings-drawer {
+  z-index: 1000;
+}
+
+.settings-drawer-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  border-bottom: 1px solid #ddd;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1001;
+}
+
+.settings-drawer-header h1 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.settings-drawer-close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.settings-drawer-close-button:hover {
+  color: #333;
+}
