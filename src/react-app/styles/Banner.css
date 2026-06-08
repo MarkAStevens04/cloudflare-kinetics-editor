@@ -96,6 +96,8 @@
 		hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
 
 	transition: border-color 0.2s;
+
+    cursor: default;
 }
 
 .TutorialPopup:hover {
@@ -110,6 +112,8 @@
 
     color: rgba(0, 0, 0, 0.8);
     transition: color 0.2s;
+
+    cursor: pointer;
 }
 
 .TutorialCloseButton:hover {
