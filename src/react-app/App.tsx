@@ -447,7 +447,7 @@ function TutorialPopup() {
         <Cross1Icon className="TutorialCloseButton" onClick={clickToClose} />
         
         <div className="TutorialTitle">Hey! Looks like you're new here.</div>
-        <div className="TutorialText">Please watch this quick 2min video explaining how to use the software! I promise, it'll make your life a lot easier.</div>
+        <div className="TutorialText">Please watch this quick video explaining how to use the software! I promise, it'll make your life a lot easier.</div>
       
         <div className="TutorialVideoContainer">
           <iframe 
