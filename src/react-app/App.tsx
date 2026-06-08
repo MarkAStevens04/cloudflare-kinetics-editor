@@ -284,7 +284,7 @@ function Banner() {
       <TooltipRoot open={tutorialPhase === 1} onOpenChange={() => setTutorialPhase(2)}>
       {/* <TooltipRoot defaultOpen={tutorialPhase === 1} > */}
         <TooltipTrigger>
-        <VideoIcon className="BannerLogo" onClick={() => window.open('https://youtu.be/dQw4w9WgXcQ?si=XU1shs6t-HQlZqqY', '_blank')} />
+        <VideoIcon className="BannerLogo" onClick={() => window.open('https://youtu.be/Lmgdc56ldk8', '_blank')} />
       </TooltipTrigger>
 
       <TooltipContent side="bottom" sideOffset={10}>
@@ -453,7 +453,7 @@ function TutorialPopup() {
           <iframe 
             width="560" 
             height="315" 
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=xYtizBm_S8NSFFjD" 
+            src="https://www.youtube.com/embed/Lmgdc56ldk8?si=urfDWERmmVXdtRYi" 
             title="YouTube video player" 
             frameBorder="0" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
