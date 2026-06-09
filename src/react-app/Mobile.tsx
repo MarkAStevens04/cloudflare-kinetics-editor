@@ -34,11 +34,6 @@ export default function MobileOverlay() {
         {/* <Banner /> */}
         <Notice />
 
-        {/* <div className="MobileSection">
-            <div className="MobileTitle">BIOBUILDER</div>
-            <div className="MobileSubtitle">LIGHT</div>
-        </div> */}
-
         <div className="MobileSection">
             <div className="MobileTitle">BIOBUILDER</div>
             <div className="MobileSubtitle">
@@ -66,7 +61,25 @@ export default function MobileOverlay() {
                 <source src={demoVideo} type="video/mp4" /> 
                 Your browser doesn't support video playback.
                 </video>
-                <div> test text </div>
+
+                {/* <iframe 
+            width="560" 
+            height="315" 
+            src="https://www.youtube.com/embed/5qKTP-GZtws?si=aFZ7Hk8uCyM2TroS&amp;controls=0" 
+            title="YouTube video player" 
+            frameBorder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+            style={{display: 'block'}}
+          >
+          </iframe> */}
+
+
+                {/* <video autoPlay muted loop width="100%" height="auto" style={{position: 'absolute', top: '-6.5%', left: '0.2%'}}>
+                <source src="https://biobuilder.app/BioBuilder%20Demo%20v2.mp4" type="video/mp4" /> 
+                Your browser doesn't support video playback.
+                </video> */}
             </div>
         </div>
 
