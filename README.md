@@ -27,7 +27,7 @@ BioBuilder is a web-based biochemical kinetics editor and simulator! 🧪✨ Bui
 
 Biochemical kinetics allows you to predict the future in biology. 🔮 It allows you to know exactly which chemicals and how much will be produced, given some set of initial conditions.
 
-We believe that biochemists shouldn't need to be computer scientists to benefit from this technique. BioBuilder bridges the gap between biologists and computers, and allows you to start running simulations NOW!
+We believe that biochemists shouldn't need to be computer scientists to benefit from this technique. BioBuilder bridges the gap between biologists and computers, and allows you to start running simulations NOW! To understand what our project is trying to achieve, see [VISION.md](VISION.md)
 
 **There are two repos**: The frontend (this repo) to interface with scientists, and the backend ([HERE](https://github.com/MarkAStevens04/Kinetics-Editor)) to run our simulations.
 
@@ -38,7 +38,7 @@ Go to [BioBuilder.app](https://biobuilder.app?utm_source=github&utm_medium=readm
 
 Want to see a new feature on the site? Is there a small tweak that would make the site less frustrating? The best person to make the change is *YOU*! You don't need to be an expert computer scientist to make a meaningful impact. Whether you're a seasoned open-source veteran, or this is your first contribution, we always welcome any help we can get, and we've created a guide to help make it easy for you to get started.
 
-See `CONTRIBUTING.md` for a guide on how to get started making your first contributions.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for a guide on how to get started making your first contributions.
 
 # How to use
 
@@ -73,7 +73,7 @@ After you know your **diagrams**, **parameters**, and **initial conditions**, it
 
 
 ## 3. Running your simulation
-Now you've set up your simulation, it's time to run it! Click "SIMULATE" in the top right corner, and voila! We've performed your simulation!
+Now you've set up your simulation, it's time to run it! Click "SIMULATE" in the top right corner, and voila! You just ran the simulation! 
 
 
 # Feedback
@@ -84,6 +84,8 @@ You can also fill out [THIS](https://tally.so/r/VLYDpa) feedback form!
 
 
 # Build
+For exhaustive instructions on how to run the code, see [CONTRIBUTING.md](CONTRIBUTING.md). Here's a quick refresher:
+
 Locally, run `npx vite`
 
 To deploy, run 
@@ -181,9 +183,9 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 
 - Show that buttons in rate editor are clickable! Meant to click buttons not type
 
-- Text at top that says "SIMULATE" should say "SIMULATING" when we run.
+- Text at top that says "SIMULATE" should say "SIMULATING" when we run. (DONE!)
 
-- Little banner that pops up at top of page when a new build is deployed and the user is still on the old version. Something like "We just launched an update! Refresh the page to see the changes <3"
+- Little banner that pops up at top of page when a new app build is deployed and the user is still on the old version. Something like "We just launched an update! Refresh the page to see the changes <3"
 
 
 ### Parameters & Functions
@@ -195,6 +197,7 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 
 ### Multi-Reactant Reactions
 - Make it so you can draw an arrow from one reactant to a REACTION! Like the little square on the reaction edge, make it so you can actually draw from another reactant to THAT square. THAT makes your reaction a multi-reactant reaction!
+    - DONE!!!
 
 ### Project Charter Document
 - What do we want out of this project?
