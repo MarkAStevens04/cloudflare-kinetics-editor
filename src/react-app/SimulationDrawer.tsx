@@ -8,6 +8,7 @@ import {
 import React from 'react';
 
 import { LineChart } from '@mui/x-charts/LineChart';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useStore from './store';
 
 import { 
@@ -30,6 +31,10 @@ function SimulationDrawer() {
 
     const setSimDrawerOpen = useStore((store) => store.setSimDrawerOpen);
     const onSimulate = useStore((store) => store.fetchSimulationData);
+
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    const chartTheme = createTheme({ palette: { mode: prefersDark ? 'dark' : 'light' } });
 
     // Animation styling we'll use on opening and closing of the drawer
     const [springs, api] = useSpring(() => ({
@@ -82,7 +87,10 @@ function SimulationDrawer() {
         (acc, node) => ({ ...acc, [node.id]: node.data.color }), {}
     );
 
-    const borderColor = simStatus === 0 ? 'rgba(0, 0, 0, 0.1)' : simStatus === 1 ? 'rgba(255, 0, 221, 0.3)' : simStatus === 2 ? 'rgba(16, 235, 78, 0.5)' : 'rgba(255, 44, 44, 0.7)';
+    const lightBorderColor = simStatus === 0 ? 'rgba(0, 0, 0, 0.1)' : simStatus === 1 ? 'rgba(255, 0, 221, 0.3)' : simStatus === 2 ? 'rgba(16, 235, 78, 0.5)' : 'rgba(255, 44, 44, 0.7)';
+    const darkBorderColor = simStatus === 0 ? 'rgba(255, 255, 255, 0.1)' : simStatus === 1 ? 'rgba(255, 0, 221, 0.3)' : simStatus === 2 ? 'rgba(16, 235, 78, 0.5)' : 'rgba(255, 44, 44, 0.7)';
+
+    const borderColor = prefersDark ? darkBorderColor : lightBorderColor;
 
     return (
     <div>
@@ -108,25 +116,27 @@ function SimulationDrawer() {
             <br />
 
 
-            {open ? <LineChart
-            dataset={data}
-            xAxis={[
-                { dataKey: 'time',
-                    valueFormatter: (value: number) => value.toString(),
-                    label: 'time',
-                },
-            ]}
-            yAxis={[{ width: 50, label: 'concentration', }]}
-            series={Object.keys(keyToLabel).map((key) => ({
-                dataKey: key,
-                label: keyToLabel[key],
-                color: colors[key],
-                showMark: false,
-            }))}
+            {open ? <ThemeProvider theme={chartTheme}> 
+            <LineChart
+                dataset={data}
+                xAxis={[
+                    { dataKey: 'time',
+                        valueFormatter: (value: number) => value.toString(),
+                        label: 'time',
+                    },
+                ]}
+                yAxis={[{ width: 50, label: 'concentration', }]}
+                series={Object.keys(keyToLabel).map((key) => ({
+                    dataKey: key,
+                    label: keyToLabel[key],
+                    color: colors[key],
+                    showMark: false,
+                }))}
 
-            height={300}
-            width={500}
-            /> : null}
+                height={300}
+                width={500}
+            />
+            </ThemeProvider> : null}
 
             
 

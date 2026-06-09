@@ -5,7 +5,7 @@
 
     width: 100%;
     height: 70px;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: var(--background, rgba(255, 255, 255, 0.9));
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 
     display: flex;
@@ -18,7 +18,7 @@
 }
 
 .BannerTitle {
-    color: rgba(0, 0, 0, 1);
+    color: var(--text-color, rgba(0, 0, 0, 1));
     font-size: 48px;
 	font-weight: 900;
 	font-family: Helios_Extended;
@@ -41,7 +41,7 @@
 }
 
 .BannerSubtitle {
-    color: rgba(0, 0, 0, 0.3);
+    color: var(--text-color-1, rgba(0, 0, 0, 0.3));
     align-self: flex-end;
     padding: 0px 0px;
     font-size: 48px;
@@ -53,7 +53,7 @@
     height: 36px;
     width: fit-content;
 
-    color: rgba(0, 0, 20, 0.8);
+    color: var(--text-color, rgba(0, 0, 20, 0.8));
     padding: 10px;
     /* background-color: #f00; */
 
@@ -158,4 +158,26 @@
 
     padding: 0px;
     margin: 0px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .Banner {
+    --background: #000;
+    --text-color: rgba(255, 255, 255, 0.87);
+	--text-color-1: rgba(255, 255, 255, 0.5);
+	--border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .BannerTitle {
+    --text-color: rgba(255, 255, 255, 1);
+  }
+
+  .BannerSubtitle {
+    --text-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .BannerLogo {
+    --text-color: rgba(255, 255, 255, 0.8);
+  }
+
 }
