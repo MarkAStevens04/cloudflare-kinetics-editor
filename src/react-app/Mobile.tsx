@@ -32,11 +32,23 @@ export default function MobileOverlay() {
     <div className="MobileOverlay">
     
         {/* <Banner /> */}
-        {/* <Notice /> */}
+        <Notice />
+
+        {/* <div className="MobileSection">
+            <div className="MobileTitle">BIOBUILDER</div>
+            <div className="MobileSubtitle">LIGHT</div>
+        </div> */}
+
 
         <div className="MobileSection">
             <div className="MobileTitle">BIOBUILDER</div>
-            <div className="MobileSubtitle">LIGHT</div>
+            <div className="MobileSubtitle">
+                <div style={{width: 'fit-content'}}>LIGHT</div>
+                <div className="MobileSection" style={{margin: '0px 0px', display: 'flex', flexDirection: 'row', justifyContent: 'right', width: '100%', padding: '0px'}} >
+                    <button className="MobileActionButton" style={{backgroundColor: '#4ECDC4'}} onClick={() => navigator.clipboard.writeText('https://biobuilder.app')} >Copy to Clipboard</button>
+                    <button className="MobileActionButton" style={{backgroundColor: '#3a86ff'}} onClick={handleShare} >Share Link</button>
+                </div>
+                </div>
         </div>
     
 
@@ -50,17 +62,20 @@ export default function MobileOverlay() {
         {/* <div className="MobileSectionHeader">
             Here's what you're missing:
         </div> */}
-        <div className="MobileVideoContainer">
-            <video autoPlay muted loop width="100%" height="auto" style={{position: 'absolute', top: '-16px', left: '1px'}}>
-            <source src={demoVideo} type="video/mp4" /> 
-            Your browser doesn't support video playback.
-            </video>
+        <div className="MobileSection">
+            <div className="MobileVideoContainer">
+                <video autoPlay muted loop width="100%" height="auto" style={{position: 'absolute', top: '-6.5%', left: '0.2%'}}>
+                <source src={demoVideo} type="video/mp4" /> 
+                Your browser doesn't support video playback.
+                </video>
+                <div> test text </div>
+            </div>
         </div>
 
-        <div className="MobileSection" style={{display: 'flex', flexDirection: 'row', justifyContent: 'right', width: '100%'}} >
-            <button className="MobileActionButton" onClick={() => navigator.clipboard.writeText('https://biobuilder.app')} >Copy to Clipboard</button>
-            <button className="MobileActionButton" onClick={handleShare} >Share Link</button>
-        </div>
+        {/* <div className="MobileSection" style={{margin: '0px 0px', display: 'flex', flexDirection: 'row', justifyContent: 'right', width: '100%'}} >
+            <button className="MobileActionButton" style={{backgroundColor: '#4ECDC4'}} onClick={() => navigator.clipboard.writeText('https://biobuilder.app')} >Copy to Clipboard</button>
+            <button className="MobileActionButton" style={{backgroundColor: '#3a86ff'}} onClick={handleShare} >Share Link</button>
+        </div> */}
           
     </div>
     
@@ -116,17 +131,17 @@ export default function MobileOverlay() {
 // }
 
 // Little banner at top that's giving a notice to the user
-// function Notice() {
-//     return (
-//         <>
-//         <div className="Notice">
-//             <div className="NoticeText">BioBuilder is built for the desktop canvas.</div> 
-//             {/* <br />  */}
-//             <div className="NoticeText-2">Please continue on Desktop.</div>
-//         </div>
-//         </>
-//     );
-// }
+function Notice() {
+    return (
+        <>
+        <div className="Notice">
+            <div className="NoticeText">BioBuilder is built for the desktop canvas.</div> 
+            {/* <br />  */}
+            <div className="NoticeText-2">Please continue on Desktop.</div>
+        </div>
+        </>
+    );
+}
 
 // What happens when you click the share link button
 const handleShare = async () => {

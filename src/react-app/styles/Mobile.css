@@ -12,6 +12,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /* .MobileContent {
@@ -54,17 +57,20 @@
 }
 
 .MobileVideoContainer {
-    border: 8px transparent solid;
+    border: 0px transparent solid;
 	border-color: rgba(0, 0, 0, 0.2);
-	border-radius: 32px;
+	border-radius: 16px;
     z-index: 1;
     overflow: hidden;
 
-    width: 500px;
-    height: 240px;
+    aspect-ratio: 1 / 0.49;
+    margin: 16px 16px;
+    /* padding: 8px 0px; */
+    /* padding: 0px 32px 0px 32px; */
+    /* height: 240px; */
     position: relative;
 
-    /* background-color: #f00; */
+    background-color: #fff;
 
     /* justify-content: center; */
     /* align-items: center; */
@@ -84,13 +90,13 @@
     text-align: left;
     
     border-radius: 16px;
-    background-color: rgba(255, 0, 0, 0.8);
+    background-color: #747bff;
 
     /* width: 100%; */
     /* max-width: 600px; */
     
     /* top, right, bottom, left */
-    padding: 12px 16px 16px 16px;
+    padding: 12px 16px 12px 16px;
     /* margin-bottom: 16px; */
     line-height: 1; 
     margin: 0px 16px 8px 16px;
@@ -108,14 +114,29 @@ b {
     line-height: 1;
     padding: 0px;
     /* background-color: rgba(0, 255, 0, 1); */
-    margin: 0px 0px 8px 0px;
+    margin: 0px 0px 4px 0px;
 }
 
 p {
+    color: rgba(255, 255, 255, 0.6);
     padding: 0px;
     /* background-color: rgba(0, 255, 0, 1); */
     margin: 0px 0px 0px 0px;
 }
+
+/* .MobileActionButton {
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background-color: rgba(255, 0, 0, 1);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    margin: 0px 16px 0px 0px;
+} */
 
 .MobileActionButton {
     padding: 16px;
@@ -129,7 +150,6 @@ p {
     transition: background-color 0.3s;
 
     margin: 0px 16px 0px 0px;
-
 }
 
 .MobileTitle {
@@ -142,12 +162,28 @@ p {
     color: rgba(0, 0, 0, 1);
 }
 
-.MobileSubtitle {
+/* .MobileSubtitle {
     font-size: 48px;
 	font-weight: 100;
     line-height: 0.9;
 
 	padding: 16px 16px 32px 16px;
     color: rgba(0, 0, 0, 0.3);
+
+    background-color: rgba(255, 0, 0, 0.1);
+    
+} */
+
+.MobileSubtitle {
+    font-size: 48px;
+	font-weight: 100;
+    line-height: 0.9;
+
+	padding: 16px 0px 32px 16px;
+    color: rgba(0, 0, 0, 0.3);
+
+    /* background-color: rgba(255, 0, 0, 0.1); */
+
+    display: flex;
     
 }
