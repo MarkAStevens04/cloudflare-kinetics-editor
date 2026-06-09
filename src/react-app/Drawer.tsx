@@ -279,7 +279,7 @@ export default function RxnDrawer() {
 
                 {/* Dropdown to select reaction type (Michaelis-Menten, Mass Action, etc.) */}
                 <div className="DrawerSection">
-                    <p>Reaction type: </p>
+                    <div>Reaction type: </div>
 
                     <Select.Root
                         onValueChange={(value) => updateEdgeType(edge.id, value)}
@@ -394,7 +394,7 @@ export default function RxnDrawer() {
                     : edge.rate_type === 'custom' ?
                         <CustomDrawerInfo />
                     :
-                        <p> { edge.rate_type } </p>
+                        <div> { edge.rate_type } </div>
                 }
 
                 
@@ -454,7 +454,7 @@ function ReactantEditor({
         
 
         <div className="DrawerHalf" >
-            <p> Reactants: </p>
+            <div> Reactants: </div>
 
             {reactants.map((reactant) => (
                 <div style={{display: 'flex', padding: '5px 0px'}}>
@@ -499,7 +499,7 @@ function ReactantEditor({
 
 
         <div className="DrawerHalf" >
-            <p> Products: </p>
+            <div> Products: </div>
 
             {products.map((product) => (
                 <div style={{display: 'flex', padding: '5px 0px'}}>
@@ -719,7 +719,7 @@ function ParameterInput({ paramID }: { paramID: string} ) {
     return (
         <>
             <div className="DrawerSection DrawerSubtext">
-                <p style={{ margin: '0px', }}>{paramDisp} </p>
+                <div style={{ margin: '0px', }}>{paramDisp} </div>
                 <input
                     className="item DrawerLongInput"
                     placeholder={`0`}

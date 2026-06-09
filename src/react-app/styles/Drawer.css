@@ -27,6 +27,7 @@
 	cursor: default;
 }
 
+
 .DrawerSubtext {
 	padding: 0px;
 	font-weight: 500;
@@ -100,4 +101,5 @@ math-field::part(menu-toggle) {
 	/* Nice little blue accent alternative */
 	/* --border-focus-color: rgba(25, 177, 255, 1);  */ 
   }
+
 }
