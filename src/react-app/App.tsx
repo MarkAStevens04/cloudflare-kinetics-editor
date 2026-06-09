@@ -11,6 +11,7 @@ import './index.css';
 import './radix.css';
 import './styles/Banner.css';
 
+
 import { Toast, Tooltip } from "radix-ui";
 import { GitHubLogoIcon, DiscordLogoIcon, VideoIcon, ChevronRightIcon, Cross1Icon } from "@radix-ui/react-icons";
 
@@ -31,6 +32,9 @@ import ProteinNode, { type AppNode } from './ProteinNode';
 import RxnDrawer from './Drawer';
 import SimulationDrawer from './SimulationDrawer';
 import FeedbackDrawer from './FeedbackDrawer';
+import MobileOverlay from './Mobile';
+
+import { isMobile } from 'react-device-detect';
 
 import { 
   edgeTypes,
@@ -252,6 +256,7 @@ export default function App() {
         <RxnDrawer />
         <SimulationDrawer />
         
+        {isMobile && <MobileOverlay />}
       
     </div>
   );

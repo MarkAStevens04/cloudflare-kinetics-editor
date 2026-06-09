@@ -178,7 +178,6 @@ type AppState = {
   focusEdge: (edgeID: string) => void; // Focuses on a given edge!
   focusNode: (nodeID: string) => void; // Focuses on a given node!
 
-
 };
 
 
@@ -763,7 +762,6 @@ const useStore = create<AppState>((set, get) => ({
       get().onNodesChange([{ id: nodeID, type: 'select', selected: true }]); // Select the node in the visualizer
       get().setFocusedTarget({id: nodeID, type: 'node'});
     }
-
 }));
 
 

@@ -263,10 +263,6 @@ As with any project, ideas can quickly outpace capacity. Here's some ideas of wh
 - It could say "Oh, your enzyme is modulating your reaction? Let me help you out!" And it automatically populates with Enzyme kinetics or whatever.
 - But if instead you drew another ligand to the reaction, it would say "Oh is this two inputs becoming 1 output? Let me help you out!" And it automatically adds a multi-species reaction or whatever.
 
-**** TODO:
-- Add different TYPES of molecules
-- Add different TYPES of reactions
-- Allow you to draw multi molecules to a single reaction, auto populate.
 
 ### Drawer
 - Possibly put mini-reaction-diagram in its own little div and make everything smaller
@@ -420,6 +416,9 @@ I'll use this in the tooltips to help users address common mistakes!
 
 - Smart / Snap Deleting!
     - When we delete a node, automatically re-infer the reaction type for any involved reactions.
+
+- Mobile, have little GitHub, Discord, YouTube icons
+    - Fixed.
 
 ### TODO
 - [X] Right click to edit color / initial values
