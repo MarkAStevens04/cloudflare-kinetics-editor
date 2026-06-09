@@ -299,6 +299,17 @@ I'll use this in the tooltips to help users address common mistakes!
 - Using Square Brackets
 - Using Curly Brackets
 
+### No longer living in a vacuum
+Ways of making this REAL for synthetic biologists
+- Top of screen, little dropdown that lets you select the species
+    - If NOT "vacuum", then initialize a little environment specific for each species
+    - Change adding just "molecule" and "enzyme" -> "chemical", "protein", "RNA", "DNA", "custom"
+    - Background changes. Little compartments you can add stuff in.
+    - https://www.nature.com/articles/s41467-022-28467-6
+- When adding chemical, search chemical database, make sure it matches
+- When adding protein, search uniprot. Can get info that you don't show to user like AA length, default concentration, etc.
+- Add default parameters used in the specific organism, like protein synthesis rate, protein degradation rate, etc.
+
 ### Urgent
 - Return differential equations
 - **better logging in Python for vercel**
@@ -450,11 +461,17 @@ I'll use this in the tooltips to help users address common mistakes!
 
 - [X] Make build passing
 
-- [ ] Make video tutorial
+- [X] Make video tutorial
     - Fun example of sin(glucose * 20) * 0.005 + glucose * 0.01
     - Show keystrokes & clicks as you make them. Show deleting nodes. Show hovering over drawers for info. Show 2 output doesn't currently work. Show breaking through sometimes. Show clicking on side to open / close simulation.
     - [X] Little sign that says "Hey! Looks like you're new here. Please watch this 2min tutorial!"
     - [X] Youtube thumbnail at top so anyone can re-watch the tutorial.
+
+
+- [ ] More Simulation parameters
+    - [ ] Start / stop time
+    - [ ] Display Resolution
+    - [ ] Download CSV
 
 
 # React + Vite + Hono + Cloudflare Workers
