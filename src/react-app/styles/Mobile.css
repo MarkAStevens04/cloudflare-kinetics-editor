@@ -162,28 +162,12 @@ p {
     color: rgba(0, 0, 0, 1);
 }
 
-/* .MobileSubtitle {
+.MobileSubtitle {
     font-size: 48px;
 	font-weight: 100;
     line-height: 0.9;
 
 	padding: 16px 16px 32px 16px;
     color: rgba(0, 0, 0, 0.3);
-
-    background-color: rgba(255, 0, 0, 0.1);
-    
-} */
-
-.MobileSubtitle {
-    font-size: 48px;
-	font-weight: 100;
-    line-height: 0.9;
-
-	padding: 16px 0px 32px 16px;
-    color: rgba(0, 0, 0, 0.3);
-
-    /* background-color: rgba(255, 0, 0, 0.1); */
-
-    display: flex;
     
 }

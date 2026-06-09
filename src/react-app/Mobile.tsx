@@ -34,23 +34,11 @@ export default function MobileOverlay() {
         {/* <Banner /> */}
         <Notice />
 
-        {/* <div className="MobileSection">
-            <div className="MobileTitle">BIOBUILDER</div>
-            <div className="MobileSubtitle">LIGHT</div>
-        </div> */}
-
-
         <div className="MobileSection">
             <div className="MobileTitle">BIOBUILDER</div>
-            <div className="MobileSubtitle">
-                <div style={{width: 'fit-content'}}>LIGHT</div>
-                <div className="MobileSection" style={{margin: '0px 0px', display: 'flex', flexDirection: 'row', justifyContent: 'right', width: '100%', padding: '0px'}} >
-                    <button className="MobileActionButton" style={{backgroundColor: '#4ECDC4'}} onClick={() => navigator.clipboard.writeText('https://biobuilder.app')} >Copy to Clipboard</button>
-                    <button className="MobileActionButton" style={{backgroundColor: '#3a86ff'}} onClick={handleShare} >Share Link</button>
-                </div>
-                </div>
+            <div className="MobileSubtitle">LIGHT</div>
         </div>
-    
+
 
         <div className="MobileSection">
             <div className="BulletSection"><b>No install, no setup.</b> <p>Open a tab and you’re modeling. No COPASI download, no Python environment.</p></div>
@@ -72,10 +60,10 @@ export default function MobileOverlay() {
             </div>
         </div>
 
-        {/* <div className="MobileSection" style={{margin: '0px 0px', display: 'flex', flexDirection: 'row', justifyContent: 'right', width: '100%'}} >
+        <div className="MobileSection" style={{margin: '0px 0px', display: 'flex', flexDirection: 'row', justifyContent: 'right', width: '100%'}} >
             <button className="MobileActionButton" style={{backgroundColor: '#4ECDC4'}} onClick={() => navigator.clipboard.writeText('https://biobuilder.app')} >Copy to Clipboard</button>
             <button className="MobileActionButton" style={{backgroundColor: '#3a86ff'}} onClick={handleShare} >Share Link</button>
-        </div> */}
+        </div>
           
     </div>
     
