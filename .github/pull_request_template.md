@@ -39,6 +39,8 @@ Please write a short, friendly note that explains:
 
 Keep it human, specific, and appreciative ✨
 
+---
+
 ### Message that will be sent:
 
 Thank you SO MUCH for sharing your feedback with us!! Your suggestion helped guide our project, and we've just shipped an update to address it. Here's a note the developer left for you:
