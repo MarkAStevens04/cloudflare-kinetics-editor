@@ -57,7 +57,7 @@ export default function MobileOverlay() {
 
         <div className="MobileSection">
             <div className="MobileVideoContainer">
-                <video autoPlay muted loop width="100%" height="auto" style={{position: 'absolute', top: '-6.5%', left: '0.2%'}}>
+                <video autoPlay muted loop playsInline width="100%" height="auto" style={{position: 'absolute', top: '-6.5%', left: '0.2%'}}>
                 <source src={demoVideo} type="video/mp4" /> 
                 Your browser doesn't support video playback.
                 </video>
