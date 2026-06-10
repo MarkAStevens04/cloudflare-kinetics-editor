@@ -14,7 +14,7 @@ import './index.css';
 import "mathlive";
 import { MathfieldElement } from 'mathlive';
 import useStore from './store';
-import { useAliases } from './context/AliasContext';
+import { useAliasStore } from './store/aliasStore';
 
 
 type rateEditorProps = {
@@ -25,7 +25,7 @@ type rateEditorProps = {
 
 export default function RxnDrawer() {
 
-    const { aliases } = useAliases();
+    const getTerm = useAliasStore((state) => state.getTerm);
 
     const edge = useStore((store) => store.reactions.find((e) => e.id === store.selectedEdge)) || { id: '', label: '', sources: [''], targets: [''], rate_law: '' };
     const nodes = useStore((store) => store.species);
@@ -135,7 +135,7 @@ export default function RxnDrawer() {
                     <div className="species-container" style={{
                         backgroundColor: reactantColor,
                     }}>
-                        <div className="species-container-header">{aliases.reactant}: {reactantLabel}</div>
+                        <div className="species-container-header">{getTerm("reactant")}: {reactantLabel}</div>
                         <hr style={{
                             border: 'none',
                             height: '1px',
@@ -167,7 +167,7 @@ export default function RxnDrawer() {
                     <div className="species-container" style={{
                         backgroundColor: productColor,
                     }}>
-                        <div className="species-container-header">{aliases.product}: {productLabel}</div>
+                        <div className="species-container-header">{getTerm("product")}: {productLabel}</div>
                         <hr style={{
                             border: 'none',
                             height: '1px',
@@ -211,6 +211,7 @@ function RateEditor({
     onRateChange,
 
 }: rateEditorProps) {
+    const getTerm = useAliasStore((state) => state.getTerm);
     const nodes = useStore((store) => store.species);
 
     const mfRef = useRef<MathfieldElement>(null); 
@@ -263,7 +264,7 @@ function RateEditor({
 
     return (
     <div className='rate-editor'>   
-        <p className='drawer-text'>{useAliases().aliases.rate} Law</p>
+        <p className='drawer-text'>{getTerm("rate")} Law</p>
 
         <math-field
                 id="formula"
