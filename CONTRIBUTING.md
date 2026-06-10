@@ -3,6 +3,8 @@ Thank you SO MUCH for taking the time to contribute to this project!! 🎉🎉
 
 The following is a set of guidelines for contributing to BioBuilder. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request! 😊
 
+Feel free to view our [VISION.md](VISION.md) for the direction the project is hoping to take, and [ROADMAP.md](ROADMAP.md) for our plan to get there.
+
 
 ## Resources
 Here's a few resources in case you get stuck while contributing. We're here to help! 
