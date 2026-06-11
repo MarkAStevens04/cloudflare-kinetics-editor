@@ -2,22 +2,24 @@ import {
     BaseEdge, 
     EdgeLabelRenderer,
     getBezierPath,
-    // useReactFlow, 
+    // useReactFlow,
     type Edge,
     type EdgeProps,
 } from '@xyflow/react';
 
-import '../index.css';
-import useStore from '../store';
+import '../../styles/index.css';
+import useStore from '../../stores/store';
 
-export type CustomEdgeType = Edge<{ 
+export type RevMAEdgeType = Edge<{ 
     label: string; 
     // toggleDrawer: (id: string) => void;
     rate_law: string;
     rate_type: string; 
-}, 'custom'>;
+}, 'rev_mass_action'>;
 
-export default function CustomEdge({ 
+
+
+export default function ReversibleMassActionEdge({ 
     id, 
     // sourceX, 
     // sourceY, 
@@ -28,7 +30,9 @@ export default function CustomEdge({
     selected,
     markerEnd,
     data,
-}: EdgeProps<CustomEdgeType>) {
+}: EdgeProps<RevMAEdgeType>) {
+
+    // const reactantIDs = useStore(store => store.reactions.find(r => r.id === id)?.participants.filter(p => p.role === 'reactant').map(p => p.id)) ?? [];
     const reactantIDs = useStore(store => store.reactions.find(r => r.id === id)?.participants)?.filter(p => p.role === 'reactant').map(p => p.id) ?? [];
     const productIDs = useStore(store => store.reactions.find(r => r.id === id)?.participants)?.filter(p => p.role === 'product').map(p => p.id) ?? [];
     
@@ -94,6 +98,7 @@ export default function CustomEdge({
     const setEdgeHovering = useStore((store) => store.setEdgeHovering);
     const setEdgeHoverID = useStore((store) => store.setEdgeHoverID);
 
+
     // const onToggle = () => {
     //     data?.toggleDrawer(id);
     // }
@@ -135,7 +140,7 @@ export default function CustomEdge({
             <polyline
               className="arrowclosed"
               style={{
-                strokeWidth: 1,
+                strokeWidth: '2px',
                 stroke: '#747bff',
                 fill: '#747bff',
               }}
@@ -146,8 +151,6 @@ export default function CustomEdge({
           </marker>
         </defs>
       </svg>
-
-
 
 
             {/* Render all forward paths */}
@@ -186,6 +189,7 @@ export default function CustomEdge({
                 ))
             }
 
+
             <EdgeLabelRenderer>
                 <button 
                 onClick={onToggle}
@@ -203,17 +207,21 @@ export default function CustomEdge({
                 onMouseLeave={() => onLeave()}
                 > {data?.label ?? 'Default Label'} </button>
             </EdgeLabelRenderer>
+
         </>
+
+
+        
 
     );
 }
 
-// Specific drawer info for Custom edges.
-export function CustomDrawerInfo() {
+// Specific drawer info for Reversible Mass Action edges. Shows reactants, products, and rate laws.
+export function ReversibleMassActionDrawerInfo() {
     return (
         <>
         
-        {/* <p> CUSTOM TEST {edgeID} </p> */}
+        {/* <p> REVERSIBLE MASS ACTION TEST </p> */}
 
         </>
     );

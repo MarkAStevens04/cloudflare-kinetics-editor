@@ -1,3 +1,5 @@
+// This is the "Base Edge Component". It tells our app what edge it should actually render.
+
 import { 
     // useReactFlow, 
     type EdgeProps,
@@ -15,7 +17,7 @@ import {
 //   type RevMAEdgeType,
 //   type MAEdgeType,
   type AppEdge,
-} from './edges'
+} from './Edges'
 
 import './index.css';
 

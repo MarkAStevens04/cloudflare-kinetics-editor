@@ -1,3 +1,6 @@
+// This is the "Main" Component. It's responsible for holding the ReactFlow Canvas, 
+// the Banner at the top, Simulate Button, add nodes buttons, etc.
+
 import { 
 	ReactFlow, 
 	Background,
@@ -7,8 +10,8 @@ import {
  } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
-import './index.css';
-import './radix.css';
+import './styles/index.css';
+import './styles/radix.css';
 import './styles/Banner.css';
 
 
@@ -28,30 +31,30 @@ FullStory('trackEvent', {
 })
 
 // Initialize Protein and Reaction types
-import ProteinNode, { type AppNode } from './ProteinNode';
-import RxnDrawer from './Drawer';
-import SimulationDrawer from './SimulationDrawer';
-import FeedbackDrawer from './FeedbackDrawer';
-import MobileOverlay from './Mobile';
+import ProteinNode, { type AppNode } from './Components/ProteinNode';
+import RxnDrawer from './Components/Drawer';
+import SimulationDrawer from './Components/SimulationDrawer';
+import FeedbackDrawer from './Components/FeedbackDrawer';
+import MobileOverlay from './Components/MobileOverlay';
 
 import { isMobile } from 'react-device-detect';
 
 import { 
   edgeTypes,
   type AppEdge,
-} from './edges'
+} from './Components/Edges'
 
 import {
      TooltipRoot, 
      TooltipContent, 
      TooltipTrigger 
-} from './Tooltips'
+} from './Components/Tooltips'
 
 // Stringify TODO: Move this to Drawer instead
 // import { convertLatexToAsciiMath } from "mathlive";
 
-import useStore from './store';
-import useThemeStore from './ThemeStore';
+import useStore from './stores/store';
+import useThemeStore from './stores/ThemeStore';
 import { useShallow } from 'zustand/react/shallow';
 import { useEffect } from 'react';
 

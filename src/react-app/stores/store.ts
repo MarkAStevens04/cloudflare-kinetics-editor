@@ -16,7 +16,7 @@ import {
 
 import { convertLatexToAsciiMath } from "mathlive";
 
-import { type AppNode } from './ProteinNode';
+import { type AppNode } from '../Components/ProteinNode';
 // import { type AppEdge } from './RxnEdge';
 import { 
   // MichaelisMentenEdge, 
@@ -27,7 +27,7 @@ import {
   // type RevMAEdgeType,
   // type MAEdgeType,
   type AppEdge,
-} from './edges'
+} from '../Components/Edges'
 
 
 type species = {

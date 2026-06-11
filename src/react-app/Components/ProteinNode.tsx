@@ -1,10 +1,12 @@
-// import type BuiltInNod from '@xyflow/react';
+// This is each square / oval "node" on the ReactFlow canvas.
+// This is mostly for styling the nodes, logic is handled on the store.
+
 import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
 import { ChangeEvent } from 'react';
-import './index.css';
-import './styles/Nodes.css'
-import './radix.css';
-import useStore from './store';
+import '../styles/index.css';
+import '../styles/Nodes.css'
+import '../styles/radix.css';
+import useStore from '../stores/store';
 
 
 type ProteinNodeType = Node<{ 
@@ -85,26 +87,6 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
         }
 
 
-        {/* Option where you can single click */}
-        {/* <input 
-            className="nodrag"
-            value={data.label}
-            onChange={onChange}
-            placeholder="-"
-            font-family="Helios_Extended"
-            style={{
-                fontSize: 24,
-                borderWidth: 0,
-                backgroundColor: data.color,
-                fieldSizing: 'content',
-                minWidth: '50px',
-                fontFamily: 'Helios_Extended',
-                padding: '0px 0px',
-                outline: '0px',
-            }}
-            /> */}
-
-
         { selected && 
             <div className="NodeEditor">
                 <div className="NodeRow">
@@ -131,8 +113,6 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
                         }}
                     />
                 </div>
-
-
             </div>
         }
         
@@ -144,10 +124,6 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
         <Handle 
             type="target" 
             position={Position.Left} 
-            // style={{ 
-            //     ...DIAMOND_STYLE,
-            //     pointerEvents: 'all',
-            // }} 
             style={{
                 background: 'none',
                 width: '1.5em',

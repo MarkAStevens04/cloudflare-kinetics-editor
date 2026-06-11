@@ -7,8 +7,8 @@ import {
     type EdgeProps,
 } from '@xyflow/react';
 
-import '../index.css';
-import useStore from '../store';
+import '../../styles/index.css';
+import useStore from '../../stores/store';
 
 import { type AppNode } from '../ProteinNode';
 

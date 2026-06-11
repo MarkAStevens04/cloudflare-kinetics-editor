@@ -1,3 +1,6 @@
+// This is the "SIMULATE" button, and the little popup when you click the sides of the button.
+// It uses MUI for LineCharts.
+
 import { 
     animated, 
     useSpring, 
@@ -9,15 +12,15 @@ import React from 'react';
 
 import { LineChart } from '@mui/x-charts/LineChart';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import useStore from './store';
+import useStore from '../stores/store';
 
 import { 
     ChevronDownIcon
 
 } from "@radix-ui/react-icons";
 
-import './index.css';
-import './styles/Simulation.css';
+import '../styles/index.css';
+import '../styles/Simulation.css';
 // Could use visx or Chart.js (https://www.chartjs.org/docs/latest/getting-started/usage.html)
 // Instead using MUI's LineCharts! https://mui.com/x/react-charts/line-demo/#BiaxialLineChart
 

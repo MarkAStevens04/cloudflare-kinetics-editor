@@ -1,5 +1,5 @@
-import useStore from '../store';
-import type { reactions } from '../store';
+import useStore from '../../stores/store';
+import type { reactions } from '../../stores/store';
 // Have to store these functions in a separate file for fast refresh!
 
 
