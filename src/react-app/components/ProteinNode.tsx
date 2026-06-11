@@ -53,7 +53,7 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
 
     return (
         <div 
-            className="custom-node" 
+            className="Node" 
             style={{
                 borderColor : borderColorOp, 
                 backgroundColor: data.color, 
