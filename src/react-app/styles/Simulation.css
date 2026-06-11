@@ -12,7 +12,8 @@
 	border-radius: 8px;
 	border: 4px solid transparent;
 	padding: 0px 16px;
-  outline: none;
+  	outline: none;
+	overflow: hidden;
 
 	position: absolute;
 	top: 20px;
