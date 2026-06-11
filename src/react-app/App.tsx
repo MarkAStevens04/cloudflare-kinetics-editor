@@ -423,7 +423,7 @@ function FocusController() {
 }
 
 
-// This is a little popup when the user opens BioBuilder for the very first time!
+// Popup for new users!
 // CSS style stored in Banner.css, but can move if we want
 function TutorialPopup() {
   const tutorialPhase = useThemeStore((state) => state.tutorialPhase);
@@ -453,16 +453,19 @@ function TutorialPopup() {
         }}
     />
 
+      {/* Text inside our popup when the user is new! */}
       <div className="TutorialPopup">
-        <Cross1Icon className="TutorialCloseButton" onClick={clickToClose} />
-        
+
+        {/* The very top of the popup. */}
+          
         <div className="TutorialTitle">Hey! Looks like you're new here.</div>
-        <div className="TutorialText">Please watch this quick video explaining how to use the software! I promise, it'll make your life a lot easier.</div>
-      
+        <Cross1Icon className="TutorialCloseButton" onClick={clickToClose} />
+
+        <div className="TutorialText">Please watch this quick tutorial! I promise, it'll make your life easier.</div>
+        
+
         <div className="TutorialVideoContainer">
           <iframe 
-            width="560" 
-            height="315" 
             src="https://www.youtube.com/embed/Lmgdc56ldk8?si=urfDWERmmVXdtRYi" 
             title="YouTube video player" 
             frameBorder="0" 
