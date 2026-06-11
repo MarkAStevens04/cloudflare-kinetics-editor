@@ -5,9 +5,8 @@ What kind of change does this PR introduce?
 
 - [ ] Bugfix
 - [ ] Feature
-- [ ] Code style update (formatting, local variables)
 - [ ] Refactoring (no functional changes, no api changes)
-- [ ] Documentation content changes
+- [ ] Documentation
 - [ ] Tests
 - [ ] Other
 
@@ -17,20 +16,12 @@ What kind of change does this PR introduce?
 
 A clear and concise description of the PR.
 
-Use this section for review hints, explanations or discussion points/todos.
-
-- Summary of changes
-- Reasoning
-- Additional context
-
 How to contribute: https://github.com/MarkAStevens04/cloudflare-kinetics-editor/blob/main/CONTRIBUTING.md
 
 
 ## 🤗 Message to Feedback Givers
 
-Users took the time to tell us what could be better, and this is our chance to close the loop.
-
-When this PR is merged, the message below will be automatically sent to everyone who contributed to the GitHub Issue(s) addressed by this PR.
+When this PR is merged, the message below will be automatically sent to those who gave feedback related to the GitHub Issue(s) addressed by this PR.
 
 Please write a short, friendly note that explains:
 - What you implemented
