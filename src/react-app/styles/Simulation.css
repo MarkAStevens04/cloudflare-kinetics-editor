@@ -135,14 +135,6 @@
 
 /* Animated gradient border for running simulation */
 @keyframes sim-border-spin {
-	0%   { border-color: #a855f7; }
-	25%  { border-color: #ec4899; }
-	50%  { border-color: #6366f1; }
-	75%  { border-color: #8b5cf6; }
-	100% { border-color: #a855f7; }
-}
-
-@keyframes sim-border-spin-dark {
 	0%   { border-color: #ffbe0b; }
 	20%  { border-color: #fb5607; }
 	40%  { border-color: #ff006e; }
