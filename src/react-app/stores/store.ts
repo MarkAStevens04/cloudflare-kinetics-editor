@@ -222,16 +222,20 @@ const useStore = create<AppState>((set, get) => ({
 
     // Default ReactFlow functions to update visualNode and visualEdge attributes
     onNodesChange: (changes) => {
-      set({
-        visualNodes: applyNodeChanges(changes, get().visualNodes),
-      });
-    },
+  set({
+    visualNodes: applyNodeChanges(changes, get().visualNodes),
+    // Mark as stale if simulation already completed
+    simulationStatus: get().simulationStatus === 2 ? 4 : get().simulationStatus,
+  });
+},
 
-    onEdgesChange: (changes) => {
-      set({
-        visualEdges: applyEdgeChanges(changes, get().visualEdges),
-      });
-    },
+onEdgesChange: (changes) => {
+  set({
+    visualEdges: applyEdgeChanges(changes, get().visualEdges),
+    // Mark as stale if simulation already completed
+    simulationStatus: get().simulationStatus === 2 ? 4 : get().simulationStatus,
+  });
+},
 
     setNodes: (nodes) => set({ visualNodes: nodes }),
 
