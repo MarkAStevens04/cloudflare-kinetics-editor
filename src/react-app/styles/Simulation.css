@@ -50,7 +50,6 @@
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-
 }
 
 .SimulationProgression {
@@ -64,68 +63,126 @@
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
 
+/* The main SIMULATE button */
+.SimulateButton,
+.simulate-button {
+	cursor: pointer;
+	font-family: inherit;
+	font-weight: 600;
+	font-size: 0.85rem;
+	letter-spacing: 0.08em;
+	padding: 6px 16px;
+	border-radius: 6px;
+	border: 1.5px solid rgba(0, 0, 0, 0.15);
+	background: transparent;
+	color: var(--text-color, rgba(0, 0, 0, 0.8));
+	transition: border-color 0.2s, color 0.2s;
+}
+
+.SimulateButton:hover,
+.simulate-button:hover {
+	border-color: #747bff;
+	color: #747bff;
 }
 
 .SimulationCloseButton {
-    padding: 0px;
-    height: 2em;
+	padding: 0px;
+	height: 2em;
 
-    color: var(--text-color, rgba(0, 0, 0, 0.6));
-    /* background-color: transparent; */
+	color: var(--text-color, rgba(0, 0, 0, 0.6));
 
-    border: 3px solid;
+	border: 3px solid;
 	border-color: var(--border-color, rgba(0, 0, 0, 0.1));
-    border-radius: 8px;
-    outline: 0px;
+	border-radius: 8px;
+	outline: 0px;
 
-    position: absolute;
-    bottom: -12px;
-    left: 50%;
+	position: absolute;
+	bottom: -12px;
+	left: 50%;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
-    translate: -50% 0; /* Recenter on page */
-    cursor: pointer;
+	translate: -50% 0;
+	cursor: pointer;
 
-    transition: border-color 0.2s color 0.2s;
+	transition: border-color 0.2s, color 0.2s;
 }
 
 .SimulationCloseButton:hover {
-    border-color: #747bff;
+	border-color: #747bff;
 }
 
 .SimulationChevron {
-   height: 100%;
-   width: fit-content;
-   line-height: 1;
-   padding: 0px;
-   margin: 0px;
-   outline: 0px;
-   /* rotate: 180deg; */
+	height: 100%;
+	width: fit-content;
+	line-height: 1;
+	padding: 0px;
+	margin: 0px;
+	outline: 0px;
 }
 
 .SimulationChevron:hover {
-    color: #747bff;
+	color: #747bff;
 }
 
 /* Automatic Dark Mode Styles */
 @media (prefers-color-scheme: dark) {
-  .SimulationDrawer {
-    --background: #0e0e0e;
-    --text-color: rgba(255, 255, 255, 0.87);
-	--text-color-1: rgba(255, 255, 255, 0.5);
-	--border-color: rgba(255, 255, 255, 1);
-  }
+	.SimulationDrawer {
+		--background: #0e0e0e;
+		--text-color: rgba(255, 255, 255, 0.87);
+		--text-color-1: rgba(255, 255, 255, 0.5);
+		--border-color: rgba(255, 255, 255, 1);
+	}
 
-  .SimulationProgression {
-    --text-color: rgba(255, 255, 255, 0.6);
-  }
+	.SimulationProgression {
+		--text-color: rgba(255, 255, 255, 0.6);
+	}
 
-  .SimulationCloseButton {
-    --border-color: rgba(255, 255, 255, 0.1);
-    --text-color: rgba(255, 255, 255, 0.87);
-  }
+	.SimulationCloseButton {
+		--border-color: rgba(255, 255, 255, 0.1);
+		--text-color: rgba(255, 255, 255, 0.87);
+	}
+
+	.SimulateButton,
+	.simulate-button {
+		border-color: rgba(255, 255, 255, 0.15);
+		color: rgba(255, 255, 255, 0.87);
+	}
+
+	.SimulateButton:hover,
+	.simulate-button:hover {
+		border-color: #747bff;
+		color: #747bff;
+	}
+}
+
+/* Animated gradient border for running simulation */
+@keyframes sim-border-spin {
+	0%   { border-color: #a855f7; }
+	25%  { border-color: #ec4899; }
+	50%  { border-color: #6366f1; }
+	75%  { border-color: #8b5cf6; }
+	100% { border-color: #a855f7; }
+}
+
+@keyframes sim-border-spin-dark {
+	0%   { border-color: #c084fc; }
+	25%  { border-color: #f472b6; }
+	50%  { border-color: #818cf8; }
+	75%  { border-color: #a78bfa; }
+	100% { border-color: #c084fc; }
+}
+
+.SimulationDrawer--running {
+	animation: sim-border-spin 1.5s linear infinite;
+}
+
+@media (prefers-color-scheme: dark) {
+	.SimulationDrawer--running {
+		animation: sim-border-spin-dark 1.5s linear infinite;
+	}
 }
