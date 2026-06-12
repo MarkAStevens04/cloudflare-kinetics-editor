@@ -34,15 +34,20 @@ function SimulationDrawer() {
 
     const chartTheme = createTheme({ palette: { mode: prefersDark ? 'dark' : 'light' } });
 
+    // Animation styling we'll use on opening and closing of the drawer
     const [springs, api] = useSpring(() => ({
         from: { height: 90, width: 300 },
     }));
 
+    // Animation styling we'll use on rotating the chevron icon
     const [rotateSpring, rotateApi] = useSpring(() => ({
         from: { rotate: 0, y: '0px' },
     }));
 
+    // When the outer drawer is clicked, spring open / closed
     const handleClick = () => {
+
+        // Do animation
         api.start({
             from: { height: 90, width: 300 },
             to: { height: 500, width: 500 },
@@ -58,18 +63,22 @@ function SimulationDrawer() {
         setSimDrawerOpen(!open);
     }
 
+    // What happens when we click the inner "Simulate" button
     const handleSimulate = (event: React.MouseEvent<HTMLButtonElement>) => { 
-        event.stopPropagation();
+        event.stopPropagation(); // Prevent the click event from bubbling up to the parent div
         if (!open) {
-            handleClick();
+            handleClick(); // Open the drawer if it's not already open
         }
-        onSimulate();
+        onSimulate(); // Outer call to run simulation
     }
 
+    // Construct legend for line chart!
+    // Tracks how we should display each reactant on the line chart
     const keyToLabel: { [key: string]: string } = speciesInfo.reduce(
         (acc, node) => ({ ...acc, [node.id]: node.data.label }), {}
     );
 
+    // Tracks the colors we use on the line chart
     const colors: { [key: string]: string } = speciesInfo.reduce(
         (acc, node) => ({ ...acc, [node.id]: node.data.color }), {}
     );
@@ -93,7 +102,8 @@ function SimulationDrawer() {
     })();
 
     // Add the --running modifier class so CSS can animate the border
-    const drawerClass = `SimulationDrawer${simStatus === 1 ? ' SimulationDrawer--running' : ''}`;
+    const drawerClass = `SimulationDrawer ${simStatus === 1 ? 'SimulationDrawer--running' : ''}`;
+    const closeButtonClass = `SimulationCloseButton ${simStatus === 1 ? ' SimulationCloseButton--running' : ''}`;
 
     const buttonLabel = simStatus === 1 ? 'SIMULATING...' : 'SIMULATE';
 
@@ -142,7 +152,7 @@ function SimulationDrawer() {
 
             </div>
             <button 
-                className="SimulationCloseButton" 
+                className={closeButtonClass}
                 onClick={handleClick} 
                 style={{ borderColor: borderColor }} 
             > 

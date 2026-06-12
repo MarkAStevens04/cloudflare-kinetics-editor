@@ -1,3 +1,4 @@
+/* The main SIMULATE button */
 .SimulateButton {
 	font-size: 36px;
 	font-weight: 900;
@@ -65,28 +66,6 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
-/* The main SIMULATE button */
-.SimulateButton,
-.simulate-button {
-	cursor: pointer;
-	font-family: inherit;
-	font-weight: 600;
-	font-size: 0.85rem;
-	letter-spacing: 0.08em;
-	padding: 6px 16px;
-	border-radius: 6px;
-	border: 1.5px solid rgba(0, 0, 0, 0.15);
-	background: transparent;
-	color: var(--text-color, rgba(0, 0, 0, 0.8));
-	transition: border-color 0.2s, color 0.2s;
-}
-
-.SimulateButton:hover,
-.simulate-button:hover {
-	border-color: #747bff;
-	color: #747bff;
-}
-
 .SimulationCloseButton {
 	padding: 0px;
 	height: 2em;
@@ -147,16 +126,10 @@
 		--text-color: rgba(255, 255, 255, 0.87);
 	}
 
-	.SimulateButton,
-	.simulate-button {
-		border-color: rgba(255, 255, 255, 0.15);
+	.SimulateButton{
+	
+		/* Reversed color scheme for main SIMULATE button in Dark mode!  */
 		color: rgba(255, 255, 255, 0.87);
-	}
-
-	.SimulateButton:hover,
-	.simulate-button:hover {
-		border-color: #747bff;
-		color: #747bff;
 	}
 }
 
@@ -170,19 +143,15 @@
 }
 
 @keyframes sim-border-spin-dark {
-	0%   { border-color: #c084fc; }
-	25%  { border-color: #f472b6; }
-	50%  { border-color: #818cf8; }
-	75%  { border-color: #a78bfa; }
-	100% { border-color: #c084fc; }
+	0%   { border-color: #ffbe0b; }
+	20%  { border-color: #fb5607; }
+	40%  { border-color: #ff006e; }
+	60%  { border-color: #8338ec; }
+	80%  { border-color: #3a86ff; }
+	100% { border-color: #ffbe0b; }
 }
 
-.SimulationDrawer--running {
+.SimulationDrawer--running,
+.SimulationCloseButton--running {
 	animation: sim-border-spin 1.5s linear infinite;
-}
-
-@media (prefers-color-scheme: dark) {
-	.SimulationDrawer--running {
-		animation: sim-border-spin-dark 1.5s linear infinite;
-	}
 }
