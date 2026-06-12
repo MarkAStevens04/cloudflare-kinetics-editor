@@ -15,8 +15,8 @@ import './styles/radix.css';
 import './styles/Banner.css';
 
 
-import { Toast, Tooltip } from "radix-ui";
-import { GitHubLogoIcon, DiscordLogoIcon, VideoIcon, ChevronRightIcon, Cross1Icon } from "@radix-ui/react-icons";
+import { Toast, Tooltip, Dialog } from "radix-ui";
+import { GitHubLogoIcon, DiscordLogoIcon, VideoIcon, ChevronRightIcon, Cross1Icon, GearIcon } from "@radix-ui/react-icons";
 
 // Analytics
 import { init as initFullStory } from '@fullstory/browser';
@@ -56,7 +56,10 @@ import {
 import useStore from './stores/store';
 import useThemeStore from './stores/ThemeStore';
 import { useShallow } from 'zustand/react/shallow';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+import useAliasStore from './stores/aliasStore';
+import AliasSettings from './components/AliasSettings';
 
 
 
@@ -172,6 +175,7 @@ export default function App() {
 
   // Function to add a Node (uses Zustand store)
   const addNode = useStore((store) => store.addNode);
+  const getTerm = useAliasStore((s) => s.getTerm);
 
   // For handling dark mode
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -224,7 +228,7 @@ export default function App() {
               backgroundColor: NODE_COLORS[0]
             }}
           >
-            Add <div className="action-button-strong-text">Molecule</div>
+            Add <div className="action-button-strong-text">{getTerm('molecule')}</div>
           </button>
 
 
@@ -243,7 +247,7 @@ export default function App() {
             }}
 
           >
-            Add <div className="action-button-strong-text">Enzyme</div>
+            Add <div className="action-button-strong-text">{getTerm('protein')}</div>
           </button>
 
 
@@ -276,6 +280,7 @@ function Banner() {
   // REMINDER: Cute color palette: #f00, #0ff, #0077b6. Not required to use, but helpful if wanting to come back later lol.
   const tutorialPhase = useThemeStore((state) => state.tutorialPhase);
   const setTutorialPhase = useThemeStore((state) => state.setTutorialPhase);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   return (
   <div className="Banner">
@@ -303,6 +308,66 @@ function Banner() {
         <Tooltip.Arrow className="TooltipArrow" />
       </TooltipContent>
       </TooltipRoot>
+
+      {/* Settings gear icon */}
+      <Dialog.Root open={settingsOpen} onOpenChange={setSettingsOpen}>
+        <Dialog.Trigger asChild>
+          <GearIcon className="BannerLogo" />
+        </Dialog.Trigger>
+
+        <Dialog.Portal>
+          <Dialog.Overlay style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0, 0, 0, 0.4)',
+            zIndex: 9998,
+          }} />
+          <Dialog.Content
+            style={{
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              background: 'var(--background, #fff)',
+              color: 'var(--text-color, rgba(0,0,0,0.87))',
+              borderRadius: 12,
+              padding: 24,
+              width: 400,
+              maxHeight: '80vh',
+              overflowY: 'auto',
+              boxShadow: 'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
+              zIndex: 9999,
+              border: '1px solid var(--border-color, rgba(0,0,0,0.1))',
+            }}
+          >
+            <Dialog.Title style={{ fontSize: 18, fontWeight: 600, margin: '0 0 4px 0' }}>
+              Settings
+            </Dialog.Title>
+            <Dialog.Description style={{ fontSize: 12, opacity: 0.6, margin: '0 0 20px 0' }}>
+              Customize your BioBuilder experience.
+            </Dialog.Description>
+
+            <AliasSettings />
+
+            <Dialog.Close asChild>
+              <button
+                style={{
+                  position: 'absolute',
+                  top: 16,
+                  right: 16,
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: 'var(--text-color, rgba(0,0,0,0.5))',
+                  padding: 4,
+                }}
+              >
+                <Cross1Icon />
+              </button>
+            </Dialog.Close>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
 
     </div>
 
