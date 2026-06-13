@@ -123,6 +123,10 @@ hr {
     padding: 10px 20px 10px 10px;
     width: 200px;
 
+    contain: content;
+    content-visibility: auto;
+    min-height: 50px;
+
     /* max-width: 100%;
     display: flex;
     flex-direction: column; */

@@ -176,6 +176,8 @@ type AppState = {
   setUniProtID: (NodeID: string, uniprotID: string) => void; // For setting the uniprot ID of a given species when a uniprot search result is selected.
   uniProtDrawerOpen: boolean; // Whether the uniprot search drawer is open
   setUniProtDrawerOpen: (open: boolean) => void;
+  renderUniProtDrawer: boolean; // Whether to render the Children of the uniprot drawer, or just the skeletons. Helps with performance.
+  setRenderUniProtDrawer: (render: boolean) => void;
 
   feedbackOpen: boolean;
   setFeedbackOpen: (open: boolean) => void;
@@ -215,6 +217,8 @@ const useStore = create<AppState>((set, get) => ({
     uniProtAbortController: null,
     uniProtDrawerOpen: false,
     setUniProtDrawerOpen: (open) => set({ uniProtDrawerOpen: open }),
+    renderUniProtDrawer: false,
+    setRenderUniProtDrawer: (render) => set({ renderUniProtDrawer: render }),
 
     focusedTarget: null,
     setFocusedTarget: (target) => set({ focusedTarget: target }),

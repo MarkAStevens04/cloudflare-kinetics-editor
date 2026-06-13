@@ -9,8 +9,6 @@ import '../styles/radix.css';
 import useStore from '../stores/store';
 
 import { ScrollArea } from 'radix-ui'; // Scroll Area for UniProt search results.
-import { TriangleDownIcon } from "@radix-ui/react-icons";
-import { animated, useSpring } from '@react-spring/web';
 
 
 import { TextTooltip } from './Tooltips'
@@ -31,6 +29,7 @@ type UniprotResultType = {
     alias: string;
     organism: string;
     score: number; // 0-1, Indicates quality of match. Correct organism, # metabolic links, # RELEVANT metabolic links
+    selected: boolean; // Whether this search result is currently selected (i.e. matches the current UniProt ID of the node)
 
     onClick: (id: string) => void; // Optional onClick handler for when a search result is clicked, which will set the uniprot ID of the node to the selected result's ID.
 }
@@ -243,129 +242,6 @@ function TriangleWithBorder({ sColor, bColor }: { sColor: string; bColor: string
 }
 
 
-// function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; currentUniProtID?: string }) {
-
-//     const currentQuery = useStore((state) => state.uniProtQuery);
-//     const updateQuery = useStore((state) => state.setUniProtQuery);
-
-//     const searchResults = useStore((state) => state.uniProtResults);
-//     const searchUniprot = useStore((state) => state.searchUniprot);
-//     const loading = useStore((state) => state.uniProtLoading);
-//     const uniProtDrawerOpen = useStore((state) => state.uniProtDrawerOpen);
-//     const setUniProtDrawerOpen = useStore((state) => state.setUniProtDrawerOpen);
-
-//     // Animation styling we'll use on opening and closing of the UniProt Search Drawer
-//     const [springs, api] = useSpring(() => ({
-//         from: { height: 0 },
-//     }));
-
-//     // Animation styling we'll use for rotating the arrow
-//     const [rotateSpring, rotateApi] = useSpring(() => ({
-//             from: { rotate: 0 },
-//         }));
-
-//     const handleDrawerToggle = () => {
-//         setUniProtDrawerOpen(!uniProtDrawerOpen);
-
-//         // Do animation
-//         api.start({
-//             from: { height: 0 },
-//             to: { height: 200 },
-//             reverse: uniProtDrawerOpen,
-//         });
-
-//         // Do rotation animation
-//         rotateApi.start({
-//             from: { rotate: 0 },
-//             to: { rotate: 180 },
-//             reverse: uniProtDrawerOpen,
-//         });
-//     }
-
-//     const updateUniProtID = useStore((state) => state.setUniProtID);
-
-//     const onSearch = (event: ChangeEvent<HTMLInputElement>) => {
-//         updateQuery(event.target.value);
-//         searchUniprot(event.target.value);
-//     }
-
-//     const onUpdateUniProtID = (id: string) => {
-//         updateUniProtID(NodeID, id);
-//     }
-
-
-//     return (
-//         <>
-
-//         <div className="NodeRow">
-//             <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '200px'}}>
-//                 <div>UniProt ID:</div>
-//                 <a
-//                     className="NodeRowLink"
-//                     href={`https://www.uniprot.org/uniprotkb/${currentUniProtID}`}
-//                     target="_blank"
-//                     rel="noopener noreferrer"
-//                     onClick={(e) => e.stopPropagation()}
-//                 >
-//                     {currentUniProtID ? currentUniProtID : "None"}
-//                 </a>
-//             </div>
-//             <animated.div style={{...rotateSpring}}>
-//                 <TriangleDownIcon onClick={handleDrawerToggle} />
-//             </animated.div>
-            
-            
-//         </div>
-
-//             <animated.div style={{margin: '0px 0px 5px 0px', overflow: 'hidden', ...springs}} >
-//                     <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
-//                         <input
-//                             // className="item species-param-input NodeRowItem"
-//                             className="ScrollSearchBar"
-//                             placeholder={`Enter UniProt ID, Name, Organism, etc.`}
-//                             value={currentQuery}
-//                             onChange={(e) => onSearch(e)}
-//                         />
-
-//                         <ScrollArea.Viewport className="ScrollAreaViewport">
-//                             <div className=" UniprotSearchContainer" >
-//                                 {/* {searchResults.length === 0 ? (
-//                                     <div className="UniprotSearchEmpty">
-//                                         Try entering a search term above!
-//                                     </div>
-                                    
-//                                 ) : (
-//                                     searchResults.map((result) => (
-//                                         <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} />
-//                                     ))
-//                                 )} */}
-
-//                                 {loading
-//                                     ? Array.from({ length: 4}).map((_, i) => <UniprotSearchSkeleton key={i} />)
-//                                     : searchResults.length === 0
-//                                         ? <div className="UniprotSearchEmpty"> No results found. <br /> Try another search! </div>
-//                                     : searchResults.map((result) => (
-//                                         <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} onClick={(id) => onUpdateUniProtID(id)} />
-//                                     ))
-//                                 }
-
-//                             </div>
-//                         </ScrollArea.Viewport>
-//                         <ScrollArea.Scrollbar
-//                             className="ScrollAreaScrollbar"
-//                             orientation="vertical"
-//                         >
-//                             {/* "Thumb" is the little dark gray part on the scrollbar! */}
-//                             <ScrollArea.Thumb className="ScrollAreaThumb" />
-//                         </ScrollArea.Scrollbar>
-//                         <ScrollArea.Corner className="ScrollAreaCorner" />
-//                     </ScrollArea.Root>
-//             </animated.div>
-//         </>
-//     )
-// }
-
-
 function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; currentUniProtID?: string }) {
 
     const currentQuery = useStore((state) => state.uniProtQuery);
@@ -376,34 +252,8 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
     const loading = useStore((state) => state.uniProtLoading);
     const uniProtDrawerOpen = useStore((state) => state.uniProtDrawerOpen);
     const setUniProtDrawerOpen = useStore((state) => state.setUniProtDrawerOpen);
-
-    // Animation styling we'll use on opening and closing of the UniProt Search Drawer
-    const [springs, api] = useSpring(() => ({
-        from: { height: 0 },
-    }));
-
-    // Animation styling we'll use for rotating the arrow
-    const [rotateSpring, rotateApi] = useSpring(() => ({
-            from: { rotate: 0 },
-        }));
-
-    const handleDrawerToggle = () => {
-        setUniProtDrawerOpen(!uniProtDrawerOpen);
-
-        // Do animation
-        api.start({
-            from: { height: 0 },
-            to: { height: 200 },
-            reverse: uniProtDrawerOpen,
-        });
-
-        // Do rotation animation
-        rotateApi.start({
-            from: { rotate: 0 },
-            to: { rotate: 180 },
-            reverse: uniProtDrawerOpen,
-        });
-    }
+    const renderUniProtDrawer = useStore((state) => state.renderUniProtDrawer);
+    const setRenderUniProtDrawer = useStore((state) => state.setRenderUniProtDrawer);
 
     const updateUniProtID = useStore((state) => state.setUniProtID);
 
@@ -416,76 +266,66 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
         updateUniProtID(NodeID, id);
     }
 
+    // Have to do some shenanagins with rendering the items inside the UniProt Drawer. Lots of lag if we render before animation is complete!
+    const performOpen = () => {
+        setRenderUniProtDrawer(false); // Don't render drawer contents until animation is finished, to avoid lag.
+        setUniProtDrawerOpen(!uniProtDrawerOpen);
+    }
+
 
     return (
         <>
-
-        <div className="NodeRow">
-            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '200px'}}>
-                <div>UniProt ID:</div>
-                <a
+            <Collapsible 
+                open={uniProtDrawerOpen}
+                setOpen={performOpen}
+                LeftItem={<div>UniProt ID:</div>}  // Just says UniProt ID: on the left
+                finishAnimation={() => setRenderUniProtDrawer(true)}
+                RightItem={ /* This is our link to the UniProt ID of the current node! */
+                    <a
                     className="NodeRowLink"
                     href={`https://www.uniprot.org/uniprotkb/${currentUniProtID}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                >
+                    >
                     {currentUniProtID ? currentUniProtID : "None"}
-                </a>
-            </div>
-            <animated.div style={{...rotateSpring}}>
-                <TriangleDownIcon onClick={handleDrawerToggle} />
-            </animated.div>
-            
-            
-        </div>
+                    </a>
+                }   
+            >
+                
+             <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
+                <input
+                    // className="item species-param-input NodeRowItem"
+                    className="ScrollSearchBar"
+                    placeholder={`Enter UniProt ID, Name, Organism, etc.`}
+                    value={currentQuery}
+                    onChange={(e) => onSearch(e)}
+                />
 
-            <animated.div style={{margin: '0px 0px 5px 0px', overflow: 'hidden', ...springs}} >
-                    <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
-                        <input
-                            // className="item species-param-input NodeRowItem"
-                            className="ScrollSearchBar"
-                            placeholder={`Enter UniProt ID, Name, Organism, etc.`}
-                            value={currentQuery}
-                            onChange={(e) => onSearch(e)}
-                        />
+                <ScrollArea.Viewport className="ScrollAreaViewport">
+                    <div className=" UniprotSearchContainer" >
+                        {loading || !renderUniProtDrawer
+                            ? Array.from({ length: 4}).map((_, i) => <UniprotSearchSkeleton key={i} />)
+                            : searchResults.length === 0
+                                ? <div className="UniprotSearchEmpty"> No results found. <br /> Try another query! </div>
+                            : searchResults.map((result) => (
+                                <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} selected={currentUniProtID === result.id} onClick={(id) => onUpdateUniProtID(id)} />
+                            ))
+                        }
 
-                        <ScrollArea.Viewport className="ScrollAreaViewport">
-                            <div className=" UniprotSearchContainer" >
-                                {/* {searchResults.length === 0 ? (
-                                    <div className="UniprotSearchEmpty">
-                                        Try entering a search term above!
-                                    </div>
-                                    
-                                ) : (
-                                    searchResults.map((result) => (
-                                        <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} />
-                                    ))
-                                )} */}
-
-                                {loading
-                                    ? Array.from({ length: 4}).map((_, i) => <UniprotSearchSkeleton key={i} />)
-                                    : searchResults.length === 0
-                                        ? <div className="UniprotSearchEmpty"> No results found. <br /> Try another search! </div>
-                                    : searchResults.map((result) => (
-                                        <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} onClick={(id) => onUpdateUniProtID(id)} />
-                                    ))
-                                }
-
-                            </div>
-                        </ScrollArea.Viewport>
-                        <ScrollArea.Scrollbar
-                            className="ScrollAreaScrollbar"
-                            orientation="vertical"
-                        >
-                            {/* "Thumb" is the little dark gray part on the scrollbar! */}
-                            <ScrollArea.Thumb className="ScrollAreaThumb" />
-                        </ScrollArea.Scrollbar>
-                        <ScrollArea.Corner className="ScrollAreaCorner" />
-                    </ScrollArea.Root>
-            </animated.div>
-
-            <Collapsible LeftText="More Info" RightText="" open={uniProtDrawerOpen} setOpen={setUniProtDrawerOpen} > <p> Hello world! </p> </Collapsible>
+                    </div>
+                </ScrollArea.Viewport>
+                <ScrollArea.Scrollbar
+                    className="ScrollAreaScrollbar"
+                    orientation="vertical"
+                >
+                    {/* "Thumb" is the little dark gray part on the scrollbar! */}
+                    <ScrollArea.Thumb className="ScrollAreaThumb" />
+                </ScrollArea.Scrollbar>
+                <ScrollArea.Corner className="ScrollAreaCorner" />
+                </ScrollArea.Root>
+             
+            </Collapsible>
         </>
     )
 }
@@ -493,7 +333,7 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
 
 
 // Each "chip" inside the UniProt search results.
-function UniprotSearchChip({ id, alias, organism, score, onClick }: UniprotResultType) {
+function UniprotSearchChip({ id, alias, organism, score, selected, onClick }: UniprotResultType) {
    
     let ringColor = 'rgba(0, 0, 0, 1)';
     let confidenceText = '';
@@ -511,6 +351,8 @@ function UniprotSearchChip({ id, alias, organism, score, onClick }: UniprotResul
         confidenceText = "The relevance of this node is UNKNOWN. We're working on improving this relevance metric!";
     }
 
+    const fillColor = selected ? '#747bff' : 'none';
+
     return (
         <div className="UniprotSearchChip" tabIndex={0} onClick={() => onClick(id)} >
             
@@ -518,8 +360,8 @@ function UniprotSearchChip({ id, alias, organism, score, onClick }: UniprotResul
             <div className="UniprotChipTop" >
                 <div className="UniprotChipName">{alias}</div>
 
-                <TextTooltip text={`${confidenceText}`} side="right" >
-                    <div className="UniprotRing" style={{borderColor: ringColor}} />
+                <TextTooltip display={`${confidenceText}`} side="right" >
+                    <div className="UniprotRing" style={{borderColor: ringColor, background: fillColor}} />
                 </TextTooltip>
 
             </div>
