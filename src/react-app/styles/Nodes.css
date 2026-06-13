@@ -105,3 +105,110 @@ input[type="color"]::-webkit-color-swatch {
   background-image: linear-gradient(to right,
   #ffbe0b, #fb5607, #ff006e, #8338ec, #3a86ff);
 }
+
+
+
+/* Horizontal line styling */
+hr {
+    outline: 0px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.4);
+    height: 1px;
+}
+
+.UniprotSearchContainer {
+    padding: 10px 20px 10px 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* .UniprotSearchChip {
+    width: 100%;
+    height: 100px;
+    background-color: rgba(0, 0, 0, 0.5);
+    
+    border-radius: 8px;
+    margin: 4px 0px;
+} */
+
+/* ---- the chip ---- */
+.UniprotSearchChip {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    /* gap: 16px; */
+    margin: 4px 0px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 2px solid transparent;
+    border-radius: 4px;
+    padding: 2px 2px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color .18s ease;
+}
+
+.UniprotSearchChip:hover {
+  border-color: #747bff;
+}
+ 
+.UniprotChipLeft {
+  display: flex; flex-direction: column; justify-content: space-between;
+  min-width: 0; flex: 1;
+}
+
+.UniprotChipRight {
+  display: flex; flex-direction: column; align-items: flex-end;
+  justify-content: space-between; flex-shrink: 0;
+}
+ 
+.UniprotChipName {
+  font-size: 18px; font-weight: 600; line-height: 1.1;
+  letter-spacing: -.015em; color: var(--pf-name);
+  margin: 0; word-break: break-word;
+}
+
+.UniprotChipId {
+  align-self: flex-start;
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, monospace;
+  font-size: 8px; letter-spacing: .02em;
+  color: var(--pf-id); text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color .15s ease;
+  margin-top: 0px;
+  padding: 0px;
+  line-height: 1;
+}
+
+.UniprotChipId:hover { border-bottom-color: #747bff; }
+ 
+.UniprotChipOrganism {
+  font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 8px; 
+  line-height: 1.25;
+  color: var(--pf-organism);
+  text-align: right; 
+  max-width: 230px;
+  margin-top: 0px;
+}
+
+
+/* ---- score ring ---- */
+.UniprotScoreRing { position: relative; width: 52px; height: 52px; }
+
+.UniprotScoreRing svg { transform: rotate(-90deg); display: block; }
+
+.UniprotRingTrack { fill: none; stroke: var(--pf-track); stroke-width: 4.5; }
+
+.UniprotRingArc {
+  fill: none; stroke-width: 4.5; stroke-linecap: round;
+  transition: stroke-dashoffset .5s cubic-bezier(.2,.7,.3,1);
+}
+
+.UniprotRingVal {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+}

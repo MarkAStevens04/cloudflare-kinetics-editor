@@ -162,7 +162,6 @@ export default function RxnDrawer() {
             <>
                 {/* Closes when you click out of the drawer, but prevents moving around the screen. */}
                 <animated.div 
-                    className="drawer-dimmer"
                     onClick={() => setRxnDrawerOpen(false)}
                     style={{
                         pointerEvents: pointerEvents,
@@ -173,6 +172,7 @@ export default function RxnDrawer() {
                     }}
                 />
                 
+
 
                 <animated.div
                     className="Drawer"
@@ -230,9 +230,9 @@ export default function RxnDrawer() {
 
 
                     {/* Arrow connecting reactants to products */}
-                    <p style={{
+                    <div style={{
                         fontSize: '24px',
-                    }}>→</p>
+                    }}>→</div>
                     
 
 

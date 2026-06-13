@@ -821,6 +821,9 @@ function addTarget(target: string, reaction: reactions) {
 
 // Predicts the reaction type based on the sourcees & targets of the reaction.
 // Returns a string corresponding to the name of type of rate law.
+// This isn't a great function. Ideally, we would have a config.yaml or something where we can easily
+// specify how much of each reactant type corresponds to each rate law type!
+
 function predictRxnType(reaction: reactions, species: species[]) {
 
 

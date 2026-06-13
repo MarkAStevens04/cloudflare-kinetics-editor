@@ -8,6 +8,8 @@ import '../styles/Nodes.css'
 import '../styles/radix.css';
 import useStore from '../stores/store';
 
+import { ScrollArea } from 'radix-ui'; // Scroll Area for UniProt search results.
+
 
 type ProteinNodeType = Node<{ 
     label: string; 
@@ -15,6 +17,14 @@ type ProteinNodeType = Node<{
     initial: string;
     speciesType: string; // Types stored in store.ts
 }, 'protein'>;
+
+
+type UniprotResultType = {
+    id: string;
+    name: string;
+    organism: string;
+    score: number; // 0-1, Indicates quality of match. Correct organism, # metabolic links, # RELEVANT metabolic links
+}
 
 export type AppNode = ProteinNodeType;
 
@@ -112,7 +122,12 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
                             padding: '0px',
                         }}
                     />
+                
+                
                 </div>
+
+                <hr />
+                <UniprotSelector />
             </div>
         }
         
@@ -215,4 +230,118 @@ function TriangleWithBorder({ sColor, bColor }: { sColor: string; bColor: string
             />
         </svg>
     );
+}
+
+
+function UniprotSelector() {
+
+    const searchResults = [
+        { id: "P00724", alias: "Invertase", organism: "Saccharomyces cerevisiae", score: 0.97 },
+        { id: "P04807", alias: "Hexokinase-2", organism: "Saccharomyces cerevisiae", score: 0.81 },
+        { id: "P42212", alias: "Green fluorescent protein", organism: "Aequorea victoria", score: 0.63 },
+        { id: "P69905", alias: "Hemoglobin subunit alpha", organism: "Homo sapiens", score: 0.52 },
+        { id: "P00722", alias: "Beta-galactosidase", organism: "Escherichia coli", score: 0.34 },
+        { id: "P02144", alias: "Myoglobin", organism: "Homo sapiens", score: 0.28 },
+    ];
+
+    return (
+        <>
+            UniProt ID:
+            <div>
+
+                <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
+                    <ScrollArea.Viewport className="ScrollAreaViewport">
+                        <div className="UniprotSearchContainer">
+                            <div className="Text">SEARCHBAR MOMENT</div>
+                            {searchResults.map((result) => (
+                                <UniprotSearchChip key={result.id} id={result.id} name={result.alias} organism={result.organism} score={result.score} />
+                            ))}
+                        </div>
+                    </ScrollArea.Viewport>
+                    <ScrollArea.Scrollbar
+                        className="ScrollAreaScrollbar"
+                        orientation="vertical"
+                        // onPointerDownCapture={(e) => e.stopPropagation()}
+                    >
+                        {/* "Thumb" is the little dark gray part on the scrollbar! */}
+                        <ScrollArea.Thumb className="ScrollAreaThumb" />
+                    </ScrollArea.Scrollbar>
+                    <ScrollArea.Corner className="ScrollAreaCorner" />
+                </ScrollArea.Root>
+            </div>
+        </>
+    )
+}
+
+
+// Each "chip" inside the UniProt search results.
+function UniprotSearchChip({ id, name, organism, score }: UniprotResultType) {
+   
+    return (
+        <div className="UniprotSearchChip" tabIndex={0}>
+            <div className="UniprotChipLeft">
+                <h3 className="UniprotChipName">{name}</h3>
+                <a
+                    className="UniprotChipId"
+                    href={`https://www.uniprot.org/uniprotkb/${id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    {id}
+                </a>
+            </div>
+            <div className="UniprotChipRight">
+            <ScoreRing score={score} />
+            <span className="UniprotChipOrganism">{organism}</span>
+            </div>
+        </div>
+    );
+}
+
+
+
+// Little ring with proportional confidence score.
+function ScoreRing({ score }: { score: number }) {
+
+    let color = 'rgba(0, 0, 0, 1)';
+    if (score > 0.7) {
+        color = '#15a05b'; // Green for high confidence
+    } else if (score > 0.4) {
+        color = '#ffa500'; // Orange for medium confidence
+    } else {
+        color = '#e0463e'; // Red for low confidence
+    }
+
+    const r = 22;
+    const c = 2 * Math.PI * r;
+    const clamped = Math.max(0, Math.min(1, score));
+    const offset = c * (1 - clamped);
+
+    return (
+        <div
+            className="UniprotScoreRing"
+            role="img"
+            aria-label={`Match score ${score.toFixed(2)}`}
+        >
+            <svg viewBox="0 0 52 52" width="52" height="52">
+                <circle className="UniprotRingTrack" cx="26" cy="26" r={r} />
+                <circle
+                    className="UniprotRingArc"
+                    cx="26"
+                    cy="26"
+                    r={r}
+                    stroke={color}
+                    strokeDasharray={c}
+                    strokeDashoffset={offset}
+                />
+            </svg>
+            <span className="UniprotRingVal" style={{ color }}>
+            {score.toFixed(2)}
+            </span>
+
+
+
+        </div>
+    )
 }
