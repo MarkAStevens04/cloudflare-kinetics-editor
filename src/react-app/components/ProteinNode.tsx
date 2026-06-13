@@ -9,6 +9,8 @@ import '../styles/radix.css';
 import useStore from '../stores/store';
 
 import { ScrollArea } from 'radix-ui'; // Scroll Area for UniProt search results.
+import { TriangleDownIcon } from "@radix-ui/react-icons";
+
 import { TextTooltip } from './Tooltips'
 
 
@@ -262,21 +264,21 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
         <>
 
         <div className="NodeRow">
-                UniProt ID: {currentUniProtID}
-                {/* <input
-                    className="item species-param-input NodeRowItem"
-                    type="text"
-                    defaultValue={data.uniprotID}
-                    onChange={(e) => onUniProtIDChange(e)}
-                    style={{
-                        backgroundColor: 'rgba(255, 255, 255, 1)',
-                        padding: '0px',
-                    }}
-                /> */}
-                
-            
-            
+            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
+                <div>UniProt ID:</div>
+                <a
+                    className="NodeRowLink"
+                    href={`https://www.uniprot.org/uniprotkb/${currentUniProtID}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    {currentUniProtID ? currentUniProtID : "None"}
+                </a>
             </div>
+            <TriangleDownIcon />
+            
+        </div>
 
             <div style={{margin: '0px 0px 5px 0px'}}>
 
