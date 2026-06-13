@@ -398,7 +398,6 @@ function ToastError() {
 }
 
 function FocusController() {
-  console.log('focusing...');
   const { fitView } = useReactFlow();
   const focusedTarget = useStore((state) => state.focusedTarget);
   const setFocusedTarget = useStore((state) => state.setFocusedTarget); // Will use this to clear selected edge afterwards

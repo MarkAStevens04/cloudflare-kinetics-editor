@@ -802,6 +802,14 @@ onEdgesChange: (changes) => {
     // Assign the uniprot ID to the given species
     setUniProtID: (NodeID: string, uniprotID: string) => set((store) => ({
       species: store.species.map((s) => s.id === NodeID ? { ...s, uniprotID } : s),
+
+      visualNodes: store.visualNodes.map((n) => n.id === NodeID ? { 
+        ...n, 
+        data: { 
+          ...n.data, 
+          uniprotID: uniprotID,
+         } 
+        } : n),
     })),
 
 

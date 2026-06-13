@@ -17,6 +17,7 @@ type ProteinNodeType = Node<{
     color: string;
     initial: string;
     speciesType: string; // Types stored in store.ts
+    uniprotID?: string; // Optional UniProt ID associated with this node, which can be set through the UniProt search interface.
 }, 'protein'>;
 
 
@@ -131,7 +132,7 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
                 </div>
 
                 <hr />
-                <UniprotSelector NodeID={id} />
+                <UniprotSelector NodeID={id} currentUniProtID={data.uniprotID} />
             </div>
         }
         
@@ -237,7 +238,7 @@ function TriangleWithBorder({ sColor, bColor }: { sColor: string; bColor: string
 }
 
 
-function UniprotSelector(NodeID: string) {
+function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; currentUniProtID?: string }) {
 
     const currentQuery = useStore((state) => state.uniProtQuery);
     const updateQuery = useStore((state) => state.setUniProtQuery);
@@ -246,7 +247,6 @@ function UniprotSelector(NodeID: string) {
     const searchUniprot = useStore((state) => state.searchUniprot);
     const loading = useStore((state) => state.uniProtLoading);
 
-    const currentUniProtID = useStore((state) => state.species.find(s => s.id === NodeID)?.uniprotID);
     const updateUniProtID = useStore((state) => state.setUniProtID);
 
     const onSearch = (event: ChangeEvent<HTMLInputElement>) => {
@@ -256,15 +256,13 @@ function UniprotSelector(NodeID: string) {
 
     const onUpdateUniProtID = (id: string) => {
         updateUniProtID(NodeID, id);
-        console.log('Updated UniProt ID for node ', NodeID, ' to ', id);
     }
-    
 
     return (
         <>
 
         <div className="NodeRow">
-                UniProt ID:
+                UniProt ID: {currentUniProtID}
                 {/* <input
                     className="item species-param-input NodeRowItem"
                     type="text"
@@ -275,7 +273,7 @@ function UniprotSelector(NodeID: string) {
                         padding: '0px',
                     }}
                 /> */}
-                {currentUniProtID}
+                
             
             
             </div>
