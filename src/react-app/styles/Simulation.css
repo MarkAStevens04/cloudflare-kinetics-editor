@@ -145,5 +145,5 @@
 
 .SimulationDrawer--running,
 .SimulationCloseButton--running {
-	animation: sim-border-spin 1.5s linear infinite;
+	animation: sim-border-spin 3s linear infinite;
 }

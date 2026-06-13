@@ -414,6 +414,18 @@
 	color: rgba(0, 0, 0, 0.5);
 }
 
+.CollapsibleContent {
+  overflow: hidden;
+}
+
+.CollapsibleContent[data-state="open"] {
+  animation: slideDown 300ms ease-out;
+}
+
+.CollapsibleContent[data-state="closed"] {
+  animation: slideUp 300ms ease-out;
+}
+
 @keyframes slideUpAndFade {
 	from {
 		opacity: 0;
@@ -483,6 +495,24 @@
 	to {
 		transform: translateX(calc(100% + var(--viewport-padding)));
 	}
+}
+
+@keyframes slideDown {
+  from {
+    height: 0;
+  }
+  to {
+    height: 200px;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    height: 200px;
+  }
+  to {
+    height: 0;
+  }
 }
 
 

@@ -274,7 +274,7 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
         <>
 
         <div className="NodeRow">
-            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
+            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '200px'}}>
                 <div>UniProt ID:</div>
                 <a
                     className="NodeRowLink"
@@ -293,7 +293,7 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
             <div style={{margin: '0px 0px 5px 0px'}}>
                 <Collapsible.Root open={uniProtDrawerOpen} onOpenChange={handleDrawerToggle}>
 
-                    <Collapsible.Content>
+                    <Collapsible.Content className="CollapsibleContent">
                     <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
                         <input
                             // className="item species-param-input NodeRowItem"
