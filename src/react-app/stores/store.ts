@@ -174,6 +174,8 @@ type AppState = {
   uniProtLoading: boolean; // True if we're currently waiting for results from uniprot, false otherwise.
   uniProtAbortController: AbortController | null; // For cancelling uniprot requests when a new search is initiated.
   setUniProtID: (NodeID: string, uniprotID: string) => void; // For setting the uniprot ID of a given species when a uniprot search result is selected.
+  uniProtDrawerOpen: boolean; // Whether the uniprot search drawer is open
+  setUniProtDrawerOpen: (open: boolean) => void;
 
   feedbackOpen: boolean;
   setFeedbackOpen: (open: boolean) => void;
@@ -211,6 +213,8 @@ const useStore = create<AppState>((set, get) => ({
     uniProtResults: [],
     uniProtLoading: false,
     uniProtAbortController: null,
+    uniProtDrawerOpen: false,
+    setUniProtDrawerOpen: (open) => set({ uniProtDrawerOpen: open }),
 
     focusedTarget: null,
     setFocusedTarget: (target) => set({ focusedTarget: target }),

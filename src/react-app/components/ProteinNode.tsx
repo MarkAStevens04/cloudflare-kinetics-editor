@@ -8,7 +8,7 @@ import '../styles/Nodes.css'
 import '../styles/radix.css';
 import useStore from '../stores/store';
 
-import { ScrollArea } from 'radix-ui'; // Scroll Area for UniProt search results.
+import { ScrollArea, Collapsible } from 'radix-ui'; // Scroll Area for UniProt search results.
 import { TriangleDownIcon } from "@radix-ui/react-icons";
 
 import { TextTooltip } from './Tooltips'
@@ -248,6 +248,12 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
     const searchResults = useStore((state) => state.uniProtResults);
     const searchUniprot = useStore((state) => state.searchUniprot);
     const loading = useStore((state) => state.uniProtLoading);
+    const uniProtDrawerOpen = useStore((state) => state.uniProtDrawerOpen);
+    const setUniProtDrawerOpen = useStore((state) => state.setUniProtDrawerOpen);
+
+    const handleDrawerToggle = () => {
+        setUniProtDrawerOpen(!uniProtDrawerOpen);
+    }
 
     const updateUniProtID = useStore((state) => state.setUniProtID);
 
@@ -259,6 +265,10 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
     const onUpdateUniProtID = (id: string) => {
         updateUniProtID(NodeID, id);
     }
+
+    // For setting the rotation of the UniProt Drawer Triangle
+    const rotationState = uniProtDrawerOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+
 
     return (
         <>
@@ -276,54 +286,58 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
                     {currentUniProtID ? currentUniProtID : "None"}
                 </a>
             </div>
-            <TriangleDownIcon />
+            <TriangleDownIcon onClick={handleDrawerToggle} style={{transform: rotationState}} />
             
         </div>
 
             <div style={{margin: '0px 0px 5px 0px'}}>
+                <Collapsible.Root open={uniProtDrawerOpen} onOpenChange={handleDrawerToggle}>
 
-                <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
-                    <input
-                        // className="item species-param-input NodeRowItem"
-                        className="ScrollSearchBar"
-                        placeholder={`Enter UniProt ID, Name, Organism, etc.`}
-                        value={currentQuery}
-                        onChange={(e) => onSearch(e)}
-                    />
+                    <Collapsible.Content>
+                    <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
+                        <input
+                            // className="item species-param-input NodeRowItem"
+                            className="ScrollSearchBar"
+                            placeholder={`Enter UniProt ID, Name, Organism, etc.`}
+                            value={currentQuery}
+                            onChange={(e) => onSearch(e)}
+                        />
 
-                    <ScrollArea.Viewport className="ScrollAreaViewport">
-                        <div className=" UniprotSearchContainer" >
-                            {/* {searchResults.length === 0 ? (
-                                <div className="UniprotSearchEmpty">
-                                    Try entering a search term above!
-                                </div>
-                                
-                            ) : (
-                                searchResults.map((result) => (
-                                    <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} />
-                                ))
-                            )} */}
+                        <ScrollArea.Viewport className="ScrollAreaViewport">
+                            <div className=" UniprotSearchContainer" >
+                                {/* {searchResults.length === 0 ? (
+                                    <div className="UniprotSearchEmpty">
+                                        Try entering a search term above!
+                                    </div>
+                                    
+                                ) : (
+                                    searchResults.map((result) => (
+                                        <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} />
+                                    ))
+                                )} */}
 
-                            {loading
-                                ? Array.from({ length: 4}).map((_, i) => <UniprotSearchSkeleton key={i} />)
-                                : searchResults.length === 0
-                                    ? <div className="UniprotSearchEmpty"> No results found. <br /> Try another search! </div>
-                                : searchResults.map((result) => (
-                                    <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} onClick={(id) => onUpdateUniProtID(id)} />
-                                ))
-                            }
+                                {loading
+                                    ? Array.from({ length: 4}).map((_, i) => <UniprotSearchSkeleton key={i} />)
+                                    : searchResults.length === 0
+                                        ? <div className="UniprotSearchEmpty"> No results found. <br /> Try another search! </div>
+                                    : searchResults.map((result) => (
+                                        <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} onClick={(id) => onUpdateUniProtID(id)} />
+                                    ))
+                                }
 
-                        </div>
-                    </ScrollArea.Viewport>
-                    <ScrollArea.Scrollbar
-                        className="ScrollAreaScrollbar"
-                        orientation="vertical"
-                    >
-                        {/* "Thumb" is the little dark gray part on the scrollbar! */}
-                        <ScrollArea.Thumb className="ScrollAreaThumb" />
-                    </ScrollArea.Scrollbar>
-                    <ScrollArea.Corner className="ScrollAreaCorner" />
-                </ScrollArea.Root>
+                            </div>
+                        </ScrollArea.Viewport>
+                        <ScrollArea.Scrollbar
+                            className="ScrollAreaScrollbar"
+                            orientation="vertical"
+                        >
+                            {/* "Thumb" is the little dark gray part on the scrollbar! */}
+                            <ScrollArea.Thumb className="ScrollAreaThumb" />
+                        </ScrollArea.Scrollbar>
+                        <ScrollArea.Corner className="ScrollAreaCorner" />
+                    </ScrollArea.Root>
+                    </Collapsible.Content>
+                </Collapsible.Root>
             </div>
         </>
     )
