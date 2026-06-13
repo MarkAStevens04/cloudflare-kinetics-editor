@@ -129,8 +129,9 @@ hr {
 /* ---- the chip ---- */
 .UniprotSearchChip {
     /* width: 100%; */
+    min-width: 0px;
     
-    margin: 4px 0px;
+    margin: 4px 0px; /* Little space between each search result */
 
     background: rgba(0, 0, 0, 0.2);
     border: 2px solid transparent;
@@ -227,4 +228,37 @@ hr {
     background: rgba(255, 255, 255, 0.1);
 
     position: relative;
+}
+
+.UniprotSearchEmpty {
+    font-size: 14px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+}
+
+.SkeletonChip {
+    /* width: 100%; */
+    min-width: 0px;
+    
+    margin: 4px 0px; /* Little space between each search result */
+
+    /* background: rgba(0, 0, 0, 0.2); */
+    background: linear-gradient(90deg, #e8e8e8 25%, #f4f4f4 37%, #e8e8e8 63%);
+    border: 2px solid transparent;
+    border-radius: 4px;
+    padding: 2px 2px;
+
+    cursor: pointer;
+    outline: none;
+
+    animation: skeleton-shimmer 1.4s ease infinite;
+}
+
+@keyframes skeleton-shimmer {
+    0%   { background-position: 100% 50%; }
+    100% { background-position: 0 50%; }
 }

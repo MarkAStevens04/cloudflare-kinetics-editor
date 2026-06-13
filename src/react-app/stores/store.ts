@@ -38,6 +38,13 @@ type species = {
   speciesType: string; // types: enzyme, molecule, custom, (future: DNA, RNA, DNA-Binding Protein, Complex, etc.)
 }
 
+type UniprotResultType = {
+    id: string;
+    alias: string;
+    organism: string;
+    score: number; // 0-1, Indicates quality of match. Correct organism, # metabolic links, # RELEVANT metabolic links
+}
+
 // type reactions = {
 //   id: string;
 //   label: string;
@@ -110,7 +117,7 @@ type AppState = {
   reactions: reactions[];
   simParams: params[];
 
-  nextPID: number; // the next parameter id
+  nextPID: number; // the next parameter id. Ensures unique id for each param.
 
   visualNodes: AppNode[];
   visualEdges: AppEdge[];
@@ -127,17 +134,17 @@ type AppState = {
 
   addNode: (id: string, label: string, color: string, speciesType: string) => void;
 
-  selectedEdge: string | null;
+  selectedEdge: string | null; // ID of the currently selected edge (for opening the drawer)
   setSelectedEdge: (edgeId: string | null) => void;
 
-  rxnDrawerOpen: boolean;
+  rxnDrawerOpen: boolean; // Whether the reaction drawer is open
   setRxnDrawerOpen: (open: boolean) => void;
 
   simulationStatus: number; // 0 = not started, 1 = running, 2 = complete, 3 = error
-  simulationData: Array<Record<string, number>>;
+  simulationData: Array<Record<string, number>>; // Data returned from our simulation
   fetchSimulationData: () => void;
 
-  simDrawerOpen: boolean;
+  simDrawerOpen: boolean; // Whether the simulation drawer is open
   setSimDrawerOpen: (open: boolean) => void;
 
   updateSpeciesLabel: (id: string, newLabel: string) => void;
@@ -153,10 +160,17 @@ type AppState = {
   getCoefficient: (reactantID: string, reactionID: string) => number;
   changeCoefficient: (reactantID: string, newCoefficient: number, reactionID: string) => void;
 
-  tempParamName: string; // For storring parameter name and value when creating a new parameter in drawer.
-  tempParamValue: string;
+  tempParamName: string; // For storing parameter name and value when creating a new parameter in drawer.
+  tempParamValue: string;  
   setTempParamName: (name: string) => void;
   setTempParamValue: (value: string) => void;
+
+  uniProtQuery: string; // For storing query when searching for a protein in the uniprot search component.
+  setUniProtQuery: (query: string) => void;
+
+  uniProtResults: UniprotResultType[]; // For storing results when searching for a protein in the uniprot search component.
+  searchUniprot: (query: string) => void; // For searching uniprot with a given query and getting back a list of results.
+  uniProtLoading: boolean; // True if we're currently waiting for results from uniprot, false otherwise.
 
   feedbackOpen: boolean;
   setFeedbackOpen: (open: boolean) => void;
@@ -190,6 +204,9 @@ const useStore = create<AppState>((set, get) => ({
     // Add Initial Variables
     tempParamName: '', 
     tempParamValue: '',
+    uniProtQuery: '',
+    uniProtResults: [],
+    uniProtLoading: false,
 
     focusedTarget: null,
     setFocusedTarget: (target) => set({ focusedTarget: target }),
@@ -748,6 +765,13 @@ onEdgesChange: (changes) => {
     setTempParamName: (name) => set({ tempParamName: name }),
     setTempParamValue: (value) => set({ tempParamValue: value }),
 
+    // Changes our temporary uniprot query
+    setUniProtQuery: (query: string) => set({ uniProtQuery: query }),
+    searchUniprot: (query: string) => {
+      const uniProtResults = performUniprotSearch(query);
+      set({ uniProtResults: uniProtResults }); // Clear previous results
+    },
+
     // Update what edge we're hovering over (if any)
     edgeHovering: false,
     edgeHoverID: 'default',
@@ -915,4 +939,19 @@ function getDefaultRateLaw(reaction: reactions) {
 // Converts a number to letters (used for getting string of paramID)
 function numberToLetters(num: number) {
     return String(num).split('').map((digit) => String.fromCharCode(97 + Number(digit))).join('');
+}
+
+function performUniprotSearch(query: string) {
+  // Placeholder function to simulate search results based on query.
+      const searchResults = [
+              { id: "AAABBB", alias: "ULTRA SUPER DUPER LONG NAME", organism: "ULTRA SUPER DUPER LONG NAME IN THE ORGANISM FIELD WHICH IS SOMEHOW EVEN LONGER THAN THE FIRST", score: 0.97 },
+              { id: "P00724", alias: "Invertase", organism: "Saccharomyces cerevisiae", score: 0.97 },
+              { id: "P04807", alias: "Hexokinase-2", organism: "Saccharomyces cerevisiae", score: 0.81 },
+              { id: "P42212", alias: "Green fluorescent protein", organism: "Aequorea victoria", score: 0.63 },
+              { id: "P69905", alias: "Hemoglobin subunit alpha", organism: "Homo sapiens", score: 0.52 },
+              { id: "P00722", alias: "Beta-galactosidase", organism: "Escherichia coli", score: 0.34 },
+              { id: "P02144", alias: "Myoglobin", organism: "Homo sapiens", score: 0.28 },
+          ];
+
+      return searchResults;
 }

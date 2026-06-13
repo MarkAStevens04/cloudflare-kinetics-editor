@@ -22,7 +22,7 @@ type ProteinNodeType = Node<{
 
 type UniprotResultType = {
     id: string;
-    name: string;
+    alias: string;
     organism: string;
     score: number; // 0-1, Indicates quality of match. Correct organism, # metabolic links, # RELEVANT metabolic links
 }
@@ -98,6 +98,7 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
         }
 
 
+        {/* Change node settings when node is open! */}
         { selected && 
             <div className="NodeEditor">
                 <div className="NodeRow">
@@ -236,28 +237,50 @@ function TriangleWithBorder({ sColor, bColor }: { sColor: string; bColor: string
 
 function UniprotSelector() {
 
-    const searchResults = [
-        { id: "AAABBB", alias: "ULTRA SUPER DUPER LONG NAME", organism: "ULTRA SUPER DUPER LONG NAME IN THE ORGANISM FIELD WHICH IS SOMEHOW EVEN LONGER THAN THE FIRST", score: 0.97 },
-        { id: "P00724", alias: "Invertase", organism: "Saccharomyces cerevisiae", score: 0.97 },
-        { id: "P04807", alias: "Hexokinase-2", organism: "Saccharomyces cerevisiae", score: 0.81 },
-        { id: "P42212", alias: "Green fluorescent protein", organism: "Aequorea victoria", score: 0.63 },
-        { id: "P69905", alias: "Hemoglobin subunit alpha", organism: "Homo sapiens", score: 0.52 },
-        { id: "P00722", alias: "Beta-galactosidase", organism: "Escherichia coli", score: 0.34 },
-        { id: "P02144", alias: "Myoglobin", organism: "Homo sapiens", score: 0.28 },
-    ];
+    const currentQuery = useStore((state) => state.uniProtQuery);
+    const updateQuery = useStore((state) => state.setUniProtQuery);
+
+    const searchResults = useStore((state) => state.uniProtResults);
+    const searchUniprot = useStore((state) => state.searchUniprot);
+
+    const onSearch = (event: ChangeEvent<HTMLInputElement>) => {
+        updateQuery(event.target.value);
+        searchUniprot(event.target.value);
+    }
+    
+    if (searchResults.length === 0) {console.log('No results found!');}
 
     return (
         <>
             UniProt ID:
-            <div>
+            <div style={{margin: '0px 0px 5px 0px'}}>
 
                 <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
+                    <input
+                        // className="item species-param-input NodeRowItem"
+                        className="ScrollSearchBar"
+                        placeholder={`Enter UniProt ID, Name, Organism, etc.`}
+                        value={currentQuery}
+                        onChange={(e) => onSearch(e)}
+                    />
+
                     <ScrollArea.Viewport className="ScrollAreaViewport">
-                        <div className=" UniprotSearchContainer">
-                            <div className="Text">SEARCHBAR MOMENT</div>
+                        <div className=" UniprotSearchContainer" >
+                            {/* {searchResults.length === 0 ? (
+                                <div className="UniprotSearchEmpty">
+                                    Try entering a search term above!
+                                </div>
+                                
+                            ) : (
+                                searchResults.map((result) => (
+                                    <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} />
+                                ))
+                            )} */}
+
                             {searchResults.map((result) => (
-                                <UniprotSearchChip key={result.id} id={result.id} name={result.alias} organism={result.organism} score={result.score} />
+                                    <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} />
                             ))}
+
                         </div>
                     </ScrollArea.Viewport>
                     <ScrollArea.Scrollbar
@@ -276,7 +299,7 @@ function UniprotSelector() {
 
 
 // Each "chip" inside the UniProt search results.
-function UniprotSearchChip({ id, name, organism, score }: UniprotResultType) {
+function UniprotSearchChip({ id, alias, organism, score }: UniprotResultType) {
    
     let ringColor = 'rgba(0, 0, 0, 1)';
     let confidenceText = '';
@@ -292,18 +315,18 @@ function UniprotSearchChip({ id, name, organism, score }: UniprotResultType) {
     }
 
     return (
-        <div className="UniprotSearchChip" tabIndex={0}>
+        <div className="UniprotSearchChip" tabIndex={0} >
             
 
-            <div className="UniprotChipTop">
-                <div className="UniprotChipName">{name}</div>
+            <div className="UniprotChipTop" >
+                <div className="UniprotChipName">{alias}</div>
 
                 <TextTooltip text={`${confidenceText}`} side="right" >
                     <div className="UniprotRing" style={{borderColor: ringColor}} />
                 </TextTooltip>
 
             </div>
-            <div className="UniprotChipBottom">
+            <div className="UniprotChipBottom" >
                 <a
                     className="UniprotChipId"
                     href={`https://www.uniprot.org/uniprotkb/${id}`}
