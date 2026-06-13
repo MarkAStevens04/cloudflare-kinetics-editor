@@ -171,6 +171,7 @@ type AppState = {
   uniProtResults: UniprotResultType[]; // For storing results when searching for a protein in the uniprot search component.
   searchUniprot: (query: string) => void; // For searching uniprot with a given query and getting back a list of results.
   uniProtLoading: boolean; // True if we're currently waiting for results from uniprot, false otherwise.
+  uniProtAbortController: AbortController | null; // For cancelling uniprot requests when a new search is initiated.
 
   feedbackOpen: boolean;
   setFeedbackOpen: (open: boolean) => void;
@@ -207,6 +208,7 @@ const useStore = create<AppState>((set, get) => ({
     uniProtQuery: '',
     uniProtResults: [],
     uniProtLoading: false,
+    uniProtAbortController: null,
 
     focusedTarget: null,
     setFocusedTarget: (target) => set({ focusedTarget: target }),
@@ -770,25 +772,28 @@ onEdgesChange: (changes) => {
 
     // Perform our uniprot search
     searchUniprot: async (query: string) => {
+       // Cancel whatever's in flight, regardless of branch
+      get().uniProtAbortController?.abort();
 
       // Check for empty query
       if (!query || query.trim() === '') { // If query is empty, don't search and just clear results
-        set({ uniProtResults: [], uniProtLoading: false }); // Clear previous results and set loading to false
+        set({ uniProtResults: [], uniProtLoading: false, uniProtAbortController: null }); // Clear previous results and set loading to false
         return;
       }
 
       // Let us know we're loading
-      set({ uniProtLoading: true }); // Set loading to true while we fetch results
+      const controller = new AbortController();
+      set({ uniProtLoading: true, uniProtAbortController: controller }); // Set loading to true while we fetch results
 
       // Try to perform our actual search!
       try {
-        const results = await performUniprotSearch(query);
-        set({ uniProtResults: results, uniProtLoading: false }); // Clear previous results and set loading to false
+        const results = await performUniprotSearch(query, controller.signal);
+        set({ uniProtResults: results, uniProtLoading: false, uniProtAbortController: null }); // Clear previous results and set loading to false
 
-      } catch {
+      } catch (err) {
         // If our actual search fails...
-
-        set({ uniProtResults: [], uniProtLoading: false });
+        if ((err as Error).name === 'AbortError') return; // superseded — let the newer call own state
+        set({ uniProtResults: [], uniProtLoading: false, uniProtAbortController: null });
       }
     },
 
@@ -963,12 +968,13 @@ function numberToLetters(num: number) {
 }
 
 // Actually PERFORM our uniprot search!
-async function performUniprotSearch(query: string): Promise<UniprotResultType[]> {
+async function performUniprotSearch(query: string, signal?: AbortSignal): Promise<UniprotResultType[]> {
 
   // Perform the fetch
   const res = await fetch(
         `https://rest.uniprot.org/uniprotkb/search?query=${encodeURIComponent(query)}` +
-        `&format=json&fields=accession,protein_name,organism_name&size=10`
+        `&format=json&fields=accession,protein_name,organism_name&size=10`,
+        { signal }
     );
 
   
