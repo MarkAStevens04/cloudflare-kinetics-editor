@@ -118,30 +118,23 @@ hr {
 
 .UniprotSearchContainer {
     padding: 10px 20px 10px 10px;
-    display: flex;
-    flex-direction: column;
+    width: 200px;
+    /* display: flex; */
+    /* flex-direction: column; */
 }
 
-/* .UniprotSearchChip {
-    width: 100%;
-    height: 100px;
-    background-color: rgba(0, 0, 0, 0.5);
-    
-    border-radius: 8px;
-    margin: 4px 0px;
-} */
 
 /* ---- the chip ---- */
 .UniprotSearchChip {
-    display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    /* gap: 16px; */
+    width: 100%;
+    
     margin: 4px 0px;
+
     background: rgba(0, 0, 0, 0.2);
     border: 2px solid transparent;
     border-radius: 4px;
     padding: 2px 2px;
+
     cursor: pointer;
     outline: none;
     transition: border-color .18s ease;
@@ -151,64 +144,83 @@ hr {
   border-color: #747bff;
 }
  
-.UniprotChipLeft {
-  display: flex; flex-direction: column; justify-content: space-between;
-  min-width: 0; flex: 1;
+.UniprotChipTop {
+
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-between;
+
 }
 
-.UniprotChipRight {
-  display: flex; flex-direction: column; align-items: flex-end;
-  justify-content: space-between; flex-shrink: 0;
+.UniprotChipBottom {
+  display: flex; 
+  flex-direction: row; 
+  align-items: flex-end;
+  justify-content: space-between; 
+
 }
  
 .UniprotChipName {
-  font-size: 18px; font-weight: 600; line-height: 1.1;
-  letter-spacing: -.015em; color: var(--pf-name);
-  margin: 0; word-break: break-word;
+    font-size: 18px; 
+    font-weight: 600; 
+    line-height: 1.1;
+    letter-spacing: -.015em; 
+    color: rgba(0, 0, 0, 1);
+
+    margin: 0px 10px 0px 0px; 
+
+    min-width: 0px;
+    max-width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
 }
 
 .UniprotChipId {
-  align-self: flex-start;
+  align-self: flex-end;
   font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, monospace;
-  font-size: 8px; letter-spacing: .02em;
-  color: var(--pf-id); text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color .15s ease;
+  font-size: 8px; 
+  letter-spacing: .02em;
+  color: rgba(0, 0, 0, 0.3); 
+  text-decoration: none;
+
+  border-bottom: 0.5px solid transparent;
+  border-bottom-color: rgba(0, 0, 0, 0.3); 
+
   margin-top: 0px;
   padding: 0px;
   line-height: 1;
+
+  transition: border-color .15s ease;
 }
 
-.UniprotChipId:hover { border-bottom-color: #747bff; }
+.UniprotChipId:hover { 
+    border-bottom-color: #747bff; 
+}
  
 .UniprotChipOrganism {
-  font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
-  font-style: italic;
-  font-size: 8px; 
-  line-height: 1.25;
-  color: var(--pf-organism);
-  text-align: right; 
-  max-width: 230px;
-  margin-top: 0px;
+    font-size: 8px; 
+    color: var(--pf-organism);
+    line-height: 1.25;
+    text-align: right; 
+
+    margin: 0px 0px 0px 10px; /* Preserve margin between ID and organism */
+    
+    min-width: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
+.UniprotRing {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    min-height: 10px;
 
-/* ---- score ring ---- */
-.UniprotScoreRing { position: relative; width: 52px; height: 52px; }
+    border-radius: 50%;
+    border: 2px solid;
 
-.UniprotScoreRing svg { transform: rotate(-90deg); display: block; }
-
-.UniprotRingTrack { fill: none; stroke: var(--pf-track); stroke-width: 4.5; }
-
-.UniprotRingArc {
-  fill: none; stroke-width: 4.5; stroke-linecap: round;
-  transition: stroke-dashoffset .5s cubic-bezier(.2,.7,.3,1);
-}
-
-.UniprotRingVal {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    position: relative;
 }

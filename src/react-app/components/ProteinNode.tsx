@@ -9,6 +9,7 @@ import '../styles/radix.css';
 import useStore from '../stores/store';
 
 import { ScrollArea } from 'radix-ui'; // Scroll Area for UniProt search results.
+import { CircleIcon } from "@radix-ui/react-icons";
 
 
 type ProteinNodeType = Node<{ 
@@ -236,6 +237,7 @@ function TriangleWithBorder({ sColor, bColor }: { sColor: string; bColor: string
 function UniprotSelector() {
 
     const searchResults = [
+        { id: "AAABBB", alias: "ULTRA SUPER DUPER LONG NAME", organism: "ULTRA SUPER DUPER LONG NAME IN THE ORGANISM FIELD WHICH IS SOMEHOW EVEN LONGER THAN THE FIRST", score: 0.97 },
         { id: "P00724", alias: "Invertase", organism: "Saccharomyces cerevisiae", score: 0.97 },
         { id: "P04807", alias: "Hexokinase-2", organism: "Saccharomyces cerevisiae", score: 0.81 },
         { id: "P42212", alias: "Green fluorescent protein", organism: "Aequorea victoria", score: 0.63 },
@@ -261,7 +263,6 @@ function UniprotSelector() {
                     <ScrollArea.Scrollbar
                         className="ScrollAreaScrollbar"
                         orientation="vertical"
-                        // onPointerDownCapture={(e) => e.stopPropagation()}
                     >
                         {/* "Thumb" is the little dark gray part on the scrollbar! */}
                         <ScrollArea.Thumb className="ScrollAreaThumb" />
@@ -277,10 +278,24 @@ function UniprotSelector() {
 // Each "chip" inside the UniProt search results.
 function UniprotSearchChip({ id, name, organism, score }: UniprotResultType) {
    
+    let ringColor = 'rgba(0, 0, 0, 1)';
+    if (score > 0.7) {
+        ringColor = '#00DA2C'; // Green for high confidence
+    } else if (score > 0.4) {
+        ringColor = '#ffa500'; // Orange for medium confidence
+    } else {
+        ringColor = '#e0463e'; // Red for low confidence
+    }
+
     return (
         <div className="UniprotSearchChip" tabIndex={0}>
-            <div className="UniprotChipLeft">
-                <h3 className="UniprotChipName">{name}</h3>
+            
+
+            <div className="UniprotChipTop">
+                <div className="UniprotChipName">{name}</div>
+                <div className="UniprotRing" style={{borderColor: ringColor}}></div>
+            </div>
+            <div className="UniprotChipBottom">
                 <a
                     className="UniprotChipId"
                     href={`https://www.uniprot.org/uniprotkb/${id}`}
@@ -290,58 +305,8 @@ function UniprotSearchChip({ id, name, organism, score }: UniprotResultType) {
                 >
                     {id}
                 </a>
-            </div>
-            <div className="UniprotChipRight">
-            <ScoreRing score={score} />
-            <span className="UniprotChipOrganism">{organism}</span>
+                <span className="UniprotChipOrganism">{organism}</span>
             </div>
         </div>
     );
-}
-
-
-
-// Little ring with proportional confidence score.
-function ScoreRing({ score }: { score: number }) {
-
-    let color = 'rgba(0, 0, 0, 1)';
-    if (score > 0.7) {
-        color = '#15a05b'; // Green for high confidence
-    } else if (score > 0.4) {
-        color = '#ffa500'; // Orange for medium confidence
-    } else {
-        color = '#e0463e'; // Red for low confidence
-    }
-
-    const r = 22;
-    const c = 2 * Math.PI * r;
-    const clamped = Math.max(0, Math.min(1, score));
-    const offset = c * (1 - clamped);
-
-    return (
-        <div
-            className="UniprotScoreRing"
-            role="img"
-            aria-label={`Match score ${score.toFixed(2)}`}
-        >
-            <svg viewBox="0 0 52 52" width="52" height="52">
-                <circle className="UniprotRingTrack" cx="26" cy="26" r={r} />
-                <circle
-                    className="UniprotRingArc"
-                    cx="26"
-                    cy="26"
-                    r={r}
-                    stroke={color}
-                    strokeDasharray={c}
-                    strokeDashoffset={offset}
-                />
-            </svg>
-            <span className="UniprotRingVal" style={{ color }}>
-            {score.toFixed(2)}
-            </span>
-
-
-
-        </div>
-    )
 }
