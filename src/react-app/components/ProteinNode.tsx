@@ -9,7 +9,7 @@ import '../styles/radix.css';
 import useStore from '../stores/store';
 
 import { ScrollArea } from 'radix-ui'; // Scroll Area for UniProt search results.
-import { CircleIcon } from "@radix-ui/react-icons";
+import { TextTooltip } from './Tooltips'
 
 
 type ProteinNodeType = Node<{ 
@@ -253,7 +253,7 @@ function UniprotSelector() {
 
                 <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
                     <ScrollArea.Viewport className="ScrollAreaViewport">
-                        <div className="UniprotSearchContainer">
+                        <div className=" UniprotSearchContainer">
                             <div className="Text">SEARCHBAR MOMENT</div>
                             {searchResults.map((result) => (
                                 <UniprotSearchChip key={result.id} id={result.id} name={result.alias} organism={result.organism} score={result.score} />
@@ -279,12 +279,16 @@ function UniprotSelector() {
 function UniprotSearchChip({ id, name, organism, score }: UniprotResultType) {
    
     let ringColor = 'rgba(0, 0, 0, 1)';
+    let confidenceText = '';
     if (score > 0.7) {
         ringColor = '#00DA2C'; // Green for high confidence
+        confidenceText = "This node has PLENTY of connections, and matches your organism. We predict this is a GREAT match for your model.";
     } else if (score > 0.4) {
         ringColor = '#ffa500'; // Orange for medium confidence
+        confidenceText = "This node has some connections, but may not match your organism perfectly. We predict this is a MODERATE match for your model.";
     } else {
         ringColor = '#e0463e'; // Red for low confidence
+        confidenceText = "This node has few connections, and may not match your organism. We predict this is a POOR match for your model.";
     }
 
     return (
@@ -293,7 +297,11 @@ function UniprotSearchChip({ id, name, organism, score }: UniprotResultType) {
 
             <div className="UniprotChipTop">
                 <div className="UniprotChipName">{name}</div>
-                <div className="UniprotRing" style={{borderColor: ringColor}}></div>
+
+                <TextTooltip text={`${confidenceText}`} side="right" >
+                    <div className="UniprotRing" style={{borderColor: ringColor}} />
+                </TextTooltip>
+
             </div>
             <div className="UniprotChipBottom">
                 <a

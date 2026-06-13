@@ -119,14 +119,16 @@ hr {
 .UniprotSearchContainer {
     padding: 10px 20px 10px 10px;
     width: 200px;
-    /* display: flex; */
-    /* flex-direction: column; */
+
+    /* max-width: 100%;
+    display: flex;
+    flex-direction: column; */
 }
 
 
 /* ---- the chip ---- */
 .UniprotSearchChip {
-    width: 100%;
+    /* width: 100%; */
     
     margin: 4px 0px;
 
@@ -167,12 +169,12 @@ hr {
     letter-spacing: -.015em; 
     color: rgba(0, 0, 0, 1);
 
-    margin: 0px 10px 0px 0px; 
+    margin: 0px 5px 0px 0px; /* Preserve margin between Name and chip color */
 
     min-width: 0px;
-    max-width: 70%;
     white-space: nowrap;
-    overflow: hidden;
+    overflow-x: clip;
+    overflow-y: visible;
     text-overflow: ellipsis;
     
 }
@@ -221,6 +223,8 @@ hr {
 
     border-radius: 50%;
     border: 2px solid;
+
+    background: rgba(255, 255, 255, 0.1);
 
     position: relative;
 }

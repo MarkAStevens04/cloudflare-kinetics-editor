@@ -7,6 +7,8 @@ import classnames from "classnames";
 type TooltipRootProps = React.PropsWithChildren<{ className?: string } & React.ComponentPropsWithoutRef<typeof Tooltip.Root>>;
 type TooltipContentProps = React.PropsWithChildren<{ className?: string } & React.ComponentPropsWithoutRef<typeof Tooltip.Content>>;
 type TooltipTriggerProps = React.PropsWithChildren<{ className?: string } & React.ComponentPropsWithoutRef<typeof Tooltip.Trigger>>;
+type TextTooltipProps = {text: React.ReactNode; side: 'top' | 'right' | 'bottom' | 'left'} & React.ComponentPropsWithoutRef<typeof Tooltip.Root>;
+
 
 const TooltipRoot = React.forwardRef<HTMLDivElement, TooltipRootProps>(
 // const TooltipRoot = React.forwardRef(
@@ -59,4 +61,15 @@ const TooltipTrigger = React.forwardRef<HTMLDivElement, TooltipTriggerProps>(
 	},
 );
 
-export { TooltipRoot, TooltipContent, TooltipTrigger };
+const TextTooltip = React.forwardRef<HTMLDivElement, TextTooltipProps>(
+	({ text, side = 'top', children, ...props }) => {
+		return (
+			<TooltipRoot {...props} >
+				<TooltipTrigger>{children}</TooltipTrigger>
+				<TooltipContent side={side}>{text}</TooltipContent>
+			</TooltipRoot>
+		);
+	},
+); 
+
+export { TooltipRoot, TooltipContent, TooltipTrigger, TextTooltip };
