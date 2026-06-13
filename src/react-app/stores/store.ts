@@ -1008,13 +1008,98 @@ async function performUniprotSearch(query: string, signal?: AbortSignal): Promis
   console.log('result: ', json);
 
   // Parse the JSON into `UniprotResultType[]` and return.
-  return (json.results.map((r: any) => ({
+  const results = json.results.map((r: any) => ({
     id: r.primaryAccession,
     alias:
       r.proteinDescription?.recommendedName?.fullName?.value ??
       r.proteinDescription?.submissionNames?.[0]?.fullName?.value ??
       r.primaryAccession,
     organism: r.organism?.scientificName ?? 'Unknown organism',
-    score: -1, // TODO: swap for real match metric
-  })));
+    score: 0, // TODO: swap for real match metric
+  }));
+
+  // Prefilter: skip the live call for accessions SABIO-RK has nothing for.
+  const sabioSet = await getSabioAccessionSet();
+  const prefilterOn = USE_PREFILTER && sabioSet.size > 0;
+
+  // Score each result with its SABIO-RK reaction count (bounded concurrency).
+  const scored = await mapWithConcurrency(results, 8, async (item) => {
+    const mightHaveData = !prefilterOn || sabioSet.has(item.id);
+    item.score = mightHaveData ? await getSabioReactionCount(item.id, signal) : 0;
+    return item;
+  });
+
+  // Sort: most reactions -> fewest.
+  scored.sort((a, b) => b.score - a.score);
+  return scored;
+
+}
+
+
+
+
+
+
+// ------------------- Chat generated Sabio-RK search ------------------------
+const SABIO_BASE = 'https://sabiork.h-its.org/sabioRestWebServices';
+// If browser calls fail with CORS errors, point this at a Cloudflare Worker
+// that proxies to SABIO-RK (and cache there). See note below.
+
+const USE_PREFILTER = true; // set false to query every accession directly
+
+// Fetch once (cached): every UniProt accession that has ANY data in SABIO-RK.
+// Lets us skip live calls for the majority of proteins with no kinetic data.
+let sabioAccessionSet: Promise<Set<string>> | null = null;
+
+function getSabioAccessionSet(): Promise<Set<string>> {
+  if (!sabioAccessionSet) {
+    sabioAccessionSet = fetch(`${SABIO_BASE}/suggestions/uniprotIDs?format=txt`)
+      .then((r) => (r.ok ? r.text() : ''))
+      .then(
+        (text) =>
+          new Set(text.split('\n').map((s) => s.trim()).filter(Boolean))
+      )
+      .catch(() => new Set<string>()); // on failure: empty -> prefilter disabled
+  }
+  return sabioAccessionSet;
+}
+
+// Count distinct SABIO-RK reactions referencing this UniProt accession.
+async function getSabioReactionCount(
+  accession: string,
+  signal?: AbortSignal
+): Promise<number> {
+  const url =
+    `${SABIO_BASE}/reactions/reactionIDs?q=` +
+    encodeURIComponent(`UniProtKB_AC:${accession}`) +
+    `&format=txt`;
+
+  try {
+    const res = await fetch(url, { signal });
+    if (res.status === 404) return 0; // no matches — a real zero, not an error
+    if (!res.ok) return 0;            // other HTTP error — don't sink the sort
+    const text = await res.text();
+    return text.split('\n').map((s) => s.trim()).filter(Boolean).length;
+  } catch (err) {
+    if ((err as Error).name === 'AbortError') throw err; // let aborts cancel
+    return 0; // a single network hiccup shouldn't zero out everything else
+  }
+}
+
+// Run a task over items with a cap on simultaneous in-flight requests.
+async function mapWithConcurrency<T, R>(
+  items: T[],
+  limit: number,
+  task: (item: T) => Promise<R>
+): Promise<R[]> {
+  const results: R[] = new Array(items.length);
+  let next = 0;
+  async function worker() {
+    while (next < items.length) {
+      const i = next++;
+      results[i] = await task(items[i]);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return results;
 }
