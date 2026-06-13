@@ -8,8 +8,10 @@ import '../styles/Nodes.css'
 import '../styles/radix.css';
 import useStore from '../stores/store';
 
-import { ScrollArea, Collapsible } from 'radix-ui'; // Scroll Area for UniProt search results.
+import { ScrollArea } from 'radix-ui'; // Scroll Area for UniProt search results.
 import { TriangleDownIcon } from "@radix-ui/react-icons";
+import { animated, useSpring } from '@react-spring/web';
+
 
 import { TextTooltip } from './Tooltips'
 
@@ -251,8 +253,20 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
     const uniProtDrawerOpen = useStore((state) => state.uniProtDrawerOpen);
     const setUniProtDrawerOpen = useStore((state) => state.setUniProtDrawerOpen);
 
+    // Animation styling we'll use on opening and closing of the UniProt Search Drawer
+    const [springs, api] = useSpring(() => ({
+        from: { height: 0 },
+    }));
+
     const handleDrawerToggle = () => {
         setUniProtDrawerOpen(!uniProtDrawerOpen);
+
+        // Do animation
+        api.start({
+            from: { height: 0 },
+            to: { height: 200 },
+            reverse: uniProtDrawerOpen,
+        });
     }
 
     const updateUniProtID = useStore((state) => state.setUniProtID);
@@ -290,10 +304,7 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
             
         </div>
 
-            <div style={{margin: '0px 0px 5px 0px'}}>
-                <Collapsible.Root open={uniProtDrawerOpen} onOpenChange={handleDrawerToggle}>
-
-                    <Collapsible.Content className="CollapsibleContent">
+            <animated.div style={{margin: '0px 0px 5px 0px', overflow: 'hidden', ...springs}} >
                     <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
                         <input
                             // className="item species-param-input NodeRowItem"
@@ -336,9 +347,7 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
                         </ScrollArea.Scrollbar>
                         <ScrollArea.Corner className="ScrollAreaCorner" />
                     </ScrollArea.Root>
-                    </Collapsible.Content>
-                </Collapsible.Root>
-            </div>
+            </animated.div>
         </>
     )
 }
