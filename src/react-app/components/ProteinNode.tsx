@@ -25,6 +25,8 @@ type UniprotResultType = {
     alias: string;
     organism: string;
     score: number; // 0-1, Indicates quality of match. Correct organism, # metabolic links, # RELEVANT metabolic links
+
+    onClick: (id: string) => void; // Optional onClick handler for when a search result is clicked, which will set the uniprot ID of the node to the selected result's ID.
 }
 
 export type AppNode = ProteinNodeType;
@@ -129,7 +131,7 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
                 </div>
 
                 <hr />
-                <UniprotSelector />
+                <UniprotSelector NodeID={id} />
             </div>
         }
         
@@ -235,7 +237,7 @@ function TriangleWithBorder({ sColor, bColor }: { sColor: string; bColor: string
 }
 
 
-function UniprotSelector() {
+function UniprotSelector(NodeID: string) {
 
     const currentQuery = useStore((state) => state.uniProtQuery);
     const updateQuery = useStore((state) => state.setUniProtQuery);
@@ -244,16 +246,40 @@ function UniprotSelector() {
     const searchUniprot = useStore((state) => state.searchUniprot);
     const loading = useStore((state) => state.uniProtLoading);
 
+    const currentUniProtID = useStore((state) => state.species.find(s => s.id === NodeID)?.uniprotID);
+    const updateUniProtID = useStore((state) => state.setUniProtID);
+
     const onSearch = (event: ChangeEvent<HTMLInputElement>) => {
         updateQuery(event.target.value);
         searchUniprot(event.target.value);
     }
+
+    const onUpdateUniProtID = (id: string) => {
+        updateUniProtID(NodeID, id);
+        console.log('Updated UniProt ID for node ', NodeID, ' to ', id);
+    }
     
-    if (loading) {console.log('Loading!');}
 
     return (
         <>
-            UniProt ID:
+
+        <div className="NodeRow">
+                UniProt ID:
+                {/* <input
+                    className="item species-param-input NodeRowItem"
+                    type="text"
+                    defaultValue={data.uniprotID}
+                    onChange={(e) => onUniProtIDChange(e)}
+                    style={{
+                        backgroundColor: 'rgba(255, 255, 255, 1)',
+                        padding: '0px',
+                    }}
+                /> */}
+                {currentUniProtID}
+            
+            
+            </div>
+
             <div style={{margin: '0px 0px 5px 0px'}}>
 
                 <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
@@ -280,8 +306,10 @@ function UniprotSelector() {
 
                             {loading
                                 ? Array.from({ length: 4}).map((_, i) => <UniprotSearchSkeleton key={i} />)
+                                : searchResults.length === 0
+                                    ? <div className="UniprotSearchEmpty"> No results found. <br /> Try another search! </div>
                                 : searchResults.map((result) => (
-                                    <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} />
+                                    <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} onClick={(id) => onUpdateUniProtID(id)} />
                                 ))
                             }
 
@@ -303,7 +331,7 @@ function UniprotSelector() {
 
 
 // Each "chip" inside the UniProt search results.
-function UniprotSearchChip({ id, alias, organism, score }: UniprotResultType) {
+function UniprotSearchChip({ id, alias, organism, score, onClick }: UniprotResultType) {
    
     let ringColor = 'rgba(0, 0, 0, 1)';
     let confidenceText = '';
@@ -313,13 +341,16 @@ function UniprotSearchChip({ id, alias, organism, score }: UniprotResultType) {
     } else if (score > 0.4) {
         ringColor = '#ffa500'; // Orange for medium confidence
         confidenceText = "This node has some connections, but may not match your organism perfectly. We predict this is a MODERATE match for your model.";
-    } else {
+    } else if (score > 0) {
         ringColor = '#e0463e'; // Red for low confidence
         confidenceText = "This node has few connections, and may not match your organism. We predict this is a POOR match for your model.";
+    } else {
+        ringColor = 'rgba(0, 0, 0, 1)'; // Red for low confidence
+        confidenceText = "The relevance of this node is UNKNOWN. We're working on improving this relevance metric!";
     }
 
     return (
-        <div className="UniprotSearchChip" tabIndex={0} >
+        <div className="UniprotSearchChip" tabIndex={0} onClick={() => onClick(id)} >
             
 
             <div className="UniprotChipTop" >

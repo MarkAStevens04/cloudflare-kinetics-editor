@@ -36,13 +36,7 @@ type species = {
   initial: string;
   color: string;
   speciesType: string; // types: enzyme, molecule, custom, (future: DNA, RNA, DNA-Binding Protein, Complex, etc.)
-}
-
-type UniprotResultType = {
-    id: string;
-    alias: string;
-    organism: string;
-    score: number; // 0-1, Indicates quality of match. Correct organism, # metabolic links, # RELEVANT metabolic links
+  uniprotID?: string; // Stores an associated uniprotID (if provided) 
 }
 
 // type reactions = {
@@ -71,6 +65,13 @@ type reactions = {
 
 }
 
+
+type params = {
+  id: string;
+  display: string;
+  val: string;
+}
+
 type errorMSG = {
   message: string;
   full_detail?: string;
@@ -78,11 +79,11 @@ type errorMSG = {
   linked_edges?: string[];
 }
 
-
-type params = {
-  id: string;
-  display: string;
-  val: string;
+type UniprotResultType = {
+    id: string;
+    alias: string;
+    organism: string;
+    score: number; // 0-1, Indicates quality of match. Correct organism, # metabolic links, # RELEVANT metabolic links
 }
 
 const initialSpecies: species[] = [
@@ -172,6 +173,7 @@ type AppState = {
   searchUniprot: (query: string) => void; // For searching uniprot with a given query and getting back a list of results.
   uniProtLoading: boolean; // True if we're currently waiting for results from uniprot, false otherwise.
   uniProtAbortController: AbortController | null; // For cancelling uniprot requests when a new search is initiated.
+  setUniProtID: (NodeID: string, uniprotID: string) => void; // For setting the uniprot ID of a given species when a uniprot search result is selected.
 
   feedbackOpen: boolean;
   setFeedbackOpen: (open: boolean) => void;
@@ -797,6 +799,11 @@ onEdgesChange: (changes) => {
       }
     },
 
+    // Assign the uniprot ID to the given species
+    setUniProtID: (NodeID: string, uniprotID: string) => set((store) => ({
+      species: store.species.map((s) => s.id === NodeID ? { ...s, uniprotID } : s),
+    })),
+
 
     // Update what edge we're hovering over (if any)
     edgeHovering: false,
@@ -973,7 +980,7 @@ async function performUniprotSearch(query: string, signal?: AbortSignal): Promis
   // Perform the fetch
   const res = await fetch(
         `https://rest.uniprot.org/uniprotkb/search?query=${encodeURIComponent(query)}` +
-        `&format=json&fields=accession,protein_name,organism_name&size=10`,
+        `&format=json&fields=accession,protein_name,organism_name&size=100`,
         { signal }
     );
 
@@ -992,6 +999,6 @@ async function performUniprotSearch(query: string, signal?: AbortSignal): Promis
       r.proteinDescription?.submissionNames?.[0]?.fullName?.value ??
       r.primaryAccession,
     organism: r.organism?.scientificName ?? 'Unknown organism',
-    score: 0.5, // TODO: swap for real match metric
+    score: -1, // TODO: swap for real match metric
   })));
 }
