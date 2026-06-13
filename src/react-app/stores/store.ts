@@ -206,7 +206,7 @@ const useStore = create<AppState>((set, get) => ({
     tempParamValue: '',
     uniProtQuery: '',
     uniProtResults: [],
-    uniProtLoading: true,
+    uniProtLoading: false,
 
     focusedTarget: null,
     setFocusedTarget: (target) => set({ focusedTarget: target }),
@@ -767,10 +767,31 @@ onEdgesChange: (changes) => {
 
     // Changes our temporary uniprot query
     setUniProtQuery: (query: string) => set({ uniProtQuery: query }),
-    searchUniprot: (query: string) => {
-      const uniProtResults = performUniprotSearch(query);
-      set({ uniProtResults: uniProtResults }); // Clear previous results
+
+    // Perform our uniprot search
+    searchUniprot: async (query: string) => {
+
+      // Check for empty query
+      if (!query || query.trim() === '') { // If query is empty, don't search and just clear results
+        set({ uniProtResults: [], uniProtLoading: false }); // Clear previous results and set loading to false
+        return;
+      }
+
+      // Let us know we're loading
+      set({ uniProtLoading: true }); // Set loading to true while we fetch results
+
+      // Try to perform our actual search!
+      try {
+        const results = await performUniprotSearch(query);
+        set({ uniProtResults: results, uniProtLoading: false }); // Clear previous results and set loading to false
+
+      } catch {
+        // If our actual search fails...
+
+        set({ uniProtResults: [], uniProtLoading: false });
+      }
     },
+
 
     // Update what edge we're hovering over (if any)
     edgeHovering: false,
@@ -941,17 +962,30 @@ function numberToLetters(num: number) {
     return String(num).split('').map((digit) => String.fromCharCode(97 + Number(digit))).join('');
 }
 
-function performUniprotSearch(query: string) {
-  // Placeholder function to simulate search results based on query.
-      const searchResults = [
-              { id: "AAABBB", alias: "ULTRA SUPER DUPER LONG NAME", organism: "ULTRA SUPER DUPER LONG NAME IN THE ORGANISM FIELD WHICH IS SOMEHOW EVEN LONGER THAN THE FIRST", score: 0.97 },
-              { id: "P00724", alias: "Invertase", organism: "Saccharomyces cerevisiae", score: 0.97 },
-              { id: "P04807", alias: "Hexokinase-2", organism: "Saccharomyces cerevisiae", score: 0.81 },
-              { id: "P42212", alias: "Green fluorescent protein", organism: "Aequorea victoria", score: 0.63 },
-              { id: "P69905", alias: "Hemoglobin subunit alpha", organism: "Homo sapiens", score: 0.52 },
-              { id: "P00722", alias: "Beta-galactosidase", organism: "Escherichia coli", score: 0.34 },
-              { id: "P02144", alias: "Myoglobin", organism: "Homo sapiens", score: 0.28 },
-          ];
+// Actually PERFORM our uniprot search!
+async function performUniprotSearch(query: string): Promise<UniprotResultType[]> {
 
-      return searchResults;
+  // Perform the fetch
+  const res = await fetch(
+        `https://rest.uniprot.org/uniprotkb/search?query=${encodeURIComponent(query)}` +
+        `&format=json&fields=accession,protein_name,organism_name&size=10`
+    );
+
+  
+
+  // Extract the JSON from the response
+  const json = await res.json();
+
+  console.log('result: ', json);
+
+  // Parse the JSON into `UniprotResultType[]` and return.
+  return (json.results.map((r: any) => ({
+    id: r.primaryAccession,
+    alias:
+      r.proteinDescription?.recommendedName?.fullName?.value ??
+      r.proteinDescription?.submissionNames?.[0]?.fullName?.value ??
+      r.primaryAccession,
+    organism: r.organism?.scientificName ?? 'Unknown organism',
+    score: 0.5, // TODO: swap for real match metric
+  })));
 }
