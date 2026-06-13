@@ -206,7 +206,7 @@ const useStore = create<AppState>((set, get) => ({
     tempParamValue: '',
     uniProtQuery: '',
     uniProtResults: [],
-    uniProtLoading: false,
+    uniProtLoading: true,
 
     focusedTarget: null,
     setFocusedTarget: (target) => set({ focusedTarget: target }),

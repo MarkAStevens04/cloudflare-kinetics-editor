@@ -242,13 +242,14 @@ function UniprotSelector() {
 
     const searchResults = useStore((state) => state.uniProtResults);
     const searchUniprot = useStore((state) => state.searchUniprot);
+    const loading = useStore((state) => state.uniProtLoading);
 
     const onSearch = (event: ChangeEvent<HTMLInputElement>) => {
         updateQuery(event.target.value);
         searchUniprot(event.target.value);
     }
     
-    if (searchResults.length === 0) {console.log('No results found!');}
+    if (loading) {console.log('Loading!');}
 
     return (
         <>
@@ -277,9 +278,12 @@ function UniprotSelector() {
                                 ))
                             )} */}
 
-                            {searchResults.map((result) => (
+                            {loading
+                                ? Array.from({ length: 4}).map((_, i) => <UniprotSearchSkeleton key={i} />)
+                                : searchResults.map((result) => (
                                     <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} />
-                            ))}
+                                ))
+                            }
 
                         </div>
                     </ScrollArea.Viewport>
@@ -340,4 +344,24 @@ function UniprotSearchChip({ id, alias, organism, score }: UniprotResultType) {
             </div>
         </div>
     );
+}
+
+function UniprotSearchSkeleton() {
+
+    const x = "Fake text";
+    return (
+        <>
+            <div className="UniprotSearchChip" >
+                <div className="UniprotChipTop" >
+                    <div className="UniprotChipName UniprotSkeleton"> {x} </div>
+                    <div className="UniprotRing UniprotSkeleton" style={{borderColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '50%',}} />
+                </div>
+                <div className="UniprotChipBottom" >
+                    <div className="UniprotChipId UniprotSkeleton"> {x.substring(0, 6)} </div> 
+                    <div className="UniprotChipOrganism UniprotSkeleton"> {x} </div>
+                </div>
+            </div>
+        
+        </>
+    )
 }

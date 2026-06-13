@@ -240,22 +240,17 @@ hr {
     width: 100%;
 }
 
-.SkeletonChip {
-    /* width: 100%; */
-    min-width: 0px;
-    
-    margin: 4px 0px; /* Little space between each search result */
+.UniprotSkeleton {
+    pointer-events: none;
 
-    /* background: rgba(0, 0, 0, 0.2); */
+    color: transparent;
+    margin: 0px;
+
     background: linear-gradient(90deg, #e8e8e8 25%, #f4f4f4 37%, #e8e8e8 63%);
-    border: 2px solid transparent;
-    border-radius: 4px;
-    padding: 2px 2px;
-
-    cursor: pointer;
-    outline: none;
-
+    background-size: 400% 100%;
     animation: skeleton-shimmer 1.4s ease infinite;
+    border-radius: 4px;
+    
 }
 
 @keyframes skeleton-shimmer {
