@@ -14,6 +14,7 @@ import { animated, useSpring } from '@react-spring/web';
 
 
 import { TextTooltip } from './Tooltips'
+import { Collapsible } from './Collapsible';
 
 
 type ProteinNodeType = Node<{ 
@@ -242,6 +243,129 @@ function TriangleWithBorder({ sColor, bColor }: { sColor: string; bColor: string
 }
 
 
+// function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; currentUniProtID?: string }) {
+
+//     const currentQuery = useStore((state) => state.uniProtQuery);
+//     const updateQuery = useStore((state) => state.setUniProtQuery);
+
+//     const searchResults = useStore((state) => state.uniProtResults);
+//     const searchUniprot = useStore((state) => state.searchUniprot);
+//     const loading = useStore((state) => state.uniProtLoading);
+//     const uniProtDrawerOpen = useStore((state) => state.uniProtDrawerOpen);
+//     const setUniProtDrawerOpen = useStore((state) => state.setUniProtDrawerOpen);
+
+//     // Animation styling we'll use on opening and closing of the UniProt Search Drawer
+//     const [springs, api] = useSpring(() => ({
+//         from: { height: 0 },
+//     }));
+
+//     // Animation styling we'll use for rotating the arrow
+//     const [rotateSpring, rotateApi] = useSpring(() => ({
+//             from: { rotate: 0 },
+//         }));
+
+//     const handleDrawerToggle = () => {
+//         setUniProtDrawerOpen(!uniProtDrawerOpen);
+
+//         // Do animation
+//         api.start({
+//             from: { height: 0 },
+//             to: { height: 200 },
+//             reverse: uniProtDrawerOpen,
+//         });
+
+//         // Do rotation animation
+//         rotateApi.start({
+//             from: { rotate: 0 },
+//             to: { rotate: 180 },
+//             reverse: uniProtDrawerOpen,
+//         });
+//     }
+
+//     const updateUniProtID = useStore((state) => state.setUniProtID);
+
+//     const onSearch = (event: ChangeEvent<HTMLInputElement>) => {
+//         updateQuery(event.target.value);
+//         searchUniprot(event.target.value);
+//     }
+
+//     const onUpdateUniProtID = (id: string) => {
+//         updateUniProtID(NodeID, id);
+//     }
+
+
+//     return (
+//         <>
+
+//         <div className="NodeRow">
+//             <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '200px'}}>
+//                 <div>UniProt ID:</div>
+//                 <a
+//                     className="NodeRowLink"
+//                     href={`https://www.uniprot.org/uniprotkb/${currentUniProtID}`}
+//                     target="_blank"
+//                     rel="noopener noreferrer"
+//                     onClick={(e) => e.stopPropagation()}
+//                 >
+//                     {currentUniProtID ? currentUniProtID : "None"}
+//                 </a>
+//             </div>
+//             <animated.div style={{...rotateSpring}}>
+//                 <TriangleDownIcon onClick={handleDrawerToggle} />
+//             </animated.div>
+            
+            
+//         </div>
+
+//             <animated.div style={{margin: '0px 0px 5px 0px', overflow: 'hidden', ...springs}} >
+//                     <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
+//                         <input
+//                             // className="item species-param-input NodeRowItem"
+//                             className="ScrollSearchBar"
+//                             placeholder={`Enter UniProt ID, Name, Organism, etc.`}
+//                             value={currentQuery}
+//                             onChange={(e) => onSearch(e)}
+//                         />
+
+//                         <ScrollArea.Viewport className="ScrollAreaViewport">
+//                             <div className=" UniprotSearchContainer" >
+//                                 {/* {searchResults.length === 0 ? (
+//                                     <div className="UniprotSearchEmpty">
+//                                         Try entering a search term above!
+//                                     </div>
+                                    
+//                                 ) : (
+//                                     searchResults.map((result) => (
+//                                         <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} />
+//                                     ))
+//                                 )} */}
+
+//                                 {loading
+//                                     ? Array.from({ length: 4}).map((_, i) => <UniprotSearchSkeleton key={i} />)
+//                                     : searchResults.length === 0
+//                                         ? <div className="UniprotSearchEmpty"> No results found. <br /> Try another search! </div>
+//                                     : searchResults.map((result) => (
+//                                         <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} onClick={(id) => onUpdateUniProtID(id)} />
+//                                     ))
+//                                 }
+
+//                             </div>
+//                         </ScrollArea.Viewport>
+//                         <ScrollArea.Scrollbar
+//                             className="ScrollAreaScrollbar"
+//                             orientation="vertical"
+//                         >
+//                             {/* "Thumb" is the little dark gray part on the scrollbar! */}
+//                             <ScrollArea.Thumb className="ScrollAreaThumb" />
+//                         </ScrollArea.Scrollbar>
+//                         <ScrollArea.Corner className="ScrollAreaCorner" />
+//                     </ScrollArea.Root>
+//             </animated.div>
+//         </>
+//     )
+// }
+
+
 function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; currentUniProtID?: string }) {
 
     const currentQuery = useStore((state) => state.uniProtQuery);
@@ -258,6 +382,11 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
         from: { height: 0 },
     }));
 
+    // Animation styling we'll use for rotating the arrow
+    const [rotateSpring, rotateApi] = useSpring(() => ({
+            from: { rotate: 0 },
+        }));
+
     const handleDrawerToggle = () => {
         setUniProtDrawerOpen(!uniProtDrawerOpen);
 
@@ -265,6 +394,13 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
         api.start({
             from: { height: 0 },
             to: { height: 200 },
+            reverse: uniProtDrawerOpen,
+        });
+
+        // Do rotation animation
+        rotateApi.start({
+            from: { rotate: 0 },
+            to: { rotate: 180 },
             reverse: uniProtDrawerOpen,
         });
     }
@@ -279,9 +415,6 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
     const onUpdateUniProtID = (id: string) => {
         updateUniProtID(NodeID, id);
     }
-
-    // For setting the rotation of the UniProt Drawer Triangle
-    const rotationState = uniProtDrawerOpen ? 'rotate(180deg)' : 'rotate(0deg)';
 
 
     return (
@@ -300,7 +433,10 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
                     {currentUniProtID ? currentUniProtID : "None"}
                 </a>
             </div>
-            <TriangleDownIcon onClick={handleDrawerToggle} style={{transform: rotationState}} />
+            <animated.div style={{...rotateSpring}}>
+                <TriangleDownIcon onClick={handleDrawerToggle} />
+            </animated.div>
+            
             
         </div>
 
@@ -348,9 +484,12 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
                         <ScrollArea.Corner className="ScrollAreaCorner" />
                     </ScrollArea.Root>
             </animated.div>
+
+            <Collapsible LeftText="More Info" RightText="" open={uniProtDrawerOpen} setOpen={setUniProtDrawerOpen} > <p> Hello world! </p> </Collapsible>
         </>
     )
 }
+
 
 
 // Each "chip" inside the UniProt search results.
