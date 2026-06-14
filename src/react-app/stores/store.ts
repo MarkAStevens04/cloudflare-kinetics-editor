@@ -37,6 +37,7 @@ type species = {
   color: string;
   speciesType: string; // types: enzyme, molecule, custom, (future: DNA, RNA, DNA-Binding Protein, Complex, etc.)
   uniprotID?: string; // Stores an associated uniprotID (if provided) 
+  chebiID?: string; // Stores an associated chebiID (if provided)
 }
 
 // type reactions = {
@@ -1015,7 +1016,7 @@ async function performUniprotSearch(query: string, signal?: AbortSignal): Promis
       r.proteinDescription?.submissionNames?.[0]?.fullName?.value ??
       r.primaryAccession,
     organism: r.organism?.scientificName ?? 'Unknown organism',
-    score: -1, 
+    score: -1,
   }));
 
   const scored = await mapWithConcurrency(results, 8, async (item: typeof results[0]) => {
