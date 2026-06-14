@@ -996,7 +996,7 @@ async function performUniprotSearch(query: string, signal?: AbortSignal): Promis
   // Perform the fetch
   const res = await fetch(
         `https://rest.uniprot.org/uniprotkb/search?query=${encodeURIComponent(query)}` +
-        `&format=json&fields=accession,protein_name,organism_name&size=100`,
+        `&format=json&fields=accession,protein_name,organism_name&size=500`,
         { signal }
     );
 
@@ -1015,21 +1015,16 @@ async function performUniprotSearch(query: string, signal?: AbortSignal): Promis
       r.proteinDescription?.submissionNames?.[0]?.fullName?.value ??
       r.primaryAccession,
     organism: r.organism?.scientificName ?? 'Unknown organism',
-    score: 0, // TODO: swap for real match metric
+    score: -1, 
   }));
 
-  // Prefilter: skip the live call for accessions SABIO-RK has nothing for.
-  const sabioSet = await getSabioAccessionSet();
-  const prefilterOn = USE_PREFILTER && sabioSet.size > 0;
-
-  // Score each result with its SABIO-RK reaction count (bounded concurrency).
-  const scored = await mapWithConcurrency(results, 8, async (item) => {
-    const mightHaveData = !prefilterOn || sabioSet.has(item.id);
-    item.score = mightHaveData ? await getSabioReactionCount(item.id, signal) : 0;
+  const scored = await mapWithConcurrency(results, 8, async (item: typeof results[0]) => {
+    item.score = await getSabioReactionCount(item.id, signal);
+    console.log(`SABIO count for ${item.id}: ${item.score}`);
     return item;
   });
 
-  // Sort: most reactions -> fewest.
+
   scored.sort((a, b) => b.score - a.score);
   return scored;
 
@@ -1037,54 +1032,47 @@ async function performUniprotSearch(query: string, signal?: AbortSignal): Promis
 
 
 
-
-
-
 // ------------------- Chat generated Sabio-RK search ------------------------
-const SABIO_BASE = 'https://sabiork.h-its.org/sabioRestWebServices';
+const SABIO_BASE = '/sabio';
 // If browser calls fail with CORS errors, point this at a Cloudflare Worker
 // that proxies to SABIO-RK (and cache there). See note below.
 
-const USE_PREFILTER = true; // set false to query every accession directly
+const reactionCountCache = new Map<string, number>();
 
-// Fetch once (cached): every UniProt accession that has ANY data in SABIO-RK.
-// Lets us skip live calls for the majority of proteins with no kinetic data.
-let sabioAccessionSet: Promise<Set<string>> | null = null;
-
-function getSabioAccessionSet(): Promise<Set<string>> {
-  if (!sabioAccessionSet) {
-    sabioAccessionSet = fetch(`${SABIO_BASE}/suggestions/uniprotIDs?format=txt`)
-      .then((r) => (r.ok ? r.text() : ''))
-      .then(
-        (text) =>
-          new Set(text.split('\n').map((s) => s.trim()).filter(Boolean))
-      )
-      .catch(() => new Set<string>()); // on failure: empty -> prefilter disabled
-  }
-  return sabioAccessionSet;
-}
-
-// Count distinct SABIO-RK reactions referencing this UniProt accession.
 async function getSabioReactionCount(
   accession: string,
   signal?: AbortSignal
 ): Promise<number> {
+  const cached = reactionCountCache.get(accession);
+  if (cached !== undefined) return cached;
+
   const url =
     `${SABIO_BASE}/reactions/reactionIDs?q=` +
     encodeURIComponent(`UniProtKB_AC:${accession}`) +
     `&format=txt`;
 
+  let count = 0;
   try {
     const res = await fetch(url, { signal });
-    if (res.status === 404) return 0; // no matches — a real zero, not an error
-    if (!res.ok) return 0;            // other HTTP error — don't sink the sort
-    const text = await res.text();
-    return text.split('\n').map((s) => s.trim()).filter(Boolean).length;
+    if (res.ok) {
+      const text = await res.text();
+      // SABIO can return 200 with an error string in the body, so don't trust
+      // a raw line count — only tally lines that are real (numeric) reaction IDs.
+      count = text
+        .split('\n')
+        .map((s) => s.trim())
+        .filter((s) => /^\d+$/.test(s)).length;
+    }
+    // 404 (no matches) or other status -> count stays 0
   } catch (err) {
-    if ((err as Error).name === 'AbortError') throw err; // let aborts cancel
-    return 0; // a single network hiccup shouldn't zero out everything else
+    if ((err as Error).name === 'AbortError') throw err;
+    return 0; // transient failure: don't cache it
   }
+
+  reactionCountCache.set(accession, count);
+  return count;
 }
+
 
 // Run a task over items with a cap on simultaneous in-flight requests.
 async function mapWithConcurrency<T, R>(

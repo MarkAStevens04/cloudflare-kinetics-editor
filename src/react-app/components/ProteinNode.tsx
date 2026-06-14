@@ -343,7 +343,7 @@ function UniprotSearchChip({ id, alias, organism, score, selected, onClick }: Un
     } else if (score > 0.4) {
         ringColor = '#ffa500'; // Orange for medium confidence
         confidenceText = "This node has some connections, but may not match your organism perfectly. We predict this is a MODERATE match for your model.";
-    } else if (score > 0) {
+    } else if (score >= 0) {
         ringColor = '#e0463e'; // Red for low confidence
         confidenceText = "This node has few connections, and may not match your organism. We predict this is a POOR match for your model.";
     } else {
