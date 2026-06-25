@@ -1,19 +1,27 @@
 Closes {LINK TO GH ISSUE}
 
-## ✅ PR Type
-What kind of change does this PR introduce?
+## 👋 Before you open this PR
 
-- [ ] Bugfix
-- [ ] Feature
-- [ ] Code style update (formatting, local variables)
-- [ ] Refactoring (no functional changes, no api changes)
-- [ ] Documentation content changes
-- [ ] Tests
-- [ ] Other
+Hi there, thanks SO MUCH for contributing!! 💛 This tempalte helps us review your work quickly and give good feedback. It looks longer than it is, most PRs only need a few sections.
+
+You own every line in this PR as if you typed it by hand. LLMs are allowed here, they're helpful tools, but the human opening the PR is the one we'll be talking to in review, so we just want to make sure that the person understands the code. The more an LLM did, the more we ask you to show that understanding. That's it. No gotchas.
+
+How to contribute: https://github.com/MarkAStevens04/cloudflare-kinetics-editor/blob/main/CONTRIBUTING.md
+
+## Section A - Description
+
+🚨 This section **MUST** be written by a human. 🚨
+
+This section describes how to fill out this pull request template. LLMs have changed the way we code for the better, but they've also increased the amount of overhead for maintainers. To help mitigate this overhead and increase the quality of our code, we ask that all pull requests follow a tiered approach. Fill out the sections based on how much work you've completed versus how much was completed by an LLM:
+
+[ ] - Fully Human -> Section A
+
+[ ] - LLM consulted, *all* code human typed -> Sections A, B
+
+[ ] - LLM directly wrote any code -> Sections A, B, C
 
 
-
-## 🤔 Description
+## 🤔 Section A - Description
 
 A clear and concise description of the PR.
 
@@ -26,26 +34,17 @@ Use this section for review hints, explanations or discussion points/todos.
 How to contribute: https://github.com/MarkAStevens04/cloudflare-kinetics-editor/blob/main/CONTRIBUTING.md
 
 
-## 🤗 Message to Feedback Givers
+## 🤗 Section B - Disclosure
 
-Users took the time to tell us what could be better, and this is our chance to close the loop.
+What code portions were LLM assisted / LLM written? 
 
-When this PR is merged, the message below will be automatically sent to everyone who contributed to the GitHub Issue(s) addressed by this PR.
+What exactly does this code do? Walk through your code, step-by-step. Make sure to add plenty of inline code comments to support your description here!
 
-Please write a short, friendly note that explains:
-- What you implemented
-- Any important details they should know
-- How their feedback helped shape the update
+## 🤖 Section C - Explanation
 
-Keep it human, specific, and appreciative ✨
+To alleviate the burden off of maintainers, we'll ask that YOU review the code written by an LLM **before** we do! This helps remove some of the pressure off of maintainers, and is meant to improve the overall quality of contributions to our repo. This isn't meant to discourage LLM contributions, but to encourage intentional and high-quality design decisions. 
 
-### Message that will be sent:
-
-Thank you SO MUCH for sharing your feedback with us!! Your suggestion helped guide our project, and we've just shipped an update to address it. Here's a note the developer left for you:
-
-> YOUR MESSAGE HERE
-
-If there's something still missing, let us know HERE, and we'll get right on it!
+Please explain **why** your code is written the way it is. What design choices were made, and why not alternatives? How does your code fit into the existing structure of the code, and where does it diverge? Go through every line changed, and justify what it does. 
 
 ## 📜 BioBuilder Contributor License Agreement
 
