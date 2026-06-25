@@ -24,7 +24,7 @@ Use this section for review hints, explanations or discussion points/todos.
 
 *(Everyone fills this out. It's the fastest way for us to trust your change!)*
 
-Show us it works! Paste a screenshot, test results, etc. 
+Show us it works! Paste a screenshot, test results, etc. Even just a list of steps you did to make sure your code is working! 
 
 [ ] I ran this code locally and it does what the description says
 
@@ -32,8 +32,11 @@ Show us it works! Paste a screenshot, test results, etc.
 *(Everyone does this, a quick 30 second pass before you submit)*
 
 - [ ] This PR is **one logical change**. (Big or architectural? Let's chat in an issue first before writing code 🙏)
-- [ ] No leftover dead code or debugging prints
+- [ ] No leftover dead code, debugging prints, or unused imports
+- [ ] Every import / API / dependency I reference actually exists and is already available
 - [ ] Comments explain *why* not what, and the style matches the surrounding file.
+- [ ] I used existing functions and components where possible.
+- [ ] My style matches the surrounding code to the best of my ability
 - [ ] I could re-derive any non-obvious line if you asked me to
 
 ## 🤖 Used an LLM? 
