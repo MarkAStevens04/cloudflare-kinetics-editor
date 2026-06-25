@@ -16,7 +16,7 @@ import {
 
 import { convertLatexToAsciiMath } from "mathlive";
 
-import { type AppNode } from './ProteinNode';
+import { type AppNode } from '../components/ProteinNode';
 // import { type AppEdge } from './RxnEdge';
 import { 
   // MichaelisMentenEdge, 
@@ -27,7 +27,7 @@ import {
   // type RevMAEdgeType,
   // type MAEdgeType,
   type AppEdge,
-} from './edges'
+} from '../components/edges'
 
 
 type species = {
@@ -222,16 +222,20 @@ const useStore = create<AppState>((set, get) => ({
 
     // Default ReactFlow functions to update visualNode and visualEdge attributes
     onNodesChange: (changes) => {
-      set({
-        visualNodes: applyNodeChanges(changes, get().visualNodes),
-      });
-    },
+  set({
+    visualNodes: applyNodeChanges(changes, get().visualNodes),
+    // Mark as stale if simulation already completed
+    simulationStatus: get().simulationStatus === 2 ? 4 : get().simulationStatus,
+  });
+},
 
-    onEdgesChange: (changes) => {
-      set({
-        visualEdges: applyEdgeChanges(changes, get().visualEdges),
-      });
-    },
+onEdgesChange: (changes) => {
+  set({
+    visualEdges: applyEdgeChanges(changes, get().visualEdges),
+    // Mark as stale if simulation already completed
+    simulationStatus: get().simulationStatus === 2 ? 4 : get().simulationStatus,
+  });
+},
 
     setNodes: (nodes) => set({ visualNodes: nodes }),
 

@@ -1,23 +1,16 @@
-// This is the Drawer that pops out when a reaction is selected!
+// When a user clicks on a reaction edge, this is the drawer that pops out!
 
-// Arrow function () => handleClick(0) kind of stores a function call!
-  // It says "Hey, I know you're expecting a function here. I have the function
-  // that I want you to call, and I can run it myself. So just let me know when you want
-  // to run that function, and I'll do it for you." The parent board is taking over this
-  // child's job because the parent knows the right parameters to give it, wheras the
-  // child wouldn't be able to provide ANY parameters to the function.
-// import React from 'react';
 import { ChangeEvent, useRef, useEffect, useMemo } from 'react';
 import { animated, useTransition } from '@react-spring/web';
 
-import './index.css';
-import './radix.css';
-import './styles/Drawer.css';
+import '../styles/index.css';
+import '../styles/radix.css';
+import '../styles/Drawer.css';
 
 // For math live input
 import "mathlive";
 import { MathfieldElement } from 'mathlive';
-import useStore from './store';
+import useStore from '../stores/store';
 
 // import * as React from "react";
 import { 

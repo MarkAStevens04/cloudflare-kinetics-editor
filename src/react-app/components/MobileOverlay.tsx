@@ -1,20 +1,12 @@
-import demoVideo from './assets/BioBuilder_Demo.mp4'
-import './radix.css';
-import './styles/Banner.css';
-import './styles/Mobile.css';
+// This is the "Mobile Overlay." When users log on from Mobile, they see
+// this overlay instead of the app!
 
-
-// import {
-//      TooltipRoot, 
-//      TooltipContent, 
-//      TooltipTrigger 
-// } from './Tooltips'
-// import { Tooltip } from "radix-ui";
+import demoVideo from '../assets/BioBuilder_Demo.mp4'
+import '../styles/radix.css';
+import '../styles/Banner.css';
+import '../styles/Mobile.css';
 
 import { GitHubLogoIcon, DiscordLogoIcon, VideoIcon } from "@radix-ui/react-icons";
-// import useThemeStore from './ThemeStore';
-
-
 
 const shareDetails = {
     title: 'BioBuilder',
@@ -23,17 +15,15 @@ const shareDetails = {
 }
 
 
-
-
-
 export default function MobileOverlay() {
   return (
     <>
     <div className="MobileOverlay">
     
-        {/* <Banner /> */}
+        {/* Tells users to log on from Desktop */}
         <Notice />
 
+        {/* Title with social buttons */}
         <div className="MobileSection">
             <div className="MobileTitle">BIOBUILDER</div>
             <div className="MobileSubtitle">
@@ -47,6 +37,7 @@ export default function MobileOverlay() {
         </div>
 
 
+        {/* Info cards about the app and its features */}
         <div className="MobileSection">
             <div className="BulletSection"><b>No install, no setup.</b> <p>Open a tab and you’re modeling. No COPASI download, no Python environment.</p></div>
             <div className="BulletSection"><b>Draw the network, get the math for free.</b> <p>Drop in species and reactions on a visual canvas. BioBuilder builds the ODE system and simulates for you.</p></div>
@@ -55,49 +46,29 @@ export default function MobileOverlay() {
         </div>
 
 
+        {/* Demo Video */}
         <div className="MobileSection">
             <div className="MobileVideoContainer">
-                <video autoPlay muted loop width="100%" height="auto" style={{position: 'absolute', top: '-6.5%', left: '0.2%'}}>
+                <video autoPlay muted loop playsInline width="100%" height="auto" style={{position: 'absolute', top: '-6.5%', left: '0.2%'}}>
                 <source src={demoVideo} type="video/mp4" /> 
                 Your browser doesn't support video playback.
                 </video>
-
-                {/* <iframe 
-            width="560" 
-            height="315" 
-            src="https://www.youtube.com/embed/5qKTP-GZtws?si=aFZ7Hk8uCyM2TroS&amp;controls=0" 
-            title="YouTube video player" 
-            frameBorder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-            style={{display: 'block'}}
-          >
-          </iframe> */}
-
-
-                {/* <video autoPlay muted loop width="100%" height="auto" style={{position: 'absolute', top: '-6.5%', left: '0.2%'}}>
-                <source src="https://biobuilder.app/BioBuilder%20Demo%20v2.mp4" type="video/mp4" /> 
-                Your browser doesn't support video playback.
-                </video> */}
             </div>
         </div>
 
 
-
-
+        {/* Call to action buttons (copy to clipboard, share, etc.) */}
         <div className="MobileSection" style={{margin: '0px 0px', display: 'flex', flexDirection: 'row', justifyContent: 'right', width: '100%'}} >
             <button className="MobileActionButton" style={{backgroundColor: '#4ECDC4'}} onClick={() => navigator.clipboard.writeText('https://biobuilder.app')} >Copy to Clipboard</button>
             <button className="MobileActionButton" style={{backgroundColor: '#3a86ff'}} onClick={handleShare} >Share Link</button>
         </div>
           
     </div>
-    
-    
     </>
 
   );
 }
+
 
 // Little banner at top that's giving a notice to the user
 function Notice() {
@@ -111,6 +82,7 @@ function Notice() {
         </>
     );
 }
+
 
 // What happens when you click the share link button
 const handleShare = async () => {

@@ -4,7 +4,7 @@ import {
 } from '@react-spring/web';
 
 import { useEffect } from 'react';
-import useStore from './store';
+import useStore from '../stores/store';
 
 declare global {
     interface Window {

@@ -1,3 +1,6 @@
+// This is the "Main" Component. It's responsible for holding the ReactFlow Canvas, 
+// the Banner at the top, Simulate Button, add nodes buttons, etc.
+
 import { 
 	ReactFlow, 
 	Background,
@@ -7,8 +10,8 @@ import {
  } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
-import './index.css';
-import './radix.css';
+import './styles/index.css';
+import './styles/radix.css';
 import './styles/Banner.css';
 
 
@@ -28,30 +31,30 @@ FullStory('trackEvent', {
 })
 
 // Initialize Protein and Reaction types
-import ProteinNode, { type AppNode } from './ProteinNode';
-import RxnDrawer from './Drawer';
-import SimulationDrawer from './SimulationDrawer';
-import FeedbackDrawer from './FeedbackDrawer';
-import MobileOverlay from './Mobile';
+import ProteinNode, { type AppNode } from './components/ProteinNode';
+import RxnDrawer from './components/Drawer';
+import SimulationDrawer from './components/SimulationDrawer';
+import FeedbackDrawer from './components/FeedbackDrawer';
+import MobileOverlay from './components/MobileOverlay';
 
 import { isMobile } from 'react-device-detect';
 
 import { 
   edgeTypes,
   type AppEdge,
-} from './edges'
+} from './components/edges'
 
 import {
      TooltipRoot, 
      TooltipContent, 
      TooltipTrigger 
-} from './Tooltips'
+} from './components/Tooltips'
 
 // Stringify TODO: Move this to Drawer instead
 // import { convertLatexToAsciiMath } from "mathlive";
 
-import useStore from './store';
-import useThemeStore from './ThemeStore';
+import useStore from './stores/store';
+import useThemeStore from './stores/ThemeStore';
 import { useShallow } from 'zustand/react/shallow';
 import { useEffect } from 'react';
 
@@ -172,6 +175,7 @@ export default function App() {
 
   // For handling dark mode
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const tutorialPhase = useThemeStore((state) => state.tutorialPhase);
 
   return (
   <>
@@ -256,7 +260,7 @@ export default function App() {
         <TutorialPopup />
 
         <RxnDrawer />
-        <SimulationDrawer />
+        {tutorialPhase !== 0 && <SimulationDrawer />}
         
       
     </div>}
@@ -420,7 +424,7 @@ function FocusController() {
 }
 
 
-// This is a little popup when the user opens BioBuilder for the very first time!
+// Popup for new users!
 // CSS style stored in Banner.css, but can move if we want
 function TutorialPopup() {
   const tutorialPhase = useThemeStore((state) => state.tutorialPhase);
@@ -450,16 +454,19 @@ function TutorialPopup() {
         }}
     />
 
+      {/* Text inside our popup when the user is new! */}
       <div className="TutorialPopup">
-        <Cross1Icon className="TutorialCloseButton" onClick={clickToClose} />
-        
+
+        {/* The very top of the popup. */}
+          
         <div className="TutorialTitle">Hey! Looks like you're new here.</div>
-        <div className="TutorialText">Please watch this quick video explaining how to use the software! I promise, it'll make your life a lot easier.</div>
-      
+        <Cross1Icon className="TutorialCloseButton" onClick={clickToClose} />
+
+        <div className="TutorialText">Please watch this quick tutorial! I promise, it'll make your life easier.</div>
+        
+
         <div className="TutorialVideoContainer">
           <iframe 
-            width="560" 
-            height="315" 
             src="https://www.youtube.com/embed/Lmgdc56ldk8?si=urfDWERmmVXdtRYi" 
             title="YouTube video player" 
             frameBorder="0" 

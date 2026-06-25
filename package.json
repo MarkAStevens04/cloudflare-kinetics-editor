@@ -1,15 +1,10 @@
 {
 	"name": "cloudflare-kinetics-editor",
-	"description": "A template for building a React application with Vite, Hono, and Cloudflare Workers",
-	"cloudflare": {
-		"label": "Vite React Template",
-		"products": [
-			"Workers"
-		],
-		"categories": [],
-		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/532a5378-9717-4964-385b-5fafd2160200/public",
-		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/ec7f4be5-d1d6-4e94-0851-126341745400/preview",
-		"publish": true
+	"description": "BioBuilder — a web-based biochemical kinetics editor and simulator. Frontend (React + Vite + Hono on Cloudflare Workers).",
+	"homepage": "https://biobuilder.app/",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/MarkAStevens04/cloudflare-kinetics-editor.git"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
@@ -20,6 +15,7 @@
 		"@radix-ui/colors": "^3.0.0",
 		"@radix-ui/react-icons": "^1.3.2",
 		"@react-spring/web": "^10.0.3",
+		"@supabase/supabase-js": "^2.108.2",
 		"@xyflow/react": "^12.10.1",
 		"classnames": "^2.5.1",
 		"hono": "^4.12.9",
