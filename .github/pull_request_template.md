@@ -8,43 +8,53 @@ You own every line in this PR as if you typed it by hand. LLMs are allowed here,
 
 How to contribute: https://github.com/MarkAStevens04/cloudflare-kinetics-editor/blob/main/CONTRIBUTING.md
 
-## Section A - Description
-
-🚨 This section **MUST** be written by a human. 🚨
-
-This section describes how to fill out this pull request template. LLMs have changed the way we code for the better, but they've also increased the amount of overhead for maintainers. To help mitigate this overhead and increase the quality of our code, we ask that all pull requests follow a tiered approach. Fill out the sections based on how much work you've completed versus how much was completed by an LLM:
-
-[ ] - Fully Human -> Section A
-
-[ ] - LLM consulted, *all* code human typed -> Sections A, B
-
-[ ] - LLM directly wrote any code -> Sections A, B, C
-
 
 ## 🤔 Section A - Description
+*(Everyone fills this out.)*
 
-A clear and concise description of the PR.
+A clear and concise description of what this PR does.
 
 Use this section for review hints, explanations or discussion points/todos.
 
-- Summary of changes
-- Reasoning
-- Additional context
+- What changed
+- Why
+- Anything reviewers should know (review hints, open questions, TODOs, discussion points, etc.)
 
-How to contribute: https://github.com/MarkAStevens04/cloudflare-kinetics-editor/blob/main/CONTRIBUTING.md
+## ✅ Verification
 
+*(Everyone fills this out. It's the fastest way for us to trust your change!)*
 
-## 🤗 Section B - Disclosure
+Show us it works! Paste a screenshot, test results, etc. 
 
-What code portions were LLM assisted / LLM written? 
+[ ] I ran this code locally and it does what the description says
 
-What exactly does this code do? Walk through your code, step-by-step. Make sure to add plenty of inline code comments to support your description here!
+## 🔎 Quick Self Check
+*(Everyone does this, a quick 30 second pass before you submit)*
 
-## 🤖 Section C - Explanation
+- [ ] This PR is **one logical change**. (Big or architectural? Let's chat in an issue first before writing code 🙏)
+- [ ] No leftover dead code or debugging prints
+- [ ] Comments explain *why* not what, and the style matches the surrounding file.
+- [ ] I could re-derive any non-obvious line if you asked me to
 
-To alleviate the burden off of maintainers, we'll ask that YOU review the code written by an LLM **before** we do! This helps remove some of the pressure off of maintainers, and is meant to improve the overall quality of contributions to our repo. This isn't meant to discourage LLM contributions, but to encourage intentional and high-quality design decisions. 
+## 🤖 Used an LLM? 
+*(Skip this if you wrote everything yourself!)*
 
-Please explain **why** your code is written the way it is. What design choices were made, and why not alternatives? How does your code fit into the existing structure of the code, and where does it diverge? Go through every line changed, and justify what it does. 
+Telling us where you used an LLM isn't a strike against you. It's helpful context, and we appreciate the honesty! 💬
+
+- **Where an LLM helped:** (which files / sections, roughly)
+- **The gist**: in your own words, what does that code do and why did you take this approach over the obvious alternative? 
+
+You don't need to justify every line, just the parts that are complex, risky, or that someone might reasonably question. If a chunk of generated code is doing something non-obvious, walk us through your thinking there. 
+
+## 🔁 When we request changes
+
+We review to make the code better, not to nitpick. We'd also love to help you grow as a contributor! 🌱 When we leave comments:
+
+- **Please reply inline and update *this* PR.** Push new commits to the same branch.
+- **Please don't close this and open a brand-new PR** with regenerated code. We lose the whole conversation that way, and it usually reintroduces the things we just fixed. Iterating in place is faster for both of us.
+
+Thanks again for contributing, we're glad you're here!! 🎉
+
 
 ## 📜 BioBuilder Contributor License Agreement
 
