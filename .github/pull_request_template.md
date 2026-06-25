@@ -2,7 +2,7 @@ Closes {LINK TO GH ISSUE}
 
 ## 👋 Before you open this PR
 
-Hi there, thanks SO MUCH for contributing!! 💛 This tempalte helps us review your work quickly and give good feedback. It looks longer than it is, most PRs only need a few sections.
+Hi there, thanks SO MUCH for contributing!! 💛 This template helps us review your work quickly and give good feedback. It looks longer than it is, most PRs only need a few sections.
 
 You own every line in this PR as if you typed it by hand. LLMs are allowed here, they're helpful tools, but the human opening the PR is the one we'll be talking to in review, so we just want to make sure that the person understands the code. The more an LLM did, the more we ask you to show that understanding. That's it. No gotchas.
 
