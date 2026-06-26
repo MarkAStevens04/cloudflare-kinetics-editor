@@ -344,8 +344,10 @@ function UniprotSearchChip({ id, alias, organism, score, selected, onClick }: Un
         ringColor = '#ffa500'; // Orange for medium confidence
         confidenceText = "This node has some connections, but may not match your organism perfectly. We predict this is a MODERATE match for your model.";
     } else if (score >= 0) {
-        ringColor = '#e0463e'; // Red for low confidence
-        confidenceText = "This node has few connections, and may not match your organism. We predict this is a POOR match for your model.";
+        // ringColor = '#e0463e'; // Red for low confidence
+        // confidenceText = "This node has few connections, and may not match your organism. We predict this is a POOR match for your model.";
+        ringColor = '#ffa500'; // Orange for medium confidence
+        confidenceText = "This node has few known kinetic parameters. It may be a good match for your model, but further verification is recommended.";
     } else {
         ringColor = 'rgba(0, 0, 0, 1)'; // Red for low confidence
         confidenceText = "The relevance of this node is UNKNOWN. We're working on improving this relevance metric!";
