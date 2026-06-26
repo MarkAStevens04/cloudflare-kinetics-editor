@@ -1001,8 +1001,6 @@ async function performUniprotSearch(query: string, signal?: AbortSignal): Promis
         { signal }
     );
 
-  
-
   // Extract the JSON from the response
   const json = await res.json();
 
@@ -1019,60 +1017,57 @@ async function performUniprotSearch(query: string, signal?: AbortSignal): Promis
     score: -1,
   }));
 
-  const scored = await mapWithConcurrency(results, 8, async (item: typeof results[0]) => {
-    item.score = await getSabioReactionCount(item.id, signal);
-    console.log(`SABIO count for ${item.id}: ${item.score}`);
-    return item;
-  });
+  // Ask Supabase cache what it already knows!
+  const cached = await getCachedCounts(results.map((r: any) => r.id), signal);
+  for (const item of results) item.score = cached.get(item.id) ?? -1; // -1 meeans not searched yet
 
+  // Anything we don't have a confirmed count for: enqueue it for background population.
+  requestProteins(results.filter((r: any) => r.score < 0).map((r: any) => r.id));
 
-  scored.sort((a, b) => b.score - a.score);
-  return scored;
-
+  results.sort((a, b) => b.score - a.score);
+  return results;
 }
 
 
 
 // ------------------- Chat generated Sabio-RK search ------------------------
-const SABIO_BASE = '/sabio';
+
 // If browser calls fail with CORS errors, point this at a Cloudflare Worker
 // that proxies to SABIO-RK (and cache there). See note below.
 
-const reactionCountCache = new Map<string, number>();
 
-async function getSabioReactionCount(
-  accession: string,
-  signal?: AbortSignal
-): Promise<number> {
-  const cached = reactionCountCache.get(accession);
-  if (cached !== undefined) return cached;
+const SB_URL = import.meta.env.VITE_SUPABASE_URL;
+const SB_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const sbHeaders = () => ({
+  apikey: SB_KEY,
+  Authorization: `Bearer ${SB_KEY}`,
+  'Content-Type': 'application/json',
+});
 
-  const url =
-    `${SABIO_BASE}/reactions/reactionIDs?q=` +
-    encodeURIComponent(`UniProtKB_AC:${accession}`) +
-    `&format=txt`;
-
-  let count = 0;
-  try {
-    const res = await fetch(url, { signal });
-    if (res.ok) {
-      const text = await res.text();
-      // SABIO can return 200 with an error string in the body, so don't trust
-      // a raw line count — only tally lines that are real (numeric) reaction IDs.
-      count = text
-        .split('\n')
-        .map((s) => s.trim())
-        .filter((s) => /^\d+$/.test(s)).length;
-    }
-    // 404 (no matches) or other status -> count stays 0
-  } catch (err) {
-    if ((err as Error).name === 'AbortError') throw err;
-    return 0; // transient failure: don't cache it
+// Ask the cache what it knows. Map id -> count, only for confirmed ('done') rows.
+async function getCachedCounts(ids: string[], signal?: AbortSignal): Promise<Map<string, number>> {
+  const map = new Map<string, number>();
+  if (!ids.length) return map;
+  const inList = `(${ids.map(encodeURIComponent).join(',')})`;
+  const res = await fetch(
+    `${SB_URL}/rest/v1/proteins?select=uniprot_id,reaction_count,status&uniprot_id=in.${inList}`,
+    { headers: sbHeaders(), signal },
+  );
+  if (!res.ok) return map; // cache unreachable -> everything stays -1
+  for (const r of await res.json()) {
+    if (r.status === 'done' && typeof r.reaction_count === 'number') map.set(r.uniprot_id, r.reaction_count);
   }
-
-  reactionCountCache.set(accession, count);
-  return count;
+  return map;
 }
+
+// Tell the cache we want these. Fire-and-forget; the worker drains it in the background.
+function requestProteins(ids: string[]): void {
+  if (!ids.length) return;
+  fetch(`${SB_URL}/rest/v1/rpc/request_proteins`, {
+    method: 'POST', headers: sbHeaders(), body: JSON.stringify({ ids }),
+  }).catch(() => {});
+}
+
 
 
 // Run a task over items with a cap on simultaneous in-flight requests.
