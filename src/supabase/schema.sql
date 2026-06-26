@@ -1,9 +1,5 @@
 -- BioBuilder SABIO-RK cache schema.
 --
--- Run this in the Supabase SQL editor (or `supabase db push`). It is shared by
--- two clients:
---   * the kinetics editor frontend (anon key) — reads counts, enqueues unknowns
---   * the biobuilder-db-helper worker (service role key) — drains the queue
 --
 -- Sentinel convention surfaced to the UI: a protein the cache has never seen
 -- has reaction_count = -1 ("not searched yet"); the frontend treats a missing
