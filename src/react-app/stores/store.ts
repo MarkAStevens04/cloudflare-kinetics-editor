@@ -125,7 +125,7 @@ type AppState = {
   setNodes: (nodes: AppNode[]) => void;
   setEdges: (edges: AppEdge[]) => void;
 
-  addNode: (id: string, label: string, color: string, speciesType: string) => void;
+  addNode: (id: string, label: string, color: string, speciesType: string, position: { x: number, y: number }) => void;
 
   selectedEdge: string | null;
   setSelectedEdge: (edgeId: string | null) => void;
@@ -243,13 +243,14 @@ onEdgesChange: (changes) => {
 
 
     // Function to add a new Node to both visualNodes AND to species!
-    addNode: (id: string, label: string, color: string, speciesType: string) => set((store) => ({
+    // Position isn't required, will assume 0, 0 as center position if not given.
+    addNode: (id: string, label: string, color: string, speciesType: string, position?: { x: number, y: number }) => set((store) => ({
         species: [...store.species, { id: id, label: label, initial: '', color: color, speciesType: speciesType }],
 
         visualNodes: [...store.visualNodes, 
         {
           id: id, 
-          position: { x: Math.random() * 300, y: Math.random() * 300 }, 
+          position: { x: (position?.x || 0) + Math.random() * 10, y: (position?.y || 0) + Math.random() * 10 }, // Add a little bit of randomness to prevent 100% overlap on adding nodes without moving
           data: { label: label, color: color, initial: '', speciesType: speciesType }, 
           type: 'protein',
         }

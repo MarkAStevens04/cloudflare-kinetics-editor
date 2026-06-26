@@ -286,7 +286,9 @@ button:focus-visible {
 	display: block;
 }
 
-.action-container {
+
+/* On main screen, this is the box that holds the buttons for us to add species to our project. */
+.AddSpeciesBox {
 	position: fixed;
 	top: 10%;
 	left: 10px;;
@@ -305,10 +307,12 @@ button:focus-visible {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+
+	z-index: 1000;
 }
 
-
-.action-button {
+/* This is the button to add species to the project. */
+.AddSpeciesButton {
 	width: 85%;
 	background-color: rgba(0, 0, 0, 0.2);
 
@@ -329,11 +333,11 @@ button:focus-visible {
 	transition: border-color 0.25s;
 }
 
-.action-button:hover {
+.AddSpeciesButton:hover {
 	border-color: '#646cff';
 }
 
-.action-button-strong-text {
+.AddSpeciesButtonStrongText {
 	font-weight: 800;
 	font-size: 1.2em;
 }
