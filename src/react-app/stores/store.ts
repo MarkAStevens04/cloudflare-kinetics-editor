@@ -780,7 +780,20 @@ function cleanAsciiConversion(ascii: string) {
   
   console.log('Before cleaning: ', ascii);
 
-  return ascii.replace(/"/g, '').replace(/\^/g, '**');
+  // NOTE: We're assuming that objects NEVER have spaces INSIDE them!! Our internal ID representation should never generate spaces inside anyways.
+  const withMul = ascii
+  .replace(/"\s*"/g, '"*"')      // object * object     Replace `" + any number of spaces + "` with `"*"` g makes it ALL occurences.
+  .replace(/(\d)\s*"/g, '$1*"')  // number * object     Replace `number + any number of spaces + "` with `number*"`."
+  .replace(/"\s*(\d)/g, '"*$1')  // object * number     Replace `" + any number of spaces + number` with `"*number`.
+  .replace(/"\s*\(/g, '"*(')     // object *   ( 
+  .replace(/\)\s*"/g, ')*"')     //    )   * object
+  .replace(/(\d)\s*\(/g, '$1*(') // number *   (
+  .replace(/\)\s*(\d)/g, ')*$1') //    )   * number
+  .replace(/\)\s*\(/g, ')*(');   //    )   *   (
+
+
+
+  return withMul.replace(/"/g, '').replace(/\^/g, '**');
 }
 
 // ===================================================================================================================

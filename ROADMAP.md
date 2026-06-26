@@ -479,7 +479,7 @@ Ways of making this REAL for synthetic biologists
     - [X] Youtube thumbnail at top so anyone can re-watch the tutorial.
 
 
-- [ ] Close button on feedback drawer
+- [X] Close button on feedback drawer
 
 - [ ] Auto multiplication in rate law editor
 
