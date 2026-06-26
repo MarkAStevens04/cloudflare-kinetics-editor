@@ -94,6 +94,9 @@ export default function App() {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const tutorialPhase = useThemeStore((state) => state.tutorialPhase);
 
+  // Wamup ONLY if the user has closed the popup. Prevent unnecessary warmups from scrapers.
+  if (tutorialPhase !== 0) {doWarmup();} 
+
   return (
   <>
     {isMobile ? <MobileOverlay /> : 
@@ -425,4 +428,17 @@ function TutorialPopup() {
     </>
   );
 
+}
+
+
+// Warmup the backend by sending a request to /api/wakeup. 
+async function doWarmup() {
+  console.log('Warming up backend...');
+  const requestOptions = {
+    method: 'GET',
+  }
+  const response = await fetch('https://kinetics-editor.vercel.app/api/wakeup', requestOptions);
+  const responseJson = await response.json();
+
+  console.log('Warmup returned: ', responseJson);
 }
