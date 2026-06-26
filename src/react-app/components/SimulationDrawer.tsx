@@ -123,12 +123,15 @@ function SimulationDrawer() {
             onClick={handleClick}
         >
             <div>
+            
+            {/* Big SIMULATE button */}
             <button onClick={handleSimulate} className="SimulateButton">{buttonLabel}</button>
         
             <br />
             <br />
             <br />
 
+            {/* Our line chart */}
             {open ? <ThemeProvider theme={chartTheme}> 
             <LineChart
                 dataset={data}
@@ -151,6 +154,8 @@ function SimulationDrawer() {
             </ThemeProvider> : null}
 
             </div>
+
+            {/* Close button to collapse drawer. */}
             <button 
                 className={closeButtonClass}
                 onClick={handleClick} 

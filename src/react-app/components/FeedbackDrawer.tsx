@@ -6,6 +6,12 @@ import {
 import { useEffect } from 'react';
 import useStore from '../stores/store';
 
+import '../styles/Feedback.css';
+
+import { 
+    ChevronLeftIcon,
+} from "@radix-ui/react-icons";
+
 declare global {
     interface Window {
         Tally?: {
@@ -94,8 +100,9 @@ export default function FeedbackDrawer() {
 
     return (
     <div>
+        {/* Outer box holding our feedback button and survey. This is the one that springs open and closed. */}
         <animated.div
-            className='feedback-box'
+            className='FeedbackBox'
             style={{
                 position: 'fixed',
                 left: 0,
@@ -110,7 +117,7 @@ export default function FeedbackDrawer() {
 
         {/* Text before button is opened */}
         <div 
-        className='feedback-button'
+        className='FeedbackButton'
         style={{
             padding: '0px 5px', 
             // backgroundColor: 'rgba(0, 0, 0, 0.3)', 
@@ -135,6 +142,15 @@ export default function FeedbackDrawer() {
             style={{ border: 'none', padding: '0px 0px', }}
             />
         </div>
+
+        {/* Close button to collapse drawer. Hidden until feedback drawer opened. */}
+        <button 
+            className="FeedbackCloseButton"
+            onClick={handleClick} 
+            style={{transform: open ? 'none' : 'translateX(40px)'}}
+        > 
+                <ChevronLeftIcon className="FeedbackChevron" /> 
+        </button>
 
 
         </animated.div>   
