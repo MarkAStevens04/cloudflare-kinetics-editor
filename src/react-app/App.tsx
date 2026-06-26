@@ -178,93 +178,79 @@ export default function App() {
   const tutorialPhase = useThemeStore((state) => state.tutorialPhase);
 
   return (
-  <>
-    {isMobile ? <MobileOverlay /> : 
-    <div style={{ width: '100vw', height: '100vh' }} className="app">
-        <>
-        <ReactFlow<AppNode, AppEdge>
-            nodes={visualNodes}
-            edges={visualEdges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onConnectEnd={onConnectEnd}
-            onEdgesDelete={onEdgesDelete}
-            onNodesDelete={onNodesDelete}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            // connectionMode={ConnectionMode.Loose}
-            fitView
-            defaultEdgeOptions={defaultEdgeOptions}
-            colorMode={prefersDark ? 'dark' : 'light'}
-            
+    <>
+      {isMobile ? (
+        <MobileOverlay />
+      ) : (
+        <div style={{ width: "100vw", height: "100vh" }} className="app">
+          <>
+            <ReactFlow<AppNode, AppEdge>
+              nodes={visualNodes}
+              edges={visualEdges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+              onConnectEnd={onConnectEnd}
+              onEdgesDelete={onEdgesDelete}
+              onNodesDelete={onNodesDelete}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+              // connectionMode={ConnectionMode.Loose}
+              fitView
+              defaultEdgeOptions={defaultEdgeOptions}
+              colorMode={prefersDark ? "dark" : "light"}
+              deleteKeyCode={["Backspace", "Delete"]}
             >
-          <Background />
-          <Controls />
-          <FocusController />
-        </ReactFlow>
-        </>
+              <Background />
+              <Controls />
+              <FocusController />
+            </ReactFlow>
+          </>
 
+          {/* Drawer on left to add species */}
+          <div className="action-container">
+            <button
+              className="action-button"
+              onClick={() => {
+                const id = "N" + numberToLetters(nextId++);
+                const label = "Species " + String(nextId - 1);
+                const color = NODE_COLORS[0];
+                addNode(id, label, color, "molecule");
+              }}
+              style={{
+                backgroundColor: NODE_COLORS[0],
+              }}
+            >
+              Add <div className="action-button-strong-text">Molecule</div>
+            </button>
 
-        {/* Drawer on left to add species */}
-        <div className="action-container"
-        > 
+            <button
+              className="action-button"
+              onClick={() => {
+                const id = "N" + numberToLetters(nextId++);
+                const label = "Species " + String(nextId - 1);
+                const color = NODE_COLORS[1];
+                addNode(id, label, color, "enzyme");
+              }}
+              style={{
+                backgroundColor: NODE_COLORS[1],
+              }}
+            >
+              Add <div className="action-button-strong-text">Enzyme</div>
+            </button>
+          </div>
 
-          <button 
-            className="action-button"
+          <FeedbackDrawer />
+          <Banner />
+          <ToastError />
 
-            onClick={() => {
-              const id = 'N' + numberToLetters(nextId++);
-              const label = 'Species ' + String(nextId - 1);
-              const color = NODE_COLORS[0];
-              addNode(id, label, color, 'molecule');
-            }}
+          <TutorialPopup />
 
-            style={{
-              backgroundColor: NODE_COLORS[0]
-            }}
-          >
-            Add <div className="action-button-strong-text">Molecule</div>
-          </button>
-
-
-          <button 
-            className="action-button"
-
-            onClick={() => {
-              const id = 'N' + numberToLetters(nextId++);
-              const label = 'Species ' + String(nextId - 1);
-              const color = NODE_COLORS[1];
-              addNode(id, label, color, 'enzyme');
-            }}
-
-            style={{
-              backgroundColor: NODE_COLORS[1]
-            }}
-
-          >
-            Add <div className="action-button-strong-text">Enzyme</div>
-          </button>
-
-
+          <RxnDrawer />
+          {tutorialPhase !== 0 && <SimulationDrawer />}
         </div>
-
-
-        
-
-
-        <FeedbackDrawer />
-        <Banner />
-        <ToastError />
-
-        <TutorialPopup />
-
-        <RxnDrawer />
-        {tutorialPhase !== 0 && <SimulationDrawer />}
-        
-      
-    </div>}
-  </>
+      )}
+    </>
   );
 }
 
