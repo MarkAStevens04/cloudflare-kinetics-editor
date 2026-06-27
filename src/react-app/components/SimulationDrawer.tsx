@@ -6,18 +6,20 @@ import {
     useSpring, 
 } from '@react-spring/web';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import { LineChart } from '@mui/x-charts/LineChart';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useStore from '../stores/store';
 
 import { 
-    ChevronDownIcon
+    ChevronDownIcon,
+    DownloadIcon
 } from "@radix-ui/react-icons";
 
 import '../styles/index.css';
 import '../styles/Simulation.css';
+import { TooltipContent, TooltipRoot, TooltipTrigger } from './Tooltips';
 
 
 function SimulationDrawer() {
@@ -44,14 +46,24 @@ function SimulationDrawer() {
         from: { rotate: 0, y: '0px' },
     }));
 
+    const [showCsvDownloadButton, setShowCsvDownloadButton] = useState(false);
+
     // When the outer drawer is clicked, spring open / closed
     const handleClick = () => {
+        if (open) {
+            setShowCsvDownloadButton(false);
+        }
 
         // Do animation
         api.start({
             from: { height: 90, width: 300 },
             to: { height: 500, width: 500 },
             reverse: open,
+            onRest: () => {
+                if (!open) {
+                    setShowCsvDownloadButton(true);
+                }
+            }
         });
 
         rotateApi.start({
@@ -70,6 +82,27 @@ function SimulationDrawer() {
             handleClick(); // Open the drawer if it's not already open
         }
         onSimulate(); // Outer call to run simulation
+    }
+
+    const handleCSVDownload = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
+        const headers = Object.keys(data[0]).map(key => keyToLabel[key] || key);
+        const values = data.map(d => {
+            return [...Object.keys(data[0]).map(key => String(d[key]))];
+        });
+
+        const concatArray = [headers].concat(values);
+        const csv = concatArray.map(a => a.join(",")).join("\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;"});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+        link.href = url;
+        link.download = `simulate-data-${timestamp}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
     }
 
     // Construct legend for line chart!
@@ -124,36 +157,70 @@ function SimulationDrawer() {
         >
             <div>
             
-            {/* Big SIMULATE button */}
-            <button onClick={handleSimulate} className="SimulateButton">{buttonLabel}</button>
-        
-            <br />
-            <br />
-            <br />
+                {/* Big SIMULATE button */}
+                <button onClick={handleSimulate} className="SimulateButton">{buttonLabel}</button>
+            
+                <br />
+                <br />
+                <br />
 
-            {/* Our line chart */}
-            {open ? <ThemeProvider theme={chartTheme}> 
-            <LineChart
-                dataset={data}
-                xAxis={[
-                    { dataKey: 'time',
-                        valueFormatter: (value: number) => value.toString(),
-                        label: 'time',
-                    },
-                ]}
-                yAxis={[{ width: 50, label: 'concentration' }]}
-                series={Object.keys(keyToLabel).map((key) => ({
-                    dataKey: key,
-                    label: keyToLabel[key],
-                    color: colors[key],
-                    showMark: false,
-                }))}
-                height={300}
-                width={500}
-            />
-            </ThemeProvider> : null}
-
+                {/* Our line chart */}
+                {open ? <ThemeProvider theme={chartTheme}> 
+                    <LineChart
+                        dataset={data}
+                        xAxis={[
+                            { dataKey: 'time',
+                                valueFormatter: (value: number) => value.toString(),
+                                label: 'time',
+                            },
+                        ]}
+                        yAxis={[{ width: 50, label: 'concentration' }]}
+                        series={Object.keys(keyToLabel).map((key) => ({
+                            dataKey: key,
+                            label: keyToLabel[key],
+                            color: colors[key],
+                            showMark: false,
+                        }))}
+                        height={300}
+                        width={500}
+                    />
+                    </ThemeProvider> : null
+                }
             </div>
+
+            {/* CSV Download button */}
+            {showCsvDownloadButton ? 
+                <TooltipRoot>
+                    <TooltipTrigger>
+                        <button
+                            style={{
+                                position: "absolute",
+                                right: "8px",
+                                bottom: "8px",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "4px",
+                                padding: "4px 8px",
+                                ...(simStatus === 2
+                                    ? { backgroundColor: "green" }
+                                    : { backgroundColor: "#cccccc", color: "#888888"}
+                                )
+                            }}
+                            disabled={ simStatus === 2 ? false : true }
+                            onClick={handleCSVDownload}
+                        >
+                            <DownloadIcon />Download CSV
+                        </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        { simStatus === 2 
+                            ? "Download the simulation data in CSV format!"
+                            : "No data to download yet!"
+                        }
+                    </TooltipContent>
+                </TooltipRoot>
+                : null
+            }
 
             {/* Close button to collapse drawer. */}
             <button 
