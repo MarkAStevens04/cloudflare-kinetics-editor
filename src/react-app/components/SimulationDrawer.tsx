@@ -194,19 +194,12 @@ function SimulationDrawer() {
                 <TooltipRoot>
                     <TooltipTrigger>
                         <button
-                            style={{
-                                position: "absolute",
-                                right: "8px",
-                                bottom: "8px",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "4px",
-                                padding: "4px 8px",
-                                ...(simStatus === 2
-                                    ? { backgroundColor: "green" }
+                            className="DownloadButton"
+                            style={
+                                simStatus === 2
+                                    ? { backgroundColor: "#87F5A6" }
                                     : { backgroundColor: "#cccccc", color: "#888888"}
-                                )
-                            }}
+                            }
                             disabled={ simStatus === 2 ? false : true }
                             onClick={handleCSVDownload}
                         >

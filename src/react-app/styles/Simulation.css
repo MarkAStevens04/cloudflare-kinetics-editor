@@ -66,6 +66,20 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.DownloadButton {
+	padding: 4px 8px;
+
+	color: #000000;
+
+	position: absolute;
+	right: 8px;
+	bottom: 8px;
+
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
 .SimulationCloseButton {
 	padding: 0px;
 	height: 2em;
