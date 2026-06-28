@@ -6,7 +6,7 @@ import {
     useSpring, 
 } from '@react-spring/web';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import { LineChart } from '@mui/x-charts/LineChart';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -29,6 +29,9 @@ function SimulationDrawer() {
     const data = useStore((store) => store.simulationData);
     const speciesInfo = useStore((store) => store.visualNodes);
 
+    const showCsvDownloadButton = useStore((store) => store.showCsvDownloadButton);
+    const setShowCsvDownloadButton = useStore((store) => store.setShowCsvDownloadButton);
+
     const setSimDrawerOpen = useStore((store) => store.setSimDrawerOpen);
     const onSimulate = useStore((store) => store.fetchSimulationData);
 
@@ -45,8 +48,6 @@ function SimulationDrawer() {
     const [rotateSpring, rotateApi] = useSpring(() => ({
         from: { rotate: 0, y: '0px' },
     }));
-
-    const [showCsvDownloadButton, setShowCsvDownloadButton] = useState(false);
 
     // When the outer drawer is clicked, spring open / closed
     const handleClick = () => {
