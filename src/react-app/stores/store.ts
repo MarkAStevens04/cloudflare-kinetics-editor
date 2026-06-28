@@ -133,6 +133,9 @@ type AppState = {
   rxnDrawerOpen: boolean;
   setRxnDrawerOpen: (open: boolean) => void;
 
+  showCsvDownloadButton: boolean;
+  setShowCsvDownloadButton: (open: boolean) => void;
+
   simulationStatus: number; // 0 = not started, 1 = running, 2 = complete, 3 = error
   simulationData: Array<Record<string, number>>;
   fetchSimulationData: () => void;
@@ -409,6 +412,10 @@ onEdgesChange: (changes) => {
     // Open the Reaction Editor Drawer
     rxnDrawerOpen: false,
     setRxnDrawerOpen: (open) => set({ rxnDrawerOpen: open }),
+
+    // Display the CSV download button in the simulation drawer
+    showCsvDownloadButton: false,
+    setShowCsvDownloadButton: (open) => set({ showCsvDownloadButton: open }),
 
     // Update the label of a given species in both species and visualNodes
     updateSpeciesLabel: (id, newLabel) => set((store) => ({
