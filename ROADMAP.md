@@ -442,6 +442,8 @@ Ways of making this REAL for synthetic biologists
 - Mobile, have little GitHub, Discord, YouTube icons
     - Fixed.
 
+- When user drags a new edge and nothing visually changes, somehow tell them!
+
 ### TODO
 - [X] Right click to edit color / initial values
 - [X] Fix Michaelis-Menten adding duplicate parameters

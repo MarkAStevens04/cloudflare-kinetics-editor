@@ -15,7 +15,7 @@ Here's a few resources in case you get stuck while contributing. We're here to h
 ## Table of contents
 - [Code of Conduct](#code-of-conduct)
 - [Where do I start?](#where-do-i-start)
-    - [First Time Contributors](#first-time-contributors)
+    - [First Time GitHub Users](#first-time-github-users)
     - [BioBuilder's Repos](#biobuilders-repos)
 - [File Structure](#file-structure)
 - [Getting Started](#getting-started)
@@ -38,11 +38,15 @@ See [CODE_OF_CONDUCT.md](https://github.com/MarkAStevens04/cloudflare-kinetics-e
 
 ## Where do I start?
 
-### First Time Contributors
+This section is for orienting you around how this project is structured.
+
+### First Time GitHub Users
+
+This section will walk you through making your first ever contribution to GitHub! 
 
 BioBuilder is built for biologists without a computer science background. If you fall in this category, this is the perfect place to start building your skills! Contributions can be as small as tweaking the documentation, or as big as implementing a completely new feature to the platform. We're always grateful for any help we can get.
 
-- [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video gives a visual explanation of how to make your first contribution.
+- [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video gives a visual explanation of how to make your first contribution to GitHub.
 - Join our [DISCORD](https://discord.gg/GmsKryYDGN) to joing a community of passionate scientists! 
 
 
@@ -67,9 +71,9 @@ Here's where you can find the code for each component:
 
 This section gives a gentle introduction into making a "fork" of this repository, running the code locally, and making your first edit. 
 
-Don't know what to code? Take a look at at the issues marked "[good first issue](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22)" and "[help wanted](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22help%20wanted%22)" to see what others need help with!
+Don't know what to code? Take a look at at the issues marked "[good first issue](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22)" or "[🚨 High Priority](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22%F0%9F%9A%A8%20High%20Priority%22)" to see what our project needs most! 
 
-For new developers, I recommend downloading [GitHub Desktop](https://github.com/apps/desktop) and [Visual Studio Code](https://code.visualstudio.com/). Finally, [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video is immensely helpful in making your first edit.
+For new developers, I recommend downloading [GitHub Desktop](https://github.com/apps/desktop) and [Visual Studio Code](https://code.visualstudio.com/). Finally, [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video is immensely helpful in making your first contribution.
 
 ## Step 1: Fork the project
 
@@ -90,33 +94,27 @@ You can now edit the project!
 
 ## Step 3: Make your edits!
 
-1. Edit the code to create your desired feature. Note with VS Code, you have to click Ctrl + S (or CMD + S on Mac) to save your code.
+1. Edit the code to create your desired feature. Note with VS Code, you have to click `Ctrl + S` (or `CMD + S` on Mac) to save your code.
 
-Make sure to follow our Style Guides (TODO).
+Make sure to follow our Style Guides (TODO, not yet created).
 
 ## Step 4: Run your code locally
 
 To run your code, open a terminal in Visual Studio Code (Top of the screen, click "Terminal") and run:
 
 ```
-npx vite
+npm run dev
 ```
 
-After waiting a few seconds, the website should now be hosted at the website <localhost:5174>
+After waiting a few seconds, the website should now be hosted at the website <localhost:5173> or some other URL. It will be specified in the terminal.
 
-One nice feature of Visual Studio Code is that after you save your edits (with CTRL + C on Windows, or CMD + C on Mac), your website should automatically update to reflect the changes!
+One nice feature of Visual Studio Code is that after you save your edits (with CTRL + C on Windows, or CMD + C on Mac), your website will automatically update to reflect the changes!
 
 ## Step 5: Merge your changes
 
-Congrats on making your first edits to BioBuilder!! Now, let's put these edits on the main BioBuilder website.
+Congrats on making your first edits to BioBuilder!! 🥳 Now, let's put these edits on the main BioBuilder website.
 
-Go to the GitHub Desktop app. You should now see a list of the files you've edited. Type a concise but descriptive summary for what changes you've made (ex: "Fixed grammar mistake in README.md" or "Created Interactive Buttons in Rate Editor").
-
-Fill your description with a description of what you changed. Making a good description is a skill you will learn over time, so don't be dissapoitned if your change is rejected at first! Some good rules of thumb are:
-
-- It should be clear WHY each file was changed
-- The purpose of the change should be explicit
-- TODO
+Go to the GitHub Desktop app. You should now see a list of the files you've edited. Type a concise but descriptive summary for what changes you've made (ex: "Fixed grammar mistake in README.md" or "Created Interactive Buttons in Rate Editor"). Fill your description with a description of what you changed. 
 
 Now, click "Commit to master" and in the top right, "Push to origin". 
 
@@ -126,13 +124,13 @@ Click "Contribute" (on the right side of the page) and "open pull request".
 
 Now, click "Create pull request".
 
-CONGRATS!!! You've just made your first contribution to BioBuilder!! But we're not done yet. Before we put your changes into the website, there's always someone who reviews the code and gives feedback. 
+CONGRATS!!! 👏 You've just made your first contribution to BioBuilder!! But we're not done yet. Before we put your changes on the website, someone will review your code and give feedback. Don't be disappointed if your change is rejected at first! You learn to be a better contributor by contributing more. Keep trying and you'll become a pro in no time! 
 
 Right now, your code exists as a "Pull Request" (PR). You can see this PR in the "Pull Requests" tab of the BioBuilder repo. You'll get notifications once someone responds to this pull request.
 
 ## Step 6: Respond to feedback
 
-We want your help improving BioBuilder, and our goal is to make your code changes materialize! But we also want to make sure our project is sustainable & bug-free. Don't be offended if your pull request is denied at first, this is normal. Take it as an opportunity to learn how to improve your coding skills!
+We want your help improving BioBuilder, and our goal is to make your code changes materialize! But big projects are bug magnets, and it's best to have a second pair of eyes looking over the code we add. Most pull requests aren't accepted at first, and require a round or two of revisions. Our goal is to get your code on the website, so we'll do our best to give feedback quickly and clearly, but please ask questions if something is unclear.
 
 We will make comments on your code and give feedback. This is called a "code review". These comments and feedback will appear underneath your pull request.
 
@@ -143,39 +141,38 @@ Huge congrats on making your first contribution, and thanks for improving BioBui
 
 # Request / Report Something!
 
-This section details how you can report any bugs you find, or request new features.
+This section explains how to report bugs and request new features. 
 
 ## How do I submit a Bug report?
 
 The best person to fix a bug is YOU! You're more qualified than you think, and if you see something that you can improve, you should do it! But if you just want to report a bug, you can do that following this guide.
 
-Bugs are tracked as [GitHub issues](https://guides.github.com/features/issues/). Create an issue and fill in the required information. It helps us resolve the issue quicker!
+Bugs are tracked as [GitHub issues](https://guides.github.com/features/issues/). Create an issue and fill in the required information. The more detail you provide, the quicker we can resolve it! You can also do a quick search to see if someone else has already documented this issue. 
 
-Go to the PUBLIC repository (not your fork if you've created a fork), go to the "Issues" tab, and click "New Issue".
-
-- impact severity (1 - Small annoyance, 2 - Frustrating but recoverable,  3 - Project Completely crashes)
+Go to the PUBLIC repository (not your fork if you've created a fork), go to the "Issues" tab, and click "New Issue". There will be a template for "Bug Reports" for you to fill in.
 
 ## How do I request a feature?
 
 The best person to implement a feature is YOU! You're more qualified than you think, and if you see something that you can improve, you should do it! But if you just want to request a feature, you can do that following this guide.
 
-Feature Requests are tracked as [GitHub issues](https://guides.github.com/features/issues/). Create an issue and fill in the required information. It helps us triage the feature quicker!
+Feature Requests are tracked as [GitHub issues](https://guides.github.com/features/issues/). Create an issue and fill in the required information. The more detail you provide, the quicker we can implement it! You can also do a quick search to see if someone else has already suggested the feature. 
 
-Go to the PUBLIC repository (not your fork if you've created a fork), go to the "Issues" tab, and click "New Issue".
+Go to the PUBLIC repository (not your fork if you've created a fork), go to the "Issues" tab, and click "New Issue". There will be a template for "Feature Requests" for you to fill in.
 
 
 # Specific Feature Guides
 ## Creating a new reaction type
-You'll learn what general steps to follow when developing a new reaction type.
 
-Create a new file in [`src/react-app/edges`](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/blob/main/src/react-app/edges) called something like `RXN.tsx`
+This section describes how to implement a new reaction type. We currently have Michaelis Menten reactions and Mass Action reactions, and are looking to expand into more. This is an advanced feature, and we recommend making a couple of smaller changes before going for this one. Take a look at at the issues marked "[good first issue](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22)" if you want ideas on what changes to make! 
 
-Copy code from `Custom.tsx` and paste into your new edge. Replace the following with a more accurate name for your edge type:
+Create a new file in [`src\react-app\components\edges`](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/tree/main/src/react-app/components/edges) called something like `RXN.tsx`, where RXN is the name of your new reaction type.
+
+Copy the code from `Custom.tsx` and paste into your new edge. Search through the file and replace the following with a more accurate name for your edge type:
 1. `CustomEdgeType` -> `RXNEdgeType`
 2. `CustomEdge` -> `RXNEdge`
 3. `CustomDrawerInfo` -> `RXNDrawerInfo`
 
-In your RXNEdgeType, define the internal name for your edge by changing `'custom'` to whatever you want you would like your edge to be called internally (this is the id for your edge type). It would look something like:
+In your RXNEdgeType, define the internal name for your edge type by changing `'custom'` to the name of your edge. It would look something like:
 
 ```
 export type RXNEdgeType = Edge<{ 
@@ -183,7 +180,7 @@ export type RXNEdgeType = Edge<{
     // toggleDrawer: (id: string) => void;
     rate_law: string;
     rate_type: string; 
-}, 'RXN'>;
+}, 'rxn'>;
 ```
 
 Modify index.ts to include your edge! Copy the block for the CustomEdge, and replace with whatever names you chose for above. You'll also add the following pieces:
@@ -191,7 +188,7 @@ Modify index.ts to include your edge! Copy the block for the CustomEdge, and rep
 2. `export const edgeTypes ...` Make sure to use the internal name you defined above.
 
 Go to `Drawer.tsx` and make the following modifications:
-1. Add information about your edge in the `reactionTypes` array. The id is the id for your edge type. The `label` is what the option will be shown as in the dropdown, and the `desc` is what the tooltip will show on hover. Change `implemented ` to true once you have finished implementing your edge.
+1. Add information about your edge in the `reactionTypes` array. The id is the id for your edge type. The `label` is what your edge will look like in the dropdown menu, and the `desc` is what the tooltip will show on hover. Change `implemented ` to true once you have finished implementing your edge.
 2. (optional) Add custom HTML that shows in the drawer for your edge! First import your `RXNDrawerInfo` at the top of `Drawer.tsx`. Then, in the section that says `Include rate type specific options`, add an option for your custom edge! This allows you to display some custom HTML for your edge. 
 
 (Optional) Go to `store.ts` and modify `predictRxnType`. Modify how we infer the rate type based on your specific reaction. Think, what kinds of inputs and outputs are unique to this reaction type? Make sure you're not overlapping too much with other reaction types.
