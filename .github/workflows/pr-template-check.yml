@@ -86,7 +86,7 @@ jobs:
               problems.push(`Missing required section: \`${h}\``);
             }
             if (claPresent && !claMatches) {
-              problems.push(`The **${VERBATIM_SECTION}** section has been altered — it must be left exactly as it appears in the template.`);
+              problems.push(`The **${VERBATIM_SECTION}** section has been altered. It must be left exactly as it appears in the template.`);
             }
 
             const passed = problems.length === 0;
