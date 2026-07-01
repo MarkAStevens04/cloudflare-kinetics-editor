@@ -42,12 +42,10 @@ This section is for orienting you around how this project is structured.
 
 ### First Time GitHub Users
 
-This section will walk you through making your first ever contribution to GitHub! 
-
-BioBuilder is built for biologists without a computer science background. If you fall in this category, this is the perfect place to start building your skills! Contributions can be as small as tweaking the documentation, or as big as implementing a completely new feature to the platform. We're always grateful for any help we can get.
+This section will link to some great resources for helping you make your first ever contribution to GitHub!
 
 - [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video gives a visual explanation of how to make your first contribution to GitHub.
-- Join our [DISCORD](https://discord.gg/GmsKryYDGN) to joing a community of passionate scientists! 
+- Join our [DISCORD](https://discord.gg/GmsKryYDGN) to joing a community of passionate scientists, who are more than happy to help you make your first contribution.
 
 
 ### BioBuilder's Repos
@@ -60,18 +58,22 @@ There are TWO repositories for biobuilder: The "frontend" (this repo!) which is 
 
 ### File Structure
 
-Here's where you can find the code for each component:
+Here's the general file structure for some of the most important components: 
 
-- `src/react-app/App.tsx`: Core code for web app
-- `src/react-app/ProteinNode.tsx`: Code for nodes in the graph editor
-- `src/react-app/RxnEdge.tsx`: Code for edges connecting nodes in graph editor
-- `src/react-app/Drawer.tsx`: Code for drawer which opens when you click an edge
+- `src/react-app/App.tsx`: Where all the components come together + code for many of the overlays (banner, error boxes, etc).
+- `src/react-app/stores/store.ts`: Core logic, data structures, and states. Where things actually "happen".
+- `src/react-app/components/ProteinNode.tsx`: Code for each node on the canvas
+- `src/react-app/components/RxnEdge.tsx`: Wrapper for all edge types. Individual edge types are editable in `src/react-app/components/edges` and tracked in `src/react-app/components/edges/index.ts`
+- `src/react-app/components/Drawer.tsx`: Code for rate law editor. Drawer opens when you click an edge.
+- `src/react-app/components/SimulationDrawer.tsx`: Code for our "SIMULATE" button. Note that the actual simulation is packed in `store.ts` by the `fetchSimulationData` function, and sent to the [BioBuilder Backend](https://github.com/MarkAStevens04/Kinetics-Editor).
+
+If you're ever confused where something lives, feel free to leave a comment on the relevant issue, or ask via any of the [resources](#resources).
 
 # Getting started
 
 This section gives a gentle introduction into making a "fork" of this repository, running the code locally, and making your first edit. 
 
-Don't know what to code? Take a look at at the issues marked "[good first issue](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22)" or "[🚨 High Priority](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22%F0%9F%9A%A8%20High%20Priority%22)" to see what our project needs most! 
+> Don't know what to code? Take a look at at the issues marked "[good first issue](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22)" or "[🚨 High Priority](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22%F0%9F%9A%A8%20High%20Priority%22)" to see what our project needs most! 
 
 For new developers, I recommend downloading [GitHub Desktop](https://github.com/apps/desktop) and [Visual Studio Code](https://code.visualstudio.com/). Finally, [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video is immensely helpful in making your first contribution.
 
