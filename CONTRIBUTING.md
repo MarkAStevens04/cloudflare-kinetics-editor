@@ -14,20 +14,23 @@ Here's a few resources in case you get stuck while contributing. We're here to h
 
 ## Table of contents
 - [Code of Conduct](#code-of-conduct)
-- [Where do I start?](#where-do-i-start)
-    - [First Time Contributors](#first-time-contributors)
+- [Repo Structure](#repo-structure)
     - [BioBuilder's Repos](#biobuilders-repos)
-- [File Structure](#file-structure)
+    - [File Structure](#file-structure)
 - [Getting Started](#getting-started)
-    - [Step 1: Fork the project](#step-1-fork-the-project)
-    - [Step 2: Copy the repository onto your computer](#step-2-copy-the-repository-onto-your-computer)
-    - [Step 3: Make your edits!](#step-3-make-your-edits)
-    - [Step 4: Run your code locally](#step-4-run-your-code-locally)
-    - [Step 5: Merge your changes](#step-5-merge-your-changes)
-    - [Step 6: Respond to feedback](#step-6-respond-to-feedback)
-- [Request / Report Something!](#request-report-something)
+    - [First time GitHub users](#first-time-github-users)
+    - [Prerequisites](#prerequisites)
+    - [Setup](#setup)
+    - [Project layout](#project-layout)
+    - [Scripts](#scripts)
+    - [Common pitfalls](#common-pitfalls)
+    - [Where to get help](#where-to-get-help)
+    - [Helpful Documentation](#helpful-documentation)
+    - [Respond to feedback](#respond-to-feedback)
+- [Request or Report Something!](#request-report-something)
     - [How do I submit a Bug report?](#how-do-i-submit-a-bug-report)
-    - [How do I submit a Request a feature?](#how-do-i-request-a-feature)
+    - [How do I request a feature?](#how-do-i-request-a-feature)
+    - [How do I report a security concern?](#how-do-i-report-a-security-concern)
 - [Specific Feature Guides](#specific-feature-guides)
     - [Creating a new reaction type](#creating-a-new-reaction-type)
 
@@ -36,14 +39,9 @@ Here's a few resources in case you get stuck while contributing. We're here to h
 See [CODE_OF_CONDUCT.md](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/blob/main/CODE_OF_CONDUCT.md)!
 
 
-## Where do I start?
+## Repo Structure
 
-### First Time Contributors
-
-BioBuilder is built for biologists without a computer science background. If you fall in this category, this is the perfect place to start building your skills! Contributions can be as small as tweaking the documentation, or as big as implementing a completely new feature to the platform. We're always grateful for any help we can get.
-
-- [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video gives a visual explanation of how to make your first contribution.
-- Join our [DISCORD](https://discord.gg/GmsKryYDGN) to joing a community of passionate scientists! 
+This section is for orienting you around how this project is structured.
 
 
 ### BioBuilder's Repos
@@ -53,86 +51,160 @@ There are TWO repositories for biobuilder: The "frontend" (this repo!) which is 
 - [BioBuilder Backend](https://github.com/MarkAStevens04/Kinetics-Editor)
 
 
-
 ### File Structure
 
-Here's where you can find the code for each component:
+Here's the general file structure for some of the most important components in the project: 
 
-- `src/react-app/App.tsx`: Core code for web app
-- `src/react-app/ProteinNode.tsx`: Code for nodes in the graph editor
-- `src/react-app/RxnEdge.tsx`: Code for edges connecting nodes in graph editor
-- `src/react-app/Drawer.tsx`: Code for drawer which opens when you click an edge
+- `src/react-app/App.tsx`: Where all the components come together.
+- `src/react-app/stores/store.ts`: App logic and states.
+- `src/react-app/components/ProteinNode.tsx`: Code for nodes on the canvas
+- `src/react-app/components/RxnEdge.tsx`: Wrapper for edges connecting nodes.
+    - This is a wrapper for all the different edge types. Individual edge types are editable in "src/react-app/components/edges/" and tracked in "src/react-app/components/edges/index.ts". For help making a new edge type, see [Creating a new reaction type](#creating-a-new-reaction-type).
+- `src/react-app/components/Drawer.tsx`: Code for rate law editor.
+    - This is the Drawer that opens when you click on an edge.
+- `src/react-app/components/SimulationDrawer.tsx`: Code for our "SIMULATE" button. 
+    - Note that the actual simulation is performed in `store.ts` by the `fetchSimulationData` function, and sent to the [BioBuilder Backend](https://github.com/MarkAStevens04/Kinetics-Editor).
+
+If you're ever confused where something lives, feel free to leave a comment on the relevant issue, or ask via any of the [resources](#resources).
 
 # Getting started
 
-This section gives a gentle introduction into making a "fork" of this repository, running the code locally, and making your first edit. 
+This section gives a gentle introduction into getting your code up and running, and making your first edit!
 
-Don't know what to code? Take a look at at the issues marked "[good first issue](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22)" and "[help wanted](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22help%20wanted%22)" to see what others need help with!
+Don't know what to code? Take a look at at the issues marked "[good first issue](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22)" or "[🚨 High Priority](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22%F0%9F%9A%A8%20High%20Priority%22)" to see what our project needs most! New to the project? Skim [VISION.md](VISION.md) for the *why* and
+[ROADMAP.md](ROADMAP.md) for concrete things to pick up. Everyone is expected to
+follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 
-For new developers, I recommend downloading [GitHub Desktop](https://github.com/apps/desktop) and [Visual Studio Code](https://code.visualstudio.com/). Finally, [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video is immensely helpful in making your first edit.
+> **🚨NOTE:🚨** 
+If you struggle somewhere setting up, so will future contributors. Please edit this document with anything that helped you get set up or made your life easier!! 
 
-## Step 1: Fork the project
+## First time GitHub users
 
-1. Go to the [root of this repository](https://github.com/MarkAStevens04/cloudflare-kinetics-editor). In the top right, click "fork repository". 
-2. Name your fork something descriptive
-3. Click "create fork"
+This sub-section will link to some great resources for helping you make your first ever contribution on GitHub!
 
+- [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video gives a visual explanation of how to make your first contribution on GitHub. LLMs are also great resources for helping you get started.
+- I recommend downloading [GitHub Desktop](https://github.com/apps/desktop) (free) to easily make changes to the code without using a terminal / command line interface.
+- I recommend downloading [Visual Studio Code](https://code.visualstudio.com/) (free) to make your edits! 
+- Join our [DISCORD](https://discord.gg/GmsKryYDGN) to join a community of passionate scientists, who are more than happy to help you make your first contribution.
 
-## Step 2: Copy the repository onto your computer
+## Prerequisites
 
-1. In the top right of your new repository, click the green "Code" button.
-2. Click "Open with GitHub Desktop" (or follow other instructions).
-3. The [GitHub Desktop](https://github.com/apps/desktop) app should open, and you can just click the blue "clone" button.
-4. If a box appears that says "How are you planning to use this fork", click **"To contribute to the parent project"**.
-5. On the right side of the GitHub Desktop app, there should be a box that says "Open Visual Studio Code". Click this. 
+BioBuilder's frontend is a React single-page app that runs on Cloudflare Workers, wired together by the [Cloudflare Vite plugin](https://developers.cloudflare.com/workers/vite-plugin/).
+The React app lives in `src/react-app/` and the Worker in `src/worker/index.ts`.
+The heavy simulation work happens in a **separate backend repo**
+([Kinetics-Editor](https://github.com/MarkAStevens04/Kinetics-Editor)). For most
+frontend contributions you won't need to run it locally.
 
-You can now edit the project!
+- **Node.js 20.19+ (Node 22 LTS recommended).** Vite 8 and React 19 will not run
+  on older versions. We suggest [nvm](https://github.com/nvm-sh/nvm) to manage this.
+- **npm** (ships with Node).
+- **A Cloudflare account** (only needed if you deploy, which most contributors
+  don't need to do).
 
-## Step 3: Make your edits!
+## Setup
+```bash
+# 1. Fork on GitHub, then clone your fork
+git clone https://github.com//cloudflare-kinetics-editor.git
+cd cloudflare-kinetics-editor
 
-1. Edit the code to create your desired feature. Note with VS Code, you have to click Ctrl + S (or CMD + S on Mac) to save your code.
+# 2. Install dependencies
+npm install
 
-Make sure to follow our Style Guides (TODO).
+# 3. Generate Worker/binding types
+npm run cf-typegen
 
-## Step 4: Run your code locally
-
-To run your code, open a terminal in Visual Studio Code (Top of the screen, click "Terminal") and run:
-
+# 4. Start the dev server
+npm run dev
 ```
-npx vite
-```
 
-After waiting a few seconds, the website should now be hosted at the website <localhost:5174>
+Open the URL Vite prints (default **http://localhost:5173**). You get hot module
+replacement, and (thanks to the Cloudflare Vite plugin) the Worker runs in the
+real Workers runtime (`workerd`) locally, so dev closely matches production.
 
-One nice feature of Visual Studio Code is that after you save your edits (with CTRL + C on Windows, or CMD + C on Mac), your website should automatically update to reflect the changes!
+## Project layout
 
-## Step 5: Merge your changes
+| Path                        | What it is                                                    |
+| --------------------------- | ------------------------------------------------------------ |
+| `src/react-app/`            | The React SPA (UI, React Flow canvas, MUI charts, MathLive). |
+| `src/worker/index.ts`       | The Hono Worker API (worker entry point).                    |
+| `index.html`                | SPA HTML entry.                                              |
+| `vite.config.ts`            | Vite config + the `@cloudflare/vite-plugin`.                 |
+| `wrangler.json`             | Worker config: name, bindings, compat date, SPA routing.     |
+| `worker-configuration.d.ts` | Generated binding types (via `npm run cf-typegen`).          |
+| `dist/client/`              | Build output for the SPA assets (generated. Never edit).    |
 
-Congrats on making your first edits to BioBuilder!! Now, let's put these edits on the main BioBuilder website.
+## Scripts
 
-Go to the GitHub Desktop app. You should now see a list of the files you've edited. Type a concise but descriptive summary for what changes you've made (ex: "Fixed grammar mistake in README.md" or "Created Interactive Buttons in Rate Editor").
+| Command             | Purpose                                                          |
+| ------------------- | ---------------------------------------------------------------- |
+| `npm run dev`       | Local dev server (Vite + Workers runtime, HMR).                 |
+| `npm run build`     | Type-check all projects (`tsc -b`) and build to `dist/`.        |
+| `npm run preview`   | Build, then serve the built output (closest to production).     |
+| `npm run check`     | Type-check + build + `wrangler deploy --dry-run`. **Run this before opening a PR.** |
+| `npm run lint`      | Run ESLint over the repo.                                       |
+| `npm run cf-typegen`| Regenerate binding/env types from `wrangler.json`.             |
+| `npm run deploy`    | Deploy to Cloudflare (maintainers only).         |
 
-Fill your description with a description of what you changed. Making a good description is a skill you will learn over time, so don't be dissapoitned if your change is rejected at first! Some good rules of thumb are:
+Before opening a PR, please make sure `npm run check` and `npm run lint` both pass.
 
-- It should be clear WHY each file was changed
-- The purpose of the change should be explicit
-- TODO
+## Common pitfalls
 
-Now, click "Commit to master" and in the top right, "Push to origin". 
+- **Don't use `wrangler dev`.** The dev command here is `npm run dev` (which runs
+  `vite`). `wrangler dev` bypasses Vite and won't behave the way the project
+  expects. See [Wrangler vs. Vite](https://developers.cloudflare.com/workers/development-testing/wrangler-vs-vite/).
 
-Go back to YOUR fork of the repo on the GitHub website (where you clicked "Open with GitHub Desktop").
+- **`wrangler.json`, not `.jsonc`.** This project uses plain JSON, so **comments
+  are not allowed** in the config file (adding one will break `wrangler`).
 
-Click "Contribute" (on the right side of the page) and "open pull request".
+- **Regenerate types after touching `wrangler.json`.** If you add or change a
+  binding, run `npm run cf-typegen` (updates `worker-configuration.d.ts`) or your
+  `Env` type will be stale and TypeScript will complain in confusing ways.
 
-Now, click "Create pull request".
+- **`tsc -b` uses project references.** Types are split across
+  `tsconfig.app.json`, `tsconfig.node.json`, and `tsconfig.worker.json`. If a
+  type change doesn't seem to "take," run `npm run build` to rebuild the
+  referenced projects.
 
-CONGRATS!!! You've just made your first contribution to BioBuilder!! But we're not done yet. Before we put your changes into the website, there's always someone who reviews the code and gives feedback. 
+- **The Worker runs in `workerd`, not Node.** `nodejs_compat` is enabled, but not
+  every Node API is available. Confirm support before reaching for a Node
+  built-in. See [Node.js compatibility](https://developers.cloudflare.com/workers/runtime-apis/nodejs/).
+
+- **SPA routing is already configured.** `not_found_handling` is set to `single-page-application` and `run_worker_first` is `["/"]`, so the Worker handles `/` and unmatched client routes fall back to `index.html`. If you add new API routes, make sure they don't collide with client-side routes. See [SPA routing](https://developers.cloudflare.com/workers/static-assets/routing/single-page-application/).
+
+- **"Simulate" not working locally?** Simulation is served by the separate [backend](https://github.com/MarkAStevens04/Kinetics-Editor). Frontend-only work usually doesn't require running it. Check with a maintainer if your change touches the simulation flow.
+
+- **Don't run `npm run deploy`.** Deployment to production is handled by
+  maintainers/CI. The Worker `name` in `wrangler.json` points at the live app. Use `npm run check` (which does a safe `--dry-run`) to validate your changes instead.
+
+- **Port 5173 already in use?** Another Vite process is likely running. Stop it, or open whichever port Vite prints instead.
+
+## Where to get help
+
+- 💬 [Discord](https://discord.gg/GmsKryYDGN) - fastest way to ask questions.
+- 🐛 [Issues](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues)
+  and [Discussions](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/discussions)
+  for bugs and ideas.
+- 📧 [mark@biobuilder.app](mailto:mark@biobuilder.app) - reach the maintainer directly.
+
+## Helpful Documentation
+
+- [Cloudflare Vite plugin](https://developers.cloudflare.com/workers/vite-plugin/)
+  · [Wrangler config](https://developers.cloudflare.com/workers/wrangler/configuration/)
+  · [Static assets / SPA routing](https://developers.cloudflare.com/workers/static-assets/routing/single-page-application/)
+- [Hono](https://hono.dev/) (Worker API framework)
+- [React Flow / @xyflow/react](https://reactflow.dev/) (the reaction-diagram canvas)
+- [Supabase JS client](https://supabase.com/docs/reference/javascript/introduction)
+- [Vite](https://vite.dev/) · [React](https://react.dev/)
+
+
+
+## Respond to feedback
+
+CONGRATS!!! 👏 You've just made your first contribution to BioBuilder!! But we're not done yet. Before we put your changes on the website, someone will review your code and give feedback. Don't be disappointed if your change is rejected at first! You learn to be a better contributor by contributing more. Keep trying and you'll become a pro in no time! 
 
 Right now, your code exists as a "Pull Request" (PR). You can see this PR in the "Pull Requests" tab of the BioBuilder repo. You'll get notifications once someone responds to this pull request.
 
-## Step 6: Respond to feedback
-
-We want your help improving BioBuilder, and our goal is to make your code changes materialize! But we also want to make sure our project is sustainable & bug-free. Don't be offended if your pull request is denied at first, this is normal. Take it as an opportunity to learn how to improve your coding skills!
+We want your help improving BioBuilder, and our goal is to make your code changes materialize! But big projects are bug magnets, and it's best to have a second pair of eyes looking over the code we add. Most pull requests aren't accepted at first, and require a round or two of revisions. Our goal is to get your code on the website, so we'll do our best to give feedback quickly and clearly, but please ask questions if something is unclear.
 
 We will make comments on your code and give feedback. This is called a "code review". These comments and feedback will appear underneath your pull request.
 
@@ -141,41 +213,46 @@ Once your code is approved, it will be merged onto the main branch, and your cod
 Huge congrats on making your first contribution, and thanks for improving BioBuilder!! This platform wouldn't be possible without amazing contributors like you ❤️
 
 
-# Request / Report Something!
+# Request or Report Something!
 
-This section details how you can report any bugs you find, or request new features.
+This section explains how to report bugs and request new features. 
 
 ## How do I submit a Bug report?
 
 The best person to fix a bug is YOU! You're more qualified than you think, and if you see something that you can improve, you should do it! But if you just want to report a bug, you can do that following this guide.
 
-Bugs are tracked as [GitHub issues](https://guides.github.com/features/issues/). Create an issue and fill in the required information. It helps us resolve the issue quicker!
+Bugs are tracked as [GitHub issues](https://guides.github.com/features/issues/). Create an issue and fill in the required information. The more detail you provide, the quicker we can resolve it! You can also do a quick search to see if someone else has already documented this issue. 
 
-Go to the PUBLIC repository (not your fork if you've created a fork), go to the "Issues" tab, and click "New Issue".
-
-- impact severity (1 - Small annoyance, 2 - Frustrating but recoverable,  3 - Project Completely crashes)
+Go to the PUBLIC repository (not your fork if you've created a fork), go to the "Issues" tab, and click "New Issue". There will be a template for "Bug Reports" for you to fill in.
 
 ## How do I request a feature?
 
 The best person to implement a feature is YOU! You're more qualified than you think, and if you see something that you can improve, you should do it! But if you just want to request a feature, you can do that following this guide.
 
-Feature Requests are tracked as [GitHub issues](https://guides.github.com/features/issues/). Create an issue and fill in the required information. It helps us triage the feature quicker!
+Feature Requests are tracked as [GitHub issues](https://guides.github.com/features/issues/). Create an issue and fill in the required information. The more detail you provide, the quicker we can implement it! You can also do a quick search to see if someone else has already suggested the feature. 
 
-Go to the PUBLIC repository (not your fork if you've created a fork), go to the "Issues" tab, and click "New Issue".
+Go to the PUBLIC repository (not your fork if you've created a fork), go to the "Issues" tab, and click "New Issue". There will be a template for "Feature Requests" for you to fill in.
 
+## How do I report a security concern?
+
+See [SECURITY.md](SECURITY.md) for a guide on reporting security vulnerabilities.
 
 # Specific Feature Guides
+
+This section acts as a guide on implementing specific advanced features.
+
 ## Creating a new reaction type
-You'll learn what general steps to follow when developing a new reaction type.
 
-Create a new file in [`src/react-app/edges`](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/blob/main/src/react-app/edges) called something like `RXN.tsx`
+This section describes how to implement a new reaction type. We currently have Michaelis Menten reactions and Mass Action reactions, and are looking to expand into more. This is a difficult feature to code, and we recommend making a couple of smaller changes before going for this one. Take a look at at the issues marked "[good first issue](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22)" if you want ideas on what changes to make! 
 
-Copy code from `Custom.tsx` and paste into your new edge. Replace the following with a more accurate name for your edge type:
+Create a new file in [`src\react-app\components\edges`](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/tree/main/src/react-app/components/edges) called something like `RXN.tsx`, where RXN is the name of your new reaction type.
+
+Copy the code from `Custom.tsx` and paste into your new edge. Search through the file and replace the following with a more accurate name for your edge type:
 1. `CustomEdgeType` -> `RXNEdgeType`
 2. `CustomEdge` -> `RXNEdge`
 3. `CustomDrawerInfo` -> `RXNDrawerInfo`
 
-In your RXNEdgeType, define the internal name for your edge by changing `'custom'` to whatever you want you would like your edge to be called internally (this is the id for your edge type). It would look something like:
+In your RXNEdgeType, define the internal name for your edge type by changing `'custom'` to the name of your edge. It would look something like:
 
 ```
 export type RXNEdgeType = Edge<{ 
@@ -183,7 +260,7 @@ export type RXNEdgeType = Edge<{
     // toggleDrawer: (id: string) => void;
     rate_law: string;
     rate_type: string; 
-}, 'RXN'>;
+}, 'rxn'>;
 ```
 
 Modify index.ts to include your edge! Copy the block for the CustomEdge, and replace with whatever names you chose for above. You'll also add the following pieces:
@@ -191,8 +268,7 @@ Modify index.ts to include your edge! Copy the block for the CustomEdge, and rep
 2. `export const edgeTypes ...` Make sure to use the internal name you defined above.
 
 Go to `Drawer.tsx` and make the following modifications:
-1. Add information about your edge in the `reactionTypes` array. The id is the id for your edge type. The `label` is what the option will be shown as in the dropdown, and the `desc` is what the tooltip will show on hover. Change `implemented ` to true once you have finished implementing your edge.
+1. Add information about your edge in the `reactionTypes` array. The id is the id for your edge type. The `label` is what your edge will look like in the dropdown menu, and the `desc` is what the tooltip will show on hover. Change `implemented ` to true once you have finished implementing your edge.
 2. (optional) Add custom HTML that shows in the drawer for your edge! First import your `RXNDrawerInfo` at the top of `Drawer.tsx`. Then, in the section that says `Include rate type specific options`, add an option for your custom edge! This allows you to display some custom HTML for your edge. 
 
 (Optional) Go to `store.ts` and modify `predictRxnType`. Modify how we infer the rate type based on your specific reaction. Think, what kinds of inputs and outputs are unique to this reaction type? Make sure you're not overlapping too much with other reaction types.
-
