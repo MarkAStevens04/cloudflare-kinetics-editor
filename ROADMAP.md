@@ -485,3 +485,6 @@ Ways of making this REAL for synthetic biologists
     - [ ] Start / stop time
     - [ ] Display Resolution
     - [ ] Download CSV
+
+- [ ] Take a gander at https://www.uniprot.org/uniprotkb/P05655/entry
+    - Looks like UniProt has started tracking enzyme kinetics!!
