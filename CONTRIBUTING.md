@@ -14,11 +14,11 @@ Here's a few resources in case you get stuck while contributing. We're here to h
 
 ## Table of contents
 - [Code of Conduct](#code-of-conduct)
-- [Where do I start?](#where-do-i-start)
-    - [First Time GitHub Users](#first-time-github-users)
+- [Repo Structure](#repo-structure)
     - [BioBuilder's Repos](#biobuilders-repos)
-- [File Structure](#file-structure)
+    - [File Structure](#file-structure)
 - [Getting Started](#getting-started)
+    - [Step 0: First time GitHub users](#step-0-first-time-github-users)
     - [Step 1: Fork the project](#step-1-fork-the-project)
     - [Step 2: Copy the repository onto your computer](#step-2-copy-the-repository-onto-your-computer)
     - [Step 3: Make your edits!](#step-3-make-your-edits)
@@ -36,16 +36,9 @@ Here's a few resources in case you get stuck while contributing. We're here to h
 See [CODE_OF_CONDUCT.md](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/blob/main/CODE_OF_CONDUCT.md)!
 
 
-## Where do I start?
+## Repo Structure
 
 This section is for orienting you around how this project is structured.
-
-### First Time GitHub Users
-
-This section will link to some great resources for helping you make your first ever contribution to GitHub!
-
-- [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video gives a visual explanation of how to make your first contribution to GitHub.
-- Join our [DISCORD](https://discord.gg/GmsKryYDGN) to joing a community of passionate scientists, who are more than happy to help you make your first contribution.
 
 
 ### BioBuilder's Repos
@@ -58,26 +51,37 @@ There are TWO repositories for biobuilder: The "frontend" (this repo!) which is 
 
 ### File Structure
 
-Here's the general file structure for some of the most important components: 
+Here's the general file structure for some of the most important components in the project: 
 
-- `src/react-app/App.tsx`: Where all the components come together + code for many of the overlays (banner, error boxes, etc).
-- `src/react-app/stores/store.ts`: Core logic, data structures, and states. Where things actually "happen".
-- `src/react-app/components/ProteinNode.tsx`: Code for each node on the canvas
-- `src/react-app/components/RxnEdge.tsx`: Wrapper for all edge types. Individual edge types are editable in `src/react-app/components/edges` and tracked in `src/react-app/components/edges/index.ts`
-- `src/react-app/components/Drawer.tsx`: Code for rate law editor. Drawer opens when you click an edge.
-- `src/react-app/components/SimulationDrawer.tsx`: Code for our "SIMULATE" button. Note that the actual simulation is packed in `store.ts` by the `fetchSimulationData` function, and sent to the [BioBuilder Backend](https://github.com/MarkAStevens04/Kinetics-Editor).
+- `src/react-app/App.tsx`: Where all the components come together.
+- `src/react-app/stores/store.ts`: App logic and states.
+- `src/react-app/components/ProteinNode.tsx`: Code for nodes on the canvas
+- `src/react-app/components/RxnEdge.tsx`: Wrapper for edges connecting nodes.
+    - This is a wrapper for all the different edge types. Individual edge types are editable in "src/react-app/components/edges/" and tracked in "src/react-app/components/edges/index.ts". For help making a new edge type, see [Creating a new reaction type](#creating-a-new-reaction-type).
+- `src/react-app/components/Drawer.tsx`: Code for rate law editor.
+    - This is the Drawer that opens when you click on an edge.
+- `src/react-app/components/SimulationDrawer.tsx`: Code for our "SIMULATE" button. 
+    - Note that the actual simulation is performed in `store.ts` by the `fetchSimulationData` function, and sent to the [BioBuilder Backend](https://github.com/MarkAStevens04/Kinetics-Editor).
 
 If you're ever confused where something lives, feel free to leave a comment on the relevant issue, or ask via any of the [resources](#resources).
 
 # Getting started
 
-This section gives a gentle introduction into making a "fork" of this repository, running the code locally, and making your first edit. 
+This section gives a gentle introduction into getting your code up and running, and making your first edit!
 
-> Don't know what to code? Take a look at at the issues marked "[good first issue](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22)" or "[🚨 High Priority](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22%F0%9F%9A%A8%20High%20Priority%22)" to see what our project needs most! 
+Don't know what to code? Take a look at at the issues marked "[good first issue](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22)" or "[🚨 High Priority](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22%F0%9F%9A%A8%20High%20Priority%22)" to see what our project needs most! 
 
-For new developers, I recommend downloading [GitHub Desktop](https://github.com/apps/desktop) and [Visual Studio Code](https://code.visualstudio.com/). Finally, [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video is immensely helpful in making your first contribution.
+> **🚨NOTE:🚨** 
+If you struggle somewhere setting up, so will future contributors. Please edit this document with anything that helped you get set up or made your life easier!! 
 
-**🚨NOTE:🚨** If you struggle somewhere setting up, so will future contributors. Please edit this document with anything that helped you get set up to start contributing!! 
+### Step 0: First time GitHub users
+
+This sub-section will link to some great resources for helping you make your first ever contribution on GitHub!
+
+- [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video gives a visual explanation of how to make your first contribution on GitHub. LLMs are also great resources for helping you get started.
+- I recommend downloading [GitHub Desktop](https://github.com/apps/desktop) (free) to easily make changes to the code without using a terminal / command line interface.
+- I recommend downloading [Visual Studio Code](https://code.visualstudio.com/) (free) to make your edits! 
+- Join our [DISCORD](https://discord.gg/GmsKryYDGN) to join a community of passionate scientists, who are more than happy to help you make your first contribution.
 
 ## Step 1: Fork the project
 
@@ -103,6 +107,8 @@ You can now edit the project!
 Make sure to follow our Style Guides (TODO, not yet created).
 
 ## Step 4: Run your code locally
+
+This project uses a ["React + Vite Cloudflare Template"](https://developers.cloudflare.com/workers/framework-guides/web-apps/react/).
 
 To run your code, open a terminal in Visual Studio Code (Top of the screen, click "Terminal") and run:
 
@@ -167,7 +173,7 @@ Go to the PUBLIC repository (not your fork if you've created a fork), go to the 
 # Specific Feature Guides
 ## Creating a new reaction type
 
-This section describes how to implement a new reaction type. We currently have Michaelis Menten reactions and Mass Action reactions, and are looking to expand into more. This is an advanced feature, and we recommend making a couple of smaller changes before going for this one. Take a look at at the issues marked "[good first issue](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22)" if you want ideas on what changes to make! 
+This section describes how to implement a new reaction type. We currently have Michaelis Menten reactions and Mass Action reactions, and are looking to expand into more. This is a difficult feature to code, and we recommend making a couple of smaller changes before going for this one. Take a look at at the issues marked "[good first issue](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22)" if you want ideas on what changes to make! 
 
 Create a new file in [`src\react-app\components\edges`](https://github.com/MarkAStevens04/cloudflare-kinetics-editor/tree/main/src/react-app/components/edges) called something like `RXN.tsx`, where RXN is the name of your new reaction type.
 
