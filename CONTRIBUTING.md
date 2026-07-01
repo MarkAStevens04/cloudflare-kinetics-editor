@@ -75,7 +75,7 @@ Don't know what to code? Take a look at at the issues marked "[good first issue]
 
 For new developers, I recommend downloading [GitHub Desktop](https://github.com/apps/desktop) and [Visual Studio Code](https://code.visualstudio.com/). Finally, [THIS](https://www.youtube.com/watch?v=dLRA1lffWBw) youtube video is immensely helpful in making your first contribution.
 
-NOTE: Future contributors will also reference this document. If you had an unintuitive step while setting up, please make changes to this CONTRIBUTING.md document so that future users can have an easier time!
+**🚨NOTE:🚨** If you struggle somewhere setting up, so will future contributors. Please edit this document with anything that helped you get set up to start contributing!! 
 
 ## Step 1: Fork the project
 
