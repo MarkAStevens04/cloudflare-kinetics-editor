@@ -479,7 +479,11 @@ Ways of making this REAL for synthetic biologists
     - [X] Youtube thumbnail at top so anyone can re-watch the tutorial.
 
 
+- [X] Close button on feedback drawer
+
+- [X] Auto multiplication in rate law editor
+
+- [X] When adding reactants, add to center of POV
+
 - [ ] More Simulation parameters
     - [ ] Start / stop time
-    - [ ] Display Resolution
-    - [ ] Download CSV

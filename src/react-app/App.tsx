@@ -64,83 +64,8 @@ const nodeTypes = {
   protein: ProteinNode,
 };
 
-// const edgeTypes = {
-//   mass_action: MassActionEdge,
-//   rev_mass_action: ReversibleMassActionEdge,
-//   michaelismenten: MichaelisMentenEdge,
-
-// };
-
-
-// Initialize set of possible colors for species nodes
-// const NODE_COLORS = [
-//   '#90f1ef', // Soft Cyan
-//   '#ffd6e0', // Petal Frost
-//   '#ffef9f', // Vanilla Custard
-//   '#c1fba4', // Light Green
-//   '#7bf1a8', // Light Green
-// ]
-
-// muted vibes
-// const NODE_COLORS = [
-//   '#d8e2dc',
-//   '#ffe5d9', 
-//   '#ffcad4',
-// ]
-
-// const NODE_COLORS = [
-//   '#c1121f',
-//   '#fdf0d5', 
-//   '#003049', 
-//   '#669bbc', 
-//   '#780000', 
-// ]
-
-// const NODE_COLORS = [
-//   '#ef476f', 
-//   '#ffd166', 
-//   '#06d6a0', 
-//   '#118ab2',
-// ]
-
-// const NODE_COLORS = [
-//   '#ffbe0b',
-//   '#fb5607',
-//   '#ff006e',
-//   '#8338ec',
-//   '#3a86ff',
-// ]
-
-
-// const NODE_COLORS = [
-//   '#edede9',
-//   '#d6ccc2',
-//   '#f5ebe0',
-//   '#e3d5ca',
-//   '#d5bdaf',
-// ]
-
-
-// const NODE_COLORS = [
-//   '#335C67',
-//   '#FFF3B0',
-//   '#E09F3E',
-//   '#9E2A2B',
-//   '#540B0E',
-// ]
-
-
-const NODE_COLORS = [
-  '#4ECDC4',
-  '#FFE66D',
-  '#FF6B6B',
-  '#3a86ff',
-
-]
-
 // ID for the next node to be added
 let nextId= 3;
-
 
 const defaultEdgeOptions: DefaultEdgeOptions = {
   type: 'mass-action',
@@ -165,17 +90,12 @@ export default function App() {
     useShallow(selector),
   );
 
-  // Convert number into letters for NodeIDs 
-  const numberToLetters = (num: number) => {
-    return String(num).split('').map((digit) => String.fromCharCode(97 + Number(digit))).join('');
-  };
-
-  // Function to add a Node (uses Zustand store)
-  const addNode = useStore((store) => store.addNode);
-
   // For handling dark mode
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const tutorialPhase = useThemeStore((state) => state.tutorialPhase);
+
+  // Wamup ONLY if the user has closed the popup. Prevent unnecessary warmups from scrapers.
+  if (tutorialPhase !== 0) {doWarmup();} 
 
   return (
     <>
@@ -201,56 +121,26 @@ export default function App() {
               colorMode={prefersDark ? "dark" : "light"}
               deleteKeyCode={["Backspace", "Delete"]}
             >
-              <Background />
-              <Controls />
-              <FocusController />
-            </ReactFlow>
-          </>
+          <Background />
+          <Controls />
+          <FocusController />
+          <AddSpeciesBox />
 
-          {/* Drawer on left to add species */}
-          <div className="action-container">
-            <button
-              className="action-button"
-              onClick={() => {
-                const id = "N" + numberToLetters(nextId++);
-                const label = "Species " + String(nextId - 1);
-                const color = NODE_COLORS[0];
-                addNode(id, label, color, "molecule");
-              }}
-              style={{
-                backgroundColor: NODE_COLORS[0],
-              }}
-            >
-              Add <div className="action-button-strong-text">Molecule</div>
-            </button>
+        </ReactFlow>
+        </>
+        
+        <FeedbackDrawer />
+        <Banner />
+        <ToastError />
 
-            <button
-              className="action-button"
-              onClick={() => {
-                const id = "N" + numberToLetters(nextId++);
-                const label = "Species " + String(nextId - 1);
-                const color = NODE_COLORS[1];
-                addNode(id, label, color, "enzyme");
-              }}
-              style={{
-                backgroundColor: NODE_COLORS[1],
-              }}
-            >
-              Add <div className="action-button-strong-text">Enzyme</div>
-            </button>
-          </div>
+        <TutorialPopup />
 
-          <FeedbackDrawer />
-          <Banner />
-          <ToastError />
-
-          <TutorialPopup />
-
-          <RxnDrawer />
-          {tutorialPhase !== 0 && <SimulationDrawer />}
-        </div>
-      )}
-    </>
+        <RxnDrawer />
+        {tutorialPhase !== 0 && <SimulationDrawer />}
+        
+      
+    </div>}
+  </>
   );
 }
 
@@ -300,6 +190,72 @@ function Banner() {
   );
 }
 
+
+// Box for adding species to the project.
+function AddSpeciesBox() {
+
+  const { screenToFlowPosition } = useReactFlow();
+  const addNode = useStore((store) => store.addNode);  // Function to add a Node (uses Zustand store)
+
+  // Initialize set of possible colors for species nodes
+  const NODE_COLORS = [
+  '#4ECDC4',
+  '#FFE66D',
+  '#FF6B6B',
+  '#3a86ff',
+  ]
+
+  // Convert number into letters for NodeIDs 
+  const numberToLetters = (num: number) => {
+    return String(num).split('').map((digit) => String.fromCharCode(97 + Number(digit))).join('');
+  };
+
+  // Handle adding a node
+  const onAddNode = (type: 'molecule' | 'enzyme') => {
+
+    const id = 'N' + numberToLetters(nextId++);
+    const label = 'Species ' + String(nextId - 1);
+    const color = type === 'molecule' ? NODE_COLORS[0] : NODE_COLORS[1];
+    const screenCenter = screenToFlowPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2}); // Center of the screen
+
+    // We got screen center, now we need to offset, otherwise top left corner of node would be in center. 
+    const position = { x: screenCenter.x - 80, y: screenCenter.y - 50 }
+    addNode(id, label, color, type, position);
+  }
+
+  return (
+    <>
+     {/* Drawer on left to add species */}
+        <div className="AddSpeciesBox"> 
+
+          {/* Add Molecule */}
+          <button 
+            className="AddSpeciesButton"
+            onClick={() => onAddNode('molecule')}
+            style={{ backgroundColor: NODE_COLORS[0] }}
+          >
+            Add <div className="AddSpeciesButtonStrongText">Molecule</div>
+          </button>
+
+
+          {/* Add Enzyme */}
+          <button 
+            className="AddSpeciesButton"
+            onClick={() => onAddNode('enzyme')}
+            style={{backgroundColor: NODE_COLORS[1]}}
+          >
+            Add <div className="AddSpeciesButtonStrongText">Enzyme</div>
+          </button>
+
+
+        </div>
+  </>
+  );
+}
+
+
+
+
 // function ToastError(reasons: string[]) {
 function ToastError() {
 
@@ -320,6 +276,8 @@ function ToastError() {
   }
 
 
+  // ToDo: This doesn't work, and ALWAYS adds the error reason "unknown error occurred..." even if there's already an error. 
+  // We need to do this in the store when we clear all our reasons.
   // const addErrorReason = useStore((state) => state.addErrorReason);
 
   // if (errorReasons.length === 0) {
@@ -383,6 +341,9 @@ function ToastError() {
   );
 }
 
+
+
+
 function FocusController() {
   console.log('focusing...');
   const { fitView } = useReactFlow();
@@ -408,6 +369,8 @@ function FocusController() {
 
   return null;
 }
+
+
 
 
 // Popup for new users!
@@ -467,4 +430,17 @@ function TutorialPopup() {
     </>
   );
 
+}
+
+
+// Warmup the backend by sending a request to /api/wakeup. 
+async function doWarmup() {
+  console.log('Warming up backend...');
+  const requestOptions = {
+    method: 'GET',
+  }
+  const response = await fetch('https://kinetics-editor.vercel.app/api/wakeup', requestOptions);
+  const responseJson = await response.json();
+
+  console.log('Warmup returned: ', responseJson);
 }

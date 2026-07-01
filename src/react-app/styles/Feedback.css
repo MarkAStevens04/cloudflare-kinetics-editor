@@ -1,0 +1,87 @@
+.FeedbackBox {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	color: rgba(255, 255, 255, 0.87);
+	background-color: rgba(116, 123, 255);
+
+	border: 5px transparent solid;
+	border-color: rgba(255, 255, 255, 0.51);
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	padding: 0px 0px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	/* width: 100% */
+
+}
+
+
+.FeedbackButton {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1;
+	font-weight: bold;
+	font-size: 24px;
+
+	color: rgba(255, 255, 255, 0.87);
+	
+	padding: 0px 0px;
+
+	/* font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale; */
+
+}
+
+
+.FeedbackCloseButton {
+	padding: 0px;
+	height: 2em;
+
+	color: var(--text-color, rgba(255, 255, 255, 0.8));
+
+    background-color: rgba(116, 123, 255);
+    border-color: rgba(255, 255, 255, 1);
+
+    border: 3px solid;
+	border-radius: 8px;
+	outline: 0px;
+
+	position: absolute;
+	right: -5px;
+	bottom: 50%;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	translate: 0% 50%;
+	cursor: pointer;
+
+	transition: border-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.FeedbackCloseButton:hover {
+	border-color: #fff;
+    color: #fff;
+}
+
+.FeedbackChevron {
+	height: 100%;
+	width: fit-content;
+	line-height: 1;
+	padding: 0px;
+	margin: 0px;
+	outline: 0px;
+}
+
+.FeedbackChevron:hover {
+	color: #fff;
+}
