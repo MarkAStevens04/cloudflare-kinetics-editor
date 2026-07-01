@@ -202,4 +202,3 @@ Go to `Drawer.tsx` and make the following modifications:
 2. (optional) Add custom HTML that shows in the drawer for your edge! First import your `RXNDrawerInfo` at the top of `Drawer.tsx`. Then, in the section that says `Include rate type specific options`, add an option for your custom edge! This allows you to display some custom HTML for your edge. 
 
 (Optional) Go to `store.ts` and modify `predictRxnType`. Modify how we infer the rate type based on your specific reaction. Think, what kinds of inputs and outputs are unique to this reaction type? Make sure you're not overlapping too much with other reaction types.
-
