@@ -13,6 +13,7 @@ import { ScrollArea } from 'radix-ui'; // Scroll Area for UniProt search results
 
 import { TextTooltip } from './Tooltips'
 import { Collapsible } from './Collapsible';
+import { SearchBox } from './SearchBox';
 
 
 type ProteinNodeType = Node<{ 
@@ -287,7 +288,7 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
                 RightItem={ /* This is our link to the UniProt ID of the current node! */
                     <a
                     className="NodeRowLink"
-                    href={`https://www.uniprot.org/uniprotkb/${currentUniProtID}`}
+                    href={currentUniProtID ? `https://www.uniprot.org/uniprotkb/${currentUniProtID}` : `https://www.uniprot.org/`} // Link to current UniProt ID OR UniProt landing page
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
@@ -296,8 +297,20 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
                     </a>
                 }   
             >
+
+                <SearchBox
+                    searchPlaceholder={`Enter UniProt ID, Name, Organism, etc.`}
+                    searchValue={currentQuery}
+                    onSearchChange={onSearch}
+                    render={renderUniProtDrawer}
+                    loading={loading}
+                    setOpen={setUniProtDrawerOpen}
+                    SearchResults={searchResults.map((result) => (
+                        <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} selected={currentUniProtID === result.id} onClick={(id) => onUpdateUniProtID(id)} />
+                    ))}
+                />
                 
-             <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
+             {/* <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
                 <input
                     // className="item species-param-input NodeRowItem"
                     className="ScrollSearchBar"
@@ -309,7 +322,7 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
                 <ScrollArea.Viewport className="ScrollAreaViewport">
                     <div className=" UniprotSearchContainer" >
                         {loading || !renderUniProtDrawer
-                            ? Array.from({ length: 4}).map((_, i) => <UniprotSearchSkeleton key={i} />)
+                            ? Array.from({ length: 4}).map((_, i) => <SearchSkeleton key={i} />)
                             : searchResults.length === 0
                                 ? <div className="UniprotSearchEmpty"> No results found. <br /> Try another query! </div>
                             : searchResults.map((result) => (
@@ -324,10 +337,10 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
                     orientation="vertical"
                 >
                     {/* "Thumb" is the little dark gray part on the scrollbar! */}
-                    <ScrollArea.Thumb className="ScrollAreaThumb" />
+                    {/* <ScrollArea.Thumb className="ScrollAreaThumb" />
                 </ScrollArea.Scrollbar>
                 <ScrollArea.Corner className="ScrollAreaCorner" />
-                </ScrollArea.Root>
+                </ScrollArea.Root> */} 
              
             </Collapsible>
         </>
@@ -385,24 +398,4 @@ function UniprotSearchChip({ id, alias, organism, score, selected, onClick }: Un
             </div>
         </div>
     );
-}
-
-function UniprotSearchSkeleton() {
-
-    const x = "Fake text";
-    return (
-        <>
-            <div className="UniprotSearchChip" >
-                <div className="UniprotChipTop" >
-                    <div className="UniprotChipName UniprotSkeleton"> {x} </div>
-                    <div className="UniprotRing UniprotSkeleton" style={{borderColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '50%',}} />
-                </div>
-                <div className="UniprotChipBottom" >
-                    <div className="UniprotChipId UniprotSkeleton"> {x.substring(0, 6)} </div> 
-                    <div className="UniprotChipOrganism UniprotSkeleton"> {x} </div>
-                </div>
-            </div>
-        
-        </>
-    )
 }

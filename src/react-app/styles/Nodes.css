@@ -119,21 +119,7 @@ hr {
     height: 1px;
 }
 
-.UniprotSearchContainer {
-    padding: 10px 20px 10px 10px;
-    width: 200px;
-
-    contain: content;
-    content-visibility: auto;
-    min-height: 50px;
-
-    /* max-width: 100%;
-    display: flex;
-    flex-direction: column; */
-}
-
-
-/* ---- the chip ---- */
+/* ---- the default chip, feel free to override ---- */
 .UniprotSearchChip {
     /* width: 100%; */
     min-width: 0px;
@@ -148,10 +134,6 @@ hr {
     cursor: pointer;
     outline: none;
     transition: border-color .18s ease;
-}
-
-.UniprotSearchChip:hover {
-  border-color: #747bff;
 }
  
 .UniprotChipTop {
@@ -237,15 +219,6 @@ hr {
     position: relative;
 }
 
-.UniprotSearchEmpty {
-    font-size: 14px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    width: 100%;
-}
 
 .UniprotSkeleton {
     pointer-events: none;

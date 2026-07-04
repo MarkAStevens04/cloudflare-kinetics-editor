@@ -1,0 +1,141 @@
+.SearchBoxContainer {
+    padding: 10px 20px 10px 10px;
+    width: 200px;
+
+    contain: content;
+    content-visibility: auto;
+    min-height: 50px;
+
+    /* max-width: 100%;
+    display: flex;
+    flex-direction: column; */
+}
+
+.SearchBoxEmptyText {
+    font-size: 14px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+}
+
+
+/* ---- the default chip, feel free to override ---- */
+.SearchChip {
+    /* width: 100%; */
+    min-width: 0px;
+    
+    margin: 4px 0px; /* Little space between each search result */
+
+    background: rgba(0, 0, 0, 0.15);
+    border: 2px solid transparent;
+    border-radius: 4px;
+    padding: 2px 2px;
+
+    cursor: pointer;
+    outline: none;
+    transition: border-color .18s ease;
+}
+
+.SearchChip:hover {
+  border-color: #747bff;
+}
+
+.SearchChipTop {
+
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-between;
+
+}
+
+.SearchChipBottom {
+  display: flex; 
+  flex-direction: row; 
+  align-items: flex-end;
+  justify-content: space-between; 
+
+}
+ 
+.SearchChipName {
+    font-size: 18px; 
+    font-weight: 600; 
+    line-height: 1.1;
+    letter-spacing: -.015em; 
+    color: rgba(0, 0, 0, 1);
+
+    margin: 0px 5px 0px 0px; /* Preserve margin between Name and chip color */
+
+    min-width: 0px;
+    white-space: nowrap;
+    overflow-x: clip;
+    overflow-y: visible;
+    text-overflow: ellipsis;
+    
+}
+
+.SearchChipId {
+  align-self: flex-end;
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, monospace;
+  font-size: 8px; 
+  letter-spacing: .02em;
+  color: rgba(0, 0, 0, 0.3); 
+  text-decoration: none;
+
+  border-bottom: 0.5px solid transparent;
+  border-bottom-color: rgba(0, 0, 0, 0.3); 
+
+  margin-top: 0px;
+  padding: 0px;
+  line-height: 1;
+
+  transition: border-color .15s ease;
+}
+
+.SearchChipId:hover { 
+    border-bottom-color: #747bff; 
+}
+ 
+.SearchChipOrganism {
+    font-size: 8px; 
+    color: var(--pf-organism);
+    line-height: 1.25;
+    text-align: right; 
+
+    margin: 0px 0px 0px 10px; /* Preserve margin between ID and organism */
+    
+    min-width: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.SearchRing {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    min-height: 10px;
+
+    border-radius: 50%;
+    border: 2px solid;
+
+    background: rgba(255, 255, 255, 0.1);
+
+    position: relative;
+}
+
+
+.SearchSkeleton {
+    pointer-events: none;
+
+    color: transparent;
+    margin: 0px;
+
+    background: linear-gradient(90deg, #e8e8e8 25%, #f4f4f4 37%, #e8e8e8 63%);
+    background-size: 400% 100%;
+    animation: skeleton-shimmer 1.4s ease infinite;
+    border-radius: 4px;
+    
+}
