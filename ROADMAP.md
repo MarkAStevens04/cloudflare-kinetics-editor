@@ -444,6 +444,13 @@ Ways of making this REAL for synthetic biologists
 
 - When user drags a new edge and nothing visually changes, somehow tell them!
 
+- Take a gander at https://www.uniprot.org/uniprotkb/P05655/entry
+    - Looks like UniProt has started tracking enzyme kinetics!!
+
+- More Simulation parameters
+    - Start / stop time
+    - Display Resolution
+
 ### TODO
 - [X] Right click to edit color / initial values
 - [X] Fix Michaelis-Menten adding duplicate parameters
@@ -481,10 +488,11 @@ Ways of making this REAL for synthetic biologists
     - [X] Youtube thumbnail at top so anyone can re-watch the tutorial.
 
 
-- [ ] More Simulation parameters
-    - [ ] Start / stop time
-    - [ ] Display Resolution
-    - [ ] Download CSV
-
-- [ ] Take a gander at https://www.uniprot.org/uniprotkb/P05655/entry
-    - Looks like UniProt has started tracking enzyme kinetics!!
+- [ ] Integrate ChEMBL
+    - [ ] UI (similar to UniProt)
+    - [ ] State (Similar to UniProt)
+    - [ ] Behavior (Similar to UniProt)
+    
+- [ ] Autofill Rxn
+    - [ ] Dynamic (background) search of Sabio-RK on connect
+    - [ ] Update rate law

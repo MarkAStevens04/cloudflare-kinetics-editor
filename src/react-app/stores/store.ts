@@ -631,37 +631,21 @@ onEdgesChange: (changes) => {
     },
 
 
-    // I really don't love this code. This will change once we change data structure of reactants and products.
+    // Modify coefficients associated with a single reaction!
     changeCoefficient: (reactantID: string, newCoefficient: number, reactionID: string) => {
-      // const prevCoefficient = get().getCoefficient(reactantID, reactionID);
+      
+      // Find current reaction
       const reaction = get().reactions.find(r => r.id === reactionID);
-
-      // const participant = reaction?.participants.find(p => p.id === reactantID);
-
-      // const newParticipant = {
-      //   id: reactantID,
-      //   role: participant?.role,
-      //   coefficient: newCoefficient,
-      // };
-
+      
+      // Get participants of that reaction
       const participants = reaction?.participants.map(p => p.id === reactantID ? { ...p, coefficient: newCoefficient } : p) || [];
 
-
-
-      // const newParticipants = reaction?.participants.map(p => p.id === reactantID ? newParticipant : p) || [];
-      // console.log('sending updated reaction' + JSON.stringify(reaction));
-      // Now we set the updated reaction back in the reactions list to trigger a re-render.
-      // set((store) => ({
-      //   'reactions': store.reactions.map((r) => r.id === reactionID ? { ...reaction, participants: newParticipants } : r),
-      // }));
-
+      // If we found the right reaction, update the store!
       if (reaction) {
         set((store) => ({
           'reactions': store.reactions.map((r) => r.id === reactionID ? { ...reaction, participants: participants } : r),
         }));
       }
-
-      console.log('new reactions list: ' + JSON.stringify(get().reactions));
 
     },
 

@@ -136,9 +136,13 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
                 </div>
 
                 <hr />
+
+                {/* This should honestly probably be moved into its own separate popup or drawer or something. For now for simplicity we keep here.  */}
                 <UniprotSelector NodeID={id} currentUniProtID={data.uniprotID} />
             </div>
         }
+
+        
         
 
 
