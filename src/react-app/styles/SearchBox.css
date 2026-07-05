@@ -1,6 +1,6 @@
 .SearchContentContainer {
     padding: 0px var(--search-pad) var(--search-pad) var(--search-pad);
-    width: 300px;
+    width: 200px;
 
     contain: content;
     content-visibility: auto;

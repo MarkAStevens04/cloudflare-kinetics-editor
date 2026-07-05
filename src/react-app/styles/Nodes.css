@@ -239,7 +239,6 @@ hr {
 }
 
 .ChebiChipRight {
-    /* display: flex;  */
     flex: 0 0 20%;
     min-width: 0;
     box-sizing: border-box;
