@@ -114,9 +114,6 @@ function Shimmer({
     width?: string;
 } & React.ComponentPropsWithoutRef<'div'>) {
     const loading = React.useContext(SkeletonCtx);
-    if (loading) {
-        console.log('we do be shimmering!');
-    }
 
     // Shimmer when the box is loading OR when this field has no data yet.
     if (loading || children === null || children === '') {
