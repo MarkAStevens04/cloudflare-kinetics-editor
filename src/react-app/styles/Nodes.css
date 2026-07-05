@@ -119,6 +119,7 @@ hr {
     height: 1px;
 }
 
+
 /* ---- the default chip, feel free to override ---- */
 .SearchChip {
     /* width: 100%; */
@@ -129,22 +130,24 @@ hr {
     background: rgba(0, 0, 0, 0.15);
     border: 2px solid transparent;
     border-radius: 8px;
-    padding: 2px 2px 2px 2px;
+    padding: 2px;
 
     cursor: pointer;
     outline: none;
     transition: border-color .18s ease;
 }
 
-.UniprotSearchChip:hover {
+.SearchChip:hover {
   border-color: #747bff;
 }
  
 .UniprotChipTop {
 
-    display: flex; 
-    flex-direction: row; 
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
+
+    min-width: 0; /* Allow the ellipsized name to shrink instead of stretching this row */
 
 }
 
@@ -219,25 +222,41 @@ hr {
     border: 2.5px solid;
 
     background: rgba(255, 255, 255, 0.1);
+}
+
+.ChebiChip {
+    display: flex;
+    flex-direction: row;
+}
+
+.ChebiChipLeft {
+    /* display: flex;  */
+    flex: 0 0 80%;
+    min-width: 0; /* Let the column shrink to its 80% basis instead of being floored at the name's min-content */
+    box-sizing: border-box; /* Keep padding inside the 80% so left + right stay at 100% */
+    padding: 2px;
+    /* background-color: rgba(255, 0, 0, 1); */
+}
+
+.ChebiChipRight {
+    /* display: flex;  */
+    flex: 0 0 20%;
+    min-width: 0;
+    box-sizing: border-box;
+
+    background-color: rgba(0, 0, 255, 1);
+}
+
+.ChebiRing {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    min-height: 10px;
+
+    border-radius: 50%;
+    border: 2.5px solid;
+
+    background: rgba(255, 255, 255, 0.1);
 
     position: relative;
-}
-
-
-.UniprotSkeleton {
-    pointer-events: none;
-
-    color: transparent;
-    margin: 0px;
-
-    background: linear-gradient(90deg, #e8e8e8 25%, #f4f4f4 37%, #e8e8e8 63%);
-    background-size: 400% 100%;
-    animation: skeleton-shimmer 1.4s ease infinite;
-    border-radius: 4px;
-    
-}
-
-@keyframes skeleton-shimmer {
-    0%   { background-position: 100% 50%; }
-    100% { background-position: 0 50%; }
 }

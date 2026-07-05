@@ -524,15 +524,16 @@ function ChebiRow({ item, index }: { item: ChebiResultType & {onChipClick: () =>
     const fillColor = item && item.selected ? '#747bff' : 'none';
 
     return (
-        <div className="SearchChip" tabIndex={0} onClick={() => item?.onChipClick()} >
+        <div className="SearchChip ChebiChip" tabIndex={0} onClick={() => item?.onChipClick()} style={{padding: '0px'}} >
             
+            <div className="ChebiChipLeft">
 
             <div className="UniprotChipTop" >
                 <Shimmer className="UniprotChipName">{item?.alias}</Shimmer>
 
                 <TextTooltip display={`${confidenceText}`} side="right" >
                     <Shimmer 
-                        className="UniprotRing" 
+                        className="ChebiRing" 
                         style={{
                             borderRadius: '50%',
                             ...(item && {background: fillColor, borderColor: ringColor}) // DO NOT override background and border if we're supposed to be shimmering!
@@ -551,8 +552,15 @@ function ChebiRow({ item, index }: { item: ChebiResultType & {onChipClick: () =>
                 >
                     <Shimmer width="4em">{item?.id}</Shimmer>
                 </a>
-                <Shimmer className="UniprotChipOrganism">{item?.smiles}</Shimmer>
+                {/* <Shimmer className="UniprotChipOrganism">{item?.smiles}</Shimmer> */}
             </div>
+            </div>
+
+            <div className="ChebiChipRight">
+            hi
+
+            </div>
+
         </div>
     );
 }
