@@ -282,8 +282,12 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
         searchUniprot(event.target.value);
     }
 
-    const onUpdateUniProtID = (id: string) => {
-        updateUniProtID(NodeID, id);
+    const onUpdateUniProtID = (id: string, isSelected: boolean) => {
+        if (isSelected) {
+            updateUniProtID(NodeID, ''); // If user clicks the current chip, we deselect it.
+        } else {
+            updateUniProtID(NodeID, id);
+        }
     }
 
     // Have to do some shenanagins with rendering the items inside the UniProt Drawer. Lots of lag if we render before animation is complete!
@@ -320,7 +324,7 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
                         organism: result.organism,
                         score: result.score,
                         selected: currentUniProtID === result.id,
-                        onChipClick: () => onUpdateUniProtID(result.id),
+                        onChipClick: () => onUpdateUniProtID(result.id, currentUniProtID === result.id),
                     }))}
                     skeletonCount={4}
                     maxItems={10}
@@ -364,8 +368,13 @@ function ChebiSelector({ NodeID, currentChebiID }: { NodeID: string; currentCheb
         searchChebi(event.target.value);
     }
 
-    const onUpdateChebiID = (id: string) => {
-        updateChebiID(NodeID, id);
+    const onUpdateChebiID = (id: string, isSelected: boolean) => {
+        if (isSelected) {
+            updateChebiID(NodeID, ''); // If the user clicks on the currently selected Chebi ID, we deselect it.
+        } else {
+            updateChebiID(NodeID, id);
+        }
+        
     }
 
     // Have to do some shenanagins with rendering the items inside the UniProt Drawer. Lots of lag if we render before animation is complete!
@@ -404,7 +413,7 @@ function ChebiSelector({ NodeID, currentChebiID }: { NodeID: string; currentCheb
                         smiles: result.smiles,
                         score: result.score,
                         selected: currentChebiID === result.id,
-                        onChipClick: () => onUpdateChebiID(result.id),
+                        onChipClick: () => onUpdateChebiID(result.id, currentChebiID === result.id),
                     }))}
                     skeletonCount={4}
                     maxItems={10}
@@ -454,7 +463,7 @@ function ProteinRow({ item, index }: { item: UniprotResultType & {onChipClick: (
     const fillColor = item && item.selected ? '#747bff' : 'none';
 
     return (
-        <div className="UniprotSearchChip" tabIndex={0} onClick={() => item?.onChipClick()} >
+        <div className="SearchChip" tabIndex={0} onClick={() => item?.onChipClick()} >
             
 
             <div className="UniprotChipTop" >
@@ -515,7 +524,7 @@ function ChebiRow({ item, index }: { item: ChebiResultType & {onChipClick: () =>
     const fillColor = item && item.selected ? '#747bff' : 'none';
 
     return (
-        <div className="UniprotSearchChip" tabIndex={0} onClick={() => item?.onChipClick()} >
+        <div className="SearchChip" tabIndex={0} onClick={() => item?.onChipClick()} >
             
 
             <div className="UniprotChipTop" >

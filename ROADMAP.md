@@ -496,3 +496,5 @@ Ways of making this REAL for synthetic biologists
 - [ ] Autofill Rxn
     - [ ] Dynamic (background) search of Sabio-RK on connect
     - [ ] Update rate law
+
+- Add ability to deselect currently selected chemical / uniprotID easier

@@ -351,11 +351,18 @@
 	overflow: hidden;
 	background-color: white;
 	--scrollbar-size: 5px;
+
+	display: flex;
+	flex-direction: column;
+	--search-pad: 10px;
 }
 
 .ScrollAreaViewport {
 	width: 100%;
-	height: 100%;
+
+	flex: 1; /* grow to fill space below top input */ 
+	min-height: 0; /* lets a flex child actually scroll */
+
 	border-radius: inherit;
 }
 
