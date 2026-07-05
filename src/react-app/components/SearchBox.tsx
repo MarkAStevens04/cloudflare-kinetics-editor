@@ -75,25 +75,14 @@ const SearchBox = React.forwardRef<HTMLDivElement, SearchBoxProps>(
                 />
 
                 <ScrollArea.Viewport className="ScrollAreaViewport">
-                    <SkeletonCtx.Provider value={loading}>
-                    {/* {<div className=" SearchBoxContainer" >
-                        {loading || !render
-                            ? Array.from({ length: 4}).map((_, i) => SkeletonResult || <DefaultSkeletonChip key={i} />)
-                            : !SearchResults || SearchResults.length === 0
-                                ? <div className="SearchBoxEmptyText"> No results found. <br /> Try another query! </div>
-                            : SearchResults?.map((result, index) => (
-                                <div key={index} className="SearchBoxResult">
-                                    {result}
-                                </div>
-                            ))
-                        }
 
-                    </div>} */}
-                    <div className="SearchBoxContainer" >
-                    {body}
-                    </div>
-                    
+                    {/* Skeleton context to show the shimmer effect when search is loading */}
+                    <SkeletonCtx.Provider value={loading || !render}> 
+                        <div className="SearchBoxContainer" >
+                            {body}
+                        </div>
                     </SkeletonCtx.Provider>
+
                 </ScrollArea.Viewport>
                 <ScrollArea.Scrollbar
                     className="ScrollAreaScrollbar"
@@ -110,35 +99,19 @@ const SearchBox = React.forwardRef<HTMLDivElement, SearchBoxProps>(
 );
 
 
-function DefaultSkeletonChip() {
-
-    const x = "Fake text";
-    return (
-        <>
-            <div className="SearchChip" >
-                <div className="SearchChipTop" >
-                    <div className="SearchChipName SearchSkeleton"> {x} </div>
-                    <div className="SearchRing SearchSkeleton" style={{borderColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '50%',}} />
-                </div>
-                <div className="SearchChipBottom" >
-                    <div className="SearchChipId SearchSkeleton"> {x.substring(0, 6)} </div> 
-                    <div className="SearchChipOrganism SearchSkeleton"> {x} </div>
-                </div>
-            </div>
-        
-        </>
-    )
-}
-
+// Skeleton context so components can track whether we should be shimmering or not.
 const SkeletonCtx = React.createContext(false);
 
+// Wrapper that turns a div into a shimmer effect.
 function Shimmer({ 
     children,
     className,
+    width = '6em', // Fake text to fill the shimmer with. Makes shimmer same size as text that will eventually fill it.
     ...props
 }: {
     children?: React.ReactNode;
     className?: string;
+    width?: string;
 } & React.ComponentPropsWithoutRef<'div'>) {
     const loading = React.useContext(SkeletonCtx);
     if (loading) {
@@ -151,8 +124,12 @@ function Shimmer({
             <span 
                 className={classnames("Shimmer", className)}
                 aria-hidden
+                style={{ width, ...props.style }} // width optional; falls back to CSS default
                 {...props}
             >
+                {/* Keeps line height good even with nothing inside. */}
+                &nbsp;
+                
                 <TextTooltip display="Loading..." />
                 {children}
             </span>

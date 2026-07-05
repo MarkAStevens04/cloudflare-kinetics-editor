@@ -87,6 +87,12 @@ type UniprotResultType = {
     score: number; // 0-1, Indicates quality of match. Correct organism, # metabolic links, # RELEVANT metabolic links
 }
 
+type ChebiResultType = {
+  id: string;
+  alias: string;
+  score: number; // 0-1, Indicates quality of match.
+}
+
 const initialSpecies: species[] = [
   { id: 'Na', label: 'Click to edit', initial: '1', color: '#4ECDC4', speciesType: 'molecule' },
   { id: 'Nb', label: 'Species 2', initial: '0', color: '#8280FF', speciesType: 'molecule' },
@@ -180,6 +186,16 @@ type AppState = {
   renderUniProtDrawer: boolean; // Whether to render the Children of the uniprot drawer, or just the skeletons. Helps with performance.
   setRenderUniProtDrawer: (render: boolean) => void;
 
+  chebiResults: ChebiResultType[]; // For storing results when searching for a chemical in the chebi search component.
+  searchChebi: (query: string) => void; // For searching chebi with a given query and getting back a list of results.
+  chebiLoading: boolean; // True if we're currently waiting for results from chebi, false otherwise.
+  chebiAbortController: AbortController | null; // For cancelling chebi requests when a new search is initiated.
+  setChebiID: (NodeID: string, chebiID: string) => void; // For setting the chebi ID of a given species when a chebi search result is selected.
+  chebiDrawerOpen: boolean; // Whether the chebi search drawer is open
+  setChebiDrawerOpen: (open: boolean) => void;
+  renderChebiDrawer: boolean; // Whether to render the Children of the chebi drawer, or just the skeletons. Helps with performance.
+  setRenderChebiDrawer: (render: boolean) => void;
+
   feedbackOpen: boolean;
   setFeedbackOpen: (open: boolean) => void;
 
@@ -220,6 +236,15 @@ const useStore = create<AppState>((set, get) => ({
     setUniProtDrawerOpen: (open) => set({ uniProtDrawerOpen: open }),
     renderUniProtDrawer: false,
     setRenderUniProtDrawer: (render) => set({ renderUniProtDrawer: render }),
+
+    chebiQuery: '',
+    chebiResults: [],
+    chebiLoading: false,
+    chebiAbortController: null,
+    chebiDrawerOpen: false,
+    setChebiDrawerOpen: (open) => set({ chebiDrawerOpen: open }),
+    renderChebiDrawer: false,
+    setRenderChebiDrawer: (render) => set({ renderChebiDrawer: render }),
 
     focusedTarget: null,
     setFocusedTarget: (target) => set({ focusedTarget: target }),
@@ -764,6 +789,7 @@ onEdgesChange: (changes) => {
 
     // Changes our temporary uniprot query
     setUniProtQuery: (query: string) => set({ uniProtQuery: query }),
+    setChebiQuery: (query: string) => set({ chebiQuery: query }),
 
     // Perform our uniprot search
     searchUniprot: async (query: string) => {
@@ -792,6 +818,8 @@ onEdgesChange: (changes) => {
       }
     },
 
+    searchChebi: async (query: string) => {pass},
+
     // Assign the uniprot ID to the given species
     setUniProtID: (NodeID: string, uniprotID: string) => set((store) => ({
       species: store.species.map((s) => s.id === NodeID ? { ...s, uniprotID } : s),
@@ -801,6 +829,19 @@ onEdgesChange: (changes) => {
         data: { 
           ...n.data, 
           uniprotID: uniprotID,
+         } 
+        } : n),
+    })),
+
+    // Assign the chebi ID to the given species
+    setChebiID: (NodeID: string, chebiID: string) => set((store) => ({
+      species: store.species.map((s) => s.id === NodeID ? { ...s, chebiID } : s),
+
+      visualNodes: store.visualNodes.map((n) => n.id === NodeID ? { 
+        ...n, 
+        data: { 
+          ...n.data, 
+          chebiID: chebiID,
          } 
         } : n),
     })),

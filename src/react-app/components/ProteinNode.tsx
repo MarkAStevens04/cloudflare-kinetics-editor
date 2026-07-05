@@ -23,6 +23,7 @@ type ProteinNodeType = Node<{
     initial: string;
     speciesType: string; // Types stored in store.ts
     uniprotID?: string; // Optional UniProt ID associated with this node, which can be set through the UniProt search interface.
+    chebiID?: string; // Optional Chebi ID associated with this node, which can be set through the Chebi search interface.
 }, 'protein'>;
 
 
@@ -141,6 +142,7 @@ export default function ProteinNode({ id, data, selected }: NodeProps<ProteinNod
 
                 {/* This should honestly probably be moved into its own separate popup or drawer or something. For now for simplicity we keep here.  */}
                 <UniprotSelector NodeID={id} currentUniProtID={data.uniprotID} />
+                <ChebiSelector NodeID={id} currentChebiID={data.chebiID} />
             </div>
         }
 
@@ -311,7 +313,7 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
                         onChipClick: () => onUpdateUniProtID(result.id),
                     }))}
                     skeletonCount={4}
-                    maxItems={Infinity}
+                    maxItems={10}
                     renderItem={(p, i) => <ProteinRow item={p} index={i} />}
                     searchPlaceholder={`Enter UniProt ID, Name, Organism, etc.`}
                     searchValue={currentQuery}
@@ -329,6 +331,90 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
     )
 }
 
+
+function ChebiSelector({ NodeID, currentChebiID }: { NodeID: string; currentChebiID?: string }) {
+
+    const currentQuery = useStore((state) => state.chebiQuery);
+    const updateQuery = useStore((state) => state.setChebiQuery);
+
+    const searchResults = useStore((state) => state.chebiResults);
+    const searchChebi = useStore((state) => state.searchChebi);
+    const loading = useStore((state) => state.chebiLoading);
+    const chebiDrawerOpen = useStore((state) => state.chebiDrawerOpen);
+    const setChebiDrawerOpen = useStore((state) => state.setChebiDrawerOpen);
+    const renderChebiDrawer = useStore((state) => state.renderChebiDrawer);
+    const setRenderChebiDrawer = useStore((state) => state.setRenderChebiDrawer);
+
+    // const loading = true;
+
+    const updateChebiID = useStore((state) => state.setChebiID);
+
+    const onSearch = (event: ChangeEvent<HTMLInputElement>) => {
+        updateQuery(event.target.value);
+        searchChebi(event.target.value);
+    }
+
+    const onUpdateChebiID = (id: string) => {
+        updateChebiID(NodeID, id);
+    }
+
+    // Have to do some shenanagins with rendering the items inside the UniProt Drawer. Lots of lag if we render before animation is complete!
+    const performOpen = () => {
+        setRenderChebiDrawer(false); // Don't render drawer contents until animation is finished, to avoid lag.
+        setChebiDrawerOpen(!chebiDrawerOpen);
+    }
+
+
+    return (
+        <>
+            <Collapsible 
+                open={chebiDrawerOpen}
+                setOpen={performOpen}
+                LeftItem={<div>Chebi ID:</div>}  // Just says Chebi ID: on the left
+                finishAnimation={() => setRenderChebiDrawer(true)}
+                RightItem={ /* This is our link to the Chebi ID of the current node! */
+                    <a
+                    className="NodeRowLink"
+                    href={currentChebiID ? `https://www.ebi.ac.uk/chebi/searchForward.do?chebiId=${currentChebiID}` : `https://www.ebi.ac.uk/chebi/`} // Link to current Chebi ID OR Chebi landing page
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    >
+                    {currentChebiID ? currentChebiID : "None"}
+                    </a>
+                }   
+            >
+
+                <SearchBox
+                    items={searchResults.map((result) => ({
+                        id: result.id,
+                        alias: result.alias,
+                        score: result.score,
+                        selected: currentChebiID === result.id,
+                        onChipClick: () => onUpdateChebiID(result.id),
+                    }))}
+                    skeletonCount={4}
+                    maxItems={10}
+                    renderItem={(p, i) => <ProteinRow item={p} index={i} />}
+                    searchPlaceholder={`Enter Chebi ID, Name, etc.`}
+                    searchValue={currentQuery}
+                    onSearchChange={onSearch}
+                    render={renderChebiDrawer}
+                    loading={loading}
+                    // setOpen={setChebiDrawerOpen}
+                    // SearchResults={searchResults.map((result) => (
+                    //     <ChebiSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} selected={currentChebiID === result.id} onClick={(id) => onUpdateChebiID(id)} />
+                    // ))}
+                />
+             
+            </Collapsible>
+        </>
+    )
+}
+
+
+
+// Each "chip" inside the UniProt search results.
 function ProteinRow({ item, index }: { item: UniprotResultType & {onChipClick: () => void, selected: boolean}; index: number }) {
     let ringColor = 'rgba(0, 0, 0, 1)';
     let confidenceText = '';
@@ -359,8 +445,7 @@ function ProteinRow({ item, index }: { item: UniprotResultType & {onChipClick: (
             
 
             <div className="UniprotChipTop" >
-                {/* <div className="UniprotChipName">{alias}</div> */}
-                <Shimmer className="UniprotChipName">{item ? item.alias : 'FAKE ALIAS'}</Shimmer>
+                <Shimmer className="UniprotChipName">{item?.alias}</Shimmer>
 
                 <TextTooltip display={`${confidenceText}`} side="right" >
                     <Shimmer 
@@ -381,62 +466,9 @@ function ProteinRow({ item, index }: { item: UniprotResultType & {onChipClick: (
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <Shimmer>{item ? item.id : 'FAKE ID'}</Shimmer>
+                    <Shimmer width="4em">{item?.id}</Shimmer>
                 </a>
-                <Shimmer className="UniprotChipOrganism">{item ? item.organism : 'FAKE ORGANISM'}</Shimmer>
-            </div>
-        </div>
-    );
-}
-
-
-
-// Each "chip" inside the UniProt search results.
-function UniprotSearchChip({ id, alias, organism, score, selected, onClick }: UniprotResultType) {
-   
-    let ringColor = 'rgba(0, 0, 0, 1)';
-    let confidenceText = '';
-    if (score > 0.7) {
-        ringColor = '#00DA2C'; // Green for high confidence
-        confidenceText = "This node has PLENTY of connections, and matches your organism. We predict this is a GREAT match for your model.";
-    } else if (score > 0.4) {
-        ringColor = '#ffa500'; // Orange for medium confidence
-        confidenceText = "This node has some connections, but may not match your organism perfectly. We predict this is a MODERATE match for your model.";
-    } else if (score >= 0) {
-        // ringColor = '#e0463e'; // Red for low confidence
-        // confidenceText = "This node has few connections, and may not match your organism. We predict this is a POOR match for your model.";
-        ringColor = '#ffa500'; // Orange for medium confidence
-        confidenceText = "This node has few known kinetic parameters. It may be a good match for your model, but further verification is recommended.";
-    } else {
-        ringColor = 'rgba(0, 0, 0, 1)'; // Red for low confidence
-        confidenceText = "The relevance of this node is UNKNOWN. We're working on improving this relevance metric!";
-    }
-
-    const fillColor = selected ? '#747bff' : 'none';
-
-    return (
-        <div className="UniprotSearchChip" tabIndex={0} onClick={() => onClick(id)} >
-            
-
-            <div className="UniprotChipTop" >
-                <div className="UniprotChipName">{alias}</div>
-
-                <TextTooltip display={`${confidenceText}`} side="right" >
-                    <div className="UniprotRing" style={{borderColor: ringColor, background: fillColor}} />
-                </TextTooltip>
-
-            </div>
-            <div className="UniprotChipBottom" >
-                <a
-                    className="UniprotChipId"
-                    href={`https://www.uniprot.org/uniprotkb/${id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    {id}
-                </a>
-                <span className="UniprotChipOrganism">{organism}</span>
+                <Shimmer className="UniprotChipOrganism">{item?.organism}</Shimmer>
             </div>
         </div>
     );
