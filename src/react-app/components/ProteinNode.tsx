@@ -37,6 +37,16 @@ type UniprotResultType = {
     onClick: (id: string) => void; // Optional onClick handler for when a search result is clicked, which will set the uniprot ID of the node to the selected result's ID.
 }
 
+type ChebiResultType = {
+    id: string;
+    alias: string;
+    smiles: string;
+    score: number; // 0-1, Indicates quality of match. Correct organism, # metabolic links, # RELEVANT metabolic links
+    selected: boolean; // Whether this search result is currently selected (i.e. matches the current UniProt ID of the node)
+
+    onClick: (id: string) => void; // Optional onClick handler for when a search result is clicked, which will set the uniprot ID of the node to the selected result's ID.
+}
+
 export type AppNode = ProteinNodeType;
 
 
@@ -364,6 +374,8 @@ function ChebiSelector({ NodeID, currentChebiID }: { NodeID: string; currentCheb
         setChebiDrawerOpen(!chebiDrawerOpen);
     }
 
+    console.log("results array: ", searchResults);
+
 
     return (
         <>
@@ -375,7 +387,7 @@ function ChebiSelector({ NodeID, currentChebiID }: { NodeID: string; currentCheb
                 RightItem={ /* This is our link to the Chebi ID of the current node! */
                     <a
                     className="NodeRowLink"
-                    href={currentChebiID ? `https://www.ebi.ac.uk/chebi/searchForward.do?chebiId=${currentChebiID}` : `https://www.ebi.ac.uk/chebi/`} // Link to current Chebi ID OR Chebi landing page
+                    href={currentChebiID ? `https://www.ebi.ac.uk/chebi/${currentChebiID}` : `https://www.ebi.ac.uk/chebi/`} // Link to current Chebi ID OR Chebi landing page
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
@@ -389,13 +401,14 @@ function ChebiSelector({ NodeID, currentChebiID }: { NodeID: string; currentCheb
                     items={searchResults.map((result) => ({
                         id: result.id,
                         alias: result.alias,
+                        smiles: result.smiles,
                         score: result.score,
                         selected: currentChebiID === result.id,
                         onChipClick: () => onUpdateChebiID(result.id),
                     }))}
                     skeletonCount={4}
                     maxItems={10}
-                    renderItem={(p, i) => <ProteinRow item={p} index={i} />}
+                    renderItem={(p, i) => <ChebiRow item={p} index={i} />}
                     searchPlaceholder={`Enter Chebi ID, Name, etc.`}
                     searchValue={currentQuery}
                     onSearchChange={onSearch}
@@ -469,6 +482,67 @@ function ProteinRow({ item, index }: { item: UniprotResultType & {onChipClick: (
                     <Shimmer width="4em">{item?.id}</Shimmer>
                 </a>
                 <Shimmer className="UniprotChipOrganism">{item?.organism}</Shimmer>
+            </div>
+        </div>
+    );
+}
+
+
+// Each "chip" inside the Chebi search results.
+function ChebiRow({ item, index }: { item: ChebiResultType & {onChipClick: () => void, selected: boolean}; index: number }) {
+    let ringColor = 'rgba(0, 0, 0, 1)';
+    let confidenceText = '';
+
+    if (!item || item.score < 0) {
+        ringColor = 'rgba(0, 0, 0, 1)'; // Unknown confidence
+        confidenceText = "The relevance of this node is UNKNOWN. We're working on improving this relevance metric!";
+    
+    } else if (item.score <= 0.4) {
+        // Being nice since SBML is sparse
+        // ringColor = '#e0463e';
+        ringColor = '#ffa500'; // Orange for medium confidence
+        confidenceText = "This node has few known kinetic parameters. It may be a good match for your model, but further verification is recommended.";
+    
+    } else if (item.score <= 0.7) {
+        ringColor = '#ffa500'; // Orange for medium confidence
+        confidenceText = "This node has some connections, but may not match your organism perfectly. We predict this is a MODERATE match for your model.";
+    
+    } else {
+        ringColor = '#00DA2C'; // Green for high confidence
+        confidenceText = "This node has PLENTY of connections, and matches your organism. We predict this is a GREAT match for your model.";
+    }
+
+    const fillColor = item && item.selected ? '#747bff' : 'none';
+
+    return (
+        <div className="UniprotSearchChip" tabIndex={0} onClick={() => item?.onChipClick()} >
+            
+
+            <div className="UniprotChipTop" >
+                <Shimmer className="UniprotChipName">{item?.alias}</Shimmer>
+
+                <TextTooltip display={`${confidenceText}`} side="right" >
+                    <Shimmer 
+                        className="UniprotRing" 
+                        style={{
+                            borderRadius: '50%',
+                            ...(item && {background: fillColor, borderColor: ringColor}) // DO NOT override background and border if we're supposed to be shimmering!
+                        }} 
+                    />
+                </TextTooltip>
+
+            </div>
+            <div className="UniprotChipBottom" >
+                <a
+                    className="UniprotChipId"
+                    href={`https://www.ebi.ac.uk/chebi/${item?.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <Shimmer width="4em">{item?.id}</Shimmer>
+                </a>
+                <Shimmer className="UniprotChipOrganism">{item?.smiles}</Shimmer>
             </div>
         </div>
     );

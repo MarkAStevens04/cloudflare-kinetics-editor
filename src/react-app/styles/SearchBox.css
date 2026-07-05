@@ -1,5 +1,5 @@
-.SearchBoxContainer {
-    padding: 0px 9px 10px 10px;
+.SearchContentContainer {
+    padding: 0px 10px 10px 10px;
     width: 200px;
 
     contain: content;
@@ -21,122 +21,40 @@
     width: 100%;
 }
 
+.SearchBoxInput {
+	font-weight: inherit;
+	font-family: inherit;
+	padding: 0em 0.2em;
+	font-size: 1em;
 
-/* ---- the default chip, feel free to override ---- */
-.SearchChip {
-    /* width: 100%; */
-    min-width: 0px;
-    
-    margin: 4px 0px; /* Little space between each search result */
+	width: 100%;
 
-    background: rgba(0, 0, 0, 0.15);
-    border: 2px solid transparent;
-    border-radius: 4px;
-    padding: 2px 2px;
+	margin: 0px 0px 0px 0px;
+	border: 2px transparent solid;
+	outline: none;
+	border-color: rgba(0, 0, 0, 0.1);
+	border-radius: 4px;
+	color: rgba(0, 0, 0, 1);
 
-    cursor: pointer;
-    outline: none;
-    transition: border-color .18s ease;
+	background-color: rgba(0, 0, 0, 0);
+
+	field-sizing: fixed;
+	cursor: pointer;
+	/* min-width: 30px; */
+
+    /* Makes it so input doesn't fly off screen. Not 100% sure exactly why. */
+    box-sizing: border-box;
+
+	transition: border-color 0.2s;
 }
 
-.SearchChip:hover {
-  border-color: #747bff;
+.SearchBoxInput:focus {
+	border-color: #747bff;
 }
 
-.SearchChipTop {
-
-    display: flex; 
-    flex-direction: row; 
-    justify-content: space-between;
-
-}
-
-.SearchChipBottom {
-  display: flex; 
-  flex-direction: row; 
-  align-items: flex-end;
-  justify-content: space-between; 
-
-}
- 
-.SearchChipName {
-    font-size: 18px; 
-    font-weight: 600; 
-    line-height: 1.1;
-    letter-spacing: -.015em; 
-    color: rgba(0, 0, 0, 1);
-
-    margin: 0px 5px 0px 0px; /* Preserve margin between Name and chip color */
-
-    min-width: 0px;
-    white-space: nowrap;
-    overflow-x: clip;
-    overflow-y: visible;
-    text-overflow: ellipsis;
-    
-}
-
-.SearchChipId {
-  align-self: flex-end;
-  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, monospace;
-  font-size: 8px; 
-  letter-spacing: .02em;
-  color: rgba(0, 0, 0, 0.3); 
-  text-decoration: none;
-
-  border-bottom: 0.5px solid transparent;
-  border-bottom-color: rgba(0, 0, 0, 0.3); 
-
-  margin-top: 0px;
-  padding: 0px;
-  line-height: 1;
-
-  transition: border-color .15s ease;
-}
-
-.SearchChipId:hover { 
-    border-bottom-color: #747bff; 
-}
- 
-.SearchChipOrganism {
-    font-size: 8px; 
-    color: var(--pf-organism);
-    line-height: 1.25;
-    text-align: right; 
-
-    margin: 0px 0px 0px 10px; /* Preserve margin between ID and organism */
-    
-    min-width: 0px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.SearchRing {
-    width: 10px;
-    height: 10px;
-    min-width: 10px;
-    min-height: 10px;
-
-    border-radius: 50%;
-    border: 2px solid;
-
-    background: rgba(255, 255, 255, 0.1);
-
-    position: relative;
-}
-
-
-.SearchSkeleton {
-    pointer-events: none;
-
-    color: transparent;
-    margin: 0px;
-
-    background: linear-gradient(90deg, #e8e8e8 25%, #f4f4f4 37%, #e8e8e8 63%);
-    background-size: 400% 100%;
-    animation: skeleton-shimmer 1.4s ease infinite;
-    border-radius: 4px;
+/* When there's a placeholder in the serachbar */
+.SearchBoxInput:placeholder-shown {
+	color: rgba(0, 0, 0, 0.5);
 }
 
 .Shimmer {

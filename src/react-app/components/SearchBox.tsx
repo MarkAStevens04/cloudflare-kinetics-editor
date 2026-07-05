@@ -68,7 +68,7 @@ const SearchBox = React.forwardRef<HTMLDivElement, SearchBoxProps>(
             <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
                 <input
                     // className="item species-param-input NodeRowItem"
-                    className="ScrollSearchBar"
+                    className="SearchBoxInput"
                     placeholder={searchPlaceholder}
                     value={searchValue}
                     onChange={(e) => onSearchChange(e)}
@@ -78,7 +78,7 @@ const SearchBox = React.forwardRef<HTMLDivElement, SearchBoxProps>(
 
                     {/* Skeleton context to show the shimmer effect when search is loading */}
                     <SkeletonCtx.Provider value={loading || !render}> 
-                        <div className="SearchBoxContainer" >
+                        <div className="SearchContentContainer" >
                             {body}
                         </div>
                     </SkeletonCtx.Provider>
@@ -92,7 +92,6 @@ const SearchBox = React.forwardRef<HTMLDivElement, SearchBoxProps>(
                     <ScrollArea.Thumb className="ScrollAreaThumb" />
                 </ScrollArea.Scrollbar>
                 <ScrollArea.Corner className="ScrollAreaCorner" />
-
             </ScrollArea.Root>
         );
     },

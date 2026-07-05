@@ -30,6 +30,7 @@ import {
 } from '../components/edges'
 
 
+// We should probably move all of these types to their own file so we can import them individually, and across other functions.
 type species = {
   id: string;
   label: string;
@@ -40,16 +41,6 @@ type species = {
   chebiID?: string; // Stores an associated chebiID (if provided)
 }
 
-// type reactions = {
-//   id: string;
-//   label: string;
-//   sources: string[];
-//   targets: string[];
-//   rate_law: string;
-//   rate_type: string; // types: mass_action
-//   enzymeID: string;
-//   associated_params: string[]; // List of param IDs which are associated with this reaction
-// }
 
 type reactions = {
   id: string;
@@ -66,13 +57,14 @@ type reactions = {
 
 }
 
-
+// Simulation parameters
 type params = {
   id: string;
   display: string;
   val: string;
 }
 
+// This type will likely be used by many different components
 type errorMSG = {
   message: string;
   full_detail?: string;
@@ -80,6 +72,7 @@ type errorMSG = {
   linked_edges?: string[];
 }
 
+// Will want to eventually import this in ProteinNode.tsx
 type UniprotResultType = {
     id: string;
     alias: string;
@@ -87,9 +80,11 @@ type UniprotResultType = {
     score: number; // 0-1, Indicates quality of match. Correct organism, # metabolic links, # RELEVANT metabolic links
 }
 
+// Will want to eventually import this in ProteinNode.tsx
 type ChebiResultType = {
   id: string;
   alias: string;
+  smiles: string; // chemical smiles
   score: number; // 0-1, Indicates quality of match.
 }
 
@@ -175,6 +170,9 @@ type AppState = {
 
   uniProtQuery: string; // For storing query when searching for a protein in the uniprot search component.
   setUniProtQuery: (query: string) => void;
+
+  chebiQuery: string; // For storing query when searching for a chemical in the chebi search component.
+  setChebiQuery: (query: string) => void;
 
   uniProtResults: UniprotResultType[]; // For storing results when searching for a protein in the uniprot search component.
   searchUniprot: (query: string) => void; // For searching uniprot with a given query and getting back a list of results.
@@ -818,7 +816,31 @@ onEdgesChange: (changes) => {
       }
     },
 
-    searchChebi: async (query: string) => {pass},
+    searchChebi: async (query: string) => {
+      // Cancel whatever's in flight, regardless of branch
+      get().chebiAbortController?.abort();
+
+      // Check for empty query
+      if (!query || query.trim() === '') { // If query is empty, don't search and just clear results
+        set({ chebiResults: [], chebiLoading: false, chebiAbortController: null }); // Clear previous results and set loading to false
+        return;
+      }
+
+      // Let us know we're loading
+      const controller = new AbortController();
+      set({ chebiLoading: true, chebiAbortController: controller }); // Set loading to true while we fetch results
+
+      // Try to perform our actual search!
+      try {
+        const results = await performChebiSearch(query, controller.signal);
+        set({ chebiResults: results, chebiLoading: false, chebiAbortController: null }); // Clear previous results and set loading to false
+
+      } catch (err) {
+        // If our actual search fails...
+        if ((err as Error).name === 'AbortError') return; // superseded — let the newer call own state
+        set({ chebiResults: [], chebiLoading: false, chebiAbortController: null });
+      }
+    },
 
     // Assign the uniprot ID to the given species
     setUniProtID: (NodeID: string, uniprotID: string) => set((store) => ({
@@ -1055,6 +1077,44 @@ async function performUniprotSearch(query: string, signal?: AbortSignal): Promis
 
 
 
+// Actually PERFORM our Chebi search!
+async function performChebiSearch(query: string, signal?: AbortSignal): Promise<ChebiResultType[]> {
+
+  // Perform the fetch
+  const res = await fetch(
+        `https://www.ebi.ac.uk/chebi/backend/api/public/es_search/?term=${encodeURIComponent(query)}` +
+        `&size=50`,
+        { signal }
+    );
+
+  // Extract the JSON from the response
+  const json = await res.json();
+
+  console.log('Chebi result: ', json);
+
+  // Parse the JSON into `ChebiResultType[]` and return.
+  const results: ChebiResultType[] = json.results.map((r: any) => ({
+    id: r._source.chebi_accession,
+    alias:
+      r._source.ascii_name ??
+      r._source.name,
+    smiles: r._source.smiles ?? 'Unknown SMILES',
+    score: -1, // -1 = not searched yet
+  }));
+
+   // Ask the chemicals cache what it already knows.
+  const cached = await getCachedChemicalCounts(results.map((r) => r.id), signal);
+  for (const item of results) item.score = cached.get(item.id) ?? -1;
+
+  // Enqueue anything without a confirmed count for background population.
+  requestChemicals(results.filter((r) => r.score < 0).map((r) => r.id));
+
+  results.sort((a, b) => b.score - a.score);
+  return results;
+}
+
+
+
 // ------------------- Chat generated Sabio-RK search ------------------------
 
 // If browser calls fail with CORS errors, point this at a Cloudflare Worker
@@ -1093,22 +1153,26 @@ function requestProteins(ids: string[]): void {
   }).catch(() => {});
 }
 
-
-
-// Run a task over items with a cap on simultaneous in-flight requests.
-async function mapWithConcurrency<T, R>(
-  items: T[],
-  limit: number,
-  task: (item: T) => Promise<R>
-): Promise<R[]> {
-  const results: R[] = new Array(items.length);
-  let next = 0;
-  async function worker() {
-    while (next < items.length) {
-      const i = next++;
-      results[i] = await task(items[i]);
-    }
+// Ask the cache what it knows about these ChEBI compounds. Map id -> count, only for confirmed ('done') rows.
+async function getCachedChemicalCounts(ids: string[], signal?: AbortSignal): Promise<Map<string, number>> {
+  const map = new Map<string, number>();
+  if (!ids.length) return map;
+  const inList = `(${ids.map(encodeURIComponent).join(',')})`;
+  const res = await fetch(
+    `${SB_URL}/rest/v1/chemicals?select=chebi_id,reaction_count,status&chebi_id=in.${inList}`,
+    { headers: sbHeaders(), signal },
+  );
+  if (!res.ok) return map; // cache unreachable -> everything stays -1
+  for (const r of await res.json()) {
+    if (r.status === 'done' && typeof r.reaction_count === 'number') map.set(r.chebi_id, r.reaction_count);
   }
-  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
-  return results;
+  return map;
+}
+
+// Tell the cache we want these chemicals. Fire-and-forget; the worker drains it in the background.
+function requestChemicals(ids: string[]): void {
+  if (!ids.length) return;
+  fetch(`${SB_URL}/rest/v1/rpc/request_chemicals`, {
+    method: 'POST', headers: sbHeaders(), body: JSON.stringify({ ids }),
+  }).catch(() => {});
 }
