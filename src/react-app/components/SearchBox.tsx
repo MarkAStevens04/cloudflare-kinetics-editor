@@ -6,32 +6,63 @@ import * as React from "react";
 import { TextTooltip } from "./Tooltips";
 import classnames from "classnames";
 
+import '../styles/radix.css'; // Import relevant CSS styles
 import '../styles/SearchBox.css'; // Import relevant CSS styles
 
+
 type SearchBoxProps = {
+    items: T[]; // Results to render. Will be passed as properties to renderItem.
+    renderItem: (item: T | undefined, index: number) => React.ReactNode; // Renders one row. Receives 'undefined' while loading.
+
+    skeletonCount?: number; // Number of skeletons to render while loading. Default is 4.
+
+    maxItems?: number; // Maximum number of items to render. Default is Infinity.
+
     searchPlaceholder: string; // The text in the searchbar before a user has input anything
     searchValue: string; // The text currently in the searchbar
     onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // Callback for when the search input changes
     render: boolean; 
     loading: boolean; // Whether the search is currently loading or not
-    setOpen: (open: boolean) => void; 
-    finishAnimation?: () => void;
-    SearchResults?: Array<React.ReactNode>; // Array of search results to display 
-    SkeletonResult?: React.ReactNode; // Custom skeleton display result 
+
+    // SkeletonResult?: React.ReactNode; // Custom skeleton display result 
 } & React.PropsWithChildren<{ className?: string } & React.ComponentPropsWithoutRef<'div'>>;
 
 const SearchBox = React.forwardRef<HTMLDivElement, SearchBoxProps>(
     ({ 
+        items,
+        renderItem,
+        skeletonCount = 4,
+        maxItems = Infinity,
+
         searchPlaceholder, 
         searchValue, 
         onSearchChange, 
         render, 
         loading,
-        SearchResults,
-        SkeletonResult,
+        // SearchResults,
+        // SkeletonResult,
         children, 
         ...props 
     }) => {
+
+        const visible = maxItems === Infinity ? items : items.slice(0, maxItems); // Return slice of item array that's up to the max number of items. 
+
+        let body: React.ReactNode;
+
+        if (loading || !render) {
+            body = Array.from({ length: skeletonCount }, (_, i) => (
+                <React.Fragment key = {`sk-${i}`} >
+                    {renderItem(undefined, i)}
+                </React.Fragment>
+            ));
+        } else  if (visible.length > 0) {
+            body = visible.map((item, i) => (
+                <React.Fragment key={`${i}`}>{renderItem(item, i)}</React.Fragment>
+            ))
+        } else {
+            body = <div className="SearchBoxEmptyText"> No results found. <br /> Try another query! </div>;
+        }
+
         return (
             <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
                 <input
@@ -44,7 +75,7 @@ const SearchBox = React.forwardRef<HTMLDivElement, SearchBoxProps>(
 
                 <ScrollArea.Viewport className="ScrollAreaViewport">
                     <SkeletonCtx.Provider value={loading}>
-                    <div className=" SearchBoxContainer" >
+                    {/* {<div className=" SearchBoxContainer" >
                         {loading || !render
                             ? Array.from({ length: 4}).map((_, i) => SkeletonResult || <DefaultSkeletonChip key={i} />)
                             : !SearchResults || SearchResults.length === 0
@@ -56,7 +87,9 @@ const SearchBox = React.forwardRef<HTMLDivElement, SearchBoxProps>(
                             ))
                         }
 
-                    </div>
+                    </div>} */}
+
+                    {body}
                     </SkeletonCtx.Provider>
                 </ScrollArea.Viewport>
                 <ScrollArea.Scrollbar
@@ -98,12 +131,16 @@ const SkeletonCtx = React.createContext(false);
 
 function Shimmer({ 
     children,
-    className
+    className,
+    ...props
 }: {
     children?: React.ReactNode;
     className?: string;
-}) {
+} & React.ComponentPropsWithoutRef<'div'>) {
     const loading = React.useContext(SkeletonCtx);
+    if (loading) {
+        console.log('we do be shimmering!');
+    }
 
     // Shimmer when the box is loading OR when this field has no data yet.
     if (loading || children === null || children === '') {
@@ -111,12 +148,14 @@ function Shimmer({
             <span 
                 className={classnames("Shimmer", className)}
                 aria-hidden
+                {...props}
             >
                 <TextTooltip display="Loading..." />
+                {children}
             </span>
         );
     }
-    return <span className={className}>{children}</span>;
+    return <span className={className} {...props}>{children}</span>;
 }
 
 export { SearchBox, Shimmer };

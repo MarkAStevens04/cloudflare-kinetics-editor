@@ -141,9 +141,8 @@
 
 .Shimmer {
     pointer-events: none;
-
     color: transparent;
-    margin: 0px;
+    /* margin: 0px; */
 
     background: linear-gradient(90deg, #e8e8e8 25%, #f4f4f4 37%, #e8e8e8 63%);
     background-size: 400% 100%;

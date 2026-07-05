@@ -14,6 +14,7 @@ import { ScrollArea } from 'radix-ui'; // Scroll Area for UniProt search results
 import { TextTooltip } from './Tooltips'
 import { Collapsible } from './Collapsible';
 import { SearchBox, Shimmer } from './SearchBox';
+import Divider from '@mui/material/Divider';
 
 
 type ProteinNodeType = Node<{ 
@@ -260,6 +261,8 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
     const renderUniProtDrawer = useStore((state) => state.renderUniProtDrawer);
     const setRenderUniProtDrawer = useStore((state) => state.setRenderUniProtDrawer);
 
+    // const loading = true;
+
     const updateUniProtID = useStore((state) => state.setUniProtID);
 
     const onSearch = (event: ChangeEvent<HTMLInputElement>) => {
@@ -299,20 +302,91 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
             >
 
                 <SearchBox
+                    items={searchResults.map((result) => ({
+                        id: result.id,
+                        alias: result.alias,
+                        organism: result.organism,
+                        score: result.score,
+                        selected: currentUniProtID === result.id,
+                        onChipClick: () => onUpdateUniProtID(result.id),
+                    }))}
+                    skeletonCount={4}
+                    maxItems={10}
+                    renderItem={(p, i) => <ProteinRow item={p} index={i} />}
                     searchPlaceholder={`Enter UniProt ID, Name, Organism, etc.`}
                     searchValue={currentQuery}
                     onSearchChange={onSearch}
                     render={renderUniProtDrawer}
                     loading={loading}
-                    setOpen={setUniProtDrawerOpen}
-                    SearchResults={searchResults.map((result) => (
-                        <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} selected={currentUniProtID === result.id} onClick={(id) => onUpdateUniProtID(id)} />
-                    ))}
+                    // setOpen={setUniProtDrawerOpen}
+                    // SearchResults={searchResults.map((result) => (
+                    //     <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} selected={currentUniProtID === result.id} onClick={(id) => onUpdateUniProtID(id)} />
+                    // ))}
                 />
              
             </Collapsible>
         </>
     )
+}
+
+function ProteinRow({ item, index }: { item: UniprotResultType & {onChipClick: () => void, selected: boolean}; index: number }) {
+    let ringColor = 'rgba(0, 0, 0, 1)';
+    let confidenceText = '';
+
+    if (!item || item.score < 0) {
+        ringColor = 'rgba(0, 0, 0, 1)'; // Unknown confidence
+        confidenceText = "The relevance of this node is UNKNOWN. We're working on improving this relevance metric!";
+    
+    } else if (item.score <= 0.4) {
+        // Being nice since SBML is sparse
+        // ringColor = '#e0463e';
+        ringColor = '#ffa500'; // Orange for medium confidence
+        confidenceText = "This node has few known kinetic parameters. It may be a good match for your model, but further verification is recommended.";
+    
+    } else if (item.score <= 0.7) {
+        ringColor = '#ffa500'; // Orange for medium confidence
+        confidenceText = "This node has some connections, but may not match your organism perfectly. We predict this is a MODERATE match for your model.";
+    
+    } else {
+        ringColor = '#00DA2C'; // Green for high confidence
+        confidenceText = "This node has PLENTY of connections, and matches your organism. We predict this is a GREAT match for your model.";
+    }
+
+    const fillColor = item && item.selected ? '#747bff' : 'none';
+
+    return (
+        <div className="UniprotSearchChip" tabIndex={0} onClick={() => item?.onChipClick()} >
+            
+
+            <div className="UniprotChipTop" >
+                {/* <div className="UniprotChipName">{alias}</div> */}
+                <Shimmer className="UniprotChipName">{item ? item.alias : 'FAKE ALIAS'}</Shimmer>
+
+                <TextTooltip display={`${confidenceText}`} side="right" >
+                    <Shimmer 
+                        className="UniprotRing" 
+                        style={{
+                            borderRadius: '50%',
+                            ...(item && {background: fillColor, borderColor: ringColor}) // DO NOT override background and border if we're supposed to be shimmering!
+                        }} 
+                    />
+                </TextTooltip>
+
+            </div>
+            <div className="UniprotChipBottom" >
+                <a
+                    className="UniprotChipId"
+                    href={`https://www.uniprot.org/uniprotkb/${item?.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <Shimmer>{item ? item.id : 'FAKE ID'}</Shimmer>
+                </a>
+                <Shimmer className="UniprotChipOrganism">{item ? item.organism : 'FAKE ORGANISM'}</Shimmer>
+            </div>
+        </div>
+    );
 }
 
 
