@@ -6,8 +6,9 @@ import * as React from "react";
 import { TextTooltip } from "./Tooltips";
 import classnames from "classnames";
 
-import '../styles/radix.css'; // Import relevant CSS styles
 import '../styles/SearchBox.css'; // Import relevant CSS styles
+import '../styles/radix.css'; // Import relevant CSS styles
+
 
 
 type SearchBoxProps = {
@@ -88,8 +89,10 @@ const SearchBox = React.forwardRef<HTMLDivElement, SearchBoxProps>(
                         }
 
                     </div>} */}
-
-                    {body}
+                    <div className="SearchBoxResult">
+                        {body}
+                    </div>
+                    
                     </SkeletonCtx.Provider>
                 </ScrollArea.Viewport>
                 <ScrollArea.Scrollbar
