@@ -489,8 +489,8 @@ Ways of making this REAL for synthetic biologists
 
 
 - [ ] Integrate ChEMBL
-    - [ ] UI (similar to UniProt)
-    - [ ] State (Similar to UniProt)
+    - [X] UI (similar to UniProt)
+    - [X] State (Similar to UniProt)
     - [ ] Behavior (Similar to UniProt)
     
 - [ ] Autofill Rxn
