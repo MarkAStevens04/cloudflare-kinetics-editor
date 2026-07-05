@@ -562,7 +562,7 @@ function ChebiRow({ item, index }: { item: ChebiResultType & {onChipClick: () =>
 
             <Shimmer className="ChebiChipRight" >
                 { item?.smiles 
-                 ? <MoleculeDrawing smiles={item?.smiles} width={'100%'} height={'100%'} /> 
+                 ? <MoleculeDrawing smiles={item?.smiles} width={100} height={30} /> 
                  : <QuestionMarkIcon />
                  }
                 
@@ -594,10 +594,14 @@ function MoleculeDrawing({
             width={width}
             height={height}
             ref={(svg) => {
-                if (svg)
-                    SmilesDrawer.parse(smiles, (tree) => 
-                    new SmilesDrawer.SvgDrawer({ width, height }).draw(tree, svg, theme, false)
-                );
+                if (!svg) return;
+                SmilesDrawer.parse(smiles, (tree) =>  {
+                new SmilesDrawer.SvgDrawer({ width, height, padding: 0}).draw(tree, svg, theme, false);
+                const { x, y, width: w, height: h } = svg.getBBox(); /* Have to manually set our own view box here to increase scale */
+                svg.setAttribute("viewBox", `${x} ${y} ${w} ${h}`);
+                svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+                });
             }}
         />
     );
