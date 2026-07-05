@@ -13,7 +13,7 @@ import { ScrollArea } from 'radix-ui'; // Scroll Area for UniProt search results
 
 import { TextTooltip } from './Tooltips'
 import { Collapsible } from './Collapsible';
-import { SearchBox } from './SearchBox';
+import { SearchBox, Shimmer } from './SearchBox';
 
 
 type ProteinNodeType = Node<{ 
@@ -309,38 +309,6 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
                         <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} selected={currentUniProtID === result.id} onClick={(id) => onUpdateUniProtID(id)} />
                     ))}
                 />
-                
-             {/* <ScrollArea.Root className="nodrag nopan nowheel ScrollAreaRoot">
-                <input
-                    // className="item species-param-input NodeRowItem"
-                    className="ScrollSearchBar"
-                    placeholder={`Enter UniProt ID, Name, Organism, etc.`}
-                    value={currentQuery}
-                    onChange={(e) => onSearch(e)}
-                />
-
-                <ScrollArea.Viewport className="ScrollAreaViewport">
-                    <div className=" UniprotSearchContainer" >
-                        {loading || !renderUniProtDrawer
-                            ? Array.from({ length: 4}).map((_, i) => <SearchSkeleton key={i} />)
-                            : searchResults.length === 0
-                                ? <div className="UniprotSearchEmpty"> No results found. <br /> Try another query! </div>
-                            : searchResults.map((result) => (
-                                <UniprotSearchChip key={result.id} id={result.id} alias={result.alias} organism={result.organism} score={result.score} selected={currentUniProtID === result.id} onClick={(id) => onUpdateUniProtID(id)} />
-                            ))
-                        }
-
-                    </div>
-                </ScrollArea.Viewport>
-                <ScrollArea.Scrollbar
-                    className="ScrollAreaScrollbar"
-                    orientation="vertical"
-                >
-                    {/* "Thumb" is the little dark gray part on the scrollbar! */}
-                    {/* <ScrollArea.Thumb className="ScrollAreaThumb" />
-                </ScrollArea.Scrollbar>
-                <ScrollArea.Corner className="ScrollAreaCorner" />
-                </ScrollArea.Root> */} 
              
             </Collapsible>
         </>

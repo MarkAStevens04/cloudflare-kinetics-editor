@@ -3,13 +3,10 @@ import { ScrollArea } from 'radix-ui'; // Scroll Area for UniProt search results
 
 
 import * as React from "react";
-import { Tooltip } from "radix-ui";
+import { TextTooltip } from "./Tooltips";
 import classnames from "classnames";
 
 import '../styles/SearchBox.css'; // Import relevant CSS styles
-
-type SearchBoxContentProps = React.PropsWithChildren<{ className?: string } & React.ComponentPropsWithoutRef<typeof Tooltip.Content>>;
-type SearchBoxTriggerProps = React.PropsWithChildren<{ className?: string } & React.ComponentPropsWithoutRef<typeof Tooltip.Trigger>>;
 
 type SearchBoxProps = {
     searchPlaceholder: string; // The text in the searchbar before a user has input anything
@@ -46,6 +43,7 @@ const SearchBox = React.forwardRef<HTMLDivElement, SearchBoxProps>(
                 />
 
                 <ScrollArea.Viewport className="ScrollAreaViewport">
+                    <SkeletonCtx.Provider value={loading}>
                     <div className=" SearchBoxContainer" >
                         {loading || !render
                             ? Array.from({ length: 4}).map((_, i) => SkeletonResult || <DefaultSkeletonChip key={i} />)
@@ -59,6 +57,7 @@ const SearchBox = React.forwardRef<HTMLDivElement, SearchBoxProps>(
                         }
 
                     </div>
+                    </SkeletonCtx.Provider>
                 </ScrollArea.Viewport>
                 <ScrollArea.Scrollbar
                     className="ScrollAreaScrollbar"
@@ -95,4 +94,29 @@ function DefaultSkeletonChip() {
     )
 }
 
-export { SearchBox };
+const SkeletonCtx = React.createContext(false);
+
+function Shimmer({ 
+    children,
+    className
+}: {
+    children?: React.ReactNode;
+    className?: string;
+}) {
+    const loading = React.useContext(SkeletonCtx);
+
+    // Shimmer when the box is loading OR when this field has no data yet.
+    if (loading || children === null || children === '') {
+        return (
+            <span 
+                className={classnames("Shimmer", className)}
+                aria-hidden
+            >
+                <TextTooltip display="Loading..." />
+            </span>
+        );
+    }
+    return <span className={className}>{children}</span>;
+}
+
+export { SearchBox, Shimmer };
