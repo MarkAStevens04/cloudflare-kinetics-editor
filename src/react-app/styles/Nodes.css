@@ -135,6 +135,10 @@ hr {
     outline: none;
     transition: border-color .18s ease;
 }
+
+.UniprotSearchChip:hover {
+  border-color: #747bff;
+}
  
 .UniprotChipTop {
 

@@ -311,7 +311,7 @@ function UniprotSelector({ NodeID, currentUniProtID }: { NodeID: string; current
                         onChipClick: () => onUpdateUniProtID(result.id),
                     }))}
                     skeletonCount={4}
-                    maxItems={10}
+                    maxItems={Infinity}
                     renderItem={(p, i) => <ProteinRow item={p} index={i} />}
                     searchPlaceholder={`Enter UniProt ID, Name, Organism, etc.`}
                     searchValue={currentQuery}

@@ -89,8 +89,8 @@ const SearchBox = React.forwardRef<HTMLDivElement, SearchBoxProps>(
                         }
 
                     </div>} */}
-                    <div className="SearchBoxResult">
-                        {body}
+                    <div className="SearchBoxContainer" >
+                    {body}
                     </div>
                     
                     </SkeletonCtx.Provider>
