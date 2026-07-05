@@ -1098,7 +1098,7 @@ async function performChebiSearch(query: string, signal?: AbortSignal): Promise<
     alias:
       r._source.ascii_name ??
       r._source.name,
-    smiles: r._source.smiles ?? 'Unknown SMILES',
+    smiles: r._source.smiles ?? '',
     score: -1, // -1 = not searched yet
   }));
 

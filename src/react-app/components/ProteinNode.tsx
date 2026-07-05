@@ -8,14 +8,16 @@ import '../styles/Nodes.css'
 import '../styles/radix.css';
 import useStore from '../stores/store';
 
-import { ScrollArea } from 'radix-ui'; // Scroll Area for UniProt search results.
-
 
 import { TextTooltip } from './Tooltips'
 import { Collapsible } from './Collapsible';
 import { SearchBox, Shimmer } from './SearchBox';
 import Divider from '@mui/material/Divider';
 
+import SmilesDrawer from "smiles-drawer";
+import { 
+    QuestionMarkIcon
+} from "@radix-ui/react-icons";
 
 type ProteinNodeType = Node<{ 
     label: string; 
@@ -466,8 +468,8 @@ function ProteinRow({ item, index }: { item: UniprotResultType & {onChipClick: (
         <div className="SearchChip" tabIndex={0} onClick={() => item?.onChipClick()} >
             
 
-            <div className="UniprotChipTop" >
-                <Shimmer className="UniprotChipName">{item?.alias}</Shimmer>
+            <div className="ChipTop"  >
+                <Shimmer className="ChipTitle" >{item?.alias}</Shimmer>
 
                 <TextTooltip display={`${confidenceText}`} side="right" >
                     <Shimmer 
@@ -480,9 +482,9 @@ function ProteinRow({ item, index }: { item: UniprotResultType & {onChipClick: (
                 </TextTooltip>
 
             </div>
-            <div className="UniprotChipBottom" >
+            <div className="ChipBottom" >
                 <a
-                    className="UniprotChipId"
+                    className="ChipId"
                     href={`https://www.uniprot.org/uniprotkb/${item?.id}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -524,12 +526,15 @@ function ChebiRow({ item, index }: { item: ChebiResultType & {onChipClick: () =>
     const fillColor = item && item.selected ? '#747bff' : 'none';
 
     return (
-        <div className="SearchChip ChebiChip" tabIndex={0} onClick={() => item?.onChipClick()} style={{padding: '0px'}} >
+        <div className="SearchChip ChebiChip" tabIndex={0} onClick={() => item?.onChipClick()} >
             
-            <div className="ChebiChipLeft">
+            <div className="ChebiChipLeft" style={{alignItems: 'center'}} >
 
-            <div className="UniprotChipTop" >
-                <Shimmer className="UniprotChipName">{item?.alias}</Shimmer>
+            <div className="ChipTop" style={{alignContent: 'center'}} >
+                <Shimmer className="ChipTitle">{item?.alias}</Shimmer>
+
+            </div>
+            <div className="ChipBottom" style={{justifyContent: 'left'}} >
 
                 <TextTooltip display={`${confidenceText}`} side="right" >
                     <Shimmer 
@@ -541,14 +546,13 @@ function ChebiRow({ item, index }: { item: ChebiResultType & {onChipClick: () =>
                     />
                 </TextTooltip>
 
-            </div>
-            <div className="UniprotChipBottom" >
                 <a
-                    className="UniprotChipId"
+                    className="ChipId"
                     href={`https://www.ebi.ac.uk/chebi/${item?.id}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
+                    style={{margin: '0px 0px 0px 3px'}} // Add some spacing between circle and Chebi ID
                 >
                     <Shimmer width="4em">{item?.id}</Shimmer>
                 </a>
@@ -556,11 +560,45 @@ function ChebiRow({ item, index }: { item: ChebiResultType & {onChipClick: () =>
             </div>
             </div>
 
-            <div className="ChebiChipRight">
-            hi
+            <Shimmer className="ChebiChipRight" >
+                { item?.smiles 
+                 ? <MoleculeDrawing smiles={item?.smiles} width={'100%'} height={'100%'} /> 
+                 : <QuestionMarkIcon />
+                 }
+                
 
-            </div>
+            </Shimmer>
 
         </div>
+    );
+}
+
+
+
+// Little drawing of our molecule structure!
+interface MoleculeDrawingProps {
+    smiles: string;
+    width?: number;
+    height?: number;
+    theme?: "light" | "dark";
+}
+
+function MoleculeDrawing({
+    smiles,
+    width = 300,
+    height = 200,
+    theme = "light",
+}: MoleculeDrawingProps) {
+    return (
+        <svg
+            width={width}
+            height={height}
+            ref={(svg) => {
+                if (svg)
+                    SmilesDrawer.parse(smiles, (tree) => 
+                    new SmilesDrawer.SvgDrawer({ width, height }).draw(tree, svg, theme, false)
+                );
+            }}
+        />
     );
 }

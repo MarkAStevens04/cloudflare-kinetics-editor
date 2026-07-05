@@ -130,28 +130,31 @@ hr {
     background: rgba(0, 0, 0, 0.15);
     border: 2px solid transparent;
     border-radius: 8px;
-    padding: 2px;
+    padding: 0px 2px 2px 2px; /* Remove padding from top so title can snug the top of chip */
 
     cursor: pointer;
     outline: none;
     transition: border-color .18s ease;
+
+    --subtext-color: rgba(0, 0, 0, 0.3);
 }
 
 .SearchChip:hover {
   border-color: #747bff;
 }
  
-.UniprotChipTop {
+.ChipTop {
 
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    /* align-items: center; Puts  circle in center of text */
 
     min-width: 0; /* Allow the ellipsized name to shrink instead of stretching this row */
 
 }
 
-.UniprotChipBottom {
+.ChipBottom {
   display: flex; 
   flex-direction: row; 
   align-items: flex-end;
@@ -159,14 +162,14 @@ hr {
 
 }
  
-.UniprotChipName {
+.ChipTitle {
     font-size: 18px; 
     font-weight: 500; 
     line-height: 1.1;
     letter-spacing: -.015em; 
     color: rgba(0, 0, 0, 1);
 
-    margin: 0px 5px 0px 0px; /* Preserve margin between Name and chip color */
+    margin: 0px 0px 0px 0px; /* Preserve margin between Name and chip color */
 
     min-width: 0px;
     white-space: nowrap;
@@ -176,16 +179,17 @@ hr {
     
 }
 
-.UniprotChipId {
+.ChipId {
   align-self: flex-end;
   font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, monospace;
   font-size: 8px; 
   letter-spacing: .02em;
-  color: rgba(0, 0, 0, 0.3); 
+  color: var(--subtext-color); 
   text-decoration: none;
+  font-weight: 400;
 
   border-bottom: 0.5px solid transparent;
-  border-bottom-color: rgba(0, 0, 0, 0.3); 
+  border-bottom-color: var(--subtext-color); 
 
   margin-top: 0px;
   padding: 0px;
@@ -194,15 +198,16 @@ hr {
   transition: border-color .15s ease;
 }
 
-.UniprotChipId:hover { 
+.ChipId:hover { 
     border-bottom-color: #747bff; 
 }
  
 .UniprotChipOrganism {
     font-size: 8px; 
-    color: var(--pf-organism);
+    color: var(--subtext-color);
     line-height: 1.25;
     text-align: right; 
+    font-weight: 500;
 
     margin: 0px 0px 0px 10px; /* Preserve margin between ID and organism */
     
@@ -213,10 +218,13 @@ hr {
 }
 
 .UniprotRing {
-    width: 10px;
-    height: 10px;
-    min-width: 10px;
-    min-height: 10px;
+    --ring-size: 10px;
+    width: var(--ring-size);
+    height: var(--ring-size);
+    min-width: var(--ring-size);
+    min-height: var(--ring-size);
+
+    margin: 2px 0px 0px 0px; /* Give ring room to breathe from top */
 
     border-radius: 50%;
     border: 2.5px solid;
@@ -227,30 +235,37 @@ hr {
 .ChebiChip {
     display: flex;
     flex-direction: row;
+
+    --smiles-size: 30%;
 }
 
 .ChebiChipLeft {
     /* display: flex;  */
-    flex: 0 0 80%;
+    flex: 0 0 calc(100% - var(--smiles-size));
     min-width: 0; /* Let the column shrink to its 80% basis instead of being floored at the name's min-content */
     box-sizing: border-box; /* Keep padding inside the 80% so left + right stay at 100% */
-    padding: 2px;
+    padding: 0px 0px 2px 2px;
     /* background-color: rgba(255, 0, 0, 1); */
+
+    text-transform: capitalize;
 }
 
 .ChebiChipRight {
-    flex: 0 0 20%;
+    margin: 2px 0px 0px 0px;
+    flex: 0 0 var(--smiles-size);
     min-width: 0;
     box-sizing: border-box;
 
-    background-color: rgba(0, 0, 255, 1);
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 6px;
 }
 
 .ChebiRing {
-    width: 10px;
-    height: 10px;
-    min-width: 10px;
-    min-height: 10px;
+    --ring-size: 8px;
+    width: var(--ring-size);
+    height: var(--ring-size);
+    min-width: var(--ring-size);
+    min-height: var(--ring-size);
 
     border-radius: 50%;
     border: 2.5px solid;
