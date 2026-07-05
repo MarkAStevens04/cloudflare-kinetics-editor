@@ -488,10 +488,10 @@ Ways of making this REAL for synthetic biologists
     - [X] Youtube thumbnail at top so anyone can re-watch the tutorial.
 
 
-- [ ] Integrate ChEMBL
+- [X] Integrate ChEMBL
     - [X] UI (similar to UniProt)
     - [X] State (Similar to UniProt)
-    - [ ] Behavior (Similar to UniProt)
+    - [X] Behavior (Similar to UniProt)
     
 - [ ] Autofill Rxn
     - [ ] Dynamic (background) search of Sabio-RK on connect
