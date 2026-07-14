@@ -264,11 +264,18 @@ onEdgesChange: (changes) => {
     // Function to add a new Edge to both visualEdges AND to reactions!
     onConnect: (params) => {
 
+      const newRxnID = `${params.source}_${params.target}`;
+
+      // Check for duplicates
+      if (get().reactions.find(r => r.id === newRxnID)) {
+        return; // TODO: Maybe pop a little toast error to user saying: error, reaction already exists
+      }
+
       // Example LaTeX we want: \objNa{\text{Na}}\cdot\objNb{\text{Nb}}\\cdot0.1
       const defRateLaw = '(\\obj' + params.source + '{\\text{' + params.source + '}})\\cdot0.1';
 
       const newRxn = { 
-        id: `${params.source}_${params.target}`, 
+        id: newRxnID, 
         label: 't2', 
         rate_law: defRateLaw, 
         rate_type: '',
@@ -292,7 +299,7 @@ onEdgesChange: (changes) => {
 
         visualEdges: addEdge(
           {...params, 
-            id: `${params.source}_${params.target}`,
+            id: newRxnID,
             type: rateType,
             animated: true,
             markerEnd: { 
