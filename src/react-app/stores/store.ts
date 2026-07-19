@@ -80,7 +80,7 @@ type params = {
 
 const initialSpecies: species[] = [
   { id: 'Na', label: 'Click to edit', initial: '1', color: '#4ECDC4', speciesType: 'molecule' },
-  { id: 'Nb', label: 'Species 2', initial: '0', color: '#8280FF', speciesType: 'molecule' },
+  { id: 'Nb', label: 'Species 2', initial: '1', color: '#8280FF', speciesType: 'molecule' },
 ];
 
 const initialReactions: reactions[] = [
@@ -248,13 +248,13 @@ onEdgesChange: (changes) => {
     // Function to add a new Node to both visualNodes AND to species!
     // Position isn't required, will assume 0, 0 as center position if not given.
     addNode: (id: string, label: string, color: string, speciesType: string, position?: { x: number, y: number }) => set((store) => ({
-        species: [...store.species, { id: id, label: label, initial: '', color: color, speciesType: speciesType }],
+        species: [...store.species, { id: id, label: label, initial: '1', color: color, speciesType: speciesType }],
 
         visualNodes: [...store.visualNodes, 
         {
           id: id, 
           position: { x: (position?.x || 0) + Math.random() * 10, y: (position?.y || 0) + Math.random() * 10 }, // Add a little bit of randomness to prevent 100% overlap on adding nodes without moving
-          data: { label: label, color: color, initial: '', speciesType: speciesType }, 
+          data: { label: label, color: color, initial: '1', speciesType: speciesType }, 
           type: 'protein',
         }
       ],
